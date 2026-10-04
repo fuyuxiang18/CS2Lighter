@@ -3,6 +3,7 @@ import { CorruptedDemoError } from 'csdm/node/demo-analyzer/corrupted-demo-error
 import type { DemoSource } from 'csdm/common/types/counter-strike';
 import { analyzeDemo } from 'csdm/node/demo/analyze-demo';
 import { insertMatch } from './insert-match';
+import { loadDemoCaches } from 'csdm/node/demo-cache/demo-cache-service';
 
 type Parameters = {
   checksum: string;
@@ -44,4 +45,5 @@ export async function generateMatchPositions({ checksum, demoPath, source, onIns
   } finally {
     await deleteCsvFilesInOutputFolder(outputFolderPath);
   }
+  await loadDemoCaches([checksum]);
 }

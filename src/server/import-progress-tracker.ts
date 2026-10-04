@@ -1,4 +1,5 @@
 import type { ImportFileProgress, ImportFileStatus, ImportProgress } from 'csdm/common/types/import-progress';
+import type { DemoCacheDirectory } from 'csdm/common/types/demo-data-cache';
 
 const terminal = new Set<ImportFileStatus>(['completed', 'failed', 'skipped']);
 
@@ -7,6 +8,7 @@ export class ImportProgressTracker {
   private files = new Map<string, ImportFileProgress>();
   private discoveryDepth = 0;
   private batch = 0;
+  private cacheDirectory: DemoCacheDirectory | null = null;
 
   constructor(private readonly onChange: () => void = () => {}) {}
 
@@ -37,7 +39,17 @@ export class ImportProgressTracker {
     if (!terminal.has(status) && (previous === undefined || terminal.has(previous.status))) {
       this.newBatchIfFinished();
     }
-    this.files.set(filePath, { filePath, status, ...details });
+    this.files.set(filePath, {
+      filePath,
+      index: this.files.get(filePath)?.index ?? this.files.size + 1,
+      status,
+      ...details,
+    });
+    this.onChange();
+  }
+
+  setCacheDirectory(directory: DemoCacheDirectory) {
+    this.cacheDirectory = directory;
     this.onChange();
   }
 
@@ -57,12 +69,23 @@ export class ImportProgressTracker {
 
   snapshot(): ImportProgress {
     const files = [...this.files.values()];
-    const counts = { waiting: 0, pending: 0, analyzing: 0, inserting: 0, completed: 0, failed: 0, skipped: 0 };
+    const counts = {
+      waiting: 0,
+      pending: 0,
+      analyzing: 0,
+      inserting: 0,
+      caching: 0,
+      profiling: 0,
+      completed: 0,
+      failed: 0,
+      skipped: 0,
+    };
     for (const file of files) {
       counts[file.status] += 1;
     }
     const settled = counts.completed + counts.failed + counts.skipped;
-    const active = counts.waiting + counts.pending + counts.analyzing + counts.inserting;
+    const active =
+      counts.waiting + counts.pending + counts.analyzing + counts.inserting + counts.caching + counts.profiling;
     const discovering = this.discoveryDepth > 0;
     const isBlocking = discovering || active > 0;
     return {
@@ -82,6 +105,7 @@ export class ImportProgressTracker {
       ...counts,
       settled,
       percent: files.length === 0 ? 0 : Math.min(isBlocking ? 99 : 100, Math.floor((settled / files.length) * 100)),
+      cacheDirectory: this.cacheDirectory,
       currentFiles: files.filter((file) => !terminal.has(file.status)).slice(0, 10),
       failures: files
         .filter((file) => file.status === 'failed' || (file.status === 'skipped' && file.reason === 'unstable'))

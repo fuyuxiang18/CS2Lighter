@@ -6,7 +6,6 @@ import { DatabaseNameInput } from 'csdm/ui/components/inputs/database-name-input
 import { UsernameInput } from 'csdm/ui/components/inputs/username-input';
 import { PasswordInput } from 'csdm/ui/components/inputs/password-input';
 import { SpinnableButton } from 'csdm/ui/components/buttons/spinnable-button';
-import { HelpLink } from './help-link';
 import type { DatabaseSettings } from 'csdm/node/settings/settings';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { useDatabaseSettings } from 'csdm/ui/settings/database/use-database-settings';
@@ -28,20 +27,19 @@ import { ResetDatabaseButton } from 'csdm/ui/settings/database/reset-database-bu
 import { DatabaseMode } from 'csdm/common/types/database-mode';
 import { DatabaseModeOptionCards } from 'csdm/ui/settings/database/database-mode-option-cards';
 import { DeleteEmbeddedDatabaseDataButton } from 'csdm/ui/settings/database/delete-embedded-database-data-button';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 
 function DatabaseSchemaVersionMismatch() {
   return (
     <div>
       <p>
         <Trans>
-          It looks like you installed an older version of CS Demo Manager and the current database schema is not
-          compatible with it.
+          It looks like you installed an older version of CS2Lighter and the current database schema is not compatible
+          with it.
         </Trans>
       </p>
       <p>
         <Trans>
-          You can either update CS Demo Manager to the latest version or reset the database to start from scratch.
+          You can either update CS2Lighter to the latest version or reset the database to start from scratch.
         </Trans>
       </p>
 
@@ -74,17 +72,14 @@ function EmbeddedDatabaseVersionMismatch({ onDataDeleted }: EmbeddedDatabaseVers
     <div className="flex flex-col gap-y-8">
       <p>
         <Trans>
-          The existing data was created by a different PostgreSQL version than the one bundled with this version of CS
-          Demo Manager, it cannot be read.
+          The existing data was created by a different PostgreSQL version than the one bundled with this version of
+          CS2Lighter, it cannot be read.
         </Trans>
       </p>
       <p>
         <Trans>
-          To keep your data, follow the{' '}
-          <ExternalLink href="https://cs-demo-manager.com/docs/guides/database#upgrading-the-embedded-database">
-            migration guide
-          </ExternalLink>{' '}
-          before connecting. Otherwise you can delete the data and start from scratch.
+          Keep a backup of your database folder before migrating to another PostgreSQL version. Deleting data starts a
+          new empty library.
         </Trans>
       </p>
       <div>
@@ -107,8 +102,8 @@ function ErrorHint({ error: { code, message }, onEmbeddedDataDeleted }: ErrorHin
       return (
         <p>
           <Trans>
-            The PostgreSQL binaries bundled with CS Demo Manager are missing, reinstall the application or use an
-            external server.
+            The PostgreSQL binaries bundled with CS2Lighter are missing, reinstall the application or use an external
+            server.
           </Trans>
         </p>
       );
@@ -249,7 +244,7 @@ export function ConnectDatabase() {
               <Trans>Database</Trans>
             </h1>
             <p id={descriptionId} className="text-gray-800">
-              <Trans>Choose where CS Demo Manager stores its data.</Trans>
+              <Trans>Choose where CS2Lighter stores its data.</Trans>
             </p>
           </div>
           {renderError()}
@@ -320,7 +315,6 @@ export function ConnectDatabase() {
                 }}
                 isDisabled={isConnecting}
               />
-              <HelpLink />
             </div>
           )}
           <div className="flex items-center justify-between">

@@ -32,7 +32,6 @@
   "menu.tileWindowToLeftOfScreen": "将窗口移至屏幕的左侧",
   "menu.tileWindowToRightOfScreen": "将窗口移至屏幕的右侧",
   "menu.bringAllToFront": "全部在前台显示",
-  "menu.documentation": "文档",
   "menu.help": "帮助",
   "trayMenu.openApp": "打开 CS2Lighter",
   "trayMenu.settings": "设置",
@@ -42,8 +41,6 @@
   "contextMenu.copy": "复制",
   "contextMenu.paste": "粘贴",
   "contextMenu.delete": "删除",
-  "notification.bannedPlayers.title": "{playerCount} 个新的被封禁玩家！",
-  "notification.bannedPlayers.body": "点击以查看玩家",
   "notification.downloading5EplayDemo.title": "正在下载 5Eplay 录像中",
   "notification.downloading5EplayDemo.message": "正在下载新的 5E 录像中，点击此处查看",
   "notification.downloadingFaceitDemo.title": "正在下载 FACEIT 录像中",
@@ -51,9 +48,5 @@
   "notification.downloadingRenownDemo.title": "正在下载 Renown 录像中",
   "notification.downloadingRenownDemo.message": "正在下载新的 Renown 录像中，点击此处查看",
   "notification.downloadingValveDemo.title": "正在下载 Valve 录像中",
-  "notification.downloadingValveDemo.message": "正在下载新的 Valve 录像中，点击此处查看",
-  "notification.steamApi.forbiddenError": "Steam API 拒绝访问",
-  "notification.steamApi.tooManyRequestsError": "Steam API 返回 429 状态码（请求过于频繁）",
-  "notification.steamApi.unknownError": "在检查新的被封禁的 Steam 账户时发生了错误 (代码 {errorCode})",
-  "notification.steamApi.title": "Steam API 错误"
+  "notification.downloadingValveDemo.message": "正在下载新的 Valve 录像中，点击此处查看"
 }

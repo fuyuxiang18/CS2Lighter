@@ -1,6 +1,7 @@
 import { server } from 'csdm/server/server';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 import { ImportProgressTracker } from './import-progress-tracker';
+import { setDemoCacheProgressListener } from 'csdm/node/demo-cache/demo-cache-progress';
 
 let updateTimer: NodeJS.Timeout | undefined;
 export const importProgress = new ImportProgressTracker(() => {
@@ -9,4 +10,11 @@ export const importProgress = new ImportProgressTracker(() => {
     updateTimer = undefined;
     server.sendPushMessage({ name: ServerPushMessageName.ImportProgressUpdated, payload: importProgress.snapshot() });
   }, 100);
+});
+
+setDemoCacheProgressListener({
+  begin: () => importProgress.beginDiscovery(),
+  end: () => importProgress.finishDiscovery(),
+  update: (filePath, status, details) => importProgress.update(filePath, status, details),
+  directory: (directory) => importProgress.setCacheDirectory(directory),
 });

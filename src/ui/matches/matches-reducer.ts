@@ -16,7 +16,6 @@ import {
 import { commentUpdated } from 'csdm/ui/comment/comment-actions';
 import { checksumsTagsUpdated, tagDeleted } from 'csdm/ui/tags/tags-actions';
 import { demoRenamed, demosSourceUpdated, demosTypeUpdated } from 'csdm/ui/demos/demos-actions';
-import { addIgnoredSteamAccountSuccess, deleteIgnoredSteamAccountSuccess } from '../ban/ban-actions';
 import { initializeAppSuccess } from '../bootstrap/bootstrap-actions';
 
 type MatchesState = {
@@ -121,12 +120,6 @@ export const matchesReducer = createReducer(initialState, (builder) => {
       } else {
         state.entities.push(action.payload);
       }
-    })
-    .addCase(addIgnoredSteamAccountSuccess, () => {
-      return initialState;
-    })
-    .addCase(deleteIgnoredSteamAccountSuccess, () => {
-      return initialState;
     })
     .addCase(initializeAppSuccess, () => {
       return initialState;

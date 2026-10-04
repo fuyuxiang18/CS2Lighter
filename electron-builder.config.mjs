@@ -25,7 +25,7 @@ if (shouldNotarize) {
  */
 const config = {
   appId: 'local.cs2.parser',
-  copyright: 'Copyright © 2014-present AkiVer',
+  copyright: 'Copyright © CS2Lighter contributors',
   productName: 'CS2Lighter',
   artifactName: 'CS2Lighter-${version}-${arch}.${ext}',
   publish: {
@@ -82,11 +82,6 @@ const config = {
       // > If you have scripts — shell, Python, AppleScript, or whatever — place them in the resources directory.
       // > These will still be signed, but as a resource rather than as code.
       //
-      // Trying with extraFiles would result in the following error as it's considered as nested code:
-      // Command failed: codesign --sign XXX --force --timestamp ./dist/mac-arm64/CS Demo Manager.app/Contents/MacOS/CS Demo Manager
-      // ./dist/mac-arm64/CS Demo Manager.app/Contents/MacOS/CS Demo Manager: replacing existing signature
-      // ./dist/mac-arm64/CS Demo Manager.app/Contents/MacOS/CS Demo Manager: code object is not signed at all
-      // In subcomponent: ./dist/mac-arm64/CS Demo Manager.app/Contents/csdm
       {
         from: 'build-assets/bin/csdm_darwin.sh',
         to: './csdm',
@@ -99,7 +94,7 @@ const config = {
     ],
   },
   linux: {
-    executableName: 'cs-demo-manager',
+    executableName: 'cs2lighter',
     target: [
       { target: 'deb', arch: ['x64'] },
       { target: 'rpm', arch: ['x64'] },

@@ -10,7 +10,6 @@ import type { Column } from 'csdm/ui/components/table/table-types';
 import type { MatchTable } from 'csdm/common/types/match-table';
 import { dateSortFunction } from 'csdm/ui/components/table/date-sort-function';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
-import { BansCell } from 'csdm/ui/components/matches/bans-cell';
 import { useGetGameModeTranslation } from 'csdm/ui/hooks/use-get-game-mode-translation';
 import { type GameMode } from 'csdm/common/types/counter-strike';
 
@@ -51,24 +50,6 @@ export function useMatchesColumns() {
         message: 'Tags',
       }),
       Cell: TagsCell,
-      width: 20,
-      allowResize: false,
-      allowMove: false,
-      allowSort: false,
-    },
-    {
-      id: 'bans',
-      accessor: 'bannedPlayerCount',
-      headerText: '',
-      headerTooltip: t({
-        context: 'Table header tooltip',
-        message: 'Bans',
-      }),
-      visibilityText: t({
-        context: 'Dropdown column visibility',
-        message: 'Bans',
-      }),
-      Cell: BansCell,
       width: 20,
       allowResize: false,
       allowMove: false,

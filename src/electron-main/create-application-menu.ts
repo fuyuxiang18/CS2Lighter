@@ -362,18 +362,9 @@ export function createApplicationMenu(client: WebSocketClient) {
 
   const helpSubmenu: MenuItemConstructorOptions[] = [
     {
-      label: i18n.t({
-        id: 'menu.documentation',
-        message: 'Documentation',
-      }),
-      click: async () => {
-        await shell.openExternal('https://cs-demo-manager.com/docs');
-      },
-    },
-    {
       label: 'GitHub',
       click: async () => {
-        await shell.openExternal('https://github.com/akiver/cs-demo-manager');
+        await shell.openExternal('https://github.com/fuyuxiang18/CS2Lighter');
       },
     },
   ];

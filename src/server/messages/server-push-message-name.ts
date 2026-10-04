@@ -55,7 +55,6 @@ export const ServerPushMessageName = {
   StartingCounterStrike: 'starting-counter-strike',
   CounterStrikeError: 'counter-strike-error',
   ResetTablesStateSuccess: 'reset-tables-state-success',
-  IgnoredSteamAccountsChanged: 'ignored-steam-accounts-changed',
   TeamNamesUpdated: 'team-names-updated',
 } as const;
 
@@ -101,7 +100,6 @@ export interface ServerPushMessagePayload extends SharedServerMessagePayload {
   [ServerPushMessageName.StartingCounterStrike]: void;
   [ServerPushMessageName.CounterStrikeError]: CounterStrikeErrorPayload;
   [ServerPushMessageName.ResetTablesStateSuccess]: void;
-  [ServerPushMessageName.IgnoredSteamAccountsChanged]: void;
   [ServerPushMessageName.TeamNamesUpdated]: number;
 }
 

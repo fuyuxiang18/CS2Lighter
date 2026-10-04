@@ -1,4 +1,4 @@
-import type { ColumnType, Insertable, Updateable } from 'kysely';
+import type { ColumnType, Insertable } from 'kysely';
 import type { EconomyBan } from 'csdm/node/steam-web-api/steam-constants';
 
 export type SteamAccountTable = {
@@ -17,4 +17,3 @@ export type SteamAccountTable = {
 };
 
 export type InsertableSteamAccount = Insertable<SteamAccountTable>;
-export type UpdateableSteamAccount = Updateable<SteamAccountTable>;

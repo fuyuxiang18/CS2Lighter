@@ -14,7 +14,6 @@ export function InitialPageSelect() {
 
   const labelPerPage: Record<Exclude<Page, typeof Page.Download>, string> = {
     [Page.Habits]: t`My habits`,
-    [Page.Learning]: t`Learn from a player`,
     [Page.Matches]: t({
       context: 'Select option initial page',
       message: 'Matches',
@@ -47,7 +46,7 @@ export function InitialPageSelect() {
       interactiveComponent={
         <Select
           options={options}
-          value={initialPage === Page.Download ? Page.Habits : initialPage}
+          value={options.some((option) => option.value === initialPage) ? initialPage : Page.Habits}
           onChange={async (page) => {
             await updateSettings({
               ui: {

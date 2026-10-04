@@ -20,10 +20,25 @@ export async function fetchMatchTable(checksum: string): Promise<MatchTable> {
       return qb.on('teamB.letter', '=', TeamLetter.B).onRef('teamB.match_checksum', '=', 'matches.checksum');
     })
     .leftJoin('players', 'players.match_checksum', 'matches.checksum')
-    .leftJoin('player_ban_per_match', 'player_ban_per_match.match_checksum', 'matches.checksum')
     .leftJoin('comments', 'comments.checksum', 'matches.checksum')
     .where('matches.checksum', '=', checksum)
-    .selectAll('matches')
+    .select([
+      'matches.checksum',
+      'matches.demo_path',
+      'matches.game_type',
+      'matches.game_mode',
+      'matches.game_mode_str',
+      'matches.is_ranked',
+      'matches.kill_count',
+      'matches.death_count',
+      'matches.assist_count',
+      'matches.shot_count',
+      'matches.winner_name',
+      'matches.winner_side',
+      'matches.analyze_date',
+      'matches.overtime_count',
+      'matches.max_rounds',
+    ])
     .select([
       'demos.name',
       'demos.game',
@@ -49,7 +64,6 @@ export async function fetchMatchTable(checksum: string): Promise<MatchTable> {
       sum<number>('players.three_kill_count').as('threeKillCount'),
       sql<number>`ROUND(AVG(players.hltv_rating_2)::numeric, 2)`.as('hltvRating2'),
       'comments.comment',
-      'player_ban_count as banned_player_count',
     ])
     .groupBy([
       'matches.checksum',
@@ -73,7 +87,6 @@ export async function fetchMatchTable(checksum: string): Promise<MatchTable> {
       'teamB.name',
       'teamA.score',
       'teamB.score',
-      'banned_player_count',
     ])
     .executeTakeFirst();
 

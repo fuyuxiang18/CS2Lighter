@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState, type ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { GameMode, TeamNumber } from 'csdm/common/types/counter-strike';
+import { DemoSource, GameMode, TeamNumber } from 'csdm/common/types/counter-strike';
 import type { HabitsCohort, HabitsSummary } from 'csdm/common/types/habits';
+import type { PersonalStatsSummary } from 'csdm/common/types/personal-stats';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 import { Button } from 'csdm/ui/components/buttons/button';
@@ -14,6 +15,7 @@ import { HabitsLayout, HabitsPanel } from './habits-layout';
 import { HabitsMap } from './habits-map';
 import { HabitsEvidenceList } from './habits-evidence';
 import { readHabitsIdentity, saveHabitsIdentity, type HabitsIdentity } from './habits-storage';
+import { PersonalStatsPanels } from './personal-stats-panels';
 
 export function HabitsDashboard() {
   const { t } = useLingui();
@@ -24,11 +26,17 @@ export function HabitsDashboard() {
   const [storageError, setStorageError] = useState(false);
   const [mapName, setMapName] = useState('all');
   const [side, setSide] = useState<'all' | 'ct' | 't'>('all');
+  const [source, setSource] = useState<DemoSource | 'all'>('all');
   const [selectedCohort, setSelectedCohort] = useState('');
-  const [result, setResult] = useState<{ key: string; summary: HabitsSummary | null; failed: boolean } | null>(null);
+  const [result, setResult] = useState<{
+    key: string;
+    summary: HabitsSummary | null;
+    stats: PersonalStatsSummary | null;
+    failed: boolean;
+  } | null>(null);
   const [revision, setRevision] = useState(0);
   const steamId = identity?.steamId;
-  const requestKey = JSON.stringify([steamId, mapName, side, revision]);
+  const requestKey = JSON.stringify([steamId, mapName, side, source, revision]);
   const summary = result?.summary;
   const loading = Boolean(steamId && result?.key !== requestKey);
   const failed = result?.key === requestKey && result.failed;
@@ -55,28 +63,37 @@ export function HabitsDashboard() {
       return;
     }
     let cancelled = false;
-    void client
-      .send({
+    const payload = {
+      steamId,
+      ...(mapName === 'all' ? {} : { mapName }),
+      ...(source === 'all' ? {} : { source }),
+      ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
+    };
+    void Promise.all([
+      client.send({
         name: RendererClientMessageName.FetchHabitsSummary,
-        payload: {
-          steamId,
-          ...(mapName === 'all' ? {} : { mapName }),
-          ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
-        },
-      })
-      .then((result) => {
+        payload,
+      }),
+      client.send({ name: RendererClientMessageName.FetchPersonalStats, payload }),
+    ])
+      .then(([summary, stats]) => {
         if (!cancelled) {
-          setResult({ key: requestKey, summary: result, failed: false });
+          setResult({ key: requestKey, summary, stats, failed: false });
         }
       })
       .catch(() => {
         if (!cancelled)
-          setResult((previous) => ({ key: requestKey, summary: previous?.summary ?? null, failed: true }));
+          setResult((previous) => ({
+            key: requestKey,
+            summary: previous?.summary ?? null,
+            stats: previous?.stats ?? null,
+            failed: true,
+          }));
       });
     return () => {
       cancelled = true;
     };
-  }, [client, steamId, mapName, side, requestKey]);
+  }, [client, steamId, mapName, side, source, requestKey]);
 
   const cohort = summary?.cohorts.find((cohort) => cohortKey(cohort) === selectedCohort) ?? summary?.cohorts[0];
   const coverage =
@@ -118,8 +135,19 @@ export function HabitsDashboard() {
                 ]}
               />
             </div>
+            <div className="flex flex-col gap-4">
+              <Select
+                label={<Trans>Source</Trans>}
+                value={source}
+                onChange={setSource}
+                options={[
+                  { value: 'all', label: t`All sources` },
+                  ...Object.values(DemoSource).map((value) => ({ value, label: getDemoSourceName(value) })),
+                ]}
+              />
+            </div>
             <Button isDisabled={loading} onClick={() => setRevision((value) => value + 1)}>
-              <Trans>Refresh</Trans>
+              <Trans>Reload cached data</Trans>
             </Button>
             <p className="pb-4 text-caption text-gray-700">
               <Trans>CS2 · your linked account · all imported dates</Trans>
@@ -127,38 +155,17 @@ export function HabitsDashboard() {
           </div>
           {loading && (
             <p role="status">
-              <Trans>Building your cross-match profile…</Trans>
+              <Trans>Loading saved demo data…</Trans>
             </p>
           )}
           {failed && (
             <p role="alert" className="text-red-500">
-              <Trans>Could not load your match history. Use Refresh to try again.</Trans>
+              <Trans>Could not load your match history. Use Reload cached data to try again.</Trans>
             </p>
           )}
           {!loading && !failed && summary && (
             <>
-              <div className="grid grid-cols-2 gap-12 xl:grid-cols-4">
-                <Metric
-                  title={<Trans>Matches / rounds</Trans>}
-                  value={`${summary.matchCount} / ${summary.roundCount}`}
-                  detail={<Trans>Rounds included in this selection</Trans>}
-                />
-                <Metric
-                  title={<Trans>Kills / deaths</Trans>}
-                  value={`${summary.kills} / ${summary.deaths}`}
-                  detail={<Trans>Across your selected matches</Trans>}
-                />
-                <Metric
-                  title={<Trans>Opening kills / deaths</Trans>}
-                  value={`${summary.openingKills} / ${summary.openingDeaths}`}
-                  detail={<Trans>First enemy elimination of each round</Trans>}
-                />
-                <Metric
-                  title={<Trans>Position coverage</Trans>}
-                  value={`${coverage}%`}
-                  detail={<Trans>Rounds with usable position data</Trans>}
-                />
-              </div>
+              {result.stats && <PersonalStatsPanels summary={result.stats} />}
               {summary.matchCount === 0 ? (
                 <HabitsPanel title={<Trans>Your profile is ready for matches</Trans>}>
                   <p>
@@ -171,6 +178,14 @@ export function HabitsDashboard() {
               ) : (
                 <>
                   <HabitsPanel title={<Trans>Where you spend your rounds</Trans>}>
+                    <p className="text-caption text-gray-700">
+                      <Trans>
+                        Heatmaps stop when the round is decided. Personal combat totals also include post-round fights.
+                      </Trans>
+                    </p>
+                    <p className="text-caption text-gray-700">
+                      <Trans>Position coverage: {coverage}% of selected rounds</Trans>
+                    </p>
                     <p className="text-gray-700">
                       <Trans>
                         Matches are grouped by map and game build. The installed radar is a reference and may differ
@@ -232,16 +247,6 @@ export function HabitsDashboard() {
         </>
       )}
     </HabitsLayout>
-  );
-}
-
-function Metric({ title, value, detail }: { title: ReactNode; value: string; detail: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-8 rounded-8 border border-gray-300 bg-gray-50 p-20">
-      <p className="text-caption text-gray-700">{title}</p>
-      <p className="text-title">{value}</p>
-      <p className="text-caption text-gray-700">{detail}</p>
-    </div>
   );
 }
 

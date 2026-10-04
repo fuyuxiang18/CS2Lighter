@@ -6,7 +6,6 @@ import { CancelButton } from 'csdm/ui/components/buttons/cancel-button';
 import { SaveButton } from 'csdm/ui/components/buttons/save-button';
 import { useDialog } from 'csdm/ui/components/dialogs/use-dialog';
 import { Trans } from '@lingui/react/macro';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 import type { CameraPayload } from 'csdm/server/handlers/renderer-process/cameras/camera-payload';
 import { useCameraForm } from './use-camera-form';
 import { CoordinateXInput } from './coordinate-x-input';
@@ -203,11 +202,6 @@ export function CameraForm({ nameInput, error, onSubmit }: Props) {
         </div>
       </DialogContent>
       <DialogFooter>
-        <div className="mr-auto">
-          <ExternalLink href="https://cs-demo-manager.com/docs/guides/cameras">
-            <Trans>Documentation</Trans>
-          </ExternalLink>
-        </div>
         <SaveButton onClick={validateAndSubmit} />
         <CancelButton onClick={hideDialog} />
       </DialogFooter>

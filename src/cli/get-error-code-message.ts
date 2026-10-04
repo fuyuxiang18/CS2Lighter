@@ -12,7 +12,7 @@ export function getErrorCodeMessage(errorCode: ErrorCode): string {
     case ErrorCode.MatchNotFound:
       return 'Match not found in the database, make sure the demo has been analyzed.';
     case ErrorCode.InvalidDemoPath:
-      return 'The demo path contains characters that are not supported by Counter-Strike. Move the demo in a folder that contains only Basic Latin characters, see https://cs-demo-manager.com/docs/guides/playback#cs2-demo-playback-doesnt-start-or-crashes';
+      return 'The demo path contains characters that are not supported by Counter-Strike. Move the demo to a folder whose path uses only Basic Latin characters.';
     case ErrorCode.InvalidDemoHeader:
       return 'The demo header is invalid, the file may be corrupted.';
     case ErrorCode.InvalidDemoName:
@@ -28,7 +28,7 @@ export function getErrorCodeMessage(errorCode: ErrorCode): string {
     case ErrorCode.DatabaseSchemaVersionMismatch:
       return 'The database schema is outdated, start the GUI to run the migrations.';
     case ErrorCode.EmbeddedDatabaseBinariesNotFound:
-      return 'The PostgreSQL binaries bundled with the app are missing, reinstall CS Demo Manager or use an external PostgreSQL server.';
+      return 'The PostgreSQL binaries bundled with the app are missing, reinstall CS2Lighter or use an external PostgreSQL server.';
     case ErrorCode.EmbeddedDatabaseInitializationFailed:
       return 'Failed to initialize the embedded database, see the log file for details.';
     case ErrorCode.EmbeddedDatabaseStartFailed:
@@ -38,7 +38,7 @@ export function getErrorCodeMessage(errorCode: ErrorCode): string {
     case ErrorCode.StartCounterStrikeError:
       return 'Failed to start the game, make sure Steam is running and you are connected.';
     case ErrorCode.CounterStrikeExecutableNotFound:
-      return 'Counter-Strike executable not found, see https://cs-demo-manager.com/docs/guides/playback#counter-strike-executable-not-found';
+      return 'Counter-Strike executable not found. Check the game location in playback settings.';
     case ErrorCode.CustomCounterStrikeExecutableNotFound:
       return 'Counter-Strike executable not found, check your app playback settings.';
     case ErrorCode.UnsupportedGame:
@@ -54,7 +54,7 @@ export function getErrorCodeMessage(errorCode: ErrorCode): string {
     case ErrorCode.CounterStrikeVideoConfigNotFound:
       return 'Counter-Strike video config file not found, make sure the game has been launched at least once from Steam.';
     case ErrorCode.GameError:
-      return 'The game crashed, see https://cs-demo-manager.com/docs/guides/playback#cs2-demo-playback-doesnt-start-or-crashes';
+      return 'The game crashed. Check the selected CS2 plugin version in playback settings and the game log.';
     case ErrorCode.AccessDenied:
       return 'The game process exited with an access denied error, make sure to close any anti-cheat software and retry.';
     case ErrorCode.SteamNotRunning:

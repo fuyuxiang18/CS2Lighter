@@ -9,7 +9,6 @@ import { LowerRadarButton } from './lower-radar-button';
 import { AudioButton } from './audio-button';
 import { AudioSelectorButton } from './audio-selector-button';
 import { useViewerContext } from '../use-viewer-context';
-import { DocumentationLink } from 'csdm/ui/components/links/documentation-link';
 import { DrawingButton } from './drawing-button';
 import type { DrawableCanvas } from '../drawing/use-drawable-canvas';
 
@@ -31,9 +30,6 @@ export function PlaybackBar({ drawing }: Props) {
       <DrawingButton drawing={drawing} />
       <LowerRadarButton />
       <FullscreenButton />
-      <div className="flex items-center px-8">
-        <DocumentationLink url="https://cs-demo-manager.com/docs/guides/2d-viewer" />
-      </div>
     </div>
   );
 }

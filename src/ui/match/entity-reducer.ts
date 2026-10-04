@@ -6,7 +6,6 @@ import type { ErrorCode } from 'csdm/common/error-code';
 import { commentUpdated } from 'csdm/ui/comment/comment-actions';
 import { checksumsTagsUpdated, playersTagsUpdated, roundTagsUpdated } from 'csdm/ui/tags/tags-actions';
 import { demoRenamed } from 'csdm/ui/demos/demos-actions';
-import { addIgnoredSteamAccountSuccess, deleteIgnoredSteamAccountSuccess } from '../ban/ban-actions';
 import { insertMatchSuccess } from '../analyses/analyses-actions';
 import { matchesTypeUpdated } from '../matches/matches-actions';
 import { steamAccountNameUpdated } from '../player/player-actions';
@@ -99,20 +98,6 @@ export const entityReducer = createReducer(initialState, (builder) => {
     .addCase(updateMatchDemoLocationSuccess, (state, action) => {
       if (state.match !== null) {
         state.match.demoFilePath = action.payload.demoFilePath;
-      }
-    })
-    .addCase(addIgnoredSteamAccountSuccess, (state, action) => {
-      for (const player of state.match?.players ?? []) {
-        if (action.payload.account.steamId === player.steamId) {
-          player.lastBanDate = null;
-        }
-      }
-    })
-    .addCase(deleteIgnoredSteamAccountSuccess, (state, action) => {
-      for (const player of state.match?.players ?? []) {
-        if (action.payload.account.steamId === player.steamId) {
-          player.lastBanDate = action.payload.account.lastBanDate;
-        }
       }
     })
     .addCase(insertMatchSuccess, (state, action) => {

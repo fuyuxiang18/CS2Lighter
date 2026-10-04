@@ -92,7 +92,6 @@ declare global {
     closeWindow: () => void;
     minimizeWindow: () => void;
     onNavigateToPendingDownloads: (callback: () => void) => () => void;
-    onNavigateToBans: (callback: () => void) => () => void;
     onUpdateStateChanged: (
       callback: (state: import('csdm/common/types/app-update').AppUpdateState) => void,
     ) => () => void;

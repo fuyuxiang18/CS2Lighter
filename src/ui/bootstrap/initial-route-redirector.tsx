@@ -27,9 +27,6 @@ export function InitialRouteRedirector() {
     let to: string = RoutePath.Habits;
     if (startPathArgument && startPathArgument !== StartPath.Settings) {
       switch (startPathArgument) {
-        case StartPath.Bans:
-          to = RoutePath.Ban;
-          break;
         case StartPath.Demos:
           to = RoutePath.Demos;
           break;
@@ -53,9 +50,6 @@ export function InitialRouteRedirector() {
       switch (defaultPage) {
         case Page.Habits:
           to = RoutePath.Habits;
-          break;
-        case Page.Learning:
-          to = RoutePath.Learning;
           break;
         case Page.Matches:
           to = RoutePath.Matches;

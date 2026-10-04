@@ -6,6 +6,7 @@ out
 .env
 *.dem
 *.vdm
+demodata/
 *.pdb
 *.exp
 *.lib

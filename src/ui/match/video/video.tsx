@@ -20,7 +20,6 @@ import { SequencesSummary } from './sequences-summary';
 import { EditSequencesSettingsButton } from './sequences/edit-sequences/edit-sequences-settings-button';
 import { RecordingSystemSelect } from './recording-system-select';
 import { RecordingOutputSelect } from './recording-output-select';
-import { DocumentationLink } from 'csdm/ui/components/links/documentation-link';
 import { WatchSequencesButton } from './watch-sequences-button';
 import { VideoActionsMenu } from './video-actions-menu';
 import { ToggleTrueView } from './toggle-true-view';
@@ -41,9 +40,6 @@ export function MatchVideo() {
           <WatchSequencesButton />
           <VideoActionsMenu />
           <SequencesSummary />
-          <div className="ml-auto">
-            <DocumentationLink url="https://cs-demo-manager.com/docs/guides/video" />
-          </div>
         </div>
         <div className="mt-12 flex gap-x-12">
           <div className="flex flex-col rounded-4 border border-gray-400 p-8">

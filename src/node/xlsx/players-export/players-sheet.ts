@@ -118,22 +118,6 @@ export class PlayersSheet extends MultiplePlayerExportSheet<PlayerRow> {
         name: '5k',
         cellFormatter: (row) => row.fiveKillCount,
       },
-      {
-        name: 'game_ban_count',
-        cellFormatter: (row) => row.gameBanCount,
-      },
-      {
-        name: 'community_banned',
-        cellFormatter: (row) => row.isCommunityBanned,
-      },
-      {
-        name: 'vac_ban_count',
-        cellFormatter: (row) => row.vacBanCount,
-      },
-      {
-        name: 'last_ban_date',
-        cellFormatter: (row) => row.lastBanDate ?? '',
-      },
     ];
   }
 

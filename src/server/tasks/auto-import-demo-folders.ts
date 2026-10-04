@@ -11,6 +11,7 @@ import { analysesListener } from 'csdm/server/analyses-listener';
 import { AnalysisStatus } from 'csdm/common/types/analysis-status';
 import { importProgress } from 'csdm/server/import-progress';
 import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
+import { getDemoCacheFailures, retryFailedDemoCaches } from 'csdm/node/demo-cache/demo-cache-service';
 import {
   DemoFileReadiness,
   getDemoFileFingerprint,
@@ -168,12 +169,25 @@ async function scanFolders() {
         }
         fingerprint = getDemoFileFingerprint(stats);
         const record = records.get(filePath);
+        // Cache retries never need the original recording, and a successful backfill repairs an earlier cache failure.
+        if (
+          record?.reason === 'cache' &&
+          record.checksum &&
+          knownChecksums.has(record.checksum) &&
+          !getDemoCacheFailures().has(filePath)
+        ) {
+          record.failed = false;
+          record.reason = undefined;
+          record.message = undefined;
+          changed = true;
+        }
         if (shouldSkipDemoImport(record, fingerprint, knownChecksums)) {
           if (reportedFingerprints.get(filePath) !== fingerprint) {
             beginProgressDiscovery();
-            importProgress.update(filePath, record?.failed ? 'failed' : 'skipped', {
-              reason: record?.failed ? (record.reason ?? 'analysis') : 'already-imported',
-              message: record?.message,
+            const cacheFailure = getDemoCacheFailures().get(filePath);
+            importProgress.update(filePath, record?.failed || cacheFailure ? 'failed' : 'skipped', {
+              reason: cacheFailure ? 'cache' : record?.failed ? (record.reason ?? 'analysis') : 'already-imported',
+              message: cacheFailure?.message ?? record?.message,
             });
             reportedFingerprints.set(filePath, fingerprint);
           }
@@ -224,7 +238,11 @@ async function scanFolders() {
         if (knownChecksums.has(demo.checksum)) {
           records.set(filePath, { fingerprint, checksum: demo.checksum, failed: false });
           changed = true;
-          importProgress.update(filePath, 'skipped', { reason: 'already-imported' });
+          const cacheFailure = getDemoCacheFailures().get(filePath);
+          importProgress.update(filePath, cacheFailure ? 'failed' : 'skipped', {
+            reason: cacheFailure ? 'cache' : 'already-imported',
+            message: cacheFailure?.message,
+          });
           continue;
         }
         const queuedAnalysis = analysesListener
@@ -315,7 +333,7 @@ export function startAutoImportDemoFolders() {
     if (attempt === undefined) {
       // A user may retry a failed automatic import through the existing manual Analyze action.
       const record = records.get(analysis.demoPath);
-      if (record && analysis.status === AnalysisStatus.InsertSuccess) {
+      if (record && analysis.status === AnalysisStatus.InsertSuccess && !analysis.cacheError) {
         record.failed = false;
         record.reason = undefined;
         record.message = undefined;
@@ -328,9 +346,9 @@ export function startAutoImportDemoFolders() {
     records.set(attempt.filePath, {
       fingerprint: attempt.fingerprint,
       checksum: analysis.demoChecksum,
-      failed: analysis.status !== AnalysisStatus.InsertSuccess,
-      reason: analysis.status === AnalysisStatus.InsertError ? 'insertion' : 'analysis',
-      message: analysis.output.slice(-1000),
+      failed: analysis.status !== AnalysisStatus.InsertSuccess || Boolean(analysis.cacheError),
+      reason: analysis.cacheError ? 'cache' : analysis.status === AnalysisStatus.InsertError ? 'insertion' : 'analysis',
+      message: analysis.cacheError ?? analysis.output.slice(-1000),
     });
     saveRecords();
   });
@@ -372,7 +390,15 @@ export async function retryFailedImports() {
   }
   importProgress.beginDiscovery();
   try {
-    for (const { filePath } of failures) {
+    // Cache failures are regenerated from the inserted DB, even if the source demo was moved or deleted.
+    try {
+      await retryFailedDemoCaches();
+    } catch (error) {
+      logger.error('Unable to retry one or more local demo caches');
+      logger.error(error);
+    }
+    for (const { filePath, reason } of failures) {
+      if (reason === 'cache') continue;
       try {
         if (analysesListener.getAnalyses().some((analysis) => analysis.demoPath === filePath)) {
           continue;

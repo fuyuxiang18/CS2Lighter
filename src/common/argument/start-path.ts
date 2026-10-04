@@ -1,5 +1,4 @@
 export const StartPath = {
-  Bans: 'bans',
   Demos: 'demos',
   Downloads: 'downloads',
   Matches: 'matches',

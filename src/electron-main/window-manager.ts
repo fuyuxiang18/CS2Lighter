@@ -149,7 +149,6 @@ class WindowManager {
 
   private isAllowedUrl(url: string) {
     const allowedWebsites = [
-      'https://cs-demo-manager.com/',
       'https://github.com/',
       'https://steamcommunity.com/',
       'https://ffmpeg.org/',

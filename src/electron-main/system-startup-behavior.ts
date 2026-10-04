@@ -119,7 +119,7 @@ Version=1.0
 Type=Application
 ${execLine}
 Name=CS2Lighter
-Comment=Counter-Strike Demo Manager
+Comment=CS2Lighter
 Terminal=false
 `;
     await fs.writeFile(desktopFilePath, desktopFileContent);

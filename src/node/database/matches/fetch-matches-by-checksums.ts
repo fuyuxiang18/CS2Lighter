@@ -25,7 +25,23 @@ export async function fetchMatchesByChecksums(checksums: string[]) {
     .innerJoin('demos', 'demos.checksum', 'matches.checksum')
     .leftJoin('comments', 'comments.checksum', 'matches.checksum')
     .where('matches.checksum', 'in', checksums)
-    .selectAll('matches')
+    .select([
+      'matches.checksum',
+      'matches.demo_path',
+      'matches.game_type',
+      'matches.game_mode',
+      'matches.game_mode_str',
+      'matches.is_ranked',
+      'matches.kill_count',
+      'matches.death_count',
+      'matches.assist_count',
+      'matches.shot_count',
+      'matches.winner_name',
+      'matches.winner_side',
+      'matches.analyze_date',
+      'matches.overtime_count',
+      'matches.max_rounds',
+    ])
     .selectAll('demos')
     .select(['comments.comment'])
     .execute();

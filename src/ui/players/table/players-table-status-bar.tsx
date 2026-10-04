@@ -3,7 +3,6 @@ import { TableStatusBarSeparator } from 'csdm/ui/components/table/status-bar/tab
 import { TableStatusBar } from 'csdm/ui/components/table/status-bar/table-status-bar';
 import { PlayerCount } from './player-count';
 import { SelectedPlayerCount } from './selected-player-count';
-import { BansIndicators } from './bans-indicators';
 
 export function PlayersTableStatusBar() {
   return (
@@ -12,7 +11,6 @@ export function PlayersTableStatusBar() {
       <TableStatusBarSeparator />
       <SelectedPlayerCount />
       <TableStatusBarSeparator />
-      <BansIndicators />
     </TableStatusBar>
   );
 }

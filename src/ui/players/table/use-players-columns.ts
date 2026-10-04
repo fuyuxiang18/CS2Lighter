@@ -8,7 +8,6 @@ import type { PlayerTable } from 'csdm/common/types/player-table';
 import type { Column } from 'csdm/ui/components/table/table-types';
 import { dateSortFunction } from 'csdm/ui/components/table/date-sort-function';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
-import { BansCell } from './bans-cell';
 import { CommentCell } from 'csdm/ui/components/table/cells/comment-cell';
 import { TagsCell } from 'csdm/ui/components/table/cells/tags-cell';
 import { killDeathDiffSortFunction } from 'csdm/ui/components/table/kill-death-diff-sort-function';
@@ -87,24 +86,6 @@ export function usePlayersColumns() {
       Cell: RankCell,
       noPadding: true,
       allowResize: false,
-    },
-    {
-      id: 'bans',
-      accessor: 'isVacBanned',
-      headerText: '',
-      headerTooltip: t({
-        context: 'Table header tooltip',
-        message: 'Bans',
-      }),
-      visibilityText: t({
-        context: 'Dropdown column visibility',
-        message: 'Bans',
-      }),
-      Cell: BansCell,
-      width: 20,
-      allowResize: false,
-      allowMove: false,
-      allowSort: false,
     },
     {
       id: 'name',
@@ -427,7 +408,7 @@ export function usePlayersColumns() {
       textAlign: 'right',
     },
     {
-      id: 'last-match-ban',
+      id: 'last-match-date',
       accessor: 'lastMatchDate',
       headerText: t({
         context: 'Table header',
@@ -441,27 +422,6 @@ export function usePlayersColumns() {
       maxWidth: 250,
       sortFunction: dateSortFunction<PlayerTable>,
       formatter: (date: string) => {
-        return formatDate(date, { timeZone: 'UTC' });
-      },
-    },
-    {
-      id: 'last-ban-date',
-      accessor: 'lastBanDate',
-      headerText: t({
-        context: 'Table header',
-        message: 'Last ban date',
-      }),
-      headerTooltip: t({
-        context: 'Table header tooltip',
-        message: 'Last ban date',
-      }),
-      width: 200,
-      maxWidth: 250,
-      sortFunction: dateSortFunction<PlayerTable>,
-      formatter: (date: string | null) => {
-        if (date === null) {
-          return null;
-        }
         return formatDate(date, { timeZone: 'UTC' });
       },
     },

@@ -171,34 +171,6 @@ export class GeneralSheet extends SinglePlayerExportSheet<Player> {
         name: 'round_count_as_t',
         cellFormatter: (row) => row.roundCountAsT,
       },
-      {
-        name: 'game_ban_count',
-        cellFormatter: (row) => row.gameBanCount,
-      },
-      {
-        name: 'community_banned',
-        cellFormatter: (row) => row.isCommunityBanned,
-      },
-      {
-        name: 'vac_ban_count',
-        cellFormatter: (row) => row.vacBanCount,
-      },
-      {
-        name: 'game_ban_count',
-        cellFormatter: (row) => row.gameBanCount,
-      },
-      {
-        name: 'community_banned',
-        cellFormatter: (row) => row.isCommunityBanned,
-      },
-      {
-        name: 'vac_ban_count',
-        cellFormatter: (row) => row.vacBanCount,
-      },
-      {
-        name: 'last_ban_date',
-        cellFormatter: (row) => row.lastBanDate ?? '',
-      },
     ];
   }
 

@@ -59,7 +59,6 @@ export type MatchPlayer = {
   hostageRescuedCount: number;
   hltvRating: number;
   hltvRating2: number;
-  lastBanDate: string | null;
   crosshairShareCode: string | null;
   inspectWeaponCount: number;
   deathWhileInspectingWeaponCount: number;

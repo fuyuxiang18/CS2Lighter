@@ -14,4 +14,6 @@ export type Analysis = {
   analyzePositions?: boolean;
   // Automatic imports must not insert incomplete results from a corrupted recording.
   allowCorrupted?: boolean;
+  // Database insertion succeeded, but its durable compact cache still needs a retry.
+  cacheError?: string;
 };

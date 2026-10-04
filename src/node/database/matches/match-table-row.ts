@@ -2,8 +2,7 @@ import type { MatchRow } from 'csdm/node/database/matches/match-table';
 import type { DemoRow } from '../demos/demo-table';
 
 export type MatchTableRow = DemoRow &
-  MatchRow & {
-    banned_player_count: number | null;
+  Omit<MatchRow, 'has_vac_live_ban'> & {
     comment: string | null;
     teamAName: string;
     teamAScore: number;

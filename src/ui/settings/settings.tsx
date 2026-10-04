@@ -10,7 +10,6 @@ import { UiSettings } from './ui/ui-settings';
 import { useSettingsOverlay } from './use-settings-overlay';
 import { PlaybackSettings } from './playback/playback-settings';
 import { TagsSettings } from './tags/tags-settings';
-import { BanSettings } from './bans/ban-settings';
 import { assertNever } from 'csdm/common/assert-never';
 import { About } from './about/about';
 import { CamerasSettings } from './cameras/cameras-settings';
@@ -35,8 +34,6 @@ export function Settings() {
       return <MapsSettings />;
     case SettingsCategory.Tags:
       return <TagsSettings />;
-    case SettingsCategory.Ban:
-      return <BanSettings />;
     case SettingsCategory.Integrations:
       return <IntegrationsSettings />;
     case SettingsCategory.About:

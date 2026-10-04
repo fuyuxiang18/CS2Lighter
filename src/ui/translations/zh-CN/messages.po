@@ -55,16 +55,8 @@ msgid "The analysis failed with the error code: <0>{errorCode}</0>"
 msgstr "分析失败，错误代码：<0>{errorCode}</0>"
 
 #: src/ui/analyses/analysis-logs.tsx
-msgid "Please read the error codes <0>documentation</0> to understand the code signification and what you can do."
-msgstr "请阅读错误代码<0>文档</0>来了解代码含义以及你能做的操作。"
-
-#: src/ui/analyses/analysis-logs.tsx
-msgid "Please read and follow the instructions on <0>GitHub</0> to report the issue <1>only if the documentation says you should for this error code</1>."
-msgstr "<1>仅当文档明确要求报告此错误代码时</1>，请阅读并按照 <0>GitHub</0> 上的说明提交问题。"
-
-#: src/ui/analyses/analysis-logs.tsx
-msgid "Please read and follow the instructions on <0>GitHub</0> to report the issue."
-msgstr "请阅读并按照 <0>GitHub</0> 上的说明来报告问题。"
+msgid "Copy the analysis log below when reporting this problem."
+msgstr "反馈问题时，请附上下方的分析日志。"
 
 #: src/ui/analyses/analysis-logs.tsx
 msgid "Logs:"
@@ -177,46 +169,86 @@ msgctxt "Table header tooltip"
 msgid "Date added"
 msgstr "添加日期"
 
-#: src/ui/ban/stats/ban-per-competitive-rank-chart.tsx
-msgctxt "Chart title"
-msgid "Ban per competitive rank"
-msgstr "每个竞技段位的封禁数"
+#: src/ui/bootstrap/app-loader.tsx
+msgid "An error occurred while loading the application."
+msgstr "加载应用程序时发生错误。"
 
-#: src/ui/ban/stats/ban-per-date-chart.tsx
-#: src/ui/player/rank/player-competitive-rank-history.tsx
-#: src/ui/player/rank/player-premier-rank-history.tsx
-msgctxt "Chart axis label"
-msgid "Date"
-msgstr "日期"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "It looks like you installed an older version of CS2Lighter and the current database schema is not compatible with it."
+msgstr "当前安装的 CS2Lighter 版本较旧，与现有数据库结构不兼容。"
 
-#: src/ui/ban/stats/ban-per-date-chart.tsx
-msgctxt "Chart axis label"
-msgid "Bans"
-msgstr "黑名单"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "You can either update CS2Lighter to the latest version or reset the database to start from scratch."
+msgstr "可以将 CS2Lighter 更新到最新版本，或重置数据库以重新开始。"
 
-#: src/ui/ban/stats/ban-per-date-chart.tsx
-msgctxt "Chart tooltip"
-msgid "Bans"
-msgstr "黑名单"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "The embedded PostgreSQL server could not be started, see the application log file and the PostgreSQL log file in <0>{folderPath}</0> for details."
+msgstr "无法启动内置 PostgreSQL 服务器，请查看应用日志和 <0>{folderPath}</0> 中的 PostgreSQL 日志了解详情。"
 
-#: src/ui/ban/stats/ban-per-date-chart.tsx
-msgid "Ban count over time"
-msgstr "随时间变化的封禁次数"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "The existing data was created by a different PostgreSQL version than the one bundled with this version of CS2Lighter, it cannot be read."
+msgstr "现有数据由另一个 PostgreSQL 版本创建，当前 CS2Lighter 内置的版本无法读取。"
 
-#: src/ui/ban/stats/ban-per-premier-rank-chart.tsx
-msgid "Tier {tier}: {bannedCount}"
-msgstr "级别 {tier}: {bannedCount}"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "Keep a backup of your database folder before migrating to another PostgreSQL version. Deleting data starts a new empty library."
+msgstr "迁移到其他 PostgreSQL 版本前，请备份数据库文件夹。删除数据后将创建一个空资料库。"
 
-#: src/ui/ban/stats/ban-per-premier-rank-chart.tsx
-msgctxt "Chart title"
-msgid "Ban per Premier rank"
-msgstr "禁止每一个最高的段位"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "The PostgreSQL binaries bundled with CS2Lighter are missing, reinstall the application or use an external server."
+msgstr "CS2Lighter 内置的 PostgreSQL 程序文件缺失，请重新安装应用或使用外部数据库服务器。"
 
-#: src/ui/ban/stats/ban-stats.tsx
-msgid "Loading ban stats…"
-msgstr "正在加载封禁数据…"
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "This error usually means that the database is not running or that the connection settings are incorrect."
+msgstr "这个错误通常意味着数据库未运行或者连接设置不正确"
 
-#: src/ui/ban/stats/ban-stats.tsx
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "Make sure PostgreSQL is running and your settings are correct."
+msgstr "请确认 PostgreSQL 正在运行并且您的设置是正确的。"
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "The connection to the database failed with the following error:"
+msgstr "与数据库的连接失败，错误如下："
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+#: src/ui/settings/database/database.tsx
+#: src/ui/settings/settings-tabs.tsx
+msgid "Database"
+msgstr "数据库"
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "Choose where CS2Lighter stores its data."
+msgstr "选择 CS2Lighter 存储数据的位置。"
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgctxt "Button"
+msgid "Continue"
+msgstr "继续"
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgctxt "Button"
+msgid "Connect"
+msgstr "连接"
+
+#: src/ui/bootstrap/connect-database/connect-database.tsx
+msgid "{secondsBeforeNextTry, plural, one {Retrying in # second…} other {Retrying in # seconds…}}"
+msgstr "{secondsBeforeNextTry, plural, other {# 秒后重试…}}"
+
+#: src/ui/bootstrap/settings-provider.tsx
+msgid "An error occurred while loading settings."
+msgstr "加载设置时发生了一个错误。"
+
+#: src/ui/bootstrap/web-socket-listeners/use-register-counter-strike-listeners.tsx
+msgid "Counter-Strike starting…"
+msgstr "正在启动Counter-Strike"
+
+#: src/ui/bootstrap/web-socket-provider.tsx
+msgid "The connection to the local server on port {port} failed with code {code}. The port might be reserved or blocked by another application. Restarting your computer or freeing the port may fix the issue."
+msgstr "连接端口 {port} 上的本地服务器失败，错误代码为 {code}。该端口可能被其他应用占用或保留。请尝试重启电脑或释放端口。"
+
+#: src/ui/bootstrap/web-socket-provider.tsx
+msgid "An error occurred connecting to the WebSocket server."
+msgstr "连接到远程服务器时出错。"
+
 #: src/ui/comment/use-update-comment.tsx
 #: src/ui/components/buttons/export-html-element-as-image-button.tsx
 #: src/ui/components/context-menu/items/change-matches-type-item.tsx
@@ -241,7 +273,6 @@ msgstr "正在加载封禁数据…"
 #: src/ui/search/filters/search-players-input.tsx
 #: src/ui/settings/about/clear-logs-button.tsx
 #: src/ui/settings/about/reveal-counter-strike-log-file-button.tsx
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
 #: src/ui/settings/cameras/add-camera-dialog.tsx
 #: src/ui/settings/cameras/edit-camera-dialog.tsx
 #: src/ui/settings/maps/add-map-dialog.tsx
@@ -255,164 +286,6 @@ msgstr "正在加载封禁数据…"
 #: src/ui/videos/video-entry.tsx
 msgid "An error occurred"
 msgstr "出现错误"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "Players"
-msgstr "玩家"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "Banned players"
-msgstr "封禁玩家"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "Banned players percentage"
-msgstr "封禁玩家的占比"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "AVG banned players/match"
-msgstr "封禁玩家/比赛的平均值"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "AVG banned account age"
-msgstr "被封禁账户的平均值"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgid "{averageBannedAccountAgeInYears, plural, one {# year} other {# years}}"
-msgstr "{averageBannedAccountAgeInYears, plural, other {# 年}}"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgctxt "Panel title"
-msgid "Median banned account age"
-msgstr "被封禁账户注册时间的中位值"
-
-#: src/ui/ban/stats/ban-stats.tsx
-msgid "{medianBannedAccountAgeInYears, plural, one {# year} other {# years}}"
-msgstr "{medianBannedAccountAgeInYears, plural, other {# 年}}"
-
-#: src/ui/ban/stats/last-bans.tsx
-msgid "Last bans"
-msgstr "上次封禁"
-
-#: src/ui/ban/stats/no-ban-message.tsx
-msgid "No bans yet"
-msgstr "尚无封禁"
-
-#: src/ui/ban/stats/no-stats.tsx
-msgid "No VAC ban stats to show, you must analyze demos to generate stats."
-msgstr "没有 VAC 封禁的统计数据，你需要先分析 demo 才能生成统计数据。"
-
-#: src/ui/bootstrap/app-loader.tsx
-msgid "An error occurred while loading the application."
-msgstr "加载应用程序时发生错误。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "It looks like you installed an older version of CS Demo Manager and the current database schema is not compatible with it."
-msgstr "看起来你安装了旧版本的 CS Demo Manager，而当前数据库架构与它不兼容。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "You can either update CS Demo Manager to the latest version or reset the database to start from scratch."
-msgstr "你可以选择更新 CS Demo Manager 到最新版本，或者重置数据库从零开始。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "The embedded PostgreSQL server could not be started, see the application log file and the PostgreSQL log file in <0>{folderPath}</0> for details."
-msgstr "无法启动内置 PostgreSQL 服务器，请查看应用日志和 <0>{folderPath}</0> 中的 PostgreSQL 日志了解详情。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "The existing data was created by a different PostgreSQL version than the one bundled with this version of CS Demo Manager, it cannot be read."
-msgstr "现有数据由另一个 PostgreSQL 版本创建，与本版本应用内置的数据库不兼容，无法读取。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "To keep your data, follow the <0>migration guide</0> before connecting. Otherwise you can delete the data and start from scratch."
-msgstr "如需保留数据，请先按照<0>迁移指南</0>操作再连接。也可以删除现有数据后重新开始。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "The PostgreSQL binaries bundled with CS Demo Manager are missing, reinstall the application or use an external server."
-msgstr "应用随附的 PostgreSQL 程序文件缺失，请重新安装应用或使用外部服务器。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "This error usually means that the database is not running or that the connection settings are incorrect."
-msgstr "这个错误通常意味着数据库未运行或者连接设置不正确"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "Make sure PostgreSQL is running and your settings are correct."
-msgstr "请确认 PostgreSQL 正在运行并且您的设置是正确的。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "The connection to the database failed with the following error:"
-msgstr "与数据库的连接失败，错误如下："
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-#: src/ui/settings/database/database.tsx
-#: src/ui/settings/settings-tabs.tsx
-msgid "Database"
-msgstr "数据库"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "Choose where CS Demo Manager stores its data."
-msgstr "选择应用存储数据的位置。"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgctxt "Button"
-msgid "Continue"
-msgstr "继续"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgctxt "Button"
-msgid "Connect"
-msgstr "连接"
-
-#: src/ui/bootstrap/connect-database/connect-database.tsx
-msgid "{secondsBeforeNextTry, plural, one {Retrying in # second…} other {Retrying in # seconds…}}"
-msgstr "{secondsBeforeNextTry, plural, other {# 秒后重试…}}"
-
-#: src/ui/bootstrap/connect-database/help-link.tsx
-msgid "Please read the <0>documentation</0> for help."
-msgstr "请阅读<0>文档</0>以获得帮助。"
-
-#: src/ui/bootstrap/settings-provider.tsx
-msgid "An error occurred while loading settings."
-msgstr "加载设置时发生了一个错误。"
-
-#: src/ui/bootstrap/web-socket-listeners/use-register-ban-listeners.tsx
-msgid "The Steam API returned a forbidden error"
-msgstr "Steam API 返回了一条错误的信息"
-
-#: src/ui/bootstrap/web-socket-listeners/use-register-ban-listeners.tsx
-msgid "Steam API returned a 429 status code"
-msgstr "Steam API 返回了 429 状态代码"
-
-#: src/ui/bootstrap/web-socket-listeners/use-register-ban-listeners.tsx
-msgid "An error occurred while checking for new banned Steam accounts (code {errorCode})"
-msgstr "在检查新的被封禁的 Steam 账户时发生了错误 (代码 {errorCode})"
-
-#: src/ui/bootstrap/web-socket-listeners/use-register-counter-strike-listeners.tsx
-msgid "Counter-Strike starting…"
-msgstr "正在启动Counter-Strike"
-
-#: src/ui/bootstrap/web-socket-provider.tsx
-msgid "The connection to the local server on port {port} failed with code {code}. The port might be reserved or blocked by another application. Restarting your computer or freeing the port may fix the issue."
-msgstr "连接端口 {port} 上的本地服务器失败，错误代码为 {code}。该端口可能被其他应用占用或保留。请尝试重启电脑或释放端口。"
-
-#: src/ui/bootstrap/web-socket-provider.tsx
-msgid "An error occurred connecting to the WebSocket server."
-msgstr "连接到远程服务器时出错。"
-
-#: src/ui/changelog/changelog-dialog.tsx
-msgid "Failed to load changelog."
-msgstr "加载更新日志失败。"
-
-#: src/ui/changelog/changelog-dialog.tsx
-msgid "Changelog version {APP_VERSION}"
-msgstr "更新日志 {APP_VERSION}"
-
-#: src/ui/changelog/changelog-dialog.tsx
-msgid "Visit website"
-msgstr "访问我们的网站"
 
 #: src/ui/components/buttons/analyze-button.tsx
 msgctxt "Button"
@@ -774,7 +647,6 @@ msgstr "您需要安装 <0>Rosetta</0>。"
 #: src/ui/player/load-player-error.tsx
 #: src/ui/players/players-table.tsx
 #: src/ui/search/search-results.tsx
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
 #: src/ui/settings/cameras/delete-camera-dialog.tsx
 #: src/ui/settings/database/database-size.tsx
 #: src/ui/settings/database/import-v2-data-button.tsx
@@ -835,29 +707,10 @@ msgctxt "Context menu"
 msgid "XLSX"
 msgstr "XLSX"
 
-#: src/ui/components/context-menu/items/ignore-steam-account-ban-item.tsx
-msgctxt "Context menu"
-msgid "Stop ignoring player's bans"
-msgstr "停止忽视玩家的封禁"
-
-#: src/ui/components/context-menu/items/ignore-steam-account-ban-item.tsx
-msgid "Steam account added to ignored list"
-msgstr "Steam 账号已添加到忽略列表"
-
-#: src/ui/components/context-menu/items/ignore-steam-account-ban-item.tsx
-msgctxt "Context menu"
-msgid "Ignore player's bans"
-msgstr "忽略玩家的封禁"
-
 #: src/ui/components/context-menu/items/open-steam-profile-item.tsx
 msgctxt "Context menu"
 msgid "Open Steam community profile"
 msgstr "打开 Steam 社区个人资料"
-
-#: src/ui/components/context-menu/items/pin-player-item.tsx
-msgctxt "Context menu"
-msgid "Pin this player"
-msgstr "固定此玩家"
 
 #: src/ui/components/context-menu/items/rename-item.tsx
 msgctxt "Context menu"
@@ -928,10 +781,6 @@ msgstr "Demo 分析"
 #: src/ui/components/dialogs/analyze-demos-dialog.tsx
 msgid "{demosSourceNotSupportedCount, plural, one {The demo's source is not supported} other {# demos source are not supported}}"
 msgstr "{demosSourceNotSupportedCount, plural, other {#个 demo 的来源不受支持}}"
-
-#: src/ui/components/dialogs/analyze-demos-dialog.tsx
-msgid "Please see this <0>documentation</0> for details."
-msgstr "请阅读这个<0>文档</0>以获得帮助。"
 
 #: src/ui/components/dialogs/analyze-demos-dialog.tsx
 msgid "{demosAnalysesInProgressCount, plural, one {The demo is already in pending analyses} other {# demos are already in pending analyses}}"
@@ -1113,22 +962,6 @@ msgstr "玩家"
 msgctxt "Watch from enemy point of view"
 msgid "Enemy"
 msgstr "敌人"
-
-#: src/ui/components/donate.tsx
-msgid "Donate"
-msgstr "捐助"
-
-#: src/ui/components/donate.tsx
-msgid "CS Demo Manager is a project that I started during college in 2014 and maintained as much as I can since then."
-msgstr "CS Demo Manager 是我在 2014 年大学期间启动的一个项目，从那时起我一直在尽力维护它。"
-
-#: src/ui/components/donate.tsx
-msgid "It's not backed by any corporate entity and is a free and open-source software that I hope you enjoy using."
-msgstr "它没有任何公司实体的支持，是一个自由和开放源码软件，我希望你们能够享受它。"
-
-#: src/ui/components/donate.tsx
-msgid "Your <0>donation</0> is greatly appreciated and motivates me to continue working on CS Demo Manager. Thank you!"
-msgstr "非常感谢您的 <0> 捐赠 </0> ，这将鼓励我继续改进 CS Demo Manager。谢谢！"
 
 #: src/ui/components/dropdown-filter/analysis-status-select.tsx
 msgctxt "Option label for demo analysis status"
@@ -1474,7 +1307,6 @@ msgid "Opening duel result"
 msgstr "首杀对枪结果"
 
 #: src/ui/components/inputs/select/perspective-select.tsx
-#: src/ui/habits/learning-review-card.tsx
 msgid "Player"
 msgstr "玩家"
 
@@ -1599,11 +1431,6 @@ msgctxt "Panel title"
 msgid "Last matches"
 msgstr "最近比赛"
 
-#: src/ui/components/links/documentation-link.tsx
-msgctxt "Link"
-msgid "Documentation"
-msgstr "帮助文档"
-
 #: src/ui/components/links/see-round-link.tsx
 msgctxt "Link"
 msgid "See round"
@@ -1621,6 +1448,7 @@ msgid "Total"
 msgstr "总计"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "Win"
 msgstr "赢"
 
@@ -1631,6 +1459,7 @@ msgid "Lost"
 msgstr "输"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "Tie"
 msgstr "平局"
 
@@ -1651,18 +1480,22 @@ msgid "Impact"
 msgstr "Impact(影响)"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "K/D"
 msgstr "K/D"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "ADR"
 msgstr "ADR"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "KAST"
 msgstr "KAST"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "HS%"
 msgstr "爆头率"
 
@@ -1699,20 +1532,6 @@ msgstr "标签"
 msgctxt "Dropdown column visibility"
 msgid "Tags"
 msgstr "标签"
-
-#: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Table header tooltip"
-msgid "Bans"
-msgstr "全部违规名单"
-
-#: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Dropdown column visibility"
-msgid "Bans"
-msgstr "全部违规名单"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/demos/table/use-demos-columns.ts
@@ -2346,23 +2165,9 @@ msgid "Defeats"
 msgstr "败北"
 
 #: src/ui/components/panels/win-rate.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "Win rate"
 msgstr "胜率"
-
-#: src/ui/components/table/cells/bans-cell.tsx
-msgctxt "Tooltip"
-msgid "VAC banned"
-msgstr "VAC 封禁"
-
-#: src/ui/components/table/cells/bans-cell.tsx
-msgctxt "Tooltip"
-msgid "Game banned"
-msgstr "游戏封禁"
-
-#: src/ui/components/table/cells/bans-cell.tsx
-msgctxt "Tooltip"
-msgid "Community banned"
-msgstr "社区封禁"
 
 #: src/ui/components/table/cells/kill-attributes-cell.tsx
 msgctxt "Tooltip kill"
@@ -2408,8 +2213,8 @@ msgid "Map not supported."
 msgstr "不支持此地图"
 
 #: src/ui/components/unsupported-map.tsx
-msgid "You can add custom maps from settings, please read the<0> documentation </0>for more details."
-msgstr "您可以从设置中添加自定义地图，请阅读<0>文档</0>以了解更多详情。"
+msgid "You can add a radar image and map coordinates in Settings → Maps."
+msgstr "可以在“设置 → 地图”中添加雷达图和地图坐标。"
 
 #: src/ui/components/valve-match/player-performance/performance-timeline.tsx
 msgid "<0>{playerName}</0> Round performance"
@@ -2840,52 +2645,29 @@ msgid "Both sides"
 msgstr "双方阵营"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Refresh"
-msgstr "刷新"
+#: src/ui/match/overview/scoreboard/match-information.tsx
+msgid "Source"
+msgstr "来源"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "All sources"
+msgstr "全部来源"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Reload cached data"
+msgstr "重新读取缓存"
 
 #: src/ui/habits/habits-dashboard.tsx
 msgid "CS2 · your linked account · all imported dates"
 msgstr "CS2 · 已绑定账号 · 全部导入日期"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Building your cross-match profile…"
-msgstr "正在生成跨比赛习惯画像…"
+msgid "Loading saved demo data…"
+msgstr "正在读取已保存的 demo 数据…"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Could not load your match history. Use Refresh to try again."
-msgstr "无法加载比赛历史，请点击“刷新”重试。"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Matches / rounds"
-msgstr "比赛数 / 回合数"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Rounds included in this selection"
-msgstr "当前筛选包含的回合"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Kills / deaths"
-msgstr "击杀 / 死亡"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Across your selected matches"
-msgstr "当前筛选的全部比赛"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Opening kills / deaths"
-msgstr "首杀 / 首死"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "First enemy elimination of each round"
-msgstr "每回合首次敌我之间的击杀"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Position coverage"
-msgstr "位置数据覆盖率"
-
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Rounds with usable position data"
-msgstr "包含可用位置数据的回合"
+msgid "Could not load your match history. Use Reload cached data to try again."
+msgstr "无法加载比赛历史，请点击“重新读取缓存”重试。"
 
 #: src/ui/habits/habits-dashboard.tsx
 msgid "Your profile is ready for matches"
@@ -2898,6 +2680,14 @@ msgstr "没有符合当前账号和筛选条件的已解析比赛。请添加完
 #: src/ui/habits/habits-dashboard.tsx
 msgid "Where you spend your rounds"
 msgstr "你在回合中常去的位置"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Heatmaps stop when the round is decided. Personal combat totals also include post-round fights."
+msgstr "热力图只统计到回合胜负确定时；个人交战总数据也包含胜负确定后的交战。"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Position coverage: {coverage}% of selected rounds"
+msgstr "位置数据覆盖所选回合的 {coverage}%"
 
 #: src/ui/habits/habits-dashboard.tsx
 msgid "Matches are grouped by map and game build. The installed radar is a reference and may differ from older map layouts."
@@ -2944,11 +2734,11 @@ msgid "No matching evidence yet."
 msgstr "暂无符合条件的回合片段。"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/personal-stats-panels.tsx
 msgid "Match"
 msgstr "比赛"
 
 #: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/learning-review-card.tsx
 #: src/ui/match/rounds/overview/rounds-history.tsx
 msgid "Round"
 msgstr "回合"
@@ -3045,12 +2835,6 @@ msgid "My habits"
 msgstr "我的习惯"
 
 #: src/ui/habits/habits-layout.tsx
-#: src/ui/habits/habits-links.tsx
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "Learn from a player"
-msgstr "向高手学习"
-
-#: src/ui/habits/habits-layout.tsx
 msgid "Match library"
 msgstr "比赛库"
 
@@ -3122,168 +2906,451 @@ msgstr "无法检查 CS2 连接，请重试。"
 msgid "Watch POV in CS2"
 msgstr "在 CS2 中观看第一视角"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Find a match"
-msgstr "查找比赛"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "No data for this selection."
+msgstr "当前筛选条件下没有数据。"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Search player, map or demo name"
-msgstr "搜索玩家、地图或录像名称"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Personal overview"
+msgstr "个人概览"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "No matching analyzed demos. Add a folder or change your search."
-msgstr "没有符合条件的已解析录像，请添加文件夹或调整搜索条件。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Duels and clutches"
+msgstr "对枪与残局"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Showing up to 100 matches. Refine your search to find older demos."
-msgstr "最多显示 100 场比赛。请缩小搜索范围以查找更早的录像。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Utility and objectives"
+msgstr "道具与目标"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Loading the selected match…"
-msgstr "正在加载所选比赛…"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Maps, sides and economy"
+msgstr "地图、阵营与经济"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "This match could not be opened. Select another match or refresh the library."
-msgstr "无法打开此比赛，请选择其他比赛或刷新比赛库。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Match history and trends"
+msgstr "比赛历史与趋势"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Open full 2D replay"
-msgstr "打开完整 2D 回放"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Personal analysis sections"
+msgstr "个人分析分类"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "One thing to practice"
-msgstr "这次练习一个改进点"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Matches / rounds"
+msgstr "比赛数 / 回合数"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "What did you notice? What will you try in your next match?"
-msgstr "你发现了什么？下一场准备尝试什么？"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
+msgstr "{matchWins} 胜 · {matchLosses} 负 · {matchTies} 平"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Save with this round"
-msgstr "保存到此回合"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Headshot rate"
+msgstr "爆头率"
 
-#: src/ui/habits/learning-review-card.tsx
-msgid "Saved locally"
-msgstr "已保存在本机"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{headshotKills} headshot kills / {kills} enemy kills"
+msgstr "{headshotKills} 次爆头击杀 / {kills} 次敌方击杀"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Loading route and view direction…"
-msgstr "正在加载移动路线和视角方向…"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rating 1.0 · historical formula"
+msgstr "Rating 1.0 · 历史公式"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Could not load this round's positions. Reopen the round to retry."
-msgstr "无法加载此回合的位置数据，请重新打开回合后重试。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{ratingRoundCount} eligible rounds"
+msgstr "{ratingRoundCount} 个符合条件的回合"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "No alive position samples for this player. Reanalyze with positions enabled, or watch the original demo in CS2."
-msgstr "此玩家没有存活位置样本。请启用位置解析后重新解析，或在 CS2 中观看原始录像。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "RWS · local calculation"
+msgstr "RWS · 本地计算"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "No radar available for this map. Open the original demo to review the round."
-msgstr "此地图没有可用雷达图，请打开原始录像复盘。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{rwsRoundCount} valid rounds · {rwsMissingRoundCount} unavailable"
+msgstr "{rwsRoundCount} 个有效回合 · {rwsMissingRoundCount} 个无法计算"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Player route and horizontal view direction"
-msgstr "玩家路线和水平视角方向"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Kills / deaths / assists"
+msgstr "击杀 / 死亡 / 助攻"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "{seconds}s after freeze time"
-msgstr "冻结时间结束后 {seconds} 秒"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "K/D {kd} · (K+A)/D {kda}"
+msgstr "K/D {kd} · (K+A)/D {kda}"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Scrub recorded positions"
-msgstr "拖动查看已记录位置"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "ADR · damage per round"
+msgstr "ADR · 回合均伤"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Blue: route. White: horizontal view direction. Drag through recorded positions; use CS2 for the full first-person view."
-msgstr "蓝色表示路线，白色表示水平视角方向。拖动可查看已记录位置；完整第一视角请在 CS2 中观看。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{damage} enemy health damage"
+msgstr "对敌方造成 {damage} 点生命伤害"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Crouching"
-msgstr "蹲伏中"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds with a kill, assist, survival or traded death"
+msgstr "完成击杀、助攻、存活或死亡后被补枪的回合"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Scoped"
-msgstr "开镜中"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Match win rate"
+msgstr "比赛胜率"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Airborne"
-msgstr "在空中"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Round win rate {roundWinRate}"
+msgstr "回合胜率 {roundWinRate}"
 
-#: src/ui/habits/learning-round-preview.tsx
-msgid "Flashed"
-msgstr "被闪光致盲"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Kills per round"
+msgstr "回合均击杀"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Study a round. Keep one idea."
-msgstr "研究一个回合，记住一个改进点。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Deaths per round"
+msgstr "回合均死亡"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Import a player's demo, choose their perspective, then compare movement and view direction with your own round. Match the map, side and situation before drawing conclusions."
-msgstr "导入高手的录像并选择其视角，与自己的回合对比移动路线和视角方向。请结合相同地图、阵营和局势判断。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Survival rate"
+msgstr "存活率"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Refresh library"
-msgstr "刷新比赛库"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{survivedRoundCount} rounds survived"
+msgstr "存活 {survivedRoundCount} 个回合"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Loading your demo library…"
-msgstr "正在加载录像库…"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Flash assists"
+msgstr "闪光助攻"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Could not load the match library. Try Refresh library."
-msgstr "无法加载比赛库，请点击“刷新比赛库”重试。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "How to read these numbers"
+msgstr "指标说明"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Reference player"
-msgstr "参考玩家"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rates use total events and rounds across the selected demos. A dash means unavailable, not zero. Map and side filters apply to every panel."
+msgstr "各项比率按所选 demo 的事件总数和回合总数计算。“—”表示数据不可用，不代表零。地图和阵营筛选应用于全部面板。"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "My comparison round"
-msgstr "我的对比回合"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rating uses the public historical HLTV 1.0 formula. RWS uses the published FACEIT 2025 damage and bomb-objective rules, calculated locally. Neither is a platform-certified score or HLTV 2.x / 3.0."
+msgstr "Rating 使用公开的历史 HLTV 1.0 公式。RWS 按 FACEIT 于 2025 年公布的伤害和 C4 目标规则在本地计算。两者均非平台认证分数，也不是 HLTV 2.x / 3.0。"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Add your perspective"
-msgstr "添加我的视角"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Some community servers label 5v5 matches as casual. Rating eligibility also checks observed teams and round structure; the original demo mode is preserved."
+msgstr "部分社区服务器会将 5v5 比赛标记为休闲模式。Rating 还会根据实际队伍人数和回合结构判断是否适用；录像原有的模式标签予以保留。"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Link your nickname to compare the reference round with your own matches."
-msgstr "绑定昵称后，即可将参考回合与自己的比赛进行对比。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "RWS only rewards won rounds: 100 points by damage, or 70 by damage plus 30 for the winning plant/defuse. Undefined rounds are excluded and reported above. Trades use a five-second window."
+msgstr "RWS 仅在获胜回合分配得分：按伤害分配 100 分；通过安放或拆除 C4 获胜时，按伤害分配 70 分，并将 30 分分配给安放者或拆除者。无法计算的回合已排除并在上方列出。补枪使用 5 秒判定窗口。"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Set up my profile"
-msgstr "设置我的画像"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "These demos describe your own sample. Aim scores, rank percentiles and visibility-based reaction time need additional models and are not inferred here."
+msgstr "这些数据仅描述你导入的比赛样本。瞄准评分、段位百分位和基于可见性的反应时间需要额外模型，此处不作推断。"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "My practice notebook"
-msgstr "我的练习笔记"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Opening kills / deaths"
+msgstr "首杀 / 首死"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Notes stay on this computer and keep a link to the exact reference round."
-msgstr "笔记保存在本机，并保留指向对应参考回合的链接。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "First enemy elimination of each round"
+msgstr "每回合首次敌我之间的击杀"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Could not save the notebook. Your text is still in the editor; check available app storage and retry."
-msgstr "无法保存笔记。文本仍在编辑框内，请检查应用存储空间后重试。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Opening duel success"
+msgstr "首杀对决成功率"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "No practice notes yet. Review a reference round and save the first adjustment you want to try."
-msgstr "还没有练习笔记。复盘一个参考回合，记下最想尝试的调整。"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{openingAttempts} opening duels"
+msgstr "参与 {openingAttempts} 次首杀对决"
 
-#: src/ui/habits/learning-workspace.tsx
-#: src/ui/match/players/kills-panel.tsx
-#: src/ui/match/rounds/overview/round-entry.tsx
-#: src/ui/search/results/result-row.tsx
-msgid "Round {roundNumber}"
-msgstr "回合 {roundNumber}"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Opening participation"
+msgstr "首杀对决参与率"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Revisit 2D round"
-msgstr "回看 2D 回合"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds where you took the first duel"
+msgstr "你参与回合首次击杀对决的回合占比"
 
-#: src/ui/habits/learning-workspace.tsx
-msgid "Remove note"
-msgstr "删除笔记"
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Win rate after an opening kill"
+msgstr "取得首杀后的回合胜率"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{openingKillRoundWins} rounds won after your opening kill"
+msgstr "取得首杀后赢下 {openingKillRoundWins} 个回合"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Trade kills"
+msgstr "补枪击杀"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Enemy killed within five seconds of killing a teammate"
+msgstr "在敌人击杀队友后的 5 秒内将其击杀"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Deaths traded by teammates"
+msgstr "死亡后获队友补枪"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Clutches won / attempted"
+msgstr "残局获胜 / 尝试"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Multi-kill rounds"
+msgstr "多杀回合"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds with at least two enemy kills"
+msgstr "击杀至少 2 名敌人的回合"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Kills per round distribution"
+msgstr "每回合击杀数分布"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "5+ kills"
+msgstr "5 杀及以上"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{kills} kills"
+msgstr "{kills} 杀"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Clutches by difficulty"
+msgstr "各类残局表现"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Situation"
+msgstr "局面"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Attempts"
+msgstr "尝试次数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Wins"
+msgstr "获胜次数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Utility damage"
+msgstr "道具伤害"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{utilityPerRound} per round"
+msgstr "每回合 {utilityPerRound}"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Enemies flashed (>1 s)"
+msgstr "致盲敌人数（超过 1 秒）"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{enemiesPerFlash} per flash thrown"
+msgstr "每颗闪光 {enemiesPerFlash} 人"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Enemy blind time"
+msgstr "敌方致盲时长"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{enemyBlindSeconds} s"
+msgstr "{enemyBlindSeconds} 秒"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Total recorded enemy flash duration"
+msgstr "记录到的敌方致盲总时长"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Teammates flashed (>1 s)"
+msgstr "致盲队友数（超过 1 秒）"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Friendly fire damage"
+msgstr "友军伤害"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Bomb plants"
+msgstr "安放 C4"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Bomb defuses"
+msgstr "拆除 C4"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Grenades used"
+msgstr "道具使用情况"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/grenades/stats/stats-label.tsx
+msgid "Thrown"
+msgstr "投掷次数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Grenade"
+msgstr "道具"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Per round"
+msgstr "每回合"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Flashbang"
+msgstr "闪光弹"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Smoke"
+msgstr "烟雾弹"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "HE grenade"
+msgstr "高爆手雷"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Molotov / incendiary"
+msgstr "燃烧瓶 / 燃烧弹"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Decoy"
+msgstr "诱饵弹"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by map"
+msgstr "按地图统计"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by side"
+msgstr "按阵营统计"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by economy"
+msgstr "按经济统计"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Average equipment value"
+msgstr "平均装备价值"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{economyRoundCount} rounds with economy data"
+msgstr "{economyRoundCount} 个回合有经济数据"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Average money spent"
+msgstr "平均消费金额"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Economy groups use the parser's round-start equipment classification. Results from different maps, game modes, builds and sources are descriptive and may not be directly comparable."
+msgstr "经济分组采用解析器对回合开始时装备的分类。不同地图、游戏模式、游戏版本和来源的数据仅供描述，未必可以直接比较。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "{skippedMatches} matches lack complete personal statistics and are excluded from these metrics."
+msgstr "{skippedMatches} 场比赛缺少完整个人统计，未计入这些指标。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Pistol round"
+msgstr "手枪局"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Eco"
+msgstr "经济局"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Semi-buy"
+msgstr "半起局"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Force-buy"
+msgstr "强起局"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Full buy"
+msgstr "全装局"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/end-reason.tsx
+msgid "Unknown"
+msgstr "未知"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Group"
+msgstr "分组"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Matches"
+msgstr "场数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds"
+msgstr "回合数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Round win rate"
+msgstr "回合胜率"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "K / D / A"
+msgstr "击杀 / 死亡 / 助攻"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rating 1.0"
+msgstr "Rating 1.0"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "RWS"
+msgstr "RWS"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Weapon performance"
+msgstr "武器表现"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/players/match-players.tsx
+#: src/ui/match/rounds/round/players-information.tsx
+#: src/ui/match/weapons/weapons-accuracy.tsx
+msgid "Kills"
+msgstr "击杀数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/grenades/stats/labels/fire-labels.tsx
+#: src/ui/match/grenades/stats/labels/he-grenade-labels.tsx
+msgid "Damage"
+msgstr "伤害"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Weapon"
+msgstr "武器"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Shots fired"
+msgstr "开火次数"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Shots include suppressive fire and penetration attempts. Shot accuracy is not inferred from damage-event counts."
+msgstr "开火次数包含压制射击和穿透尝试。命中率不会根据伤害事件数推算。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Recent performance trend"
+msgstr "近期表现趋势"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Metric"
+msgstr "指标"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Recent match trend: {label}"
+msgstr "近期比赛趋势：{label}"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Up to 50 recent matches, oldest to newest. Each point is one match; missing values stay empty. Exact values and match links are listed below."
+msgstr "最多显示最近 50 场比赛，按时间从早到晚排列。每个点代表一场比赛，缺失值留空。具体数值和比赛入口列在下方。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Loss"
+msgstr "负"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Personal match history"
+msgstr "个人比赛历史"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Result"
+msgstr "结果"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Show more matches"
+msgstr "显示更多比赛"
 
 #: src/ui/hooks/chart/use-match-result-pie.tsx
 msgctxt "Match result"
@@ -3507,26 +3574,6 @@ msgctxt "CS premier rank tier"
 msgid "Tier {tier}"
 msgstr "段位 {tier}"
 
-#: src/ui/hooks/use-translate-economy-ban.ts
-msgctxt "Steam economy ban status"
-msgid "None"
-msgstr "无"
-
-#: src/ui/hooks/use-translate-economy-ban.ts
-msgctxt "Steam economy ban status"
-msgid "Probation"
-msgstr "交易观察期"
-
-#: src/ui/hooks/use-translate-economy-ban.ts
-msgctxt "Steam economy ban status"
-msgid "Banned"
-msgstr "已封禁"
-
-#: src/ui/hooks/use-translate-economy-ban.ts
-msgctxt "Steam economy ban status"
-msgid "Unknown"
-msgstr "未知"
-
 #: src/ui/hooks/use-translate-team-number.ts
 msgctxt "Team side"
 msgid "SPEC"
@@ -3540,6 +3587,14 @@ msgstr "未分配"
 #: src/ui/hooks/use-update-demo-location.ts
 msgid "Select demo's path"
 msgstr "选择 Demo 文件路径"
+
+#: src/ui/imports/demo-cache-location.tsx
+msgid "Demo cache folder"
+msgstr "demo 缓存文件夹"
+
+#: src/ui/imports/demo-cache-location.tsx
+msgid "The preferred cache folder is unavailable. The app is using this writable folder instead."
+msgstr "首选缓存文件夹不可用，应用正在使用此可写入的文件夹。"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Preparing your demo library"
@@ -3582,6 +3637,14 @@ msgid "Saving match data"
 msgstr "正在保存比赛数据"
 
 #: src/ui/imports/import-progress-gate.tsx
+msgid "Generating demo cache"
+msgstr "正在生成 demo 缓存"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Building your profile"
+msgstr "正在生成个人画像"
+
+#: src/ui/imports/import-progress-gate.tsx
 msgid "Ready"
 msgstr "已就绪"
 
@@ -3608,6 +3671,10 @@ msgstr "无法解析此录像，请检查文件后重试。"
 #: src/ui/imports/import-progress-gate.tsx
 msgid "The parsed match could not be saved. Check the database and retry."
 msgstr "无法保存已解析的比赛，请检查数据库后重试。"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "The demo cache could not be generated. Check the cache folder and retry."
+msgstr "无法生成 demo 缓存，请检查缓存文件夹后重试。"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "The file could not be read. Check that the folder is available."
@@ -3650,8 +3717,16 @@ msgid "{completed} ready · {failed} failed · {skipped} skipped · {waiting} wa
 msgstr "{completed} 个就绪 · {failed} 个失败 · {skipped} 个跳过 · {waiting} 个等待 · {pending} 个排队"
 
 #: src/ui/imports/import-progress-gate.tsx
+msgid "{analyzing} parsing · {inserting} saving · {caching} generating cache · {profiling} building profile"
+msgstr "{analyzing} 个正在解析 · {inserting} 个正在保存 · {caching} 个正在生成缓存 · {profiling} 个正在生成画像"
+
+#: src/ui/imports/import-progress-gate.tsx
 msgid "Progress counts files that have finished processing, including failures and skips."
 msgstr "进度按已处理完的文件计算，包括失败和跳过的文件。"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "File {index} of {total}"
+msgstr "第 {index} 个文件 / 共 {total} 个"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Files to review"
@@ -3678,11 +3753,6 @@ msgctxt "Tooltip"
 msgid "Analyses"
 msgstr "解析任务"
 
-#: src/ui/left-bar/bans-link.tsx
-msgctxt "Tooltip"
-msgid "VAC bans"
-msgstr "VAC封禁"
-
 #: src/ui/left-bar/demos-link.tsx
 msgctxt "Tooltip"
 msgid "Demos"
@@ -3692,11 +3762,6 @@ msgstr "录像"
 msgctxt "Tooltip"
 msgid "Matches"
 msgstr "比赛"
-
-#: src/ui/left-bar/pinned-player-link.tsx
-msgctxt "Tooltip"
-msgid "Pinned player"
-msgstr "置顶的玩家"
 
 #: src/ui/left-bar/players-link.tsx
 msgctxt "Tooltip"
@@ -4130,11 +4195,6 @@ msgstr "燃烧弹"
 
 #: src/ui/match/grenades/stats/labels/fire-labels.tsx
 #: src/ui/match/grenades/stats/labels/he-grenade-labels.tsx
-msgid "Damage"
-msgstr "伤害"
-
-#: src/ui/match/grenades/stats/labels/fire-labels.tsx
-#: src/ui/match/grenades/stats/labels/he-grenade-labels.tsx
 msgid "Damage per throw"
 msgstr "每投掷伤害"
 
@@ -4179,10 +4239,6 @@ msgstr "<0>{flasherName}</0>致盲了<1>{flashedName}</1>大约<2>{duration}秒<
 #: src/ui/match/grenades/stats/players-flashbang-matrix.tsx
 msgid "Players flashbang matrix"
 msgstr "玩家闪光弹数据矩阵"
-
-#: src/ui/match/grenades/stats/stats-label.tsx
-msgid "Thrown"
-msgstr "投掷次数"
 
 #: src/ui/match/match-loader.tsx
 #: src/ui/match/viewer-2d/no-positions-found.tsx
@@ -4369,10 +4425,6 @@ msgstr "生成视频"
 msgctxt "Versus"
 msgid "vs"
 msgstr "vs"
-
-#: src/ui/match/overview/scoreboard/match-information.tsx
-msgid "Source"
-msgstr "来源"
 
 #: src/ui/match/overview/scoreboard/match-information.tsx
 msgid "Name"
@@ -4838,6 +4890,12 @@ msgid "Watch clutch"
 msgstr "观看残局"
 
 #: src/ui/match/players/kills-panel.tsx
+#: src/ui/match/rounds/overview/round-entry.tsx
+#: src/ui/search/results/result-row.tsx
+msgid "Round {roundNumber}"
+msgstr "回合 {roundNumber}"
+
+#: src/ui/match/players/kills-panel.tsx
 #: src/ui/match/rounds/round/kill-feed.tsx
 msgctxt "Tooltip"
 msgid "Watch kill"
@@ -4853,19 +4911,8 @@ msgstr "未找到该玩家"
 
 #: src/ui/match/players/match-players.tsx
 #: src/ui/match/rounds/round/players-information.tsx
-#: src/ui/match/weapons/weapons-accuracy.tsx
-msgid "Kills"
-msgstr "击杀数"
-
-#: src/ui/match/players/match-players.tsx
-#: src/ui/match/rounds/round/players-information.tsx
 msgid "Deaths"
 msgstr "死亡"
-
-#: src/ui/match/players/player-action-bar.tsx
-msgctxt "Tooltip"
-msgid "Banned player"
-msgstr "已被封禁的玩家"
 
 #: src/ui/match/players/player-action-bar.tsx
 msgctxt "Button"
@@ -4946,10 +4993,6 @@ msgid "{clutcherName} lost a 1v{opponentCount}"
 msgstr "{clutcherName} 输掉了1v{opponentCount}"
 
 #: src/ui/match/rounds/round/end-reason.tsx
-msgid "Unknown"
-msgstr "未知"
-
-#: src/ui/match/rounds/round/end-reason.tsx
 msgctxt "Panel title"
 msgid "Round end reason"
 msgstr "回合结束原因"
@@ -4974,10 +5017,6 @@ msgstr "存活时间"
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "Headshot kills"
 msgstr "爆头击杀"
-
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Trade kills"
-msgstr "补枪击杀"
 
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "Airborne kills"
@@ -5010,14 +5049,6 @@ msgstr "闪光震撼弹"
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "HE"
 msgstr "高爆手雷"
-
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Smoke"
-msgstr "烟雾弹"
-
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Decoy"
-msgstr "诱饵弹"
 
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "Molotov"
@@ -6164,11 +6195,6 @@ msgid "Select an existing audio file from your computer to use for playback."
 msgstr "从计算机中选择一个现有的音频文件用于播放。"
 
 #: src/ui/match/viewer-2d/playback-bar/audio-selector-button.tsx
-#: src/ui/settings/playback/cs2-plugin-select.tsx
-msgid "See the <0>documentation</0> for more information."
-msgstr "详情请查阅<0>文档</0>。"
-
-#: src/ui/match/viewer-2d/playback-bar/audio-selector-button.tsx
 msgid "The following issues were found:"
 msgstr "遇到了下列问题："
 
@@ -6434,10 +6460,6 @@ msgstr "更新队伍名称"
 msgid "{matchCount, plural, one {# match} other {# matches}}"
 msgstr "{matchCount, plural, other {# 场比赛}}"
 
-#: src/ui/matches/table/match-with-cheater-indicator.tsx
-msgid "{matchWithCheaterCount, plural, one {# match with a cheater} other {# matches with a cheater}}"
-msgstr "{matchWithCheaterCount, plural, other {# 场与作弊者的比赛}}"
-
 #: src/ui/matches/table/matches-table.tsx
 msgid "Loading matches…"
 msgstr "加载比赛中…"
@@ -6629,57 +6651,6 @@ msgctxt "Panel label"
 msgid "Avg smokes thrown"
 msgstr "平均丢烟数"
 
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel title"
-msgid "VAC"
-msgstr "VAC"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Bans"
-msgstr "封禁"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Game bans"
-msgstr "游戏封禁"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Last ban date"
-msgstr "最后封禁的日期"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Economy ban"
-msgstr "禁止交易"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Community banned"
-msgstr "社区封禁"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgctxt "Panel label"
-msgid "Profile"
-msgstr "资料"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgid "Private"
-msgstr "私密"
-
-#: src/ui/player/overview/vac-panel.tsx
-msgid "Public"
-msgstr "公开"
-
-#: src/ui/player/pinned-player.tsx
-msgid "No pinned player found."
-msgstr "没有找到标记的玩家。"
-
-#: src/ui/player/pinned-player.tsx
-msgid "You can pin a player from scoreboards or the players list."
-msgstr "您可以从记分板或玩家列表中标记一名玩家。"
-
 #: src/ui/player/player-loader.tsx
 msgid "Loading player…"
 msgstr "正在加载玩家…"
@@ -6714,6 +6685,12 @@ msgstr "竞技模式段位历史"
 #: src/ui/player/rank/player-competitive-rank-history.tsx
 #: src/ui/player/rank/player-premier-rank-history.tsx
 msgctxt "Chart axis label"
+msgid "Date"
+msgstr "日期"
+
+#: src/ui/player/rank/player-competitive-rank-history.tsx
+#: src/ui/player/rank/player-premier-rank-history.tsx
+msgctxt "Chart axis label"
 msgid "Rank"
 msgstr "排名"
 
@@ -6726,31 +6703,6 @@ msgstr "优先模式段位历史"
 msgid "Win count: {winCount}"
 msgstr "胜场：{winCount}"
 
-#: src/ui/players/action-bar/ban-filter.tsx
-msgctxt "Select option Steam ban status"
-msgid "None"
-msgstr "无"
-
-#: src/ui/players/action-bar/ban-filter.tsx
-msgctxt "Select option Steam ban status"
-msgid "VAC banned"
-msgstr "VAC 封禁"
-
-#: src/ui/players/action-bar/ban-filter.tsx
-msgctxt "Select option Steam ban status"
-msgid "Game banned"
-msgstr "游戏封禁"
-
-#: src/ui/players/action-bar/ban-filter.tsx
-msgctxt "Select option Steam ban status"
-msgid "Community banned"
-msgstr "社区封禁"
-
-#: src/ui/players/action-bar/ban-filter.tsx
-msgctxt "Ban filter title"
-msgid "Bans"
-msgstr "封禁"
-
 #: src/ui/players/no-players.tsx
 msgid "No player found with current filters."
 msgstr "未找到与筛选结果匹配的玩家。"
@@ -6762,18 +6714,6 @@ msgstr "未找到玩家，你必须分析 demo 以生成玩家数据。"
 #: src/ui/players/players-table.tsx
 msgid "Loading players…"
 msgstr "正在加载玩家…"
-
-#: src/ui/players/table/bans-indicators.tsx
-msgid "{vacBannedPlayerCount, plural, one {# VAC ban} other {# VAC bans}}"
-msgstr "{vacBannedPlayerCount, plural, other {# VAC封禁}}"
-
-#: src/ui/players/table/bans-indicators.tsx
-msgid "{gameBannedPlayerCount, plural, one {# game ban} other {# game bans}}"
-msgstr "{gameBannedPlayerCount, plural, other {# 游戏封禁}}"
-
-#: src/ui/players/table/bans-indicators.tsx
-msgid "{communityBannedPlayerCount, plural, one {# community ban} other {# community bans}}"
-msgstr "{communityBannedPlayerCount, plural, other {# 社区封禁}}"
 
 #. placeholder {0}: table.getRowCount()
 #: src/ui/players/table/player-count.tsx
@@ -6824,16 +6764,6 @@ msgstr "最后对战的日期"
 msgctxt "Table header tooltip"
 msgid "Last match date"
 msgstr "最后对战的日期"
-
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Table header"
-msgid "Last ban date"
-msgstr "最后封禁的日期"
-
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Table header tooltip"
-msgid "Last ban date"
-msgstr "最后封禁的日期"
 
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Headshot"
@@ -6984,12 +6914,8 @@ msgid "Search"
 msgstr "搜索"
 
 #: src/ui/settings/about/about.tsx
-msgid "A local demo habits and learning app based on CS Demo Manager."
-msgstr "基于 CS Demo Manager 的本地录像习惯分析与学习应用。"
-
-#: src/ui/settings/about/about.tsx
-msgid "Open-source foundation:"
-msgstr "开源基础："
+msgid "Review local CS2 demos and explore your habits across matches."
+msgstr "复盘本地 CS2 demo，了解跨比赛的个人习惯。"
 
 #: src/ui/settings/about/about.tsx
 msgid "Information"
@@ -7008,40 +6934,16 @@ msgid "Reveal PostgreSQL log file"
 msgstr "打开 PostgreSQL 日志位置"
 
 #: src/ui/settings/about/about.tsx
-msgid "Credits"
+msgid "Acknowledgements"
 msgstr "鸣谢"
 
 #: src/ui/settings/about/about.tsx
-msgid "Special thanks to the following developers for their open-source work related to Counter-Strike that at some point helped create CS Demo Manager ❤️."
-msgstr "特别感谢以下开发人员所做的与《Counter-Strike》相关的开源工作，他们的工作在一定程度上帮助创建了 CS Demo Manager ❤️。"
+msgid "Built on the open-source work of CS Demo Manager and its contributors."
+msgstr "基于 CS Demo Manager 及其贡献者的开源成果开发。"
 
 #: src/ui/settings/about/about.tsx
-msgid "<0>@DandrewsDev</0> for his work on CS2 demos <1>voice data extraction</1>."
-msgstr "<0>@DandrewsDev</0>因他在 CS2Demo上的<1>语音数据提取</1>。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@dtugend</0>, the main developer of <1>HLAE</1> which CS Demo Manager uses to generate videos. Without HLAE the CS moviemaking community would not be the same. You can support the HLAE team <2>here</2>."
-msgstr "<0>@dtugend</0>, CS Demo Manager用于生成视频的<1>HLAE</1>的主要开发者。 没有HLAE，CS视频制作社区将截然不同。您可以<2>在此处</2>支持HLAE团队。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@GAMMACASE</0>, <1>@zer0.k</1> and other AlliedModders contributors to the <2>CS2 SDK</2> internally used by CS Demo Manager."
-msgstr "<0>@GAMMACASE</0>，<1>@zer0.k</1> 和其他 AlliedModders 对<2> CS2 SDK</2> 的贡献已经在 CS:DM 中实装。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@LaihoE</0> for his reverse engineering work on CS2 demo parsing. His parser is available on <1>GitHub</1>."
-msgstr "<0>@LaihoE</0>用于逆向CS2 Demo解析。他的逆向工程可在<1>GitHub</1>上查阅。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@main--</0> and <1>@moritzuehling</1> for creating <2>DemoInfo</2>, one of the first CSGO demo parsers used for years in CSGO Demo Manager V2."
-msgstr "<0>@main--</0>和<1>@moritzuehling</1>用于创建<2>Demo信息</2>，是多年来在CSGO Demo Manager V2中使用的第一个CSGODemo解析器。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@markus-wa</0> for creating and maintaining <1>demoinfocs-golang</1>, the demo parser internally used by CS Demo Manager V3."
-msgstr "<0>@markus-wa</0>用于创建和维护<1>deminfocs-golang</1>，CS Demo Manager V3 内使用的 Demo 解析器。"
-
-#: src/ui/settings/about/about.tsx
-msgid "<0>@saul</0>, a Source Engine/CS wizard who created a <1>CSGO</1> and <2>CS2</2> demo parser and share his CS related knowledge through various <3>open-source</3> <4>projects</4>. You can support him on <5>GitHub</5>."
-msgstr "<0>@saul</0>，一个Source Engine/CS 小天才，创建了一个<1>CSGO</1>和<2>CS2</2> Demo 解析器，并通过各种<3>开源</3><4>项目</4>分享他的CS相关知识。 您可以在 <5>GitHub </5>上支持他。"
+msgid "Original copyright and license notices are included with this application."
+msgstr "本应用附有原始版权声明和许可证。"
 
 #: src/ui/settings/about/app-updates.tsx
 #: src/ui/title-bar/update-available-button.tsx
@@ -7117,8 +7019,8 @@ msgid "Release notes"
 msgstr "版本说明"
 
 #: src/ui/settings/about/app-updates.tsx
-msgid "Updates keep your demo folders, parsed matches, account and learning notes."
-msgstr "更新会保留你的录像文件夹、已解析比赛、账号和学习笔记。"
+msgid "Updates keep your demo folders, parsed matches and account."
+msgstr "更新会保留你的 demo 文件夹、已解析比赛和账号。"
 
 #: src/ui/settings/about/clear-logs-button.tsx
 msgid "Log file cleared"
@@ -7145,19 +7047,6 @@ msgstr "重置设置"
 msgid "Reveal {gameName} log file"
 msgstr "打开 {gameName} 日志文件"
 
-#: src/ui/settings/about/see-changelog-button.tsx
-msgctxt "Button"
-msgid "Upstream changelog"
-msgstr "上游更新日志"
-
-#: src/ui/settings/analyze/ignore-ban-before-first-seen.tsx
-msgid "Bans that happened before the player was first seen in a match will be ignored."
-msgstr "忽略遇到该玩家之前的封禁事件"
-
-#: src/ui/settings/analyze/ignore-ban-before-first-seen.tsx
-msgid "Ignore bans happened before first match"
-msgstr "忽略在第一场比赛之前的封禁事件"
-
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgctxt "Settings title"
 msgid "Maximum number of concurrent analyses"
@@ -7174,67 +7063,6 @@ msgstr "手动解析时记录玩家和投掷物位置。习惯分析和 2D 回�
 #: src/ui/settings/analyze/toggle-analyze-positions.tsx
 msgid "Analyze player/grenade positions"
 msgstr "分析玩家/手榴弹位置"
-
-#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
-msgctxt "Dialog title"
-msgid "Ignore Steam account"
-msgstr "忽略Steam账户"
-
-#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
-msgid "The Steam account will be ignored from VAC ban stats."
-msgstr "Steam账户将从被 VAC封禁状态忽略。"
-
-#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
-msgctxt "Input label"
-msgid "SteamID64 or Steam community profile URL"
-msgstr "Steam 64位ID或Steam社区资料URL"
-
-#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
-#: src/ui/settings/tags/add-tag.tsx
-msgctxt "Button"
-msgid "Add"
-msgstr "添加"
-
-#: src/ui/settings/bans/ignored-steam-accounts.tsx
-msgctxt "Settings title"
-msgid "Ignored Steam accounts"
-msgstr "已忽略Steam的账户"
-
-#: src/ui/settings/bans/ignored-steam-accounts.tsx
-msgid "Add Steam account"
-msgstr "添加Steam账户"
-
-#: src/ui/settings/bans/ignored-steam-accounts.tsx
-msgid "The following Steam accounts will be ignored from VAC ban stats."
-msgstr "以下Steam账户将从被 VAC封禁状态忽略。"
-
-#: src/ui/settings/bans/ignored-steam-accounts.tsx
-msgid "No ignored Steam account yet."
-msgstr "暂未已忽略Steam的账户."
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "This account is already ignored."
-msgstr "该账户已被忽略。"
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "Steam account not found."
-msgstr "Steam账户未找到。"
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "Invalid Steam community URL."
-msgstr "无效的 Steam 社区 URL。"
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "The Steam API returned a forbidden error."
-msgstr "Steam API 返回了一条被禁止的错误."
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "Too many requests sent to the Steam API."
-msgstr "发送给Steam API的请求过多。"
-
-#: src/ui/settings/bans/use-ignored-steam-account.tsx
-msgid "The Steam API returned an error."
-msgstr "Steam API 返回了一个错误。"
 
 #: src/ui/settings/cameras/add-camera-button.tsx
 msgctxt "Button"
@@ -7337,11 +7165,6 @@ msgstr "无法生成截图，请确保游戏已完全加载且您处于游戏中
 msgid "Generate camera from in‑game view"
 msgstr "从游戏视角生成摄像机"
 
-#: src/ui/settings/cameras/form/camera-form.tsx
-#: src/ui/settings/maps/map-dialog/map-form-dialog.tsx
-msgid "Documentation"
-msgstr "文档"
-
 #: src/ui/settings/cameras/form/camera-preview-input.tsx
 msgid "Image Files"
 msgstr "图像文件"
@@ -7387,8 +7210,8 @@ msgid "Embedded (recommended)"
 msgstr "内置数据库（推荐）"
 
 #: src/ui/settings/database/database-mode-option-cards.tsx
-msgid "Managed by CS Demo Manager, nothing to install."
-msgstr "由应用管理，无需额外安装。"
+msgid "Managed by the app, nothing to install."
+msgstr "由应用管理，无需另行安装。"
 
 #: src/ui/settings/database/database-mode-option-cards.tsx
 msgid "External server"
@@ -8038,10 +7861,6 @@ msgid "Cameras"
 msgstr "相机"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "Ban"
-msgstr "封禁"
-
-#: src/ui/settings/settings-tabs.tsx
 msgid "Integrations"
 msgstr "集成"
 
@@ -8066,6 +7885,11 @@ msgstr "设置游戏分辨率宽度。"
 msgctxt "Settings title"
 msgid "Width"
 msgstr "宽度"
+
+#: src/ui/settings/tags/add-tag.tsx
+msgctxt "Button"
+msgid "Add"
+msgstr "添加"
 
 #: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
 msgid "The name is already taken"
@@ -8298,8 +8122,8 @@ msgid "The demo's path contains characters that are not supported by Counter-Str
 msgstr "Demo 路径中包含不受 Counter-Strike 支持的字符，因此无法播放。"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
-msgid "You have to move the demo in a folder that contains only Basic Latin characters - see <0>this documentation</0> for details."
-msgstr "您必须将 Demo 移动到只包含基本拉丁字符的文件夹中 - 详情请参阅<0>本文档</0>。"
+msgid "Move the demo to a folder whose path uses only Basic Latin characters."
+msgstr "请将 demo 移至路径仅含基本拉丁字符（如英文字母和数字）的文件夹。"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "Failed to start the game, make sure Steam is running and you are connected."
@@ -8308,10 +8132,6 @@ msgstr "游戏启动失败，请确保 Steam 正在运行并且您已连接"
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "Make sure Steam is not installed through Flatpak as it's not supported!"
 msgstr "确保Steam不是通过Flatpak安装的，因为它不被支持！"
-
-#: src/ui/shared/get-playback-error-from-error-code.tsx
-msgid "Read the <0>documentation</0> for more information."
-msgstr "阅读<0>文档</0>以了解更多信息."
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "{game} is not supported on your operating system"
@@ -8358,8 +8178,8 @@ msgid "Raw files not found."
 msgstr "未找到原始文件"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
-msgid "The game crashed, please see <0>this documentation</0> for help."
-msgstr "游戏崩溃了，请查看<0>此文档</0>以获取帮助。"
+msgid "The game crashed. Check the selected CS2 plugin version in playback settings and the game log."
+msgstr "游戏已崩溃，请检查回放设置中选择的 CS2 插件版本及游戏日志。"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "The game process exited with an access denied error."

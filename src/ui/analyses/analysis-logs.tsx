@@ -6,7 +6,6 @@ import { useSelectedAnalysis } from './use-selected-analysis-demo-id';
 import { assertNever } from 'csdm/common/assert-never';
 import { isAnalysisErrorStatus } from './analysis-status';
 import { CopyButton } from 'csdm/ui/components/buttons/copy-button';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 import { ExclamationTriangleIcon } from 'csdm/ui/icons/exclamation-triangle-icon';
 import { isErrorCode } from 'csdm/common/is-error-code';
 import { ErrorCode } from 'csdm/common/error-code';
@@ -113,35 +112,14 @@ export function AnalysisLogs() {
             </Trans>
           </p>
           <p>
-            <Trans>
-              Please read the error codes{' '}
-              <ExternalLink href="https://cs-demo-manager.com/docs/guides/demos-analysis#analysis-errors">
-                documentation
-              </ExternalLink>{' '}
-              to understand the code signification and what you can do.
-            </Trans>
-          </p>
-          <p>
-            <Trans>
-              Please read and follow the instructions on{' '}
-              <ExternalLink href="https://github.com/akiver/cs-demo-manager/issues/new?assignees=&labels=&projects=&template=bug_report.yml">
-                GitHub
-              </ExternalLink>{' '}
-              to report the issue <strong>only if the documentation says you should for this error code</strong>.
-            </Trans>
+            <Trans>Copy the analysis log below when reporting this problem.</Trans>
           </p>
         </div>
       );
     } else {
       message = (
         <p>
-          <Trans>
-            Please read and follow the instructions on{' '}
-            <ExternalLink href="https://github.com/akiver/cs-demo-manager/issues/new?assignees=&labels=&projects=&template=bug_report.yml">
-              GitHub
-            </ExternalLink>{' '}
-            to report the issue.
-          </Trans>
+          <Trans>Copy the analysis log below when reporting this problem.</Trans>
         </p>
       );
     }

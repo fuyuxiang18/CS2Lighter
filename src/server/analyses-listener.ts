@@ -14,11 +14,13 @@ import type { ErrorCode } from 'csdm/common/error-code';
 import { MAX_CONCURRENT_ANALYSES } from 'csdm/common/analyses';
 import { importProgress } from 'csdm/server/import-progress';
 import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
+import { ensureDemoCache } from 'csdm/node/demo-cache/demo-cache-service';
 
 class AnalysesListener {
   private analyses: Analysis[] = [];
   private currentAnalyses: Analysis[] = [];
   private completionListeners = new Set<(analysis: Analysis) => void>();
+  private progressHeld = false;
   // Tracks which client connections queued or wait for a demo so its pending analysis can be canceled when the last
   // of them disconnects. Demos queued by the GUI are not tracked and never canceled on disconnect.
   private clientIdsPerChecksum = new Map<string, Set<string>>();
@@ -38,6 +40,7 @@ class AnalysesListener {
     for (const checksum of checksums) {
       this.clientIdsPerChecksum.delete(checksum);
     }
+    this.releaseProgressIfIdle();
     logger.log(`checksums removed from analyses`, checksums);
   }
 
@@ -105,6 +108,12 @@ class AnalysesListener {
 
       return analysis;
     });
+    // A concurrent profile request may read the previous cache for a manually reanalyzed match.
+    // Its per-file completion must never unlock browsing before this queue has really finished.
+    if (!this.progressHeld) {
+      this.progressHeld = true;
+      importProgress.beginDiscovery();
+    }
     this.analyses.push(...analyses);
     for (const analysis of analyses) {
       importProgress.update(analysis.demoPath, 'pending');
@@ -143,6 +152,14 @@ class AnalysesListener {
     this.analyses = [];
     this.currentAnalyses = [];
     this.clientIdsPerChecksum.clear();
+    this.releaseProgressIfIdle();
+  }
+
+  private releaseProgressIfIdle() {
+    if (this.progressHeld && !this.hasAnalysesInProgress()) {
+      this.progressHeld = false;
+      importProgress.finishDiscovery();
+    }
   }
 
   private hasPendingAnalyses = () => {
@@ -171,15 +188,22 @@ class AnalysesListener {
           .finally(() => {
             importProgress.update(
               analysis.demoPath,
-              analysis.status === AnalysisStatus.InsertSuccess ? 'completed' : 'failed',
+              analysis.status === AnalysisStatus.InsertSuccess && !analysis.cacheError ? 'completed' : 'failed',
               {
-                reason: analysis.status === AnalysisStatus.InsertError ? 'insertion' : 'analysis',
-                message: analysis.status === AnalysisStatus.InsertSuccess ? undefined : analysis.output.slice(-1000),
+                reason: analysis.cacheError
+                  ? 'cache'
+                  : analysis.status === AnalysisStatus.InsertError
+                    ? 'insertion'
+                    : 'analysis',
+                message:
+                  analysis.cacheError ??
+                  (analysis.status === AnalysisStatus.InsertSuccess ? undefined : analysis.output.slice(-1000)),
               },
             );
             this.currentAnalyses = this.currentAnalyses.filter(
               ({ demoChecksum }) => demoChecksum !== analysis.demoChecksum,
             );
+            this.releaseProgressIfIdle();
             for (const listener of this.completionListeners) {
               try {
                 listener(analysis);
@@ -257,6 +281,14 @@ class AnalysesListener {
         outputFolderPath: this.getAnalysisOutputFolderPath(analysis),
       });
       this.updateAnalysisStatus(analysis, AnalysisStatus.InsertSuccess);
+      try {
+        importProgress.update(demoPath, 'caching');
+        await ensureDemoCache(checksum, demoPath);
+      } catch (error) {
+        analysis.cacheError = error instanceof Error ? error.message : String(error);
+        logger.error('Match was inserted but its local cache could not be saved');
+        logger.error(error);
+      }
       server.sendPushMessage({
         name: ServerPushMessageName.MatchInserted,
         payload: match,

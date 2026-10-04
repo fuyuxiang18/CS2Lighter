@@ -32,7 +32,6 @@
   "menu.tileWindowToLeftOfScreen": "Tile Window to Left of Screen",
   "menu.tileWindowToRightOfScreen": "Tile Window to Right of Screen",
   "menu.bringAllToFront": "Bring All to Front",
-  "menu.documentation": "Documentation",
   "menu.help": "Help",
   "trayMenu.openApp": "Open CS2Lighter",
   "trayMenu.settings": "Settings",
@@ -42,8 +41,6 @@
   "contextMenu.copy": "Copy",
   "contextMenu.paste": "Paste",
   "contextMenu.delete": "Delete",
-  "notification.bannedPlayers.title": "{playerCount} new banned players!",
-  "notification.bannedPlayers.body": "Click to see players",
   "notification.downloading5EplayDemo.title": "Downloading 5Eplay demos",
   "notification.downloading5EplayDemo.message": "New 5Eplay demos are being downloaded, click here to show them",
   "notification.downloadingFaceitDemo.title": "Downloading FACEIT demos",
@@ -51,9 +48,5 @@
   "notification.downloadingRenownDemo.title": "Downloading Renown demos",
   "notification.downloadingRenownDemo.message": "New Renown demos are being downloaded, click here to show them",
   "notification.downloadingValveDemo.title": "Downloading Valve demos",
-  "notification.downloadingValveDemo.message": "New Valve demos are being downloaded, click here to show them",
-  "notification.steamApi.forbiddenError": "The Steam API returned a forbidden error",
-  "notification.steamApi.tooManyRequestsError": "Steam API returned a 429 status code",
-  "notification.steamApi.unknownError": "An error occurred while checking for new banned Steam accounts (code {errorCode})",
-  "notification.steamApi.title": "Steam API error"
+  "notification.downloadingValveDemo.message": "New Valve demos are being downloaded, click here to show them"
 }

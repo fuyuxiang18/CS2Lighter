@@ -32,7 +32,6 @@ export type MatchTable = Pick<
   | 'shareCode'
 > & {
   date: string;
-  bannedPlayerCount: number;
   teamAName: string;
   teamBName: string;
   teamAScore: number;

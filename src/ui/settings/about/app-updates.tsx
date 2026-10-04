@@ -102,7 +102,7 @@ export function AppUpdates() {
         </ExternalLink>
       </div>
       <p className="text-gray-600">
-        <Trans>Updates keep your demo folders, parsed matches, account and learning notes.</Trans>
+        <Trans>Updates keep your demo folders, parsed matches and account.</Trans>
       </p>
     </section>
   );

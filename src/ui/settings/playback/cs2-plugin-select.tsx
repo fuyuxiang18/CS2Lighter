@@ -6,7 +6,6 @@ import { SettingsEntry } from 'csdm/ui/settings/settings-entry';
 import { CS2PluginVersion as PluginVersion } from 'csdm/common/types/cs2-plugin-version';
 import { ExclamationTriangleIcon } from 'csdm/ui/icons/exclamation-triangle-icon';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 import { usePlaybackSettings } from './use-playback-settings';
 
 export function Cs2PluginSelect() {
@@ -144,15 +143,6 @@ export function Cs2PluginSelect() {
           <div>
             <p>
               <Trans>The version of the internal CS2 plugin used to communicate with the game during playback.</Trans>
-            </p>
-            <p>
-              <Trans>
-                See the{' '}
-                <ExternalLink href="https://cs-demo-manager.com/docs/guides/playback#cs2-plugin-compatibility">
-                  documentation
-                </ExternalLink>{' '}
-                for more information.
-              </Trans>
             </p>
           </div>
           <div className="flex items-center gap-x-4">

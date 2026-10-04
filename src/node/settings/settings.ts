@@ -173,10 +173,6 @@ export type VideoSettings = {
   trueView: boolean; // CS2 only
 };
 
-type BanSettings = {
-  ignoreBanBeforeFirstSeen: boolean;
-};
-
 export type Settings = {
   schemaVersion: number;
   autoDownloadUpdates: boolean;
@@ -193,12 +189,10 @@ export type Settings = {
   analyze: AnalyzeSettings;
   playback: PlaybackSettings;
   playerProfile: PlayerProfileSettings;
-  pinnedPlayerSteamId: string;
   video: VideoSettings;
   download: DownloadSettings;
   matches: MatchesSettings;
   players: PlayersSettings;
   teams: TeamsSettings;
   teamProfile: TeamProfileSettings;
-  ban: BanSettings;
 };

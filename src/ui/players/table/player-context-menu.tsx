@@ -1,7 +1,6 @@
 import React from 'react';
 import { ContextMenu } from 'csdm/ui/components/context-menu/context-menu';
 import { NavigateToPlayerItem } from '../../components/context-menu/items/navigate-to-player-item';
-import { PinPlayerItem } from 'csdm/ui/components/context-menu/items/pin-player-item';
 import { CopySteamIdItem } from 'csdm/ui/components/context-menu/items/copy-steamid-item';
 import { OpenSteamProfileItem } from 'csdm/ui/components/context-menu/items/open-steam-profile-item';
 import { CommentItem } from 'csdm/ui/components/context-menu/items/comment-item';
@@ -50,7 +49,6 @@ export function PlayerContextMenu({ players, onCommentClick }: Props) {
       <Separator />
       <CopySteamIdItem steamIds={playerSteamIds} />
       <OpenSteamProfileItem steamIds={playerSteamIds} />
-      <PinPlayerItem steamId={selectedPlayerSteamId} />
       {!isMultipleSelection && <UpdateNameItem onClick={onUpdateNameClick} />}
       <ExportPlayersItem steamIds={playerSteamIds} />
     </ContextMenu>

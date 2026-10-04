@@ -9,10 +9,10 @@ import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from 'csdm/ui/dialogs/dialog';
 import { ExclamationTriangleIcon } from 'csdm/ui/icons/exclamation-triangle-icon';
 import { ErrorMessage } from 'csdm/ui/components/error-message';
+import { ExternalLink } from 'csdm/ui/components/external-link';
 import { CloseButton } from 'csdm/ui/components/buttons/close-button';
 import { Button, ButtonVariant } from 'csdm/ui/components/buttons/button';
 import { useCurrentMatch } from '../../use-current-match';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { ExportVoiceMode } from 'csdm/node/csgo-voice-extractor/export-voice-mode';
 import { useDispatch } from 'csdm/ui/store/use-dispatch';
@@ -153,16 +153,6 @@ function AudioSelectorDialog({ loadAudioFile }: Props) {
                   <Trans>Select an existing audio file from your computer to use for playback.</Trans>
                 </li>
               </ul>
-
-              <p className="mt-8">
-                <Trans>
-                  See the{' '}
-                  <ExternalLink href="https://cs-demo-manager.com/docs/guides/2d-viewer#audio-playback">
-                    documentation
-                  </ExternalLink>{' '}
-                  for more information.
-                </Trans>
-              </p>
             </div>
           </div>
           {warnings.length > 0 && (

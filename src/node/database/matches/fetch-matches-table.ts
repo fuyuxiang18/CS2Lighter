@@ -24,7 +24,6 @@ export async function fetchMatchesTable(filters: MatchTableFilters): Promise<Mat
     })
     .leftJoin('players', 'players.match_checksum', 'matches.checksum')
     .leftJoin('comments', 'comments.checksum', 'matches.checksum')
-    .leftJoin('player_ban_per_match', 'player_ban_per_match.match_checksum', 'matches.checksum')
     .select([
       'matches.checksum',
       'matches.demo_path',
@@ -41,7 +40,6 @@ export async function fetchMatchesTable(filters: MatchTableFilters): Promise<Mat
       'matches.winner_side',
       'matches.overtime_count',
       'matches.max_rounds',
-      'matches.has_vac_live_ban',
       'demos.name',
       'demos.game',
       'demos.source',
@@ -66,7 +64,6 @@ export async function fetchMatchesTable(filters: MatchTableFilters): Promise<Mat
       sum<number>('players.three_kill_count').as('threeKillCount'),
       sql<number>`ROUND(AVG(players.hltv_rating_2)::numeric, 2)`.as('hltvRating2'),
       'comments.comment',
-      'player_ban_count as banned_player_count',
     ])
     .groupBy([
       'matches.checksum',
@@ -90,7 +87,6 @@ export async function fetchMatchesTable(filters: MatchTableFilters): Promise<Mat
       'teamBName',
       'teamAScore',
       'teamBScore',
-      'banned_player_count',
     ]);
 
   query = applyMatchFilters(query, filters);

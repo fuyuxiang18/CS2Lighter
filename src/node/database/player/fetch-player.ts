@@ -8,7 +8,6 @@ import { applyMatchFilters, type MatchFilters } from '../match/apply-match-filte
 import { fetchPlayerCollateralKillCount } from './fetch-player-collateral-kill-count';
 import { fetchPlayerUtilityStats } from './fetch-player-utility-stats';
 import { fetchPlayerOpeningDuelsStats } from './fetch-player-opening-duels-stats';
-import { EconomyBan } from 'csdm/node/steam-web-api/steam-constants';
 import type { Player } from 'csdm/common/types/player';
 
 async function fetchPlayerRow(steamId: string, filters?: MatchFilters) {
@@ -85,24 +84,9 @@ async function fetchPlayerRow(steamId: string, filters?: MatchFilters) {
     .innerJoin('matches', 'matches.checksum', 'players.match_checksum')
     .innerJoin('demos', 'demos.checksum', 'matches.checksum')
     .leftJoin('steam_accounts', 'steam_accounts.steam_id', 'players.steam_id')
-    .select([
-      'vac_ban_count as vacBanCount',
-      'game_ban_count as gameBanCount',
-      'last_ban_date as lastBanDate',
-      'economy_ban as economyBan',
-      'has_private_profile as hasPrivateProfile',
-      'is_community_banned as isCommunityBanned',
-    ])
+    .select(['has_private_profile as hasPrivateProfile'])
     .where('players.steam_id', '=', steamId)
-    .groupBy([
-      'players.steam_id',
-      'vacBanCount',
-      'gameBanCount',
-      'lastBanDate',
-      'economyBan',
-      'hasPrivateProfile',
-      'isCommunityBanned',
-    ]);
+    .groupBy(['players.steam_id', 'hasPrivateProfile']);
 
   if (filters) {
     query = applyMatchFilters(query, filters);
@@ -145,12 +129,7 @@ export async function fetchPlayer(steamId: string, filters?: MatchFilters): Prom
     roundCount: roundCount.totalCount,
     collateralKillCount,
     wallbangKillCount: playerRow.wallbangKillCount ?? 0,
-    vacBanCount: playerRow.vacBanCount ?? 0,
-    gameBanCount: playerRow.gameBanCount ?? 0,
-    economyBan: playerRow.economyBan ?? EconomyBan.None,
     hasPrivateProfile: playerRow.hasPrivateProfile ?? false,
-    isCommunityBanned: playerRow.isCommunityBanned ?? false,
-    lastBanDate: playerRow.lastBanDate?.toISOString() ?? null,
     openingDuelsStats: openingDuelsStats.all,
     inspectWeaponCount: playerRow.inspectWeaponCount ?? 0,
     deathWhileInspectingWeaponCount: playerRow.deathWhileInspectingWeaponCount ?? 0,

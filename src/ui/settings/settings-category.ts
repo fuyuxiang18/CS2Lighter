@@ -8,7 +8,6 @@ export const SettingsCategory = {
   Maps: 'maps',
   Tags: 'tags',
   Integrations: 'integrations',
-  Ban: 'ban',
   About: 'about',
   Cameras: 'cameras',
 } as const;

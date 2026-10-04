@@ -6,7 +6,6 @@ import { getTableRowHeight } from 'csdm/ui/components/table/get-table-row-height
 import { roundNumber } from 'csdm/common/math/round-number';
 import type { MatchPlayer } from 'csdm/common/types/match-player';
 import { ScoreboardAvatarCell } from './scoreboard-avatar-cell';
-import { BansCell } from './bans-cell';
 import { killDeathDiffSortFunction } from 'csdm/ui/components/table/kill-death-diff-sort-function';
 import { TagsCell } from 'csdm/ui/components/table/cells/tags-cell';
 
@@ -42,23 +41,6 @@ export function useScoreboardColumns(isDefuseMap: boolean) {
         message: 'Tags',
       }),
       Cell: TagsCell,
-      width: 20,
-      allowResize: false,
-      allowSort: false,
-    },
-    {
-      id: 'bans',
-      accessor: 'lastBanDate',
-      headerText: '',
-      headerTooltip: t({
-        context: 'Table header tooltip',
-        message: 'Bans',
-      }),
-      visibilityText: t({
-        context: 'Dropdown column visibility',
-        message: 'Bans',
-      }),
-      Cell: BansCell,
       width: 20,
       allowResize: false,
       allowSort: false,

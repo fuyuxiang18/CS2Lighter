@@ -12,8 +12,6 @@ import { fetchTags } from 'csdm/node/database/tags/fetch-tags';
 import { fetchFaceitAccounts } from 'csdm/node/database/faceit-account/fetch-faceit-accounts';
 import type { Download } from 'csdm/common/download/download-types';
 import { startBackgroundTasks } from 'csdm/server/start-background-tasks';
-import { fetchIgnoredSteamAccounts } from 'csdm/node/database/steam-accounts/fetch-ignored-steam-accounts';
-import type { IgnoredSteamAccount } from 'csdm/common/types/ignored-steam-account';
 import { initializeSettings } from 'csdm/node/settings/initialize-settings';
 import { videoQueue } from 'csdm/server/video-queue';
 import { type Video } from 'csdm/common/types/video';
@@ -35,34 +33,23 @@ export type InitializeApplicationSuccessPayload = {
   fiveEPlayAccounts: FiveEPlayAccount[];
   renownAccounts: RenownAccount[];
   downloads: Download[];
-  ignoredSteamAccounts: IgnoredSteamAccount[];
   videos: Video[];
   isVideoQueuePaused: boolean;
 };
 
 export async function initializeApplicationHandler() {
   try {
-    const [
-      settings,
-      maps,
-      cameras,
-      tags,
-      matchChecksums,
-      faceitAccounts,
-      fiveEPlayAccounts,
-      renownAccounts,
-      ignoredSteamAccounts,
-    ] = await Promise.all([
-      initializeSettings(),
-      fetchMaps(),
-      fetchCameras(),
-      fetchTags(),
-      fetchMatchChecksums(),
-      fetchFaceitAccounts(),
-      fetch5EPlayAccounts(),
-      fetchRenownAccounts(),
-      fetchIgnoredSteamAccounts(),
-    ]);
+    const [settings, maps, cameras, tags, matchChecksums, faceitAccounts, fiveEPlayAccounts, renownAccounts] =
+      await Promise.all([
+        initializeSettings(),
+        fetchMaps(),
+        fetchCameras(),
+        fetchTags(),
+        fetchMatchChecksums(),
+        fetchFaceitAccounts(),
+        fetch5EPlayAccounts(),
+        fetchRenownAccounts(),
+      ]);
     const payload: InitializeApplicationSuccessPayload = {
       maps,
       cameras,
@@ -72,7 +59,6 @@ export async function initializeApplicationHandler() {
       faceitAccounts,
       fiveEPlayAccounts,
       renownAccounts,
-      ignoredSteamAccounts,
       analyses: analysesListener.getAnalyses(),
       downloads: downloadDemoQueue.getDownloads(),
       videos: videoQueue.getVideos(),

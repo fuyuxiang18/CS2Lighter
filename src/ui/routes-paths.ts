@@ -1,6 +1,5 @@
 export const RoutePath = {
   Habits: '/habits',
-  Learning: '/learning',
   Demos: '/demos',
   Matches: '/matches',
   MatchHeatmap: 'heatmap',
@@ -23,10 +22,8 @@ export const RoutePath = {
   PlayerMatches: 'matches',
   PlayerMaps: 'maps',
   PlayerHeatmap: 'heatmap',
-  PinnerPlayer: '/pinned-player',
   Search: '/search',
   Downloads: '/downloads',
-  Ban: '/ban',
   Teams: '/teams',
   TeamHeatmap: 'heatmap',
   TeamMatches: 'matches',

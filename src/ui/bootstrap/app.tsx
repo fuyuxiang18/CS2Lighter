@@ -6,7 +6,6 @@ import { NavigationListener } from './navigation-listener';
 import { ContextMenuProvider } from '../components/context-menu/context-menu-provider';
 import { useArgumentsContext } from './use-arguments-context';
 import { Outlet } from 'react-router';
-import { ImportProgressProvider } from 'csdm/ui/imports/import-progress-provider';
 import { ImportProgressGate } from 'csdm/ui/imports/import-progress-gate';
 
 export function App() {
@@ -20,18 +19,16 @@ export function App() {
 
   return (
     <NavigationListener>
-      <ImportProgressProvider>
-        <ContextMenuProvider>
-          <AppWrapper>
-            <LeftBar />
-            <AppContent>
-              <ImportProgressGate>
-                <Outlet />
-              </ImportProgressGate>
-            </AppContent>
-          </AppWrapper>
-        </ContextMenuProvider>
-      </ImportProgressProvider>
+      <ContextMenuProvider>
+        <AppWrapper>
+          <LeftBar />
+          <AppContent>
+            <ImportProgressGate>
+              <Outlet />
+            </ImportProgressGate>
+          </AppContent>
+        </AppWrapper>
+      </ContextMenuProvider>
     </NavigationListener>
   );
 }

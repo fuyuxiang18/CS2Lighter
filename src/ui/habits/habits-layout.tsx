@@ -31,9 +31,6 @@ export function HabitsLayout({ children }: { children: ReactNode }) {
           <WorkspaceLink to={RoutePath.Habits}>
             <Trans>My habits</Trans>
           </WorkspaceLink>
-          <WorkspaceLink to={RoutePath.Learning}>
-            <Trans>Learn from a player</Trans>
-          </WorkspaceLink>
           <WorkspaceLink to={RoutePath.Matches}>
             <Trans>Match library</Trans>
           </WorkspaceLink>

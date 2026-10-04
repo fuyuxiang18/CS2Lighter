@@ -17,7 +17,7 @@ export function DatabaseModeOptionCards({ mode, onChange, isDisabled, ariaLabell
       <OptionCard
         value={DatabaseMode.Embedded}
         title={<Trans>Embedded (recommended)</Trans>}
-        description={<Trans>Managed by CS Demo Manager, nothing to install.</Trans>}
+        description={<Trans>Managed by the app, nothing to install.</Trans>}
       />
       <OptionCard
         value={DatabaseMode.External}

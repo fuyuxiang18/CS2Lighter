@@ -1,6 +1,5 @@
 import React from 'react';
 import { ContextMenu } from 'csdm/ui/components/context-menu/context-menu';
-import { PinPlayerItem } from 'csdm/ui/components/context-menu/items/pin-player-item';
 import { ShowPlayerMatchesItem } from 'csdm/ui/components/context-menu/items/show-player-matches-item';
 import { WatchPlayerItem } from 'csdm/ui/components/context-menu/items/watch-player-item';
 import { OpenSteamProfileItem } from 'csdm/ui/components/context-menu/items/open-steam-profile-item';
@@ -26,7 +25,6 @@ export function ValveScoreboardContextMenu({ steamId, demoPath, game }: Props) {
       <CopySteamIdItem steamIds={[steamId]} />
       <ShowPlayerMatchesItem steamIds={[steamId]} />
       <OpenSteamProfileItem steamIds={[steamId]} />
-      <PinPlayerItem steamId={steamId} />
     </ContextMenu>
   );
 }

@@ -31,7 +31,6 @@ export const IPCChannel = {
   CanGoForward: 'can-go-forward',
   NavigateToPlayers: 'navigate-to-players',
   NavigateToPendingDownloads: 'navigate-to-pending-downloads',
-  NavigateToBans: 'navigate-to-bans',
   GetUpdateState: 'get-update-state',
   UpdateStateChanged: 'update-state-changed',
   CheckForUpdates: 'check-for-updates',

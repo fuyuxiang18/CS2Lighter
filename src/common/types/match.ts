@@ -65,6 +65,5 @@ export type Match = {
   damages: Damage[];
   tagIds: string[];
   shareCode: string;
-  hasVacLiveBan: boolean;
   teamsEconomyStats: TeamEconomyStats[];
 };

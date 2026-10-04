@@ -9,11 +9,7 @@ export type LastPlayersData = {
   winsCount: number;
   lastKnownName: string | null;
   avatar: string | null;
-  lastBanDate: Date | null;
   lastMatchDate: Date;
-  vacBanCount: number | null;
-  gameBanCount: number | null;
-  isCommunityBanned: boolean | null;
 };
 
 export async function fetchLastPlayersData(steamIds: string[]): Promise<LastPlayersData[]> {
@@ -31,15 +27,7 @@ export async function fetchLastPlayersData(steamIds: string[]): Promise<LastPlay
     ])
     .leftJoin('steam_accounts', 'steam_accounts.steam_id', 'players.steam_id')
     .leftJoin('steam_account_overrides', 'players.steam_id', 'steam_account_overrides.steam_id')
-    .select([
-      db.fn.coalesce('steam_account_overrides.name', 'steam_accounts.name').as('lastKnownName'),
-      'avatar',
-      'last_ban_date as lastBanDate',
-      'is_community_banned as isCommunityBanned',
-      'vac_ban_count as vacBanCount',
-      'game_ban_count as gameBanCount',
-      'economy_ban as economyBan',
-    ])
+    .select([db.fn.coalesce('steam_account_overrides.name', 'steam_accounts.name').as('lastKnownName'), 'avatar'])
     .innerJoin('demos', 'demos.checksum', 'players.match_checksum')
     .select(['demos.date as lastMatchDate', 'demos.game as game'])
     .where((eb) => eb('players.steam_id', '=', eb.fn.any(eb.val(steamIds))))
@@ -51,11 +39,6 @@ export async function fetchLastPlayersData(steamIds: string[]): Promise<LastPlay
       'players.wins_count',
       'lastKnownName',
       'steam_accounts.avatar',
-      'lastBanDate',
-      'isCommunityBanned',
-      'vacBanCount',
-      'gameBanCount',
-      'economyBan',
     ])
     .orderBy('demos.date', 'desc')
     .execute();

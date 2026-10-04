@@ -1,7 +1,5 @@
 import React from 'react';
 import { DropdownFilter } from 'csdm/ui/components/dropdown-filter/dropdown-filter';
-import { BansFilter } from './ban-filter';
-import type { BanFilter } from 'csdm/common/types/ban-filter';
 import { useFetchPlayers } from '../use-fetch-players';
 import { useActivePlayersFilters } from '../use-active-players-filters';
 import { usePlayersSettings } from 'csdm/ui/settings/use-players-settings';
@@ -11,14 +9,8 @@ import { TagsFilter } from 'csdm/ui/components/dropdown-filter/tags-filter';
 
 export function PlayersFilterDropdown() {
   const fetchPlayers = useFetchPlayers();
-  const { bans, startDate, endDate, tagIds } = usePlayersSettings();
-  const { hasActiveFilter, hasActiveBanFilters, hasActiveTagsFilter } = useActivePlayersFilters();
-
-  const onBansChange = async (bans: BanFilter[]) => {
-    await fetchPlayers({
-      bans,
-    });
-  };
+  const { startDate, endDate, tagIds } = usePlayersSettings();
+  const { hasActiveFilter, hasActiveTagsFilter } = useActivePlayersFilters();
 
   const onPeriodChange = async (range: DateRange | undefined) => {
     const startDate = formatDate(range?.from);
@@ -43,9 +35,6 @@ export function PlayersFilterDropdown() {
           <PeriodFilter startDate={startDate} endDate={endDate} onRangeChange={onPeriodChange} />
         </div>
         <div className="w-[300px] border-l border-l-gray-300">
-          <div className="p-8">
-            <BansFilter selectedBans={bans} onChange={onBansChange} hasActiveFilter={hasActiveBanFilters} />
-          </div>
           <div className="p-8">
             <TagsFilter selectedTagIds={tagIds} onChange={onTagsChange} hasActiveFilter={hasActiveTagsFilter} />
           </div>

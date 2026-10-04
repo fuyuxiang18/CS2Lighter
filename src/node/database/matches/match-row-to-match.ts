@@ -6,7 +6,7 @@ import type { CollateralKillPerMatch } from './fetch-collateral-kill-count-per-m
 import type { DemoRow } from '../demos/demo-table';
 
 export async function matchRowToMatch(
-  row: DemoRow & MatchRow,
+  row: DemoRow & Omit<MatchRow, 'has_vac_live_ban'>,
   teamA: Team,
   teamB: Team,
   collateralKillCountPerMatch: CollateralKillPerMatch,
@@ -40,7 +40,6 @@ export async function matchRowToMatch(
     isRanked: row.is_ranked,
     maxRounds: row.max_rounds,
     shareCode: row.share_code ?? '',
-    hasVacLiveBan: row.has_vac_live_ban,
     teamA,
     teamB,
     blinds: [],

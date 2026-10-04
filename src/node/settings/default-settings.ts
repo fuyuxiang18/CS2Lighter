@@ -35,7 +35,6 @@ export const defaultSettings: Settings = {
     endDate: undefined,
     analysisStatus: AnalysisStatusFilter.All,
   },
-  pinnedPlayerSteamId: '',
   steamApiKey: '',
   faceitApiKey: '',
   ui: {
@@ -148,7 +147,6 @@ export const defaultSettings: Settings = {
     endDate: undefined,
   },
   players: {
-    bans: [],
     startDate: undefined,
     endDate: undefined,
     tagIds: [],
@@ -166,8 +164,5 @@ export const defaultSettings: Settings = {
     maxRounds: [],
     startDate: undefined,
     endDate: undefined,
-  },
-  ban: {
-    ignoreBanBeforeFirstSeen: true,
   },
 };

@@ -26,8 +26,7 @@ export function ErrorBoundary() {
     const environment = system.join('\n');
     const stacktrace = `\`\`\`\n${errorData}\n\`\`\``;
 
-    const url = new URL('https://github.com/akiver/cs-demo-manager/issues/new');
-    url.searchParams.set('template', 'bug_report.yml');
+    const url = new URL('https://github.com/fuyuxiang18/CS2Lighter/issues/new');
     url.searchParams.set('title', title);
     url.searchParams.set('environment', environment);
     url.searchParams.set('additional', stacktrace);

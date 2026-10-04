@@ -32,7 +32,6 @@ export function matchTableRowToMatchTable(
     tickCount: row.tick_count,
     gameMode: row.game_mode_str,
     isRanked: row.is_ranked,
-    bannedPlayerCount: row.banned_player_count ?? 0,
     teamAName: row.teamAName,
     teamAScore: row.teamAScore,
     teamBName: row.teamBName,

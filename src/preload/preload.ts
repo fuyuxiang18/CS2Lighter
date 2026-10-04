@@ -267,14 +267,6 @@ const api: PreloadApi = {
     };
   },
 
-  onNavigateToBans: (callback: () => void) => {
-    ipcRenderer.addListener(IPCChannel.NavigateToBans, callback);
-
-    return () => {
-      ipcRenderer.removeListener(IPCChannel.NavigateToBans, callback);
-    };
-  },
-
   onUpdateStateChanged: (callback: (state: AppUpdateState) => void) => {
     const listener = (_event: IpcRendererEvent, state: AppUpdateState) => callback(state);
     ipcRenderer.addListener(IPCChannel.UpdateStateChanged, listener);

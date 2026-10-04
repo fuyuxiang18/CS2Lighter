@@ -29,12 +29,6 @@ export async function getSettings(): Promise<Settings> {
   }
 }
 
-export async function getBanSettings() {
-  const settings = await getSettings();
-
-  return settings.ban ?? defaultSettings.ban;
-}
-
 // You should probably use the async version of this function.
 // This synchronous version is only intended for use during application bootstrap in order to access settings before the
 // Electron app 'ready' event is fired.

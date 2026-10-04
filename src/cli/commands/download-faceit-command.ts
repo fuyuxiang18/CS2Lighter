@@ -53,9 +53,7 @@ export class DownloadFaceitCommand extends DownloadBaseCommand {
   }
 
   public async run() {
-    console.warn(
-      `This command is currently disabled, see https://cs-demo-manager.com/docs/guides/downloads#why-faceit-downloads-are-disabled.`,
-    );
+    console.warn('Remote demo downloads are disabled. Import local demos from your configured folders.');
     return;
     // oxlint-disable no-unreachable
     this.parseArgs();

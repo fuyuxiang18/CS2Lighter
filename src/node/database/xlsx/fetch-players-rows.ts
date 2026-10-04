@@ -54,10 +54,6 @@ type PlayerQueryResult = {
   enemiesFlashedCount: number;
   score: number;
   mvpCount: number;
-  gameBanCount: number;
-  isCommunityBanned: boolean;
-  vacBanCount: number;
-  lastBanDate: string | null;
   inspectWeaponCount: number;
   deathWhileInspectingWeaponCount: number;
 };
@@ -152,10 +148,6 @@ export async function fetchPlayersRows(filters: Filters): Promise<PlayerRow[]> {
       inspectWeaponCount: player.inspectWeaponCount ?? 0,
       deathWhileInspectingWeaponCount: weaponInspectionsStats?.deathWhileInspectingWeaponCount ?? 0,
       enemiesFlashedCount: enemiesFlashed?.enemiesFlashedCount ?? 0,
-      gameBanCount: lastData.gameBanCount ?? 0,
-      isCommunityBanned: lastData.isCommunityBanned ?? false,
-      vacBanCount: lastData.vacBanCount ?? 0,
-      lastBanDate: lastData.lastBanDate?.toISOString() ?? null,
       vsOneCount: clutchStats?.vsOneCount ?? 0,
       vsOneWonCount: clutchStats?.vsOneWonCount ?? 0,
       vsOneLostCount: clutchStats?.vsOneLostCount ?? 0,

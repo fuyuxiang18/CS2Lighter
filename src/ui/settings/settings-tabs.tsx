@@ -32,9 +32,6 @@ export function SettingsTabs() {
       <SettingsCategoryButton category={SettingsCategory.Cameras}>
         <Trans>Cameras</Trans>
       </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Ban}>
-        <Trans>Ban</Trans>
-      </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Integrations}>
         <Trans>Integrations</Trans>
       </SettingsCategoryButton>

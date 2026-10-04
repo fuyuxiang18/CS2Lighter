@@ -2,9 +2,11 @@
 
 ## Project
 
-CS2Lighter is a local CS2 habits and learning desktop application based on CS Demo Manager (MIT).
+CS2Lighter is a local CS2 personal demo analysis desktop application.
 It only imports demos from explicitly configured folders; do not restore remote demo downloading or automatic folder discovery.
 The default language is Simplified Chinese; English is the only alternative. Both catalogs ship with the app.
+Do not restore ban checks, VAC/PAC content, pinned players, learning workspace, donations or upstream changelogs.
+Keep upstream acknowledgements and required licenses. Cache each demo's reusable statistics in demodata and preserve it during upgrades.
 
 The user requests ongoing GitHub synchronization: after completing and validating authorized changes, commit and push
 to origin (fuyuxiang18/CS2Lighter). Upstream is the original project and must not receive pushes.

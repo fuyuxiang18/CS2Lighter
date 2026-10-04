@@ -1,5 +1,4 @@
 import type { CompetitiveRank, PremierRank } from './counter-strike';
-import type { EconomyBan } from 'csdm/node/steam-web-api/steam-constants';
 import type { PlayerUtilityStats } from 'csdm/node/database/players/fetch-players-utility-stats';
 import type { PlayerOpeningDuelsStats } from 'csdm/node/database/player/fetch-player-opening-duels-stats';
 
@@ -51,11 +50,6 @@ export type Player = {
   hltvRating: number;
   hltvRating2: number;
   winsCount: number;
-  lastBanDate: string | null;
-  vacBanCount: number;
-  gameBanCount: number;
-  isCommunityBanned: boolean;
-  economyBan: EconomyBan;
   hasPrivateProfile: boolean;
   inspectWeaponCount: number;
   deathWhileInspectingWeaponCount: number;

@@ -8,7 +8,7 @@ import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { HabitsPlaybackButton } from './habits-playback-button';
 
-export function buildEvidencePath(checksum: string, roundNumber: number, steamId: string, tick?: number) {
+function buildEvidencePath(checksum: string, roundNumber: number, steamId: string, tick?: number) {
   const search = new URLSearchParams({ player: steamId });
   if (tick !== undefined) search.set('tick', String(tick));
   return `${buildMatch2dViewerRoundPath(checksum, roundNumber)}?${search}`;

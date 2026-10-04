@@ -8,12 +8,11 @@ import { usePlayersSettings } from 'csdm/ui/settings/use-players-settings';
 export function useFetchPlayers() {
   const dispatch = useDispatch();
   const client = useWebSocketClient();
-  const { updateSettings, bans, startDate, endDate, tagIds } = usePlayersSettings();
+  const { updateSettings, startDate, endDate, tagIds } = usePlayersSettings();
 
   return async (options?: Partial<PlayersTableFilter>) => {
     try {
       const payload: PlayersTableFilter = {
-        bans: options?.bans ?? bans,
         startDate: options && 'startDate' in options ? options.startDate : startDate,
         endDate: options && 'endDate' in options ? options.endDate : endDate,
         tagIds: options?.tagIds ?? tagIds,

@@ -8,7 +8,6 @@ import { DemoLoader } from 'csdm/ui/demo/demo-loader';
 import { PlayerMaps } from 'csdm/ui/player/maps/player-maps';
 import { Players } from 'csdm/ui/players/players';
 import { Player } from 'csdm/ui/player/player';
-import { PinnedPlayer } from 'csdm/ui/player/pinned-player';
 import { PlayerOverview } from 'csdm/ui/player/overview/player-overview';
 import { PlayerCharts } from 'csdm/ui/player/charts/player-charts';
 import { PlayerMatchesTable } from 'csdm/ui/player/matches/player-matches-table';
@@ -25,7 +24,6 @@ import { Economy } from 'csdm/ui/match/economy/economy';
 import { Weapons } from 'csdm/ui/match/weapons/weapons';
 import { GrenadesStats } from 'csdm/ui/match/grenades/stats/grenades-stats';
 import { GrenadesFinderLoader } from 'csdm/ui/match/grenades/finder/grenades-finder-loader';
-import { BanStats } from 'csdm/ui/ban/stats/ban-stats';
 import { MatchPlayers } from 'csdm/ui/match/players/match-players';
 import { MatchPlayersLoader } from 'csdm/ui/match/players/match-players-loader';
 import { Search } from 'csdm/ui/search/search';
@@ -47,14 +45,11 @@ import { Videos } from './videos/videos';
 import { TeamPerformance } from './team/performance/team-performance';
 import { PlayerHeatmap } from './player/heatmap/player-heatmap';
 import { HabitsDashboard } from 'csdm/ui/habits/habits-dashboard';
-import { LearningWorkspace } from 'csdm/ui/habits/learning-workspace';
 
 export const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />} errorElement={<ErrorBoundary />}>
       <Route path={RoutePath.Habits} element={<HabitsDashboard />} />
-      <Route path={RoutePath.Learning} element={<LearningWorkspace />} />
-      <Route path={RoutePath.PinnerPlayer} element={<PinnedPlayer />} />
       <Route path={RoutePath.Matches} element={<Matches />} />
       <Route path={`${RoutePath.Matches}/:checksum`} element={<MatchLoader />}>
         <Route index={true} element={<MatchOverview />} />
@@ -105,11 +100,11 @@ export const router = createHashRouter(
         <Route path={RoutePath.TeamMatches} element={<TeamMatchesTable />} />
       </Route>
       <Route path={RoutePath.Search} element={<Search />} />
-      <Route path={RoutePath.Ban} element={<BanStats />} />
       <Route path={RoutePath.Analyses} element={<Analyses />} />
       <Route path={`${RoutePath.Downloads}/*`} element={<InitialRouteRedirector />} />
       <Route path={RoutePath.Videos} element={<Videos />} />
       <Route index={true} element={<InitialRouteRedirector />} />
+      <Route path="*" element={<InitialRouteRedirector />} />
     </Route>,
   ),
 );

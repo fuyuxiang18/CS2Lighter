@@ -4,7 +4,6 @@ import { ConfirmDialog } from 'csdm/ui/dialogs/confirm-dialog';
 import type { Demo } from 'csdm/common/types/demo';
 import { Checkbox } from '../inputs/checkbox';
 import { useAddDemosToAnalyses } from 'csdm/ui/hooks/use-add-demos-to-analyses';
-import { ExternalLink } from '../external-link';
 
 type Props = {
   analyzableDemos: Demo[];
@@ -48,16 +47,6 @@ export function AnalyzeConfirmationDialog({
                 one="The demo's source is not supported"
                 other="# demos source are not supported"
               />
-            </p>
-
-            <p>
-              <Trans>
-                Please see this{' '}
-                <ExternalLink href="https://cs-demo-manager.com/docs/guides/demos-analysis#the-demo-source-is-not-supported">
-                  documentation
-                </ExternalLink>{' '}
-                for details.
-              </Trans>
             </p>
           </li>
         )}

@@ -58,7 +58,7 @@ export abstract class Command {
       if (error instanceof DatabaseSchemaVersionMismatch) {
         console.error(error.message);
         console.error(
-          'The database is managed by a CS Demo Manager daemon running a different version than this CLI, close the running CS Demo Manager instances so the daemon can be replaced and retry.',
+          'The database is managed by a CS2Lighter daemon running a different version than this CLI, close the running CS2Lighter instances so the daemon can be replaced and retry.',
         );
       } else if (isErrorCode(error)) {
         console.error(getErrorCodeMessage(error));
@@ -98,7 +98,7 @@ export abstract class Command {
     try {
       return await createDaemonConnection();
     } catch (error) {
-      console.error('Failed to connect to the CS Demo Manager daemon');
+      console.error('Failed to connect to the CS2Lighter daemon');
       console.error(error instanceof Error ? error.message : error);
       return this.exitWithFailure();
     }

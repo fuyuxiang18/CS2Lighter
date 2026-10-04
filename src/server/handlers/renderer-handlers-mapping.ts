@@ -10,6 +10,8 @@ import type {
 } from 'csdm/common/types/habits';
 import { findHabitsIdentityHandler } from './renderer-process/habits/find-habits-identity-handler';
 import { fetchHabitsSummaryHandler } from './renderer-process/habits/fetch-habits-summary-handler';
+import { fetchPersonalStatsHandler } from './renderer-process/habits/fetch-personal-stats-handler';
+import type { FetchPersonalStatsPayload, PersonalStatsSummary } from 'csdm/common/types/personal-stats';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import type { FaceitAccount } from 'csdm/common/types/faceit-account';
 import { addDownloadHandler } from './renderer-process/download/add-download-handler';
@@ -41,7 +43,6 @@ import { navigateToDemoOrMatch } from './renderer-process/navigate-to-demo-or-ma
 import { addDemosToAnalysesHandler } from './renderer-process/demo/add-demos-to-analyses-handler';
 import { removeDemosFromAnalysesHandler } from './renderer-process/demo/remove-demos-from-analyses-handler';
 import { deleteMatchesHandler } from './renderer-process/match/delete-matches-handler';
-import { deleteIgnoredSteamAccountHandler } from './renderer-process/steam-accounts/delete-ignored-steam-account-handler';
 import { fetchLastValveMatchesHandler } from './renderer-process/download/fetch-last-valve-matches-handler';
 import { abortDownloadHandler } from './renderer-process/download/abort-download-handler';
 import { addDownloadsHandler } from './renderer-process/download/add-downloads-handler';
@@ -49,12 +50,10 @@ import { addDownloadFromShareCodeHandler } from './renderer-process/download/add
 import { deleteDemosHandler, type DeleteDemosResultPayload } from './renderer-process/demo/delete-demos-handler';
 import type { ExportMatchesToXlsxPayload } from './renderer-process/match/export-matches-to-xlsx-handler';
 import { exportMatchesToXlsxHandler } from './renderer-process/match/export-matches-to-xlsx-handler';
-import { addIgnoredSteamAccountHandler } from './renderer-process/steam-accounts/add-ignored-steam-account-handler';
 import { addMapHandler } from './renderer-process/map/add-map-handler';
 import { updateMapHandler } from './renderer-process/map/update-map-handler';
 import type { MapPayload } from './renderer-process/map/map-payload';
 import { deleteMapHandler } from './renderer-process/map/delete-map-handler';
-import { fetchBanStatsHandler } from './renderer-process/bans/fetch-ban-stats-handler';
 import { disconnectDatabaseConnectionHandler } from './renderer-process/database/disconnect-database-connection-handler';
 import { deleteEmbeddedDatabaseDataHandler } from './renderer-process/database/delete-embedded-database-data-handler';
 import {
@@ -122,8 +121,6 @@ import type { ExportDemoPlayersVoicePayload } from './renderer-process/demo/expo
 import { exportDemoPlayersVoiceHandler } from './renderer-process/demo/export-demo-players-voice-handler';
 import type { MatchTable } from 'csdm/common/types/match-table';
 import type { Point } from 'csdm/common/types/point';
-import type { IgnoredSteamAccount } from 'csdm/common/types/ignored-steam-account';
-import type { BanStats } from 'csdm/common/types/ban-stats';
 import type { PlayerProfile } from 'csdm/common/types/player-profile';
 import type { PlayerTable } from 'csdm/common/types/player-table';
 import type { UpdateDemosTypePayload } from './renderer-process/demo/update-demos-type-handler';
@@ -246,6 +243,7 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.RetryFailedImports]: Handler;
   [RendererClientMessageName.FindHabitsIdentity]: Handler<FindHabitsIdentityPayload, HabitsIdentityCandidate[]>;
   [RendererClientMessageName.FetchHabitsSummary]: Handler<FetchHabitsPayload, HabitsSummary>;
+  [RendererClientMessageName.FetchPersonalStats]: Handler<FetchPersonalStatsPayload, PersonalStatsSummary>;
   [RendererClientMessageName.InitializeApplication]: Handler<void, InitializeApplicationSuccessPayload>;
   [RendererClientMessageName.IsCs2ConnectedToServer]: Handler<void, boolean>;
   [RendererClientMessageName.AbortCurrentTask]: Handler;
@@ -274,7 +272,6 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.GenerateMatchPositions]: Handler<GenerateMatchPositionsPayload>;
   [RendererClientMessageName.RenameDemo]: Handler<RenameDemoPayload>;
   [RendererClientMessageName.DeleteMatches]: Handler<string[]>;
-  [RendererClientMessageName.DeleteIgnoredSteamAccount]: Handler<string>;
   [RendererClientMessageName.FetchLastValveMatches]: Handler;
   [RendererClientMessageName.AbortDownload]: Handler<string>;
   [RendererClientMessageName.AbortDownloads]: Handler;
@@ -294,14 +291,12 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.ExportMatchesToXlsx]: Handler<ExportMatchesToXlsxPayload>;
   [RendererClientMessageName.ExportMatchesToJson]: Handler<ExportMatchesToJsonPayload>;
   [RendererClientMessageName.ExportPlayersToXlsx]: Handler<ExportPlayersToXlsxPayload>;
-  [RendererClientMessageName.AddIgnoredSteamAccount]: Handler<string, IgnoredSteamAccount>;
   [RendererClientMessageName.AddMap]: Handler<MapPayload, Map>;
   [RendererClientMessageName.UpdateMap]: Handler<MapPayload, Map>;
   [RendererClientMessageName.DeleteMap]: Handler<Map>;
   [RendererClientMessageName.AddCamera]: Handler<CameraPayload, Camera>;
   [RendererClientMessageName.UpdateCamera]: Handler<UpdateCameraPayload, Camera>;
   [RendererClientMessageName.DeleteCamera]: Handler<string>;
-  [RendererClientMessageName.FetchBanStats]: Handler<void, BanStats>;
   [RendererClientMessageName.DisconnectDatabase]: Handler;
   [RendererClientMessageName.ConnectDatabase]: Handler<DatabaseSettings | undefined, ConnectDatabaseError | undefined>;
   [RendererClientMessageName.AddVideoToQueue]: Handler<AddVideoPayload>;
@@ -379,6 +374,7 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.RetryFailedImports]: retryFailedImportsHandler,
   [RendererClientMessageName.FindHabitsIdentity]: findHabitsIdentityHandler,
   [RendererClientMessageName.FetchHabitsSummary]: fetchHabitsSummaryHandler,
+  [RendererClientMessageName.FetchPersonalStats]: fetchPersonalStatsHandler,
   [RendererClientMessageName.InitializeApplication]: initializeApplicationHandler,
   [RendererClientMessageName.IsCs2ConnectedToServer]: isCs2ConnectedToServerHandler,
   [RendererClientMessageName.AbortCurrentTask]: abortCurrentTaskHandler,
@@ -407,7 +403,6 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.GenerateMatchPositions]: generateMatchPositionsHandler,
   [RendererClientMessageName.RenameDemo]: renameDemoHandler,
   [RendererClientMessageName.DeleteMatches]: deleteMatchesHandler,
-  [RendererClientMessageName.DeleteIgnoredSteamAccount]: deleteIgnoredSteamAccountHandler,
   [RendererClientMessageName.FetchLastValveMatches]: fetchLastValveMatchesHandler,
   [RendererClientMessageName.AbortDownload]: abortDownloadHandler,
   [RendererClientMessageName.AbortDownloads]: abortDownloadsHandler,
@@ -424,14 +419,12 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.ExportMatchesToXlsx]: exportMatchesToXlsxHandler,
   [RendererClientMessageName.ExportMatchesToJson]: exportMatchesToJsonHandler,
   [RendererClientMessageName.ExportPlayersToXlsx]: exportPlayersToXlsxHandler,
-  [RendererClientMessageName.AddIgnoredSteamAccount]: addIgnoredSteamAccountHandler,
   [RendererClientMessageName.AddMap]: addMapHandler,
   [RendererClientMessageName.UpdateMap]: updateMapHandler,
   [RendererClientMessageName.DeleteMap]: deleteMapHandler,
   [RendererClientMessageName.AddCamera]: addCameraHandler,
   [RendererClientMessageName.UpdateCamera]: updateCameraHandler,
   [RendererClientMessageName.DeleteCamera]: deleteCameraHandler,
-  [RendererClientMessageName.FetchBanStats]: fetchBanStatsHandler,
   [RendererClientMessageName.DisconnectDatabase]: disconnectDatabaseConnectionHandler,
   [RendererClientMessageName.ConnectDatabase]: connectDatabaseHandler,
   [RendererClientMessageName.AddVideoToQueue]: addVideoToQueueHandler,

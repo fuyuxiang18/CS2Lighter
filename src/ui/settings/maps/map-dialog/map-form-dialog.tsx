@@ -14,7 +14,6 @@ import type { MapPayload } from 'csdm/server/handlers/renderer-process/map/map-p
 import { useDialog } from 'csdm/ui/components/dialogs/use-dialog';
 import { useMapForm } from 'csdm/ui/settings/maps/map-dialog/use-map-form';
 import { Trans } from '@lingui/react/macro';
-import { ExternalLink } from 'csdm/ui/components/external-link';
 import { ThresholdZInput } from './threshold-z-input';
 
 function InputsRow({ children }: { children: ReactNode }) {
@@ -83,11 +82,6 @@ export function MapFormDialog({ nameInput, error, onSubmit }: Props) {
         </div>
       </DialogContent>
       <DialogFooter>
-        <div className="mr-auto">
-          <ExternalLink href="https://cs-demo-manager.com/docs/guides/maps#addingediting-a-map">
-            <Trans>Documentation</Trans>
-          </ExternalLink>
-        </div>
         <SaveButton onClick={validateAndSubmit} />
         <CancelButton onClick={hideDialog} />
       </DialogFooter>

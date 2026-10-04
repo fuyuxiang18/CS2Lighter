@@ -73,9 +73,13 @@ export function useChart({ option }: { option: ChartOption }) {
       instanceRef.current?.resize();
     };
 
+    // Panels can be hidden by the import gate without a window resize.
+    const observer = new ResizeObserver(onResize);
+    if (domRef.current) observer.observe(domRef.current);
     window.addEventListener('resize', onResize);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', onResize);
     };
   }, []);

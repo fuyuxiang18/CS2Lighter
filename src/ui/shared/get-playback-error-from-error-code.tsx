@@ -38,13 +38,7 @@ export function getPlaybackErrorMessageFromErrorCode(errorCode: ErrorCode, game?
             </Trans>
           </p>
           <p>
-            <Trans>
-              You have to move the demo in a folder that contains only Basic Latin characters - see{' '}
-              <ExternalLink href="https://cs-demo-manager.com/docs/guides/playback#cs2-demo-playback-doesnt-start-or-crashes">
-                this documentation
-              </ExternalLink>{' '}
-              for details.
-            </Trans>
+            <Trans>Move the demo to a folder whose path uses only Basic Latin characters.</Trans>
           </p>
         </div>
       );
@@ -77,13 +71,6 @@ export function getPlaybackErrorMessageFromErrorCode(errorCode: ErrorCode, game?
               <CsgoNotInstalledMessage />
             </p>
           )}
-          <p>
-            <Trans>
-              Read the{' '}
-              <ExternalLink href="https://cs-demo-manager.com/docs/guides/playback">documentation</ExternalLink> for
-              more information.
-            </Trans>
-          </p>
         </div>
       );
     case ErrorCode.CustomCounterStrikeExecutableNotFound:
@@ -161,13 +148,7 @@ export function getPlaybackErrorMessageFromErrorCode(errorCode: ErrorCode, game?
     case ErrorCode.GameError:
       return (
         <p>
-          <Trans>
-            The game crashed, please see{' '}
-            <ExternalLink href="https://cs-demo-manager.com/docs/guides/playback#cs2-demo-playback-doesnt-start-or-crashes">
-              this documentation
-            </ExternalLink>{' '}
-            for help.
-          </Trans>
+          <Trans>The game crashed. Check the selected CS2 plugin version in playback settings and the game log.</Trans>
         </p>
       );
     case ErrorCode.AccessDenied:

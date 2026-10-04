@@ -18,6 +18,8 @@
 
 - 保持 electron-builder 的 appId `local.cs2.parser` 和 Windows executableName `cs2-parser`。应用名称可以显示 CS2Lighter，旧安装记录和进程身份需要保持兼容。
 - 保持 `%LOCALAPPDATA%\CS2Parser` 和 `ui` 用户数据子目录，保留现有 localStorage 身份与笔记 key。
+- 安装目录 `demodata` 是用户缓存，不是程序资源；NSIS 的 `customRemoveFiles` 在升级和卸载时保留此目录。发布前须实际验证有缓存文件的覆盖安装，不能恢复默认递归删除安装目录的行为。
+- 首次升级到 0.3.0 从已有数据库回填逐场缓存，不应重跑原始 demo 解析器。新解析、重分析、删除和地图元数据变化必须保持缓存一致性。
 - 设置变动增加 schema migration；数据库变动使用现有数据库 migration，不重置用户库。
 - PostgreSQL 主版本升级需额外设计数据迁移，不能直接替换不兼容主版本。
 - 安装更新前须确认无解析/入库/视频任务及 CLI 工作，停止监听、关闭数据库并等待后台进程退出。

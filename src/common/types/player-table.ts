@@ -22,10 +22,6 @@ export type PlayerTable = {
   fourKillCount: number;
   fiveKillCount: number;
   lastMatchDate: string;
-  lastBanDate: string | null;
-  isCommunityBanned: boolean;
-  isVacBanned: boolean;
-  isGameBanned: boolean;
   hltvRating: number;
   hltvRating2: number;
   comment: string;

@@ -1,7 +1,7 @@
 {
   "name": "cs2lighter",
-  "version": "0.2.0",
-  "description": "Local CS2 demo habits and learning desktop app, based on CS Demo Manager.",
+  "version": "0.3.0",
+  "description": "Local CS2 demo analysis, personal statistics and habit heatmaps.",
   "keywords": [
     "CS",
     "CS2",
@@ -145,8 +145,5 @@
   "packageManager": "pnpm@12.6.0",
   "download": {
     "url": "https://github.com/fuyuxiang18/CS2Lighter/releases/latest"
-  },
-  "tutorial": {
-    "url": "https://cs-demo-manager.com/docs"
   }
 }

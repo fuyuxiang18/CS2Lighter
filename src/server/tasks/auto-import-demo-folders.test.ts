@@ -26,6 +26,10 @@ vi.mock('csdm/node/demo/has-complete-source2-demo', () => ({ hasCompleteSource2D
 vi.mock('csdm/node/database/matches/fetch-match-checksums', () => ({ fetchMatchChecksums: () => Promise.resolve([]) }));
 vi.mock('csdm/node/database/database', () => ({ isDatabaseConnected: () => true }));
 vi.mock('csdm/server/update-maintenance', () => ({ isUpdateMaintenance: () => false }));
+vi.mock('csdm/node/demo-cache/demo-cache-service', () => ({
+  getDemoCacheFailures: () => new Map(),
+  retryFailedDemoCaches: () => Promise.resolve(),
+}));
 vi.mock('csdm/server/server', () => ({ server: { sendPushMessage: vi.fn() } }));
 vi.mock('csdm/server/analyses-listener', () => ({
   analysesListener: {

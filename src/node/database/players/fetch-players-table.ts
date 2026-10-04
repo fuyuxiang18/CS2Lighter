@@ -1,8 +1,7 @@
-import { sql, type Expression, type SqlBool } from 'kysely';
+import { sql } from 'kysely';
 import type { PlayerTable } from 'csdm/common/types/player-table';
 import { db } from 'csdm/node/database/database';
 import type { PlayersTableFilter } from './players-table-filter';
-import { BanFilter } from 'csdm/common/types/ban-filter';
 import { fetchPlayersTags } from 'csdm/node/database/tags/fetch-players-tags';
 import type { SteamAccountTagTable } from 'csdm/node/database/tags/steam-account-tag-table';
 import { fetchLastPlayersData, type LastPlayersData } from './fetch-last-players-data';
@@ -69,34 +68,6 @@ async function fetchPlayersStats(filter: PlayersTableFilter): Promise<PlayersSta
       .where('steam_account_tags.tag_id', 'in', tagIds);
   }
 
-  if (filter.bans.length > 0) {
-    query = query
-      .innerJoin('steam_accounts', 'steam_accounts.steam_id', 'players.steam_id')
-      .where(({ eb, or, and }) => {
-        const filters: Expression<SqlBool>[] = [];
-
-        if (filter.bans.includes(BanFilter.None)) {
-          filters.push(
-            and([eb('vac_ban_count', '=', 0), eb('game_ban_count', '=', 0), eb('is_community_banned', '=', false)]),
-          );
-        }
-
-        if (filter.bans.includes(BanFilter.VacBanned)) {
-          filters.push(eb('vac_ban_count', '>', 0));
-        }
-
-        if (filter.bans.includes(BanFilter.GameBanned)) {
-          filters.push(eb('game_ban_count', '>', 0));
-        }
-
-        if (filter.bans.includes(BanFilter.CommunityBanned)) {
-          filters.push(eb('is_community_banned', '=', true));
-        }
-
-        return or(filters);
-      });
-  }
-
   const playersStats: PlayersStatsResult[] = await query.execute();
 
   return playersStats;
@@ -119,11 +90,7 @@ function buildPlayersTable(
         avatar: lastPlayerData.avatar,
         rank: lastPlayerData.rank,
         game: lastPlayerData.game,
-        lastBanDate: lastPlayerData.lastBanDate?.toISOString() ?? null,
         lastMatchDate: lastPlayerData.lastMatchDate?.toISOString() ?? null,
-        isVacBanned: lastPlayerData.vacBanCount ? lastPlayerData.vacBanCount > 0 : false,
-        isGameBanned: lastPlayerData.gameBanCount ? lastPlayerData.gameBanCount > 0 : false,
-        isCommunityBanned: lastPlayerData.isCommunityBanned ?? false,
         comment: playerStats.comment ?? '',
         tagIds: tags
           .filter((row) => {

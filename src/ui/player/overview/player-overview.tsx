@@ -5,7 +5,6 @@ import { PlayerMultiKillsPanel } from 'csdm/ui/player/overview/player-multi-kill
 import { PlayerLastMatches } from 'csdm/ui/player/overview/player-last-matches';
 import { PlayerObjectivesPanel } from './player-objectives-panel';
 import { MatchmakingPanel } from './matchmaking-panel';
-import { VacPanel } from './vac-panel';
 import { KillsPanel } from 'csdm/ui/components/panels/kills-panel';
 import { usePlayer } from '../use-player';
 import { KastPanel } from 'csdm/ui/components/panels/kast-panel';
@@ -88,7 +87,6 @@ export function PlayerOverview() {
           <PlayerMultiKillsPanel />
           <PlayerWeaponInspections />
           <PlayerObjectivesPanel />
-          <VacPanel />
         </div>
         <div>
           <PlayerClutches />
