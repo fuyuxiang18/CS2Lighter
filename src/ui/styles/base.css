@@ -17,7 +17,8 @@
   }
 
   *:focus-visible {
-    outline: 1px solid var(--gray-800);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
     border-radius: 4px;
   }
 
@@ -70,7 +71,7 @@
 
   ::-webkit-scrollbar-thumb {
     border-radius: 20px;
-    background-color: var(--gray-200);
+    background-color: var(--gray-300);
   }
 
   ::-webkit-scrollbar-thumb:hover {

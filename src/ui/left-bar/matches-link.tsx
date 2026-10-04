@@ -5,7 +5,5 @@ import { RoutePath } from 'csdm/ui/routes-paths';
 import { CalendarIcon } from 'csdm/ui/icons/calendar-icon';
 
 export function MatchesLink() {
-  return (
-    <LeftBarLink icon={<CalendarIcon />} tooltip={<Trans context="Tooltip">Matches</Trans>} url={RoutePath.Matches} />
-  );
+  return <LeftBarLink icon={<CalendarIcon />} tooltip={<Trans>Detailed matches</Trans>} url={RoutePath.Matches} />;
 }

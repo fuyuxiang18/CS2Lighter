@@ -18,7 +18,7 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
   const getRadarSrc = useGetMapRadarSrc();
   const [mode, setMode] = useState<'all' | 'opening'>('all');
   const [level, setLevel] = useState<RadarLevel | 'unknown'>(RadarLevel.Upper);
-  const [selectedBin, setSelectedBin] = useState<HabitsPositionBin | null>(null);
+  const [selectedBinKey, setSelectedBinKey] = useState<string | null>(null);
   const map = maps.find((map) => map.name === cohort.mapName && map.game === Game.CS2);
   const hasLevels = Boolean(map?.lowerRadarFilePath);
   const radarSrc = level === 'unknown' ? undefined : getRadarSrc(cohort.mapName, Game.CS2, level);
@@ -26,6 +26,9 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
   const bins = cohort.bins.filter(
     (bin) => metric(bin) > 0 && (!hasLevels || (level === 'unknown' ? bin.level === null : bin.level === level)),
   );
+  const binKey = (bin: HabitsPositionBin) => `${bin.x}-${bin.y}-${bin.z}-${bin.level}`;
+  const selectedBin = bins.find((bin) => binKey(bin) === selectedBinKey);
+  const selectBin = (bin: HabitsPositionBin | null) => setSelectedBinKey(bin ? binKey(bin) : null);
   const maximum = bins.reduce((maximum, bin) => Math.max(maximum, metric(bin)), 0);
   const topBins = bins.toSorted((a, b) => metric(b) - metric(a)).slice(0, 5);
   const observedSeconds = mode === 'opening' ? cohort.openingSeconds : cohort.observedSeconds;
@@ -38,7 +41,7 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
           value={mode}
           onChange={(value) => {
             setMode(value);
-            setSelectedBin(null);
+            selectBin(null);
           }}
           options={[
             { value: 'all', label: t`Alive time` },
@@ -50,7 +53,7 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
             value={level}
             onChange={(value) => {
               setLevel(value);
-              setSelectedBin(null);
+              selectBin(null);
             }}
             options={[
               { value: RadarLevel.Upper, label: t`Upper floor` },
@@ -62,13 +65,13 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
           />
         )}
       </div>
-      <div className="grid grid-cols-1 gap-20 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-20 lg:grid-cols-2">
         <div className="min-w-0 overflow-hidden rounded-8 border border-gray-300 bg-gray-100">
           {map && radarSrc ? (
             <svg
               className="aspect-square w-full"
               viewBox={`0 0 ${map.radarSize} ${map.radarSize}`}
-              role="img"
+              role="group"
               aria-label={t`Time spent by map area`}
             >
               <image href={radarSrc} width={map.radarSize} height={map.radarSize} />
@@ -83,7 +86,18 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
                     width={size}
                     height={size}
                     opacity={0.12 + (0.78 * metric(bin)) / maximum}
-                    className="fill-orange-500"
+                    className="cursor-pointer fill-accent focus:stroke-white"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={t`${seconds} observed seconds`}
+                    aria-pressed={selectedBin === bin}
+                    onClick={() => selectBin(bin)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        selectBin(bin);
+                      }
+                    }}
                   >
                     <title>{t`${seconds} observed seconds`}</title>
                   </rect>
@@ -94,7 +108,7 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
                   cx={getScaledCoordinateX(map, map.radarSize, selectedBin.x)}
                   cy={getScaledCoordinateY(map, map.radarSize, selectedBin.y)}
                   r={gridSize / map.scale}
-                  className="fill-transparent stroke-white"
+                  className="pointer-events-none fill-transparent stroke-white"
                   strokeWidth={3}
                 />
               )}
@@ -128,8 +142,8 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
             return (
               <button
                 key={`${bin.x}-${bin.y}-${bin.z}-${bin.level}`}
-                className={`flex items-center justify-between gap-12 rounded-4 border p-12 text-left ${selectedBin === bin ? 'border-blue-500 bg-gray-100' : 'border-gray-300 hover:border-gray-600'}`}
-                onClick={() => setSelectedBin(bin)}
+                className={`flex items-center justify-between gap-12 rounded-8 border p-12 text-left ${selectedBin === bin ? 'border-accent-muted bg-accent-soft' : 'border-gray-300 hover:border-gray-600'}`}
+                onClick={() => selectBin(bin)}
               >
                 <div>
                   <p className="text-body-strong">
@@ -141,7 +155,7 @@ export function HabitsMap({ cohort, gridSize, steamId, openingWindowSeconds }: P
                     </Trans>
                   </p>
                 </div>
-                <span className="text-subtitle text-orange-500">{share}%</span>
+                <span className="text-subtitle text-accent">{share}%</span>
               </button>
             );
           })}

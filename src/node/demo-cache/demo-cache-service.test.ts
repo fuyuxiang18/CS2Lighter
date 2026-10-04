@@ -38,6 +38,7 @@ beforeEach(async () => {
   );
   mocks.habits.mockResolvedValue({});
   mocks.metrics.mockResolvedValue([]);
+  mocks.read.mockResolvedValue(undefined);
   progress = new ImportProgressTracker();
   const { setDemoCacheProgressListener } = await import('./demo-cache-progress');
   setDemoCacheProgressListener({
@@ -57,7 +58,7 @@ describe('durable per-demo cache service', () => {
     expect(mocks.habits).not.toHaveBeenCalled();
     expect(mocks.metrics).not.toHaveBeenCalled();
     expect(mocks.write).not.toHaveBeenCalled();
-    expect(progress.snapshot()).toMatchObject({ completed: 1, percent: 100, isBlocking: false });
+    expect(progress.snapshot()).toMatchObject({ phase: 'idle', total: 0, isBlocking: false });
   });
 
   it('deduplicates concurrent consumers and rebuilds a stale revision', async () => {
@@ -128,8 +129,7 @@ describe('durable per-demo cache service', () => {
     expect(progress.snapshot()).toMatchObject({ completed: 1, percent: 100, isBlocking: false });
   });
 
-  it('does not unlock when another consumer of the same demo is still merging', async () => {
-    mocks.read.mockResolvedValue({ revision: 'revision-1', checksum: 'aa' });
+  it('does not unlock a real rebuild when another consumer of the same demo is still merging', async () => {
     let finish: () => void = () => {};
     const slow = vi.fn(
       () =>
@@ -146,6 +146,64 @@ describe('durable per-demo cache service', () => {
     finish();
     await first;
     expect(progress.snapshot()).toMatchObject({ isBlocking: false, percent: 100 });
+  });
+
+  it('leaves global progress unchanged during slow or repeated cache-hit page requests', async () => {
+    mocks.read.mockResolvedValue({ revision: 'revision-1', checksum: 'aa' });
+    progress.update('/other-import.dem', 'analyzing');
+    const before = progress.snapshot();
+    let finish: () => void = () => {};
+    const callback = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const first = service.loadDemoCaches(['aa'], callback);
+    await vi.waitFor(() => expect(callback).toHaveBeenCalledTimes(1));
+    expect(progress.snapshot()).toEqual(before);
+    await service.loadDemoCaches(['aa']);
+    expect(progress.snapshot()).toEqual(before);
+    finish();
+    await first;
+    expect(progress.snapshot()).toEqual(before);
+    expect(mocks.habits).not.toHaveBeenCalled();
+  });
+
+  it('tracks only stale files while preserving callback order and the full selected total', async () => {
+    mocks.read.mockImplementation((_directory: string, checksum: string) =>
+      Promise.resolve(checksum === 'aa' ? { revision: 'revision-1', checksum: 'aa' } : undefined),
+    );
+    const calls: { checksum: string; index: number; total: number }[] = [];
+    await service.loadDemoCaches(['aa', 'bb'], (cache, index, total) => {
+      calls.push({ checksum: cache.checksum, index, total });
+    });
+    expect(calls).toEqual([
+      { checksum: 'aa', index: 1, total: 2 },
+      { checksum: 'bb', index: 2, total: 2 },
+    ]);
+    expect(mocks.habits).toHaveBeenCalledTimes(1);
+    expect(progress.snapshot()).toMatchObject({ total: 1, completed: 1, isBlocking: false });
+  });
+
+  it('keeps a mixed rebuild batch blocked through the final cache-hit aggregation callback', async () => {
+    mocks.read.mockImplementation((_directory: string, checksum: string) =>
+      Promise.resolve(checksum === 'bb' ? { revision: 'revision-1', checksum: 'bb' } : undefined),
+    );
+    let finish: () => void = () => {};
+    const callback = vi.fn((_cache, index: number) =>
+      index === 2
+        ? new Promise<void>((resolve) => {
+            finish = resolve;
+          })
+        : undefined,
+    );
+    const run = service.loadDemoCaches(['aa', 'bb'], callback);
+    await vi.waitFor(() => expect(callback).toHaveBeenCalledTimes(2));
+    expect(progress.snapshot()).toMatchObject({ total: 1, completed: 1, isBlocking: true, percent: 99 });
+    finish();
+    await run;
+    expect(progress.snapshot()).toMatchObject({ total: 1, completed: 1, isBlocking: false, percent: 100 });
   });
 
   it('records cache failures and retries from the database without invoking an analyzer', async () => {

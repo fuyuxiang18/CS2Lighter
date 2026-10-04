@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile, rename, rm } from 'node:fs/promises';
 import type { DemoDataCache } from 'csdm/common/types/demo-data-cache';
 
 // Bump when persisted fields, habits binning or personal-statistics formulas change.
-export const DEMO_CACHE_SCHEMA_VERSION = 2;
+export const DEMO_CACHE_SCHEMA_VERSION = 3;
 
 function cachePath(directory: string, checksum: string) {
   if (!/^[a-f0-9]{1,64}$/.test(checksum)) {

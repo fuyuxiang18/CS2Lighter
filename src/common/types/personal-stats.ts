@@ -15,6 +15,11 @@ export type PersonalWeaponStats = {
 export type PersonalRoundStats = {
   roundNumber: number;
   startTick: number;
+  openingKillTick: number | null;
+  openingDeathTick: number | null;
+  deathTick: number | null;
+  teamFlashTick: number | null;
+  clutchTick: number | null;
   side: PersonalStatsSide;
   won: boolean;
   kills: number;
@@ -60,6 +65,7 @@ export type PersonalMatchStats = {
   source: DemoSource;
   gameMode: GameMode;
   buildNumber: number;
+  tickrate: number;
   result: PersonalMatchResult;
   /** Competitive metadata or verified 5v5 structure permits the historical model, never Wingman/respawn. */
   ratingEligible: boolean;

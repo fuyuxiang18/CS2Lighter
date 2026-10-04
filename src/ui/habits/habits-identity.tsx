@@ -7,6 +7,8 @@ import { Button, ButtonVariant } from 'csdm/ui/components/buttons/button';
 import { TextInput } from 'csdm/ui/components/inputs/text-input';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
+import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
+import { SettingsCategory } from 'csdm/ui/settings/settings-category';
 import { HabitsPanel } from './habits-layout';
 import type { HabitsIdentity } from './habits-storage';
 
@@ -19,13 +21,17 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
   const { t } = useLingui();
   const client = useWebSocketClient();
   const formatDate = useFormatDate();
+  const { openSettings } = useSettingsOverlay();
+  const [editing, setEditing] = useState(false);
   const [nickname, setNickname] = useState(identity?.nickname ?? '');
+  const [submittedNickname, setSubmittedNickname] = useState<string | null>(null);
   const [lookup, setLookup] = useState<{ key: string; candidates: HabitsIdentityCandidate[]; failed: boolean } | null>(
     null,
   );
   const [revision, setRevision] = useState(0);
-  const requestKey = JSON.stringify([identity?.nickname, revision]);
-  const loading = Boolean(identity && !identity.steamId && lookup?.key !== requestKey);
+  const searchNickname = editing ? submittedNickname : identity && !identity.steamId ? identity.nickname : null;
+  const requestKey = JSON.stringify([searchNickname, revision]);
+  const loading = searchNickname !== null && lookup?.key !== requestKey;
   const failed = lookup?.key === requestKey && lookup.failed;
   const candidates = lookup?.key === requestKey ? lookup.candidates : [];
 
@@ -37,19 +43,21 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    if (!identity || identity.steamId) {
+    if (searchNickname === null) {
       return;
     }
     void client
       .send({
         name: RendererClientMessageName.FindHabitsIdentity,
-        payload: { nickname: identity.nickname },
+        payload: { nickname: searchNickname },
       })
       .then((results) => {
         if (cancelled) return;
         setLookup({ key: requestKey, candidates: results, failed: false });
         if (results.length === 1) {
-          onSave({ nickname: identity.nickname, steamId: results[0].steamId });
+          onSave({ nickname: searchNickname, steamId: results[0].steamId });
+          setEditing(false);
+          setSubmittedNickname(null);
         }
       })
       .catch(() => {
@@ -58,21 +66,23 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [client, identity, onSave, requestKey]);
+  }, [client, searchNickname, onSave, requestKey]);
 
-  if (identity?.steamId) {
+  if (identity?.steamId && !editing) {
     const name = identity.nickname;
     return (
-      <div className="flex flex-wrap items-center justify-between gap-16 rounded-8 border border-gray-300 bg-gray-50 p-16">
-        <div>
-          <p className="text-body-strong">
-            <Trans>Reviewing {name}</Trans>
-          </p>
-          <p className="text-caption text-gray-700">
-            <Trans>Account linked. Future name changes will not split your match history.</Trans>
-          </p>
-        </div>
-        <Button onClick={() => onSave(null)}>
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-12 border-b border-gray-300 pb-12">
+        <p className="min-w-0 text-caption wrap-break-word text-gray-700">
+          <Trans>Linked account: {name}</Trans>
+        </p>
+        <Button
+          onClick={() => {
+            setNickname(identity.nickname);
+            setSubmittedNickname(null);
+            setLookup(null);
+            setEditing(true);
+          }}
+        >
           <Trans>Change player</Trans>
         </Button>
       </div>
@@ -81,21 +91,49 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
 
   const submit = () => {
     if (nickname.trim().length > 0) {
-      onSave({ nickname, steamId: null });
+      if (editing) {
+        setSubmittedNickname(nickname);
+      } else {
+        onSave({ nickname, steamId: null });
+      }
       setRevision((value) => value + 1);
     }
   };
 
   return (
-    <HabitsPanel title={<Trans>Start with your recorded nickname</Trans>}>
+    <HabitsPanel title={editing ? <Trans>Change the linked account</Trans> : <Trans>Set up your local review</Trans>}>
+      {editing ? (
+        <p className="text-caption text-gray-700">
+          <Trans>Your current account stays linked while you search. Cancel to keep it.</Trans>
+        </p>
+      ) : (
+        <div className="flex flex-wrap items-center justify-between gap-12 border-b border-gray-300 pb-16">
+          <div className="flex flex-col gap-4">
+            <p className="text-body-strong">
+              <Trans>1. Add your demo folders</Trans>
+            </p>
+            <p className="text-caption text-gray-700">
+              <Trans>Choose the folders where your downloaded demos are saved.</Trans>
+            </p>
+          </div>
+          <Button onClick={() => openSettings(SettingsCategory.Folders)}>
+            <Trans>Choose folders</Trans>
+          </Button>
+        </div>
+      )}
+      {!editing && (
+        <p className="text-body-strong">
+          <Trans>2. Find your account in a demo</Trans>
+        </p>
+      )}
       <p className="text-gray-700">
         <Trans>
-          Add your demo folders, then enter the exact nickname used when the demo was recorded. An old nickname works
-          too. We will find your account after a demo is analyzed.
+          Enter the exact nickname used when the demo was recorded. An old nickname works too. We will find your account
+          after a demo is analyzed.
         </Trans>
       </p>
       <div className="flex flex-wrap items-end gap-12">
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <TextInput
             label={<Trans>Your in-game nickname</Trans>}
             placeholder={t`Exact nickname, including symbols`}
@@ -107,6 +145,18 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
         <Button variant={ButtonVariant.Primary} onClick={submit} isDisabled={loading || nickname.trim().length === 0}>
           <Trans>Find my account</Trans>
         </Button>
+        {editing && (
+          <Button
+            onClick={() => {
+              setEditing(false);
+              setSubmittedNickname(null);
+              setNickname(identity?.nickname ?? '');
+              setLookup(null);
+            }}
+          >
+            <Trans>Cancel</Trans>
+          </Button>
+        )}
       </div>
       {loading && (
         <p role="status">
@@ -118,7 +168,7 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
           <Trans>Account lookup failed. Try again after checking the database connection.</Trans>
         </p>
       )}
-      {identity && !loading && !failed && candidates.length === 0 && (
+      {searchNickname !== null && !loading && !failed && candidates.length === 0 && (
         <p className="text-gray-700">
           <Trans>
             Waiting for an analyzed CS2 match with this nickname. New matches will be checked automatically.
@@ -150,9 +200,11 @@ export function HabitsIdentitySetup({ identity, onSave }: Props) {
                     </p>
                   </div>
                   <Button
-                    onClick={() =>
-                      onSave({ nickname: identity?.nickname ?? candidate.nickname, steamId: candidate.steamId })
-                    }
+                    onClick={() => {
+                      onSave({ nickname: searchNickname ?? candidate.nickname, steamId: candidate.steamId });
+                      setEditing(false);
+                      setSubmittedNickname(null);
+                    }}
                   >
                     <Trans>This is me</Trans>
                   </Button>

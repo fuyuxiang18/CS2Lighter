@@ -78,47 +78,76 @@ async function readOrBuild(checksum: string, demoPath?: string): Promise<DemoDat
   }
 }
 
-/** Reports a real per-demo operation for backfill or compact cross-match aggregation. */
+/** Reading saved summaries is page-local work. Only missing/stale caches enter the global import gate. */
 export async function loadDemoCaches(
   checksums: string[],
   onLoaded?: (cache: DemoDataCache, index: number, total: number) => void | Promise<void>,
 ): Promise<DemoDataCache[]> {
   const unique = [...new Set(checksums)];
-  demoCacheProgress.begin();
+  if (unique.length === 0) return [];
   const results: DemoDataCache[] = [];
   let firstError: unknown;
+  let reporting = false;
+  function track(filePath: string) {
+    if (!reporting) {
+      reporting = true;
+      demoCacheProgress.begin();
+    }
+    demoCacheProgress.update(filePath, 'pending');
+  }
   try {
-    const entries = await Promise.all(
-      unique.map(async (checksum) => {
-        return getDemoCacheDescriptor(checksum);
-      }),
-    );
-    for (const { match } of entries) demoCacheProgress.update(match.demoPath, 'pending');
-    for (const [index, { match }] of entries.entries()) {
+    const directory = await getDemoCacheDirectory();
+    const descriptors = await Promise.all(unique.map(getDemoCacheDescriptor));
+    const entries: { match: DemoDataCache['match']; cache?: DemoDataCache; generation: number; tracked: boolean }[] =
+      [];
+    // Validate files before deciding whether this is an import. Keep file reads sequential, rather than
+    // opening every file in a large library at once. No position queries run on this path.
+    for (const { match, revision } of descriptors) {
+      const generation = getDemoCacheGeneration(match.checksum);
+      const saved = await readCacheFile(directory.path, match.checksum).catch(() => undefined);
+      const cache =
+        saved?.revision === revision && generation === getDemoCacheGeneration(match.checksum) ? saved : undefined;
+      entries.push({ match, cache, generation, tracked: cache === undefined });
+    }
+    for (const entry of entries) if (entry.tracked) track(entry.match.demoPath);
+    for (const [index, entry] of entries.entries()) {
+      const { match } = entry;
       try {
-        const cache = await ensureDemoCache(match.checksum, match.demoPath);
+        if (entry.cache && entry.generation !== getDemoCacheGeneration(match.checksum)) {
+          entry.cache = undefined;
+          entry.tracked = true;
+          track(match.demoPath);
+        }
+        const cache = entry.cache ?? (await ensureDemoCache(match.checksum, match.demoPath));
+        failures.delete(match.demoPath);
         if (onLoaded) {
-          demoCacheProgress.update(match.demoPath, 'profiling');
+          if (entry.tracked) demoCacheProgress.update(match.demoPath, 'profiling');
           await onLoaded(cache, index + 1, entries.length);
         }
         results.push(cache);
-        demoCacheProgress.update(match.demoPath, 'completed');
+        if (entry.tracked) demoCacheProgress.update(match.demoPath, 'completed');
       } catch (error) {
         firstError ??= error;
-        demoCacheProgress.update(match.demoPath, 'failed', {
-          reason: 'cache',
-          message: error instanceof Error ? error.message : String(error),
-        });
+        if (entry.tracked) {
+          demoCacheProgress.update(match.demoPath, 'failed', {
+            reason: 'cache',
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
       }
     }
     if (firstError) throw firstError;
     return results;
   } finally {
-    demoCacheProgress.end();
+    if (reporting) demoCacheProgress.end();
   }
 }
 
 export async function retryFailedDemoCaches() {
   const failed = [...failures.values()];
-  if (failed.length > 0) await loadDemoCaches(failed.map((failure) => failure.checksum));
+  if (failed.length > 0) {
+    const caches = await loadDemoCaches(failed.map((failure) => failure.checksum));
+    // A repaired file may now be a cache hit. An explicit retry still clears its old visible failure.
+    for (const cache of caches) demoCacheProgress.update(cache.match.demoPath, 'completed');
+  }
 }

@@ -38,7 +38,7 @@ export function PlayerActionBar({ player }: Props) {
             <Avatar avatarUrl={player.avatar} playerName={player.name} size={30} />
             <p className="text-body-strong">{player.name}</p>
           </a>
-          <div className="w-[64px]">
+          <div className="w-64">
             {player.rank > CompetitiveRank.GlobalElite ? (
               <PremierRank rank={player.rank} />
             ) : (

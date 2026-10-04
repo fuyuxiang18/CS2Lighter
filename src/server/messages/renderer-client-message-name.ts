@@ -5,6 +5,7 @@ export const RendererClientMessageName = {
   FindHabitsIdentity: 'find-habits-identity',
   FetchHabitsSummary: 'fetch-habits-summary',
   FetchPersonalStats: 'fetch-personal-stats',
+  FetchReviewInsights: 'fetch-review-insights',
   InitializeApplication: 'init-application',
   IsCs2ConnectedToServer: 'is-cs2-connected-to-server',
   AbortCurrentTask: 'abort-current-task',

@@ -73,7 +73,7 @@ export function CompetitiveRankRepartitionChart() {
 
         return renderToString(
           <div className="flex flex-col gap-y-4">
-            <img src={window.csdm.getRankImageSrc(rankNumber)} className="w-[64px] self-center" />
+            <img src={window.csdm.getRankImageSrc(rankNumber)} className="w-64 self-center" />
             <p>{getRankName(rankNumber)}</p>
             <div className="flex gap-x-4">
               <p className="text-body-strong">{value}</p>

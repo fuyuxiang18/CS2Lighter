@@ -135,6 +135,66 @@ describe('public rating and RWS definitions', () => {
 });
 
 describe('per-demo round facts', () => {
+  it('persists exact eligible event ticks, keeping the earliest event despite unsorted rows', () => {
+    const data = fixture();
+    data.kills = [
+      kill({
+        id: 2,
+        tick: 1500,
+        killer_steam_id: enemy,
+        victim_steam_id: self,
+        killer_side: TeamNumber.CT,
+        victim_side: TeamNumber.T,
+      }),
+      kill({ id: 1, tick: 1200 }),
+    ];
+    data.blinds = [
+      { tick: 1450, duration: 2 },
+      { tick: 1300, duration: 3 },
+      { tick: 1250, duration: 1 },
+      { tick: 1200, duration: 3, is_flasher_controlling_bot: true },
+    ].map(
+      (event) =>
+        ({
+          round_number: 1,
+          flasher_steam_id: self,
+          flashed_steam_id: mate,
+          flasher_side: TeamNumber.T,
+          flashed_side: TeamNumber.T,
+          is_flasher_controlling_bot: false,
+          ...event,
+        }) as PersonalMatchInput['blinds'][number],
+    );
+    data.clutches = [
+      {
+        round_number: 1,
+        tick: 1400,
+        clutcher_steam_id: self,
+        opponent_count: 1,
+        won: false,
+      } as PersonalMatchInput['clutches'][number],
+    ];
+    const players = buildPersonalMatchStats(data);
+    const stats = players.find((player) => player.steamId === self)!;
+    expect(stats.tickrate).toBe(64);
+    expect(stats.rounds[0]).toMatchObject({
+      openingKillTick: 1200,
+      openingDeathTick: null,
+      deathTick: 1500,
+      teamFlashTick: 1300,
+      clutchTick: 1400,
+      teammatesFlashed: 2,
+    });
+    expect(players.find((player) => player.steamId === enemy)?.rounds[0].openingDeathTick).toBe(1200);
+    expect(stats.rounds[1]).toMatchObject({
+      openingKillTick: null,
+      openingDeathTick: null,
+      deathTick: null,
+      teamFlashTick: null,
+      clutchTick: null,
+    });
+  });
+
   it('separates enemy kills, all deaths, overkill damage, utility and objective RWS', () => {
     const data = fixture();
     data.rounds[0].end_reason = RoundEndReason.TargetBombed;

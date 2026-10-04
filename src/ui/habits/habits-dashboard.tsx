@@ -1,67 +1,104 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { DemoSource, GameMode, TeamNumber } from 'csdm/common/types/counter-strike';
-import type { HabitsCohort, HabitsSummary } from 'csdm/common/types/habits';
+import { DemoSource, TeamNumber } from 'csdm/common/types/counter-strike';
+import type { HabitsSummary } from 'csdm/common/types/habits';
 import type { PersonalStatsSummary } from 'csdm/common/types/personal-stats';
+import type { ReviewInsightsSummary } from 'csdm/common/types/review-insights';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
-import { Button } from 'csdm/ui/components/buttons/button';
 import { Select } from 'csdm/ui/components/inputs/select';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
-import { useGetGameModeTranslation } from 'csdm/ui/hooks/use-get-game-mode-translation';
 import { useGetDemoSourceName } from 'csdm/ui/demos/use-demo-sources';
+import { RoutePath } from 'csdm/ui/routes-paths';
 import { HabitsIdentitySetup } from './habits-identity';
 import { HabitsLayout, HabitsPanel } from './habits-layout';
-import { HabitsMap } from './habits-map';
-import { HabitsEvidenceList } from './habits-evidence';
 import { readHabitsIdentity, saveHabitsIdentity, type HabitsIdentity } from './habits-storage';
-import { PersonalStatsPanels } from './personal-stats-panels';
+import {
+  defaultReviewPreferences,
+  readReviewPreferences,
+  saveReviewPreferences,
+  type ReviewPreferences,
+} from './review-storage';
+import { ReviewWorkbench } from './review-workbench';
+import { ReviewStyle } from './review-style';
+import { ReviewProgress } from './review-progress';
+import { ReviewMaps } from './review-maps';
+import { ReviewMatches } from './review-matches';
+import { ReviewButton } from './review-button';
+
+type ReviewData = { key: string; summary: HabitsSummary; stats: PersonalStatsSummary; insights: ReviewInsightsSummary };
 
 export function HabitsDashboard() {
   const { t } = useLingui();
-  const client = useWebSocketClient();
-  const getGameModeTranslation = useGetGameModeTranslation();
-  const getDemoSourceName = useGetDemoSourceName();
+  const { pathname } = useLocation();
   const [identity, setIdentity] = useState(readHabitsIdentity);
   const [storageError, setStorageError] = useState(false);
-  const [mapName, setMapName] = useState('all');
-  const [side, setSide] = useState<'all' | 'ct' | 't'>('all');
-  const [source, setSource] = useState<DemoSource | 'all'>('all');
-  const [selectedCohort, setSelectedCohort] = useState('');
-  const [result, setResult] = useState<{
-    key: string;
-    summary: HabitsSummary | null;
-    stats: PersonalStatsSummary | null;
-    failed: boolean;
-  } | null>(null);
-  const [revision, setRevision] = useState(0);
-  const steamId = identity?.steamId;
-  const requestKey = JSON.stringify([steamId, mapName, side, source, revision]);
-  const summary = result?.summary;
-  const loading = Boolean(steamId && result?.key !== requestKey);
-  const failed = result?.key === requestKey && result.failed;
   const saveIdentity = useCallback((value: HabitsIdentity | null) => {
     try {
       saveHabitsIdentity(value);
       setIdentity(value);
       setStorageError(false);
-      setMapName('all');
     } catch (error) {
       logger.error(error);
       setStorageError(true);
     }
   }, []);
+  const page = pathname === RoutePath.HabitsMaps ? 'maps' : pathname === RoutePath.HabitsMatches ? 'matches' : 'review';
+  return (
+    <HabitsLayout
+      title={page === 'maps' ? t`Map habits` : page === 'matches' ? t`Match notebook` : t`Review workspace`}
+      description={
+        page === 'maps'
+          ? t`Where you go, where you fight, and the rounds that explain it.`
+          : page === 'matches'
+            ? t`Your local matches, ready when you want the details.`
+            : t`Find a recurring situation. Review the evidence. Try one change.`
+      }
+    >
+      <HabitsIdentitySetup identity={identity} onSave={saveIdentity} />
+      {storageError && (
+        <p role="alert" className="text-red-500">
+          <Trans>Could not save your account locally. Check that app storage is writable and try again.</Trans>
+        </p>
+      )}
+      {identity?.steamId && <ReviewContent key={identity.steamId} steamId={identity.steamId} page={page} />}
+    </HabitsLayout>
+  );
+}
 
-  useEffect(() => {
-    const onMatchInserted = () => setRevision((value) => value + 1);
-    client.on(ServerPushMessageName.MatchInserted, onMatchInserted);
-    return () => client.off(ServerPushMessageName.MatchInserted, onMatchInserted);
-  }, [client]);
-
-  useEffect(() => {
-    if (!steamId) {
-      return;
+function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'maps' | 'matches' }) {
+  const { t } = useLingui();
+  const client = useWebSocketClient();
+  const getSourceName = useGetDemoSourceName();
+  const [preferences, setPreferences] = useState(() => readReviewPreferences(steamId));
+  const [storageError, setStorageError] = useState(false);
+  const [data, setData] = useState<ReviewData | null>(null);
+  const [availableSources, setAvailableSources] = useState<DemoSource[]>([]);
+  const [failedKey, setFailedKey] = useState<string | null>(null);
+  const [revision, setRevision] = useState(0);
+  const { mapName, side, source, tab } = preferences;
+  const trainingKey = JSON.stringify(preferences.focus?.scope ?? null);
+  const requestKey = JSON.stringify([steamId, mapName, side, source, revision, trainingKey]);
+  const loading = data?.key !== requestKey && failedKey !== requestKey;
+  const failed = failedKey === requestKey;
+  const update = (patch: Partial<ReviewPreferences>) => {
+    const next = { ...preferences, ...patch };
+    setPreferences(next);
+    try {
+      saveReviewPreferences(steamId, next);
+      setStorageError(false);
+    } catch (error) {
+      logger.error(error);
+      setStorageError(true);
     }
+  };
+  useEffect(() => {
+    const inserted = () => setRevision((value) => value + 1);
+    client.on(ServerPushMessageName.MatchInserted, inserted);
+    return () => client.off(ServerPushMessageName.MatchInserted, inserted);
+  }, [client]);
+  useEffect(() => {
     let cancelled = false;
     const payload = {
       steamId,
@@ -69,187 +106,174 @@ export function HabitsDashboard() {
       ...(source === 'all' ? {} : { source }),
       ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
     };
+    const training = JSON.parse(trainingKey) ?? undefined;
     void Promise.all([
-      client.send({
-        name: RendererClientMessageName.FetchHabitsSummary,
-        payload,
-      }),
+      client.send({ name: RendererClientMessageName.FetchHabitsSummary, payload }),
       client.send({ name: RendererClientMessageName.FetchPersonalStats, payload }),
+      client.send({ name: RendererClientMessageName.FetchReviewInsights, payload: { ...payload, training } }),
     ])
-      .then(([summary, stats]) => {
+      .then(([summary, stats, insights]) => {
         if (!cancelled) {
-          setResult({ key: requestKey, summary, stats, failed: false });
+          setData({ key: requestKey, summary, stats, insights });
+          setAvailableSources((previous) => [...new Set([...previous, ...summary.cohorts.map((item) => item.source)])]);
+          setFailedKey(null);
         }
       })
-      .catch(() => {
-        if (!cancelled)
-          setResult((previous) => ({
-            key: requestKey,
-            summary: previous?.summary ?? null,
-            stats: previous?.stats ?? null,
-            failed: true,
-          }));
+      .catch((error) => {
+        logger.error(error);
+        if (!cancelled) setFailedKey(requestKey);
       });
     return () => {
       cancelled = true;
     };
-  }, [client, steamId, mapName, side, source, requestKey]);
-
-  const cohort = summary?.cohorts.find((cohort) => cohortKey(cohort) === selectedCohort) ?? summary?.cohorts[0];
-  const coverage =
-    summary && summary.roundCount > 0 ? Math.round((100 * summary.positionRoundCount) / summary.roundCount) : 0;
-  const evidenceCount = summary?.evidence.length ?? 0;
-  const evidenceTotal = summary?.evidenceTotalCount ?? 0;
-
+  }, [client, steamId, mapName, source, side, trainingKey, requestKey]);
+  const matches = data?.stats.matchCount ?? 0;
+  const rounds = data?.stats.metrics.roundCount ?? 0;
+  const dates = data?.stats.matches.map((match) => new Date(match.date).getTime()).filter(Number.isFinite) ?? [];
+  const dateRange = dates.length
+    ? `${new Date(Math.min(...dates)).toLocaleDateString()} – ${new Date(Math.max(...dates)).toLocaleDateString()}`
+    : '—';
   return (
-    <HabitsLayout>
-      <HabitsIdentitySetup identity={identity} onSave={saveIdentity} />
+    <>
+      <section
+        aria-label={t`Review filters`}
+        className="flex flex-wrap items-end gap-12 rounded-12 border border-gray-300 bg-gray-100 p-16"
+      >
+        <div className="flex min-w-0 flex-col gap-4">
+          <Select
+            label={t`Map`}
+            value={mapName}
+            onChange={(mapName) => update({ mapName })}
+            options={[
+              { value: 'all', label: t`All maps` },
+              ...Array.from(
+                new Set([...(data?.summary.mapNames ?? []), ...(mapName === 'all' ? [] : [mapName])]),
+                (name) => ({ value: name, label: name }),
+              ),
+            ]}
+          />
+        </div>
+        <div className="flex flex-col gap-4">
+          <Select
+            label={t`Side`}
+            value={side}
+            onChange={(side) => update({ side })}
+            options={[
+              { value: 'all', label: t`Both sides` },
+              { value: 'ct', label: 'CT' },
+              { value: 't', label: 'T' },
+            ]}
+          />
+        </div>
+        <div className="flex min-w-0 flex-col gap-4">
+          <Select
+            label={t`Source`}
+            value={source}
+            onChange={(source) => update({ source })}
+            options={[
+              { value: 'all', label: t`All sources` },
+              ...Array.from(new Set([...availableSources, ...(source === 'all' ? [] : [source])]), (value) => ({
+                value,
+                label: getSourceName(value),
+              })),
+            ]}
+          />
+        </div>
+        <div className="flex-1" />
+        <div className="flex flex-col gap-4 text-right">
+          <p className="text-body-strong tabular-nums">
+            {loading ? t`Loading saved data…` : t`${matches} matches · ${rounds} rounds`}
+          </p>
+          <p className="text-caption text-gray-600">{dateRange}</p>
+        </div>
+        {(mapName !== 'all' || side !== 'all' || source !== 'all') && (
+          <button
+            className="self-center px-8 text-caption text-accent"
+            onClick={() => update({ mapName: 'all', side: 'all', source: 'all' })}
+          >
+            <Trans>Reset filters</Trans>
+          </button>
+        )}
+      </section>
       {storageError && (
         <p role="alert" className="text-red-500">
-          <Trans>Could not save your account locally. Check that app storage is writable and try again.</Trans>
+          <Trans>Your changes could not be saved locally. Keep this window open and check storage permissions.</Trans>
         </p>
       )}
-      {steamId && (
-        <>
-          <div className="flex flex-wrap items-end gap-16">
-            <div className="flex flex-col gap-4">
-              <Select
-                label={<Trans>Map</Trans>}
-                value={mapName}
-                onChange={setMapName}
-                options={[
-                  { value: 'all', label: t`All maps` },
-                  ...(summary?.mapNames ?? []).map((name) => ({ value: name, label: name })),
-                ]}
-              />
-            </div>
-            <div className="flex flex-col gap-4">
-              <Select
-                label={<Trans>Side</Trans>}
-                value={side}
-                onChange={setSide}
-                options={[
-                  { value: 'all', label: t`Both sides` },
-                  { value: 'ct', label: 'CT' },
-                  { value: 't', label: 'T' },
-                ]}
-              />
-            </div>
-            <div className="flex flex-col gap-4">
-              <Select
-                label={<Trans>Source</Trans>}
-                value={source}
-                onChange={setSource}
-                options={[
-                  { value: 'all', label: t`All sources` },
-                  ...Object.values(DemoSource).map((value) => ({ value, label: getDemoSourceName(value) })),
-                ]}
-              />
-            </div>
-            <Button isDisabled={loading} onClick={() => setRevision((value) => value + 1)}>
-              <Trans>Reload cached data</Trans>
-            </Button>
-            <p className="pb-4 text-caption text-gray-700">
-              <Trans>CS2 · your linked account · all imported dates</Trans>
-            </p>
+      {page === 'review' && (
+        <nav aria-label={t`Review sections`} className="flex flex-wrap gap-8 border-b border-gray-300 pb-12">
+          {[
+            { value: 'review' as const, label: t`Review priorities` },
+            { value: 'style' as const, label: t`My playing style` },
+            { value: 'progress' as const, label: t`Practice and progress` },
+          ].map((item) => (
+            <button
+              key={item.value}
+              aria-current={tab === item.value ? 'page' : undefined}
+              className={`rounded-8 px-20 py-10 text-body-strong ${tab === item.value ? 'bg-accent-soft text-accent' : 'text-gray-700 hover:bg-gray-100'}`}
+              onClick={() => update({ tab: item.value })}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      )}
+      {loading && (
+        <div role="status" className="rounded-12 border border-gray-300 bg-gray-100 p-24 text-gray-700">
+          <Trans>Reading your saved match data…</Trans>
+        </div>
+      )}
+      {failed && (
+        <HabitsPanel title={<Trans>Could not load your review</Trans>}>
+          <p role="alert">
+            <Trans>Your demo files are unchanged. Retry loading the saved data.</Trans>
+          </p>
+          <div>
+            <ReviewButton onClick={() => setRevision((value) => value + 1)}>
+              <Trans>Retry</Trans>
+            </ReviewButton>
           </div>
-          {loading && (
-            <p role="status">
-              <Trans>Loading saved demo data…</Trans>
-            </p>
-          )}
-          {failed && (
-            <p role="alert" className="text-red-500">
-              <Trans>Could not load your match history. Use Reload cached data to try again.</Trans>
-            </p>
-          )}
-          {!loading && !failed && summary && (
+        </HabitsPanel>
+      )}
+      {data && (
+        <div className={loading || failed ? 'hidden' : 'flex min-w-0 flex-col gap-20'}>
+          {page === 'review' && tab === 'progress' ? (
+            <ReviewProgress insights={data.insights} preferences={preferences} update={update} />
+          ) : matches === 0 ? (
+            <HabitsPanel title={<Trans>No matches in this selection</Trans>}>
+              <p className="text-gray-700">
+                <Trans>
+                  Reset the filters, or add a folder containing demos for this account. Imported files are analyzed once
+                  and reused.
+                </Trans>
+              </p>
+              <div>
+                <ReviewButton
+                  onClick={() =>
+                    update({ ...defaultReviewPreferences(), focus: preferences.focus, marks: preferences.marks })
+                  }
+                >
+                  <Trans>Reset filters</Trans>
+                </ReviewButton>
+              </div>
+            </HabitsPanel>
+          ) : (
             <>
-              {result.stats && <PersonalStatsPanels summary={result.stats} />}
-              {summary.matchCount === 0 ? (
-                <HabitsPanel title={<Trans>Your profile is ready for matches</Trans>}>
-                  <p>
-                    <Trans>
-                      No analyzed matches match this account and filter. Add your Perfect World demo folders or choose
-                      another map.
-                    </Trans>
-                  </p>
-                </HabitsPanel>
-              ) : (
-                <>
-                  <HabitsPanel title={<Trans>Where you spend your rounds</Trans>}>
-                    <p className="text-caption text-gray-700">
-                      <Trans>
-                        Heatmaps stop when the round is decided. Personal combat totals also include post-round fights.
-                      </Trans>
-                    </p>
-                    <p className="text-caption text-gray-700">
-                      <Trans>Position coverage: {coverage}% of selected rounds</Trans>
-                    </p>
-                    <p className="text-gray-700">
-                      <Trans>
-                        Matches are grouped by map and game build. The installed radar is a reference and may differ
-                        from older map layouts.
-                      </Trans>
-                    </p>
-                    {summary.cohorts.length > 0 && (
-                      <Select
-                        value={cohort ? cohortKey(cohort) : ''}
-                        onChange={setSelectedCohort}
-                        options={summary.cohorts.map((cohort) => {
-                          const map = cohort.mapName;
-                          const version = cohort.buildNumber;
-                          const count = cohort.matchCount;
-                          const gameMode = Object.values(GameMode).find((mode) => mode === cohort.gameMode);
-                          const mode = gameMode ? getGameModeTranslation(gameMode) : cohort.gameMode;
-                          const source = getDemoSourceName(cohort.source);
-                          return {
-                            value: cohortKey(cohort),
-                            label: t`${map} · build ${version} · ${mode} · ${source} · ${count} matches`,
-                          };
-                        })}
-                      />
-                    )}
-                    {cohort && (
-                      <HabitsMap
-                        key={`${cohort.mapName}-${cohort.buildNumber}-${cohort.gameMode}-${cohort.source}`}
-                        cohort={cohort}
-                        gridSize={summary.gridSize}
-                        steamId={steamId}
-                        openingWindowSeconds={summary.openingWindowSeconds}
-                      />
-                    )}
-                    {summary.positionRoundCount < summary.roundCount && (
-                      <p className="text-caption text-orange-500">
-                        <Trans>
-                          Some rounds have no usable positions. Their combat events still count; enable position
-                          analysis in settings and reanalyze older demos to fill the map.
-                        </Trans>
-                      </p>
-                    )}
-                  </HabitsPanel>
-                  <HabitsPanel title={<Trans>Return to the evidence</Trans>}>
-                    <p className="text-gray-700">
-                      <Trans>Review the fight, your teammates and your equipment before deciding what to change.</Trans>
-                    </p>
-                    <p className="text-caption text-gray-700">
-                      <Trans>
-                        Showing {evidenceCount} stored examples from {evidenceTotal} events. This is a review sample,
-                        not the full event export.
-                      </Trans>
-                    </p>
-                    <HabitsEvidenceList key={`${mapName}-${side}`} evidence={summary.evidence} steamId={steamId} />
-                  </HabitsPanel>
-                </>
+              {page === 'review' && tab === 'review' && (
+                <ReviewWorkbench insights={data.insights} preferences={preferences} update={update} />
               )}
+              {page === 'review' && tab === 'style' && <ReviewStyle insights={data.insights} stats={data.stats} />}
+              {page === 'maps' && <ReviewMaps summary={data.summary} steamId={steamId} />}
+              {page === 'matches' && <ReviewMatches stats={data.stats} />}
             </>
           )}
-        </>
+          <p className="text-caption text-gray-600">
+            <Trans>
+              Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts.
+            </Trans>
+          </p>
+        </div>
       )}
-    </HabitsLayout>
+    </>
   );
-}
-
-function cohortKey(cohort: HabitsCohort) {
-  return JSON.stringify([cohort.mapName, cohort.buildNumber, cohort.gameMode, cohort.source]);
 }

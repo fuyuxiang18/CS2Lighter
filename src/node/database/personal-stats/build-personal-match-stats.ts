@@ -40,6 +40,11 @@ function emptyRound(round: RoundRow, economy: PlayerEconomyRow): PersonalRoundSt
   return {
     roundNumber: round.number,
     startTick: round.freeze_time_end_tick || round.start_tick,
+    openingKillTick: null,
+    openingDeathTick: null,
+    deathTick: null,
+    teamFlashTick: null,
+    clutchTick: null,
     side: economy.player_side as PersonalStatsSide,
     won: round.winner_side === economy.player_side,
     kills: 0,
@@ -146,6 +151,7 @@ export function buildPersonalMatchStats(input: PersonalMatchInput): PersonalMatc
       source: demo.source,
       gameMode: match.game_mode_str,
       buildNumber: demo.build_number,
+      tickrate: demo.tickrate,
       result:
         knownWinner && knownPlayerTeam
           ? match.winner_name === player.team_name
@@ -265,8 +271,14 @@ export function buildPersonalMatchStats(input: PersonalMatchInput): PersonalMatc
     }
     if (!openingRounds.has(kill.round_number) && kill.tick <= roundMap.get(kill.round_number)!.end_tick) {
       openingRounds.add(kill.round_number);
-      if (killer) killer.openingKill = true;
-      if (victim) victim.openingDeath = true;
+      if (killer) {
+        killer.openingKill = true;
+        killer.openingKillTick = kill.tick;
+      }
+      if (victim) {
+        victim.openingDeath = true;
+        victim.openingDeathTick = kill.tick;
+      }
     }
     let trade = false;
     for (let previous = index - 1; previous >= 0; previous--) {
@@ -299,6 +311,7 @@ export function buildPersonalMatchStats(input: PersonalMatchInput): PersonalMatc
     if (victim) {
       victim.deaths++;
       victim.survived = false;
+      victim.deathTick = Math.min(victim.deathTick ?? kill.tick, kill.tick);
     }
   }
   for (const shot of input.shots) {
@@ -340,7 +353,10 @@ export function buildPersonalMatchStats(input: PersonalMatchInput): PersonalMatc
     if (blind.flasher_side !== blind.flashed_side) {
       round.enemyBlindSeconds += blind.duration;
       if (blind.duration > 1) round.enemiesFlashed++;
-    } else if (blind.flasher_steam_id !== blind.flashed_steam_id && blind.duration > 1) round.teammatesFlashed++;
+    } else if (blind.flasher_steam_id !== blind.flashed_steam_id && blind.duration > 1) {
+      round.teammatesFlashed++;
+      round.teamFlashTick = Math.min(round.teamFlashTick ?? blind.tick, blind.tick);
+    }
   }
   for (const clutch of input.clutches.toSorted((a, b) => a.tick - b.tick)) {
     const round = getFact(clutch.round_number, clutch.clutcher_steam_id, clutch.tick);
@@ -352,6 +368,7 @@ export function buildPersonalMatchStats(input: PersonalMatchInput): PersonalMatc
     ) {
       round.clutchOpponents = clutch.opponent_count;
       round.clutchWon = clutch.won;
+      round.clutchTick = clutch.tick;
     }
   }
   const objectivePlayers = new Map<number, string>();

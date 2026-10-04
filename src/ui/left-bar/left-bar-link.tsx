@@ -1,32 +1,36 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 import { NavLink } from 'react-router';
-import { LeftBarTooltip } from './left-bar-tooltip';
 
 type Props = {
   icon: ReactNode;
   tooltip: ReactNode;
   url: string;
   ariaLabel?: string;
+  end?: boolean;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
 
-export function LeftBarLink({ url, tooltip, icon, onClick, ariaLabel }: Props) {
+export function LeftBarLink({ url, tooltip, icon, onClick, ariaLabel, end }: Props) {
   return (
-    <LeftBarTooltip content={tooltip}>
-      <NavLink
-        to={url}
-        aria-label={ariaLabel}
-        onClick={onClick}
-        className={({ isActive }) => {
-          return `flex flex-col items-center w-full no-underline hover:text-gray-900 duration-85 transition-all py-12 outline-hidden ${
-            isActive ? 'text-gray-900' : 'text-gray-500'
-          }`;
-        }}
-        viewTransition={true}
-      >
-        <div className="flex w-32 justify-center">{icon}</div>
-      </NavLink>
-    </LeftBarTooltip>
+    <NavLink
+      to={url}
+      aria-label={ariaLabel}
+      onClick={onClick}
+      end={end}
+      className={({ isActive }) => {
+        return `flex min-h-40 w-full items-center gap-8 rounded-8 border px-8 py-10 no-underline duration-85 transition-colors max-[1100px]:px-4 ${
+          isActive
+            ? 'border-accent-muted bg-accent-soft text-accent text-body-strong'
+            : 'border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+        }`;
+      }}
+      viewTransition={true}
+    >
+      <span className="flex size-20 shrink-0 items-center justify-center *:size-full" aria-hidden="true">
+        {icon}
+      </span>
+      <span className="min-w-0 wrap-break-word">{tooltip}</span>
+    </NavLink>
   );
 }

@@ -50,7 +50,7 @@ export function PlayerPremierRankHistory() {
 
         return renderToString(
           <div className="flex flex-col gap-y-4">
-            <div className="w-[64px] self-center">
+            <div className="w-64 self-center">
               <PremierRankLogo rank={rank} />
             </div>
             <div className="mt-8 flex flex-col">

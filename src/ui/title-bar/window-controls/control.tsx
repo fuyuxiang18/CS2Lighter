@@ -4,20 +4,23 @@ import clsx from 'clsx';
 
 type Props = {
   children: ReactNode;
+  label: string;
   onClick: () => void;
   variant?: 'danger' | 'default';
 };
 
-export function Control({ children, onClick, variant }: Props) {
+export function Control({ children, onClick, variant, label }: Props) {
   return (
-    <div
+    <button
+      type="button"
+      aria-label={label}
       className={clsx(
-        'flex h-full w-48 items-center justify-center',
-        variant === 'danger' ? 'hover:bg-[#c42b1c]' : 'hover:bg-gray-300',
+        'flex h-full w-48 cursor-default items-center justify-center',
+        variant === 'danger' ? 'hover:bg-red-700 hover:text-white' : 'hover:bg-gray-200',
       )}
       onClick={onClick}
     >
       {children}
-    </div>
+    </button>
   );
 }

@@ -1449,6 +1449,7 @@ msgstr "总计"
 
 #: src/ui/components/maps-stats.tsx
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Win"
 msgstr "赢"
 
@@ -1460,6 +1461,7 @@ msgstr "输"
 
 #: src/ui/components/maps-stats.tsx
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Tie"
 msgstr "平局"
 
@@ -1486,6 +1488,7 @@ msgstr "K/D"
 
 #: src/ui/components/maps-stats.tsx
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/use-review-labels.ts
 msgid "ADR"
 msgstr "ADR"
 
@@ -2221,6 +2224,7 @@ msgid "<0>{playerName}</0> Round performance"
 msgstr "<0>{playerName}</0> 回合表现"
 
 #: src/ui/components/valve-match/player-performance/round-context-menu.tsx
+#: src/ui/habits/review-workbench.tsx
 msgid "Watch round"
 msgstr "观看回合"
 
@@ -2624,8 +2628,38 @@ msgid "Leave it empty to remove the override."
 msgstr "将其留空以移除覆盖。"
 
 #: src/ui/habits/habits-dashboard.tsx
+#: src/ui/left-bar/left-bar.tsx
+msgid "Review workspace"
+msgstr "复盘工作台"
+
+#: src/ui/habits/habits-dashboard.tsx
+#: src/ui/left-bar/left-bar.tsx
+msgid "Map habits"
+msgstr "地图习惯"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Match notebook"
+msgstr "比赛记录"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Where you go, where you fight, and the rounds that explain it."
+msgstr "你常去哪里、在哪里交战，以及背后的具体回合。"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Your local matches, ready when you want the details."
+msgstr "已保存的本地比赛，随时查看细节。"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Find a recurring situation. Review the evidence. Try one change."
+msgstr "找出重复场景，核对回合证据，尝试一个改变。"
+
+#: src/ui/habits/habits-dashboard.tsx
 msgid "Could not save your account locally. Check that app storage is writable and try again."
 msgstr "无法在本机保存你的账号。请检查应用存储目录是否可写，然后重试。"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Review filters"
+msgstr "复盘筛选"
 
 #: src/ui/habits/habits-dashboard.tsx
 #: src/ui/videos/video-entry.tsx
@@ -2654,64 +2688,65 @@ msgid "All sources"
 msgstr "全部来源"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Reload cached data"
-msgstr "重新读取缓存"
+msgid "Loading saved data…"
+msgstr "正在读取已保存的数据…"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "CS2 · your linked account · all imported dates"
-msgstr "CS2 · 已绑定账号 · 全部导入日期"
+#: src/ui/habits/review-progress.tsx
+msgid "{matches} matches · {rounds} rounds"
+msgstr "{matches} 场比赛 · {rounds} 个回合"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Loading saved demo data…"
-msgstr "正在读取已保存的 demo 数据…"
+msgid "Reset filters"
+msgstr "重置筛选"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Could not load your match history. Use Reload cached data to try again."
-msgstr "无法加载比赛历史，请点击“重新读取缓存”重试。"
+msgid "Your changes could not be saved locally. Keep this window open and check storage permissions."
+msgstr "更改未能保存到本机。请保持窗口打开，并检查存储权限。"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Your profile is ready for matches"
-msgstr "画像已准备好，等待导入比赛"
+msgid "Review sections"
+msgstr "复盘栏目"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "No analyzed matches match this account and filter. Add your Perfect World demo folders or choose another map."
-msgstr "没有符合当前账号和筛选条件的已解析比赛。请添加完美平台录像文件夹，或选择其他地图。"
+msgid "Review priorities"
+msgstr "复盘重点"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Where you spend your rounds"
-msgstr "你在回合中常去的位置"
+msgid "My playing style"
+msgstr "我的风格"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Heatmaps stop when the round is decided. Personal combat totals also include post-round fights."
-msgstr "热力图只统计到回合胜负确定时；个人交战总数据也包含胜负确定后的交战。"
+msgid "Practice and progress"
+msgstr "练习与进步"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Position coverage: {coverage}% of selected rounds"
-msgstr "位置数据覆盖所选回合的 {coverage}%"
+msgid "Reading your saved match data…"
+msgstr "正在读取已保存的比赛数据…"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Matches are grouped by map and game build. The installed radar is a reference and may differ from older map layouts."
-msgstr "比赛按地图和游戏版本分组。雷达图仅供参考，可能与旧版地图布局不同。"
+msgid "Could not load your review"
+msgstr "无法加载复盘数据"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "{map} · build {version} · {mode} · {source} · {count} matches"
-msgstr "{map} · 版本 {version} · {mode} · {source} · {count} 场比赛"
+msgid "Your demo files are unchanged. Retry loading the saved data."
+msgstr "demo 文件未受影响，请重试读取已保存的数据。"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Some rounds have no usable positions. Their combat events still count; enable position analysis in settings and reanalyze older demos to fill the map."
-msgstr "部分回合没有可用位置数据，但其交战事件仍计入统计。请在设置中启用位置解析，并重新解析旧录像来补充地图数据。"
+msgid "Retry"
+msgstr "重试"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Return to the evidence"
-msgstr "回到原始回合核实"
+msgid "No matches in this selection"
+msgstr "当前筛选没有匹配的比赛"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Review the fight, your teammates and your equipment before deciding what to change."
-msgstr "结合交战过程、队友位置和自身装备复盘，再决定如何调整。"
+msgid "Reset the filters, or add a folder containing demos for this account. Imported files are analyzed once and reused."
+msgstr "请重置筛选，或添加包含此账号录像的文件夹。导入的文件只需解析一次，之后会复用结果。"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Showing {evidenceCount} stored examples from {evidenceTotal} events. This is a review sample, not the full event export."
-msgstr "从 {evidenceTotal} 个事件中展示 {evidenceCount} 个已保存片段。这些是复盘样本，并非完整事件导出。"
+msgid "Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts."
+msgstr "基于本地 demo，无需上传。以下比例是观察记录，不是对打法的自动判决。"
 
 #: src/ui/habits/habits-evidence.tsx
 msgid "Position"
@@ -2735,6 +2770,7 @@ msgstr "暂无符合条件的回合片段。"
 
 #: src/ui/habits/habits-evidence.tsx
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Match"
 msgstr "比赛"
 
@@ -2748,7 +2784,7 @@ msgid "Event"
 msgstr "事件"
 
 #: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/habits-layout.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Review"
 msgstr "复盘"
 
@@ -2761,24 +2797,44 @@ msgid "Show more evidence"
 msgstr "显示更多片段"
 
 #: src/ui/habits/habits-identity.tsx
-msgid "Reviewing {name}"
-msgstr "正在复盘 {name}"
-
-#: src/ui/habits/habits-identity.tsx
-msgid "Account linked. Future name changes will not split your match history."
-msgstr "账号已绑定。今后更改昵称不会拆分你的比赛历史。"
+msgid "Linked account: {name}"
+msgstr "已绑定账号：{name}"
 
 #: src/ui/habits/habits-identity.tsx
 msgid "Change player"
 msgstr "更换玩家"
 
 #: src/ui/habits/habits-identity.tsx
-msgid "Start with your recorded nickname"
-msgstr "从录像中的昵称开始"
+msgid "Change the linked account"
+msgstr "更换绑定账号"
 
 #: src/ui/habits/habits-identity.tsx
-msgid "Add your demo folders, then enter the exact nickname used when the demo was recorded. An old nickname works too. We will find your account after a demo is analyzed."
-msgstr "添加录像文件夹后，输入录制比赛时使用的完整昵称。旧昵称也可以。录像解析完成后，我们会查找你的账号。"
+msgid "Set up your local review"
+msgstr "开始本地复盘"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Your current account stays linked while you search. Cancel to keep it."
+msgstr "查找期间会保留当前绑定，取消即可继续使用原账号。"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "1. Add your demo folders"
+msgstr "1. 添加录像文件夹"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Choose the folders where your downloaded demos are saved."
+msgstr "选择已下载 demo 的保存文件夹。"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Choose folders"
+msgstr "选择文件夹"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "2. Find your account in a demo"
+msgstr "2. 从录像中找到你的账号"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Enter the exact nickname used when the demo was recorded. An old nickname works too. We will find your account after a demo is analyzed."
+msgstr "输入录像录制时使用的完整昵称，旧昵称也可以。demo 解析完成后，应用会查找对应账号。"
 
 #: src/ui/habits/habits-identity.tsx
 msgid "Your in-game nickname"
@@ -2791,6 +2847,11 @@ msgstr "完整昵称，包含符号"
 #: src/ui/habits/habits-identity.tsx
 msgid "Find my account"
 msgstr "查找我的账号"
+
+#: src/ui/habits/habits-identity.tsx
+#: src/ui/habits/review-workbench.tsx
+msgid "Cancel"
+msgstr "取消"
 
 #: src/ui/habits/habits-identity.tsx
 msgid "Looking through analyzed matches…"
@@ -2817,26 +2878,9 @@ msgid "This is me"
 msgstr "这是我"
 
 #: src/ui/habits/habits-layout.tsx
-msgid "Your local review workspace"
-msgstr "你的本地复盘空间"
-
-#: src/ui/habits/habits-layout.tsx
-msgid "From matches to better habits"
-msgstr "从比赛中发现并改善习惯"
-
-#: src/ui/habits/habits-layout.tsx
-msgid "Demo folders"
-msgstr "录像文件夹"
-
-#: src/ui/habits/habits-layout.tsx
-#: src/ui/habits/habits-links.tsx
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "My habits"
-msgstr "我的习惯"
-
-#: src/ui/habits/habits-layout.tsx
-msgid "Match library"
-msgstr "比赛库"
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Manage demo folders"
+msgstr "管理录像文件夹"
 
 #: src/ui/habits/habits-map.tsx
 msgid "Alive time"
@@ -2943,6 +2987,9 @@ msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
 msgstr "{matchWins} 胜 · {matchLosses} 负 · {matchTies} 平"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
+#: src/ui/habits/review-style.tsx
+#: src/ui/habits/use-review-labels.ts
 msgid "Headshot rate"
 msgstr "爆头率"
 
@@ -2955,6 +3002,7 @@ msgid "Rating 1.0 · historical formula"
 msgstr "Rating 1.0 · 历史公式"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-style.tsx
 msgid "{ratingRoundCount} eligible rounds"
 msgstr "{ratingRoundCount} 个符合条件的回合"
 
@@ -2963,6 +3011,7 @@ msgid "RWS · local calculation"
 msgstr "RWS · 本地计算"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-style.tsx
 msgid "{rwsRoundCount} valid rounds · {rwsMissingRoundCount} unavailable"
 msgstr "{rwsRoundCount} 个有效回合 · {rwsMissingRoundCount} 个无法计算"
 
@@ -3003,6 +3052,7 @@ msgid "Deaths per round"
 msgstr "回合均死亡"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/use-review-labels.ts
 msgid "Survival rate"
 msgstr "存活率"
 
@@ -3055,6 +3105,7 @@ msgid "{openingAttempts} opening duels"
 msgstr "参与 {openingAttempts} 次首杀对决"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/use-review-labels.ts
 msgid "Opening participation"
 msgstr "首杀对决参与率"
 
@@ -3280,6 +3331,8 @@ msgid "Round win rate"
 msgstr "回合胜率"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
+#: src/ui/habits/review-style.tsx
 msgid "K / D / A"
 msgstr "击杀 / 死亡 / 助攻"
 
@@ -3337,6 +3390,7 @@ msgid "Up to 50 recent matches, oldest to newest. Each point is one match; missi
 msgstr "最多显示最近 50 场比赛，按时间从早到晚排列。每个点代表一场比赛，缺失值留空。具体数值和比赛入口列在下方。"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Loss"
 msgstr "负"
 
@@ -3345,12 +3399,489 @@ msgid "Personal match history"
 msgstr "个人比赛历史"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
 msgid "Result"
 msgstr "结果"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Show more matches"
 msgstr "显示更多比赛"
+
+#: src/ui/habits/review-maps.tsx
+msgid "Your space on the map"
+msgstr "你的地图活动范围"
+
+#: src/ui/habits/review-maps.tsx
+msgid "Switch to the opening window to see where your rounds begin. Click a lit area to inspect the rounds behind it."
+msgstr "切换到开局时段，查看你通常从哪里展开回合。点击着色区域，可查看对应的回合。"
+
+#: src/ui/habits/review-maps.tsx
+msgid "Heatmap scenario"
+msgstr "热力图场景"
+
+#: src/ui/habits/review-maps.tsx
+#: src/ui/hooks/use-get-game-mode-translation.ts
+msgctxt "Game mode"
+msgid "Unknown"
+msgstr "未知"
+
+#: src/ui/habits/review-maps.tsx
+msgid "This heatmap only: {matches} matches · {rounds} rounds · position coverage {coverage}%"
+msgstr "当前热力图：{matches} 场比赛 · {rounds} 个回合 · 位置数据覆盖 {coverage}%"
+
+#: src/ui/habits/review-maps.tsx
+msgid "Time is counted while alive until the round is decided. Radar artwork may differ from older map versions. These positions describe where you play, not whether your crosshair placement is good."
+msgstr "仅统计存活期间、回合胜负确定前的时间。雷达图可能与旧版地图不同。这些位置记录描述你的活动范围，不能评价预瞄水平。"
+
+#: src/ui/habits/review-maps.tsx
+msgid "More position and combat examples"
+msgstr "更多位置与交战片段"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Your match notebook"
+msgstr "你的比赛记录"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal numbers."
+msgstr "打开比赛可查看回合、对枪、道具和完整回放。上方筛选同样适用于这些个人数据。"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Open match"
+msgstr "打开比赛"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Load more matches"
+msgstr "加载更多比赛"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Need the full numbers? Combat, utility, economy, weapons and trends are still here."
+msgstr "需要完整数据？这里仍可查看交战、道具、经济、武器和趋势统计。"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Hide detailed statistics"
+msgstr "收起详细统计"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Show detailed statistics"
+msgstr "展开详细统计"
+
+#: src/ui/habits/review-progress.tsx
+msgid "One action for the next matches"
+msgstr "接下来几场，只尝试一个动作"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Started"
+msgstr "开始时间"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Before this practice"
+msgstr "开始练习前"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Matches played after starting"
+msgstr "开始练习后进行的比赛"
+
+#: src/ui/habits/review-progress.tsx
+msgid "You now have comparable samples. Revisit the rounds and judge whether your chosen action helped; a percentage change alone does not prove improvement."
+msgstr "现在已有可比较的样本。请回看具体回合，判断所选动作是否有帮助；比例变化本身不能证明进步。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Keep the same focus. A comparison needs at least two matches and twenty rounds on each side, plus enough relevant situations."
+msgstr "继续专注当前动作。比较需要前后各至少 2 场比赛、20 个回合，以及足够的相关场景。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Only matches played after the start time count as practice results. Importing an old demo does not create progress. Each period uses up to five matches in this exact scenario."
+msgstr "只统计开始时间之后实际进行的比赛；新导入旧 demo 不会算作练习成果。每个时期最多使用此相同场景下的 5 场比赛。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Review more evidence"
+msgstr "查看更多回合证据"
+
+#: src/ui/habits/review-progress.tsx
+msgid "End this focus"
+msgstr "结束当前练习"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Watch a candidate round first, then choose one concrete action. We will compare later matches with the same map, side, source, mode and game build."
+msgstr "先看一段待复核回合，再选一个具体动作。应用会在地图、阵营、来源、模式和游戏版本相同的条件下，比较后续比赛。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Choose from review candidates"
+msgstr "从复盘候选中选择"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Recent play versus your earlier play"
+msgstr "最近表现与之前相比"
+
+#: src/ui/habits/review-progress.tsx
+msgid "This is a self comparison, not a rank or a training score. Maps, sides, sources, modes and game builds are kept separate."
+msgstr "这是与你过去表现的比较，不是段位或训练评分。地图、阵营、来源、模式和游戏版本分别统计。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Comparable scenario"
+msgstr "可比较的场景"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Earlier sample"
+msgstr "之前的样本"
+
+#: src/ui/habits/review-progress.tsx
+msgid "matches"
+msgstr "场比赛"
+
+#: src/ui/habits/review-progress.tsx
+msgid "rounds"
+msgstr "个回合"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Recent sample"
+msgstr "最近的样本"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Not enough comparable matches yet. Values remain visible as observations; changes are withheld until the sample is large enough."
+msgstr "可比较的比赛还不够。现有数值仅作观察，样本达到要求后才显示变化。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Behavior / result"
+msgstr "行为 / 结果"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Earlier"
+msgstr "之前"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Recent"
+msgstr "最近"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Change"
+msgstr "变化"
+
+#: src/ui/habits/review-progress.tsx
+msgid "pp"
+msgstr "个百分点"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Up to five recent matches versus the previous five. Each period needs at least two matches and twenty rounds; rare events need additional samples. A dash means insufficient evidence."
+msgstr "最多取最近 5 场与此前 5 场比较。每个时期至少需要 2 场、20 个回合；少见事件还需更多样本。横线表示证据不足。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "No comparable scenario in this selection."
+msgstr "当前筛选没有可比较的场景。"
+
+#: src/ui/habits/review-style.tsx
+msgid "How you tend to play"
+msgstr "你的打法倾向"
+
+#: src/ui/habits/review-style.tsx
+msgid "These are proportions, not skill scores. Compare maps and sides before assigning yourself a role."
+msgstr "这些是行为比例，不是技术评分。先比较不同地图和阵营，再判断自己的角色。"
+
+#: src/ui/habits/review-style.tsx
+msgid "{numerator} / {denominator} observed"
+msgstr "已记录 {numerator} / {denominator}"
+
+#: src/ui/habits/review-style.tsx
+#: src/ui/habits/review-workbench.tsx
+msgid "Small sample"
+msgstr "样本较少"
+
+#: src/ui/habits/review-style.tsx
+msgid "Your results, in context"
+msgstr "结合样本看表现"
+
+#: src/ui/habits/review-style.tsx
+msgid "Use these numbers to describe the sample, then return to rounds to understand your decisions."
+msgstr "这些数值描述当前样本；要理解具体决策，请回到原始回合。"
+
+#: src/ui/habits/review-style.tsx
+msgid "Rating 1.0 · historical"
+msgstr "Rating 1.0 · 历史公式"
+
+#: src/ui/habits/review-style.tsx
+msgid "RWS · public formula"
+msgstr "RWS · 公开公式"
+
+#: src/ui/habits/review-style.tsx
+msgid "Rating uses the historical public 1.0 model. RWS uses the public damage/objective model; neither is an official platform score."
+msgstr "Rating 使用公开的历史 1.0 模型；RWS 使用公开的伤害与目标贡献模型。两者都不是平台官方评分。"
+
+#: src/ui/habits/review-style.tsx
+msgid "Where does this style happen?"
+msgstr "这些打法常出现在哪里？"
+
+#: src/ui/habits/review-style.tsx
+msgid "Explore opening positions and alive-time heatmaps. Select any occupied area to revisit example rounds."
+msgstr "查看开局位置与存活时间热力图。选择任意着色区域，可回看对应回合。"
+
+#: src/ui/habits/review-style.tsx
+msgid "Explore map habits"
+msgstr "查看地图习惯"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "YOUR NEXT MATCH FOCUS"
+msgstr "下一场的练习重点"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Track this practice"
+msgstr "跟踪这项练习"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "One useful review, one change to try."
+msgstr "认真复盘一次，尝试一个改变。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Choose a recurring situation. Watch the context before deciding whether to change it."
+msgstr "选择反复出现的场景，先看上下文，再决定是否调整。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Show top situations"
+msgstr "只看重点场景"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Show all situations"
+msgstr "查看全部场景"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Review candidate"
+msgstr "复盘候选"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "{count} / {total} {denominator}"
+msgstr "{count} / {total} {denominator}"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "No review candidates in this selection"
+msgstr "当前筛选没有复盘候选"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Try another map or side, or explore your playing style. No detected candidate does not mean flawless play."
+msgstr "可以换一个地图或阵营，也可以看看打法倾向。没有发现候选，不代表每次决策都没有问题。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "{affectedMatches} affected matches · {evidenceShown} recent examples of {evidenceTotal} matching rounds"
+msgstr "涉及 {affectedMatches} 场比赛 · 从 {evidenceTotal} 个匹配回合中展示最近 {evidenceShown} 个片段"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Round {round}"
+msgstr "第 {round} 回合"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Round won"
+msgstr "回合获胜"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Round lost"
+msgstr "回合失利"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "From round start"
+msgstr "从回合开始"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "With pre-event context"
+msgstr "含事件前的上下文"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Reviewed"
+msgstr "已复核"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Intentional play"
+msgstr "有意这样打"
+
+#: src/ui/habits/review-workbench.tsx
+#: src/ui/match/viewer-2d/playback-bar/drawing-button.tsx
+msgid "Undo"
+msgstr "撤销"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Worth changing after watching? Pick one action for your next matches."
+msgstr "看完后觉得值得调整吗？为接下来的比赛选一个动作。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Make this my practice focus"
+msgstr "设为当前练习重点"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Practice one situation"
+msgstr "针对一个场景练习"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Choose a map and side. Later matches will be compared with your previous matches in the same source, mode and game build."
+msgstr "选择地图和阵营。后续比赛会与来源、模式和游戏版本相同的历史比赛比较。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Practice scenario"
+msgstr "练习场景"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "What will you do differently?"
+msgstr "下一次准备怎么做？"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Practice action"
+msgstr "练习动作"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "This replaces your current practice focus and starts a new tracking period."
+msgstr "这会替换当前练习重点，并开始新的跟踪周期。"
+
+#: src/ui/habits/review-workbench.tsx
+msgid "Start this practice"
+msgstr "开始这项练习"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "First contact, first death"
+msgstr "开局交锋中的首死"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Before the first duel, did you have information and a teammate ready to follow?"
+msgstr "第一次交锋前，你掌握了哪些信息？是否有队友准备跟进？"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Before taking first contact, agree on the timing and who can trade."
+msgstr "首次接敌前，约定出手时机和负责补枪的队友。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Rounds where you were the first enemy kill of the round. Timing and role matter; taking an opening risk can be correct."
+msgstr "你成为本回合首个被敌方击杀的玩家。时机和角色很重要；承担开局风险也可能是正确选择。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Opening advantage lost"
+msgstr "取得首杀后仍输掉回合"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "After your opening kill, did the team regroup or keep taking isolated fights?"
+msgstr "拿到首杀后，队伍是重新协同，还是继续各自交战？"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "After an opening kill, call the advantage and plan the next move together."
+msgstr "拿到首杀后，报出人数优势，一起确定下一步行动。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Rounds lost after your opening kill. This describes the outcome, not who caused the loss."
+msgstr "你拿到首杀后仍输掉的回合。这只描述结果，不判定谁导致失利。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Deaths without a trade"
+msgstr "死亡后未被补枪"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Was a trade realistic from your teammates' positions, or were you intentionally isolated?"
+msgstr "从队友当时的位置看，补枪是否可行？还是你有意独立行动？"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Before committing to a fight, check one teammate can follow the same timing."
+msgstr "决定交战前，确认至少一名队友能够同步跟进。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Death rounds without a recorded trade within five seconds. Includes deaths where trading was impossible; review before changing your play."
+msgstr "你死亡后 5 秒内没有记录到补枪的回合，也包括本来就无法补枪的情况。请先复核，再决定是否调整打法。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Friendly flash rounds"
+msgstr "闪到队友的回合"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Did your teammate know the flash timing and have a way to turn away?"
+msgstr "队友是否知道这颗闪光的时机，又是否来得及背闪？"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Call the flash before throwing and confirm teammates are ready."
+msgstr "投闪前先报时机，并确认队友已做好准备。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Rounds with recorded friendly blindness. A brief blind or an agreed team flash is not automatically a mistake."
+msgstr "记录到队友被致盲的回合。短暂致盲或事先约定的配合闪，不会被直接判作失误。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Clutches to revisit"
+msgstr "值得回看的残局"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "What information, time and utility did you have before choosing the next fight?"
+msgstr "决定下一次交战前，你还掌握哪些信息、多少时间和什么道具？"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "In a clutch, check the clock and last known positions before committing."
+msgstr "残局中决定交战前，先看剩余时间和敌人最后出现的位置。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Recorded 1vX attempts that were lost. Opponent count and the starting situation strongly affect the outcome."
+msgstr "记录到的未获胜 1vX 残局。对手人数和进入残局时的局面会明显影响结果。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "your opening duels"
+msgstr "次开局交锋"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "your opening-kill rounds"
+msgstr "个取得首杀的回合"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "rounds with a death"
+msgstr "个死亡回合"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "flash rounds"
+msgstr "个投闪回合"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "clutch attempts"
+msgstr "次残局尝试"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Taking first contact"
+msgstr "参与开局交锋"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Opening kills + opening deaths / played rounds. Describes how often you enter the first decisive duel."
+msgstr "（首杀次数 + 首死次数）/ 参赛回合数，描述你参与首个决定性交锋的频率。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Joining trade kills"
+msgstr "参与补枪"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Trade kills / enemy kills. Describes recorded five-second trades, not your distance from teammates."
+msgstr "补枪击杀数 / 对敌击杀数，按 5 秒窗口统计补枪，不表示你与队友的距离。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Using utility"
+msgstr "使用道具"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Rounds with a grenade thrown / played rounds. Frequency does not measure grenade quality."
+msgstr "投掷过道具的回合数 / 参赛回合数。频率不能衡量道具质量。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Staying alive"
+msgstr "回合存活"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Survived rounds / played rounds. Saving, role and round outcome all affect this proportion."
+msgstr "存活回合数 / 参赛回合数。保枪、角色和回合结果都会影响这个比例。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Playing the last player"
+msgstr "成为最后一人"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Recorded 1vX attempts / played rounds. This is the situation you reach, not a passive-play label."
+msgstr "记录到的 1vX 残局数 / 参赛回合数。这描述你遇到的局面，不是被动打法的标签。"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Opening conversion"
+msgstr "首杀后回合胜率"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Traded deaths"
+msgstr "被队友补枪的死亡"
+
+#: src/ui/habits/use-review-labels.ts
+msgid "Utility round share"
+msgstr "道具使用回合占比"
 
 #: src/ui/hooks/chart/use-match-result-pie.tsx
 msgctxt "Match result"
@@ -3467,11 +3998,6 @@ msgstr "遭遇战"
 msgctxt "Game mode"
 msgid "Survival"
 msgstr "生存"
-
-#: src/ui/hooks/use-get-game-mode-translation.ts
-msgctxt "Game mode"
-msgid "Unknown"
-msgstr "未知"
 
 #: src/ui/hooks/use-get-rank-name.ts
 msgctxt "CS competitive rank"
@@ -3613,10 +4139,6 @@ msgid "Retry connection"
 msgstr "重新连接"
 
 #: src/ui/imports/import-progress-gate.tsx
-msgid "Manage demo folders"
-msgstr "管理录像文件夹"
-
-#: src/ui/imports/import-progress-gate.tsx
 msgid "Some demo files need attention"
 msgstr "部分录像文件需要处理"
 
@@ -3709,6 +4231,7 @@ msgid "{settled} of {total} files processed"
 msgstr "已处理 {settled}/{total} 个文件"
 
 #: src/ui/imports/import-progress-gate.tsx
+#: src/ui/left-bar/import-summary.tsx
 msgid "Demo import progress"
 msgstr "录像导入进度"
 
@@ -3758,10 +4281,57 @@ msgctxt "Tooltip"
 msgid "Demos"
 msgstr "录像"
 
+#: src/ui/left-bar/import-summary.tsx
+msgid "Manage imports and cache"
+msgstr "管理导入与缓存"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Imports & cache"
+msgstr "导入与缓存"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Import status unavailable"
+msgstr "无法获取导入状态"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "{settled} / {total} processed"
+msgstr "已处理 {settled} / {total}"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Checking local files"
+msgstr "正在检查本地文件"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Files need attention"
+msgstr "有文件需要处理"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Local library ready"
+msgstr "本地比赛库已就绪"
+
+#: src/ui/left-bar/import-summary.tsx
+msgid "Manage folders →"
+msgstr "管理文件夹 →"
+
+#: src/ui/left-bar/left-bar.tsx
+msgid "Main navigation"
+msgstr "主导航"
+
+#: src/ui/left-bar/left-bar.tsx
+msgid "PERSONAL REVIEW"
+msgstr "个人复盘"
+
+#: src/ui/left-bar/left-bar.tsx
+msgid "Match history"
+msgstr "比赛记录"
+
+#: src/ui/left-bar/left-bar.tsx
+msgid "Advanced tools"
+msgstr "高级工具"
+
 #: src/ui/left-bar/matches-link.tsx
-msgctxt "Tooltip"
-msgid "Matches"
-msgstr "比赛"
+msgid "Detailed matches"
+msgstr "完整比赛库"
 
 #: src/ui/left-bar/players-link.tsx
 msgctxt "Tooltip"
@@ -3774,22 +4344,12 @@ msgid "Search"
 msgstr "搜索"
 
 #: src/ui/left-bar/settings-button.tsx
-msgid "Settings ({shortcut})"
-msgstr "设置 ({shortcut})"
-
-#: src/ui/left-bar/settings-button.tsx
 msgid "Settings"
 msgstr "设置"
 
-#: src/ui/left-bar/teams-link.tsx
-msgctxt "Tooltip"
-msgid "Teams"
-msgstr "队伍"
-
-#: src/ui/left-bar/video-queue-link.tsx
-msgctxt "Tooltip"
-msgid "Videos"
-msgstr "视频"
+#: src/ui/left-bar/settings-button.tsx
+msgid "Settings ({shortcut})"
+msgstr "设置 ({shortcut})"
 
 #: src/ui/match/chat-messages/chat-message.tsx
 msgctxt "Chat message status"
@@ -4252,6 +4812,10 @@ msgstr "获取比赛信息中…"
 #: src/ui/match/match-loader.tsx
 msgid "Match not found."
 msgstr "未找到比赛"
+
+#: src/ui/match/match-loader.tsx
+msgid "Back to review"
+msgstr "返回复盘"
 
 #: src/ui/match/match-tabs.tsx
 msgid "Previous match ({shortcut})"
@@ -6239,10 +6803,6 @@ msgid "Color"
 msgstr "颜色"
 
 #: src/ui/match/viewer-2d/playback-bar/drawing-button.tsx
-msgid "Undo"
-msgstr "撤销"
-
-#: src/ui/match/viewer-2d/playback-bar/drawing-button.tsx
 msgid "Redo"
 msgstr "重做"
 
@@ -7951,6 +8511,10 @@ msgid "Hardware Acceleration"
 msgstr "硬件加速"
 
 #: src/ui/settings/ui/initial-page-select.tsx
+msgid "My habits"
+msgstr "我的习惯"
+
+#: src/ui/settings/ui/initial-page-select.tsx
 msgctxt "Select option initial page"
 msgid "Matches"
 msgstr "比赛"
@@ -8389,6 +8953,26 @@ msgstr "{0, plural, other {# 队伍}}"
 #: src/ui/teams/teams-table.tsx
 msgid "Loading teams…"
 msgstr "加载队伍中…"
+
+#: src/ui/title-bar/menu-button.tsx
+msgid "Application menu"
+msgstr "应用菜单"
+
+#: src/ui/title-bar/window-controls/close-control.tsx
+msgid "Close window"
+msgstr "关闭窗口"
+
+#: src/ui/title-bar/window-controls/maximize-control.tsx
+msgid "Restore window"
+msgstr "还原窗口"
+
+#: src/ui/title-bar/window-controls/maximize-control.tsx
+msgid "Maximize window"
+msgstr "最大化窗口"
+
+#: src/ui/title-bar/window-controls/minimize-control.tsx
+msgid "Minimize window"
+msgstr "最小化窗口"
 
 #: src/ui/videos/remove-all-videos-button.tsx
 msgctxt "Button"

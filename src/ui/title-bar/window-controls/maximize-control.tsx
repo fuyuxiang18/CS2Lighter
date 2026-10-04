@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useLingui } from '@lingui/react/macro';
 import { Control } from './control';
 import { MaximizeIcon } from './maximize-icon';
 import { UnMaximizeIcon } from './unmaximize-icon';
 
 export function MaximizeControl() {
+  const { t } = useLingui();
   const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
@@ -39,11 +41,11 @@ export function MaximizeControl() {
   };
 
   return isMaximized ? (
-    <Control onClick={onUnMaximizeClick}>
+    <Control onClick={onUnMaximizeClick} label={t`Restore window`}>
       <UnMaximizeIcon />
     </Control>
   ) : (
-    <Control onClick={onMaximizeClick}>
+    <Control onClick={onMaximizeClick} label={t`Maximize window`}>
       <MaximizeIcon />
     </Control>
   );

@@ -11,6 +11,8 @@ import type {
 import { findHabitsIdentityHandler } from './renderer-process/habits/find-habits-identity-handler';
 import { fetchHabitsSummaryHandler } from './renderer-process/habits/fetch-habits-summary-handler';
 import { fetchPersonalStatsHandler } from './renderer-process/habits/fetch-personal-stats-handler';
+import { fetchReviewInsightsHandler } from './renderer-process/habits/fetch-review-insights-handler';
+import type { FetchReviewInsightsPayload, ReviewInsightsSummary } from 'csdm/common/types/review-insights';
 import type { FetchPersonalStatsPayload, PersonalStatsSummary } from 'csdm/common/types/personal-stats';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import type { FaceitAccount } from 'csdm/common/types/faceit-account';
@@ -244,6 +246,7 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.FindHabitsIdentity]: Handler<FindHabitsIdentityPayload, HabitsIdentityCandidate[]>;
   [RendererClientMessageName.FetchHabitsSummary]: Handler<FetchHabitsPayload, HabitsSummary>;
   [RendererClientMessageName.FetchPersonalStats]: Handler<FetchPersonalStatsPayload, PersonalStatsSummary>;
+  [RendererClientMessageName.FetchReviewInsights]: Handler<FetchReviewInsightsPayload, ReviewInsightsSummary>;
   [RendererClientMessageName.InitializeApplication]: Handler<void, InitializeApplicationSuccessPayload>;
   [RendererClientMessageName.IsCs2ConnectedToServer]: Handler<void, boolean>;
   [RendererClientMessageName.AbortCurrentTask]: Handler;
@@ -375,6 +378,7 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.FindHabitsIdentity]: findHabitsIdentityHandler,
   [RendererClientMessageName.FetchHabitsSummary]: fetchHabitsSummaryHandler,
   [RendererClientMessageName.FetchPersonalStats]: fetchPersonalStatsHandler,
+  [RendererClientMessageName.FetchReviewInsights]: fetchReviewInsightsHandler,
   [RendererClientMessageName.InitializeApplication]: initializeApplicationHandler,
   [RendererClientMessageName.IsCs2ConnectedToServer]: isCs2ConnectedToServerHandler,
   [RendererClientMessageName.AbortCurrentTask]: abortCurrentTaskHandler,

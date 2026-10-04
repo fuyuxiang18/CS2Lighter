@@ -50,6 +50,8 @@ export const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />} errorElement={<ErrorBoundary />}>
       <Route path={RoutePath.Habits} element={<HabitsDashboard />} />
+      <Route path={RoutePath.HabitsMaps} element={<HabitsDashboard />} />
+      <Route path={RoutePath.HabitsMatches} element={<HabitsDashboard />} />
       <Route path={RoutePath.Matches} element={<Matches />} />
       <Route path={`${RoutePath.Matches}/:checksum`} element={<MatchLoader />}>
         <Route index={true} element={<MatchOverview />} />
