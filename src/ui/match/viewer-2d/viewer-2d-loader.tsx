@@ -20,7 +20,7 @@ import type { GrenadePosition } from 'csdm/common/types/grenade-position';
 import type { BombPlanted } from 'csdm/common/types/bomb-planted';
 import type { BombDefused } from 'csdm/common/types/bomb-defused';
 import type { Shot } from 'csdm/common/types/shot';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import type { BombPlantStart } from 'csdm/common/types/bomb-plant-start';
 import type { BombDefuseStart } from 'csdm/common/types/bomb-defuse-start';
 import type { HostagePickUpStart } from 'csdm/common/types/hostage-pick-up-start';
@@ -89,6 +89,7 @@ const defaultState: State = {
 };
 
 export function Viewer2DLoader() {
+  const [searchParams] = useSearchParams();
   const { number: roundNumberParameter } = useParams();
   const roundNumber = Number(roundNumberParameter || 1);
   const client = useWebSocketClient();
@@ -249,6 +250,7 @@ export function Viewer2DLoader() {
 
   return (
     <ViewerProvider
+      key={`${match.checksum}-${state.round.number}-${searchParams.get('tick') ?? ''}-${searchParams.get('player') ?? ''}`}
       map={map}
       shots={state.shots}
       kills={state.kills}

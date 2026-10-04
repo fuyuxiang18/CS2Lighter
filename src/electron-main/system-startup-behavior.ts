@@ -18,7 +18,7 @@ import { updateSettings } from 'csdm/node/settings/update-settings';
 
 // @platform linux
 function getDesktopFilePath() {
-  return `${os.homedir()}/.config/autostart/cs-demo-manager.desktop`;
+  return `${os.homedir()}/.config/autostart/cs2-parser.desktop`;
 }
 
 export async function getSystemStartupBehavior(): Promise<StartupBehavior> {
@@ -31,7 +31,7 @@ export async function getSystemStartupBehavior(): Promise<StartupBehavior> {
     // start minimized or not, we have to check the registry.
     const data = await getRegistryStringKey({
       path: 'Software\\Microsoft\\Windows\\CurrentVersion\\Run',
-      name: 'com.akiver.csdm',
+      name: 'local.cs2.parser',
     });
     if (!data) {
       return StartupBehavior.Off;
@@ -97,7 +97,7 @@ export async function updateSystemStartupBehavior(behavior: StartupBehavior) {
     if (isWindows && exePath.includes(' ')) {
       await writeRegistryStringKey({
         path: 'Software\\Microsoft\\Windows\\CurrentVersion\\Run',
-        name: 'com.akiver.csdm',
+        name: 'local.cs2.parser',
         data: `"${exePath}" ${args.join(' ')}`,
       });
     }
@@ -118,7 +118,7 @@ export async function updateSystemStartupBehavior(behavior: StartupBehavior) {
 Version=1.0
 Type=Application
 ${execLine}
-Name=CS Demo Manager
+Name=CS2Lighter
 Comment=Counter-Strike Demo Manager
 Terminal=false
 `;

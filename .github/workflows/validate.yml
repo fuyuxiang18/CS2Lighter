@@ -1,86 +1,29 @@
 name: Validate
-
 on:
   push:
-    branches:
-      - main
-    paths-ignore:
-      - 'README.md'
+    branches: [main]
   pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - 'README.md'
-
+    branches: [main]
+permissions:
+  contents: read
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: validate-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
-  compile:
-    runs-on: ubuntu-latest
+  validate:
+    runs-on: windows-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
         with:
-          cache: true
-
-      - name: TS compile
-        run: vp run compile
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          cache: true
-
-      - name: Lint
-        run: vp run lint
-
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          cache: true
-
-      - name: Code format
-        run: vp run format --check
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          cache: true
-
-      - name: Test
-        run: vp run test
-
-      - name: Check if the English source strings have been extracted
-        id: git-diff
+          version-file: package.json
+      # Git's CLAUDE.md symlink is a text placeholder on Windows; validate all application sources explicitly.
+      - run: vp check src scripts linter types package.json electron-builder.config.mjs pnpm-workspace.yaml pnpm-lock.yaml
+      - run: vp check --no-fmt
+      - run: vp run test
+      - run: vp run deadcode
+      - name: Validate translation catalogs
+        shell: pwsh
         run: |
           vp run i18n:extract
-          git diff --ignore-blank-lines src/ui/translations/en src/electron-main/translations/en
-          echo "MODIFIED=$(if [ -n "$(git diff --ignore-blank-lines src/ui/translations/en src/electron-main/translations/en)" ]; then echo "true"; else echo "false"; fi)" >> "$GITHUB_OUTPUT"
-
-      - name: Fail if the English source strings have not been extracted
-        if: steps.git-diff.outputs.MODIFIED == 'true'
-        run: |
-          echo "::error title=Translations not up-to-date::The English source strings are not extracted. Please run 'vp run i18n:extract' and commit the changes."
-          exit 1
-
-      - name: Find dead code
-        run: vp run deadcode
+          git diff --exit-code -- src/ui/translations src/electron-main/translations

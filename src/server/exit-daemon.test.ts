@@ -102,6 +102,25 @@ describe('exitDaemon', () => {
     expect(exit).toHaveBeenCalledTimes(1);
   });
 
+  it('confirms update shutdown only after every resource has closed successfully', async () => {
+    const { exitDaemon } = await importExitDaemon();
+    const confirm = vi.fn().mockResolvedValue(undefined);
+    await exitDaemon(0, confirm);
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(confirm.mock.invocationCallOrder[0]).toBeGreaterThan(
+      mocks.stopEmbeddedPostgreSql.mock.invocationCallOrder[0],
+    );
+    expect(exit.mock.invocationCallOrder[0]).toBeGreaterThan(confirm.mock.invocationCallOrder[0]);
+  });
+
+  it('does not authorize an update if stopping PostgreSQL failed', async () => {
+    const { exitDaemon } = await importExitDaemon();
+    const confirm = vi.fn();
+    mocks.stopEmbeddedPostgreSql.mockRejectedValue(new Error('database still running'));
+    await exitDaemon(0, confirm);
+    expect(confirm).not.toHaveBeenCalled();
+  });
+
   it('should still exit when releasing a resource fails', async () => {
     const { exitDaemon } = await importExitDaemon();
     mocks.closeServer.mockRejectedValue(new Error('close failed'));

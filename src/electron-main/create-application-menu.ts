@@ -65,7 +65,7 @@ export function createApplicationMenu(client: WebSocketClient) {
           role: 'hide',
           label: i18n.t({
             id: 'menu.hide',
-            message: 'Hide CS:DM',
+            message: 'Hide CS2Lighter',
           }),
         },
         {
@@ -87,7 +87,7 @@ export function createApplicationMenu(client: WebSocketClient) {
         {
           label: i18n.t({
             id: 'menu.quit',
-            message: 'Quit CS:DM',
+            message: 'Quit CS2Lighter',
           }),
           accelerator: 'CommandOrControl+Q',
           click: (menu, window) => {
@@ -132,7 +132,7 @@ export function createApplicationMenu(client: WebSocketClient) {
           role: 'quit',
           label: i18n.t({
             id: 'menu.quit',
-            message: 'Quit CS:DM',
+            message: 'Quit CS2Lighter',
           }),
         },
       ],

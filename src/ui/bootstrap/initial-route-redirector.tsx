@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useUiSettings } from '../settings/ui/use-ui-settings';
 import { useArgument } from './use-argument';
 import { ArgumentName } from 'csdm/common/argument/argument-name';
-import { RoutePath, buildPendingDownloadPath } from '../routes-paths';
+import { RoutePath } from '../routes-paths';
 import { StartPath } from 'csdm/common/argument/start-path';
 import { Page } from 'csdm/node/settings/page';
 import { useSettingsOverlay } from '../settings/use-settings-overlay';
@@ -24,7 +24,7 @@ export function InitialRouteRedirector() {
       openSettings();
     }
 
-    let to: string = RoutePath.Matches;
+    let to: string = RoutePath.Habits;
     if (startPathArgument && startPathArgument !== StartPath.Settings) {
       switch (startPathArgument) {
         case StartPath.Bans:
@@ -34,7 +34,7 @@ export function InitialRouteRedirector() {
           to = RoutePath.Demos;
           break;
         case StartPath.Downloads:
-          to = buildPendingDownloadPath();
+          to = RoutePath.Habits;
           break;
         case StartPath.Matches:
           to = RoutePath.Matches;
@@ -51,11 +51,20 @@ export function InitialRouteRedirector() {
       }
     } else {
       switch (defaultPage) {
+        case Page.Habits:
+          to = RoutePath.Habits;
+          break;
+        case Page.Learning:
+          to = RoutePath.Learning;
+          break;
+        case Page.Matches:
+          to = RoutePath.Matches;
+          break;
         case Page.Demos:
           to = RoutePath.Demos;
           break;
         case Page.Download:
-          to = RoutePath.Downloads;
+          to = RoutePath.Habits;
           break;
         case Page.Players:
           to = RoutePath.Players;

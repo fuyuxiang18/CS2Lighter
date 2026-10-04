@@ -1,13 +1,9 @@
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import type { IpcRendererEvent } from 'electron';
 import { useWebSocketClient } from '../hooks/use-web-socket-client';
-import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
-import { RoutePath, buildPendingDownloadPath } from '../routes-paths';
-import { useArgument } from './use-argument';
-import { ArgumentName } from 'csdm/common/argument/argument-name';
+import { RoutePath } from '../routes-paths';
 import { useNavigateToMatch } from 'csdm/ui/hooks/use-navigate-to-match';
 import { useNavigateToDemo } from 'csdm/ui/hooks/use-navigate-to-demo';
 
@@ -20,7 +16,6 @@ export function NavigationListener({ children }: Props) {
   const navigate = useNavigate();
   const navigateToMatch = useNavigateToMatch();
   const navigateToDemo = useNavigateToDemo();
-  const demoPathArgument = useArgument(ArgumentName.DemoPath);
 
   useEffect(() => {
     const navigateToBans = async () => {
@@ -28,18 +23,6 @@ export function NavigationListener({ children }: Props) {
     };
 
     const unListen = window.csdm.onNavigateToBans(navigateToBans);
-
-    return () => {
-      unListen();
-    };
-  }, [navigate]);
-
-  useEffect(() => {
-    const navigateToPendingDownloads = async () => {
-      await navigate(buildPendingDownloadPath());
-    };
-
-    const unListen = window.csdm.onNavigateToPendingDownloads(navigateToPendingDownloads);
 
     return () => {
       unListen();
@@ -61,28 +44,6 @@ export function NavigationListener({ children }: Props) {
       client.off(ServerPushMessageName.NavigateToMatch, navigateToMatch);
     };
   }, [client, navigateToMatch]);
-
-  useEffect(() => {
-    const sendNavigateToDemoOrMatch = async (demoPath: string) => {
-      await client.send({
-        name: RendererClientMessageName.NavigateToDemoOrMatch,
-        payload: demoPath,
-      });
-    };
-    const onOpenDemoFile = async (event: IpcRendererEvent, demoPath: string) => {
-      await sendNavigateToDemoOrMatch(demoPath);
-    };
-
-    if (demoPathArgument !== undefined) {
-      void sendNavigateToDemoOrMatch(demoPathArgument);
-    }
-
-    const unListen = window.csdm.onOpenDemoFile(onOpenDemoFile);
-
-    return () => {
-      unListen();
-    };
-  }, [client, demoPathArgument]);
 
   return <>{children}</>;
 }

@@ -13,7 +13,7 @@ export function SeeChangelogButton() {
 
   return (
     <Button onClick={onClick}>
-      <Trans context="Button">See Changelog</Trans>
+      <Trans context="Button">Upstream changelog</Trans>
     </Button>
   );
 }

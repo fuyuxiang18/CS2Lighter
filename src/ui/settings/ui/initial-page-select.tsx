@@ -12,7 +12,9 @@ export function InitialPageSelect() {
   const { initialPage } = useUiSettings();
   const updateSettings = useUpdateSettings();
 
-  const labelPerPage: Record<Page, string> = {
+  const labelPerPage: Record<Exclude<Page, typeof Page.Download>, string> = {
+    [Page.Habits]: t`My habits`,
+    [Page.Learning]: t`Learn from a player`,
     [Page.Matches]: t({
       context: 'Select option initial page',
       message: 'Matches',
@@ -25,29 +27,27 @@ export function InitialPageSelect() {
       context: 'Select option initial page',
       message: 'Players',
     }),
-    [Page.Download]: t({
-      context: 'Select option initial page',
-      message: 'Download',
-    }),
     [Page.Teams]: t({
       context: 'Select option initial page',
       message: 'Teams',
     }),
   };
 
-  const options: SelectOption<Page>[] = Object.values(Page).map((page) => {
-    return {
-      value: page,
-      label: labelPerPage[page],
-    };
-  });
+  const options: SelectOption<Page>[] = Object.values(Page)
+    .filter((page) => page !== Page.Download)
+    .map((page) => {
+      return {
+        value: page,
+        label: labelPerPage[page],
+      };
+    });
 
   return (
     <SettingsEntry
       interactiveComponent={
         <Select
           options={options}
-          value={initialPage}
+          value={initialPage === Page.Download ? Page.Habits : initialPage}
           onChange={async (page) => {
             await updateSettings({
               ui: {

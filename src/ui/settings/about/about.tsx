@@ -9,23 +9,19 @@ import { ExternalLink } from 'csdm/ui/components/external-link';
 import { RevealLogFileButton } from 'csdm/ui/components/buttons/reveal-log-file-button';
 import { ClearLogsButton } from './clear-logs-button';
 import { ResetSettingsButton } from './reset-settings-button';
-import { SettingsEntry } from '../settings-entry';
-import { Switch } from 'csdm/ui/components/inputs/switch';
-import { useSettings } from '../use-settings';
-import { useUpdateSettings } from '../use-update-settings';
 import { Donate } from 'csdm/ui/components/donate';
 import { SeeChangelogButton } from './see-changelog-button';
 import { RevealCounterStrikeLogFileButton } from './reveal-counter-strike-log-file-button';
 import { Game } from 'csdm/common/types/counter-strike';
 import { DatabaseMode } from 'csdm/common/types/database-mode';
 import { useDatabaseSettings } from 'csdm/ui/settings/database/use-database-settings';
+import { AppUpdates } from './app-updates';
+import { applicationName } from 'csdm/common/application-name';
 
 export function About() {
   const client = useWebSocketClient();
   const [migrations, setMigrations] = useState<Migration[]>([]);
   const info = window.csdm.getAppInformation();
-  const { autoDownloadUpdates } = useSettings();
-  const updateSettings = useUpdateSettings();
   const databaseSettings = useDatabaseSettings();
   const isEmbeddedDatabase = databaseSettings.mode === DatabaseMode.Embedded;
 
@@ -56,24 +52,17 @@ export function About() {
   return (
     <SettingsView>
       <div className="flex flex-col gap-y-20">
-        <h2 className="text-title">CS Demo Manager</h2>
+        <h2 className="text-title">{applicationName}</h2>
+        <AppUpdates />
 
         <section className="flex flex-col gap-y-8">
-          <SettingsEntry
-            interactiveComponent={
-              <Switch
-                isChecked={autoDownloadUpdates}
-                onChange={async (isChecked: boolean) => {
-                  window.csdm.toggleAutoDownloadUpdates(isChecked);
-                  await updateSettings({
-                    autoDownloadUpdates: isChecked,
-                  });
-                }}
-              />
-            }
-            description={<Trans>Automatically download updates.</Trans>}
-            title={<Trans context="Settings title">Auto update</Trans>}
-          />
+          <p>
+            <Trans>A local demo habits and learning app based on CS Demo Manager.</Trans>
+          </p>
+          <p>
+            <Trans>Open-source foundation:</Trans>{' '}
+            <ExternalLink href="https://github.com/akiver/cs-demo-manager">CS Demo Manager</ExternalLink> (MIT)
+          </p>
           <div>
             <SeeChangelogButton />
           </div>
@@ -88,7 +77,7 @@ export function About() {
               {line}
             </p>
           ))}
-          <div className="mt-4 flex items-center gap-x-8">
+          <div className="mt-4 flex flex-wrap items-center gap-8">
             <CopyButton data={data.join('\n')} />
             <ResetSettingsButton />
           </div>
@@ -98,7 +87,7 @@ export function About() {
           <h2 className="text-subtitle">
             <Trans>Logs</Trans>
           </h2>
-          <div className="mt-4 flex items-center gap-x-8">
+          <div className="mt-4 flex flex-wrap items-center gap-8">
             <RevealLogFileButton filePath={logger.getLogFilePath()}>
               <Trans>Reveal log file</Trans>
             </RevealLogFileButton>

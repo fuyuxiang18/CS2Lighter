@@ -1,0 +1,35 @@
+[
+  {
+    "component": "PostgreSQL",
+    "version": "18.4 (embedded-postgres package 18.4.0-beta.17)",
+    "file": "postgresql/COPYRIGHT",
+    "url": "https://raw.githubusercontent.com/postgres/postgres/REL_18_4/COPYRIGHT",
+    "note": "Bundled postgres --version reports 18.4. This is PostgreSQL's own copyright text, not a complete inventory of all native linked libraries."
+  },
+  {
+    "component": "cs-demo-analyzer",
+    "version": "1.11.0",
+    "file": "cs-demo-analyzer/LICENSE.md",
+    "url": "https://raw.githubusercontent.com/akiver/cs-demo-analyzer/v1.11.0/LICENSE.md"
+  },
+  {
+    "component": "demoinfocs-golang",
+    "version": "v4.5.2-0.20260902223806-5be4d04e24fa",
+    "file": "demoinfocs/LICENSE.md",
+    "url": "https://raw.githubusercontent.com/markus-wa/demoinfocs-golang/5be4d04e24fa/LICENSE.md",
+    "note": "cs-demo-analyzer v1.11.0/go.mod replaces its v4.5.1 requirement with this commit: https://raw.githubusercontent.com/akiver/cs-demo-analyzer/v1.11.0/go.mod"
+  },
+  {
+    "component": "boiler-writter",
+    "version": "1.7.0",
+    "file": "boiler-writter/LICENSE",
+    "url": "https://raw.githubusercontent.com/akiver/boiler-writter/v1.7.0/LICENSE",
+    "note": "The installed package.json and upstream v1.7.0/package.json declare GPL-3.0, while the upstream and installed LICENSE text says MIT. Both declarations are preserved; this collection does not resolve the discrepancy or establish redistribution compliance."
+  },
+  {
+    "component": "csgo-voice-extractor",
+    "version": "3.1.6",
+    "file": "voice-extractor/LICENSE",
+    "url": "https://raw.githubusercontent.com/akiver/csgo-voice-extractor/v3.1.6/LICENSE"
+  }
+]

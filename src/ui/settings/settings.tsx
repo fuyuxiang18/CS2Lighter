@@ -1,7 +1,6 @@
 import React from 'react';
 import { AnalyzeSettings } from './analyze/analyze-settings';
 import { DatabaseSettings } from './database/database-settings';
-import { DownloadSettings } from './downloads/download-view';
 import { FoldersSettings } from './folders/folders-settings';
 import { VideoSettings } from './video/video-settings';
 import { MapsSettings } from './maps/maps-settings';
@@ -28,8 +27,6 @@ export function Settings() {
       return <UiSettings />;
     case SettingsCategory.Analyze:
       return <AnalyzeSettings />;
-    case SettingsCategory.Download:
-      return <DownloadSettings />;
     case SettingsCategory.Playback:
       return <PlaybackSettings />;
     case SettingsCategory.Video:

@@ -233,11 +233,6 @@ msgstr "Loading ban stats…"
 #: src/ui/demo/demo-name-input.tsx
 #: src/ui/demos/table/update-demos-type-item.tsx
 #: src/ui/dialogs/checksums-tags-dialog.tsx
-#: src/ui/downloads/faceit/use-update-current-faceit-account.tsx
-#: src/ui/downloads/five-eplay/use-update-current-5eplay-account.tsx
-#: src/ui/downloads/pending/remove-download-button.tsx
-#: src/ui/downloads/pending/remove-downloads-button.tsx
-#: src/ui/downloads/renown/use-update-current-renown-account.tsx
 #: src/ui/hooks/use-export-match-chat-messages.tsx
 #: src/ui/match/duels/players-duels-matrix.tsx
 #: src/ui/match/grenades/stats/players-flashbang-matrix.tsx
@@ -255,9 +250,6 @@ msgstr "Loading ban stats…"
 #: src/ui/settings/bans/use-ignored-steam-account.tsx
 #: src/ui/settings/cameras/add-camera-dialog.tsx
 #: src/ui/settings/cameras/edit-camera-dialog.tsx
-#: src/ui/settings/downloads/5eplay-settings.tsx
-#: src/ui/settings/downloads/faceit-settings.tsx
-#: src/ui/settings/downloads/renown-settings.tsx
 #: src/ui/settings/maps/add-map-dialog.tsx
 #: src/ui/settings/maps/edit-map-dialog.tsx
 #: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
@@ -463,11 +455,6 @@ msgstr "Confirm"
 msgctxt "Button"
 msgid "Copy"
 msgstr "Copy"
-
-#: src/ui/components/buttons/copy-demo-link-button.tsx
-msgctxt "Button"
-msgid "Copy demo link"
-msgstr "Copy demo link"
 
 #: src/ui/components/buttons/copy-share-code-button.tsx
 msgctxt "Button"
@@ -782,13 +769,6 @@ msgstr "You need to install <0>Rosetta</0>."
 #: src/ui/components/dialogs/rename-dialog.tsx
 #: src/ui/demos/table/demos-table.tsx
 #: src/ui/dialogs/update-player-name-dialog.tsx
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-#: src/ui/downloads/download-demos-button.tsx
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/downloads/five-eplay/5eplay-last-matches-loader.tsx
-#: src/ui/downloads/renown/last-matches-loader.tsx
-#: src/ui/downloads/valve/last-matches-loader.tsx
 #: src/ui/match/grenades/finder/grenades-finder-loader.tsx
 #: src/ui/match/match-loader.tsx
 #: src/ui/match/rounds/round/round-tags.tsx
@@ -805,9 +785,6 @@ msgstr "You need to install <0>Rosetta</0>."
 #: src/ui/settings/database/database-size.tsx
 #: src/ui/settings/database/import-v2-data-button.tsx
 #: src/ui/settings/database/optimize-database-button.tsx
-#: src/ui/settings/downloads/use-add-5eplay-account.tsx
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-#: src/ui/settings/downloads/use-add-renown-account.tsx
 #: src/ui/settings/maps/delete-map-dialog.tsx
 #: src/ui/settings/maps/reset-default-maps-button.tsx
 #: src/ui/shared/get-playback-error-from-error-code.tsx
@@ -877,21 +854,6 @@ msgstr "Steam account added to ignored list"
 msgctxt "Context menu"
 msgid "Ignore player's bans"
 msgstr "Ignore player's bans"
-
-#: src/ui/components/context-menu/items/open-faceit-profile-item.tsx
-msgctxt "Context menu"
-msgid "Open FACEIT profile"
-msgstr "Open FACEIT profile"
-
-#: src/ui/components/context-menu/items/open-leetify-profile-item.tsx
-msgctxt "Context menu"
-msgid "Open Leetify profile"
-msgstr "Open Leetify profile"
-
-#: src/ui/components/context-menu/items/open-renown-profile-item.tsx
-msgctxt "Context menu"
-msgid "Open Renown profile"
-msgstr "Open Renown profile"
 
 #: src/ui/components/context-menu/items/open-steam-profile-item.tsx
 msgctxt "Context menu"
@@ -1518,6 +1480,7 @@ msgid "Opening duel result"
 msgstr "Opening duel result"
 
 #: src/ui/components/inputs/select/perspective-select.tsx
+#: src/ui/habits/learning-review-card.tsx
 msgid "Player"
 msgstr "Player"
 
@@ -1833,9 +1796,6 @@ msgstr "Score Team B"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1845,9 +1805,6 @@ msgstr "K"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1865,9 +1822,6 @@ msgstr "Kills"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1877,9 +1831,6 @@ msgstr "A"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1897,9 +1848,6 @@ msgstr "Assists"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1909,9 +1857,6 @@ msgstr "D"
 
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1928,9 +1873,6 @@ msgid "Deaths"
 msgstr "Deaths"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1939,9 +1881,6 @@ msgid "5K"
 msgstr "5K"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1950,9 +1889,6 @@ msgid "5-kill rounds"
 msgstr "5-kill rounds"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1961,9 +1897,6 @@ msgid "4K"
 msgstr "4K"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1972,9 +1905,6 @@ msgid "4-kill rounds"
 msgstr "4-kill rounds"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -1983,9 +1913,6 @@ msgid "3K"
 msgstr "3K"
 
 #: src/ui/components/matches/use-matches-columns.tsx
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -2087,9 +2014,6 @@ msgstr "Tickrate"
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
 #: src/ui/demos/table/use-demos-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/match/video/sequence/cameras/sequence-custom-cameras-table.tsx
 #: src/ui/match/weapons/weapons-accuracy.tsx
@@ -2102,9 +2026,6 @@ msgstr "Name"
 #: src/ui/components/matches/use-matches-columns.tsx
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
 #: src/ui/demos/table/use-demos-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/match/video/sequence/cameras/sequence-custom-cameras-table.tsx
 #: src/ui/players/table/use-players-columns.ts
@@ -2505,9 +2426,6 @@ msgid "Watch round"
 msgstr "Watch round"
 
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 msgctxt "Table header tooltip"
@@ -2515,9 +2433,6 @@ msgid "Avatar"
 msgstr "Avatar"
 
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -2526,9 +2441,6 @@ msgid "K/D diff"
 msgstr "K/D diff"
 
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
@@ -2537,8 +2449,6 @@ msgid "Kill/Death difference"
 msgstr "Kill/Death difference"
 
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 msgctxt "Table header mvp count"
@@ -2546,8 +2456,6 @@ msgid "MVP"
 msgstr "MVP"
 
 #: src/ui/components/valve-match/use-valve-scoreboard-columns.ts
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 msgctxt "Table header tooltip"
@@ -2916,540 +2824,472 @@ msgstr "It will override the name of the player identified by his Steam ID every
 msgid "Leave it empty to remove the override."
 msgstr "Leave it empty to remove the override."
 
-#: src/ui/downloads/dowload-required-tooltip.tsx
-msgctxt "Tooltip"
-msgid "You must download the demo first"
-msgstr "You must download the demo first"
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-#: src/ui/downloads/download-demos-button.tsx
-msgid "A download folder is required. You can change it from settings."
-msgstr "A download folder is required. You can change it from settings."
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-#: src/ui/downloads/download-demos-button.tsx
-msgid "The download folder doesn't exist, please change it from the settings."
-msgstr "The download folder doesn't exist, please change it from the settings."
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgid "This match is already in pending downloads."
-msgstr "This match is already in pending downloads."
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgid "This match is already in your downloads folder."
-msgstr "This match is already in your downloads folder."
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-#: src/ui/downloads/pending/download-actions.tsx
-msgid "The download link has expired."
-msgstr "The download link has expired."
-
-#: src/ui/downloads/download-demo-button.tsx
-msgctxt "Tooltip"
-msgid "Download link expired"
-msgstr "Download link expired"
-
-#: src/ui/downloads/download-demo-button.tsx
-msgctxt "Tooltip"
-msgid "The demo is corrupted"
-msgstr "The demo is corrupted"
-
-#: src/ui/downloads/download-demo-button.tsx
-msgctxt "Tooltip"
-msgid "Download in progress"
-msgstr "Download in progress"
-
-#: src/ui/downloads/download-demo-button.tsx
-msgctxt "Tooltip"
-msgid "Demo already downloaded"
-msgstr "Demo already downloaded"
-
-#: src/ui/downloads/download-demo-button.tsx
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgctxt "Button"
-msgid "Download"
-msgstr "Download"
-
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgid "Invalid share code."
-msgstr "Invalid share code."
-
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgid "An error occurred while decoding the share code."
-msgstr "An error occurred while decoding the share code."
-
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgctxt "Dialog title"
-msgid "Share code"
-msgstr "Share code"
-
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgid "Enter a share code"
-msgstr "Enter a share code"
-
-#: src/ui/downloads/download-demo-from-share-code-button.tsx
-msgctxt "Button"
-msgid "Share code"
-msgstr "Share code"
-
-#: src/ui/downloads/download-demos-button.tsx
-msgctxt "Button"
-msgid "Download all"
-msgstr "Download all"
-
-#: src/ui/downloads/downloads-folder-required.tsx
-msgid "A downloads folder is required."
-msgstr "A downloads folder is required."
-
-#: src/ui/downloads/downloads-folder-required.tsx
-msgctxt "Button"
-msgid "Select downloads folder"
-msgstr "Select downloads folder"
-
-#: src/ui/downloads/faceit/current-match.tsx
-msgctxt "Button"
-msgid "See on FACEIT"
-msgstr "See on FACEIT"
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/downloads/five-eplay/5eplay-last-matches-loader.tsx
-#: src/ui/downloads/renown/last-matches-loader.tsx
-#: src/ui/downloads/valve/last-matches-loader.tsx
-msgid "Fetching last matches…"
-msgstr "Fetching last matches…"
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-msgid "The API returned a forbidden error, please check your API key."
-msgstr "The API returned a forbidden error, please check your API key."
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-msgid "The API returned an unauthorized status code, please check your API key."
-msgstr "The API returned an unauthorized status code, please check your API key."
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/downloads/renown/last-matches-loader.tsx
-#: src/ui/settings/downloads/use-add-5eplay-account.tsx
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-msgid "Invalid API request."
-msgstr "Invalid API request."
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/downloads/five-eplay/5eplay-last-matches-loader.tsx
-#: src/ui/downloads/renown/last-matches-loader.tsx
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-#: src/ui/settings/downloads/use-add-renown-account.tsx
-msgid "The API returned an error, please re-try later."
-msgstr "The API returned an error, please re-try later."
-
-#: src/ui/downloads/faceit/last-matches-loader.tsx
-#: src/ui/downloads/five-eplay/5eplay-last-matches-loader.tsx
-#: src/ui/downloads/renown/last-matches-loader.tsx
-msgid "No matches found for the current account."
-msgstr "No matches found for the current account."
-
-#: src/ui/downloads/faceit/no-faceit-account.tsx
-msgid "To add a FACEIT account, enter your FACEIT nickname."
-msgstr "To add a FACEIT account, enter your FACEIT nickname."
-
-#: src/ui/downloads/faceit/no-faceit-account.tsx
-msgctxt "Input placeholder"
-msgid "FACEIT nickname"
-msgstr "FACEIT nickname"
-
-#: src/ui/downloads/faceit/no-faceit-account.tsx
-#: src/ui/settings/downloads/faceit-settings.tsx
-msgid "The nickname is case sensitive!"
-msgstr "The nickname is case sensitive!"
-
-#: src/ui/downloads/faceit/no-faceit-account.tsx
-#: src/ui/downloads/five-eplay/no-5eplay-account.tsx
-#: src/ui/downloads/renown/no-renown-account.tsx
-#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
-#: src/ui/settings/tags/add-tag.tsx
-msgctxt "Button"
-msgid "Add"
-msgstr "Add"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header kill death ratio"
-msgid "K/D"
-msgstr "K/D"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header tooltip"
-msgid "Kill-Death Ratio"
-msgstr "Kill-Death Ratio"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header headshot count"
-msgid "HS"
-msgstr "HS"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header tooltip"
-msgid "Headshot"
-msgstr "Headshot"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header headshot percentage"
-msgid "HS%"
-msgstr "HS%"
-
-#: src/ui/downloads/faceit/use-faceit-scoreboard-columns.ts
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header tooltip"
-msgid "Headshot Percentage"
-msgstr "Headshot Percentage"
-
-#: src/ui/downloads/five-eplay/5eplay-current-match.tsx
-msgctxt "Button"
-msgid "See on 5EPlay"
-msgstr "See on 5EPlay"
-
-#: src/ui/downloads/five-eplay/5eplay-last-matches-loader.tsx
-msgid "Invalid request."
-msgstr "Invalid request."
-
-#: src/ui/downloads/five-eplay/5eplay-scoreboard-context-menu.tsx
-msgctxt "Context menu"
-msgid "Open 5EPlay profile"
-msgstr "Open 5EPlay profile"
-
-#: src/ui/downloads/five-eplay/five-eplay-account-instructions.tsx
-msgid "How can I find my 5EPlay ID?"
-msgstr "How can I find my 5EPlay ID?"
-
-#: src/ui/downloads/five-eplay/five-eplay-account-instructions.tsx
-msgid "Log into your <0>5EPlay</0> account."
-msgstr "Log into your <0>5EPlay</0> account."
-
-#: src/ui/downloads/five-eplay/five-eplay-account-instructions.tsx
-msgid "Go to your profile and copy the last segment of the URL."
-msgstr "Go to your profile and copy the last segment of the URL."
-
-#: src/ui/downloads/five-eplay/five-eplay-account-instructions.tsx
-msgid "For example, if the URL is <0>https://arena.5eplay.com/data/player/111111</0> then the ID is <1>111111</1>."
-msgstr "For example, if the URL is <0>https://arena.5eplay.com/data/player/111111</0> then the ID is <1>111111</1>."
-
-#: src/ui/downloads/five-eplay/no-5eplay-account.tsx
-msgid "To add a 5EPlay account, enter your 5EPlay ID."
-msgstr "To add a 5EPlay account, enter your 5EPlay ID."
-
-#: src/ui/downloads/five-eplay/no-5eplay-account.tsx
-msgctxt "Input placeholder"
-msgid "5EPlay ID"
-msgstr "5EPlay ID"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header kast"
-msgid "KAST"
-msgstr "KAST"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header tooltip"
-msgid "Percentage of rounds in which the player either had a kill, assist, survived or was traded"
-msgstr "Percentage of rounds in which the player either had a kill, assist, survived or was traded"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header average damage per round"
-msgid "ADR"
-msgstr "ADR"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Table header tooltip"
-msgid "Average Damage per Round"
-msgstr "Average Damage per Round"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-#: src/ui/teams/table/use-teams-columns.ts
-msgctxt "Dropdown column visibility"
-msgid "Average Damage per Round"
-msgstr "Average Damage per Round"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Table header first kill count"
-msgid "FK"
-msgstr "FK"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Table header tooltip"
-msgid "First kills of a round"
-msgstr "First kills of a round"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Dropdown column visibility"
-msgid "First Kills"
-msgstr "First Kills"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Table header first death count"
-msgid "FD"
-msgstr "FD"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Table header tooltip"
-msgid "First deaths of a round"
-msgstr "First deaths of a round"
-
-#: src/ui/downloads/five-eplay/use-5eplay-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Dropdown column visibility"
-msgid "First Deaths"
-msgstr "First Deaths"
-
-#: src/ui/downloads/pending-downloads-link.tsx
-msgctxt "Link"
-msgid "Pending downloads"
-msgstr "Pending downloads"
-
-#: src/ui/downloads/pending/download-actions.tsx
-msgid "The downloaded demo is corrupted. You can retry later."
-msgstr "The downloaded demo is corrupted. You can retry later."
-
-#: src/ui/downloads/pending/download-actions.tsx
-msgid "An error occurred while downloading the demo."
-msgstr "An error occurred while downloading the demo."
-
-#: src/ui/downloads/pending/pending-downloads-list.tsx
-msgid "No pending downloads."
-msgstr "No pending downloads."
-
-#: src/ui/downloads/pending/remove-downloads-button.tsx
-msgctxt "Button"
-msgid "Remove downloads"
-msgstr "Remove downloads"
-
-#: src/ui/downloads/renown/current-match.tsx
-msgctxt "Button"
-msgid "See on Renown"
-msgstr "See on Renown"
-
-#: src/ui/downloads/renown/current-match.tsx
-msgctxt "Button"
-msgid "See on Leetify"
-msgstr "See on Leetify"
-
-#: src/ui/downloads/renown/last-matches-loader.tsx
-msgid "Too many requests sent to the API."
-msgstr "Too many requests sent to the API."
-
-#: src/ui/downloads/renown/no-renown-account.tsx
-msgid "No Renown account configured yet. Enter your Steam ID to get started."
-msgstr "No Renown account configured yet. Enter your Steam ID to get started."
-
-#: src/ui/downloads/renown/no-renown-account.tsx
-msgctxt "Input placeholder"
-msgid "Steam ID"
-msgstr "Steam ID"
-
-#: src/ui/downloads/renown/no-renown-account.tsx
-msgid "Use the 64-bit version of your Steam ID (e.g., 76561198000000000)."
-msgstr "Use the 64-bit version of your Steam ID (e.g., 76561198000000000)."
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-msgctxt "Table header Leetify rating"
-msgid "LR"
-msgstr "LR"
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-msgctxt "Table header tooltip"
-msgid "Leetify Rating"
-msgstr "Leetify Rating"
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Table header utility damage per round"
-msgid "UDR"
-msgstr "UDR"
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-#: src/ui/players/table/use-players-columns.ts
-msgctxt "Table header tooltip"
-msgid "Utility damage per round"
-msgstr "Utility damage per round"
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
-msgctxt "Dropdown column visibility"
-msgid "Utility Damage per Round"
-msgstr "Utility Damage per Round"
-
-#: src/ui/downloads/renown/use-renown-scoreboard-columns.ts
-msgctxt "Table header"
-msgid "MVP"
-msgstr "MVP"
-
-#: src/ui/downloads/reveal-download-folder-in-explorer-button.tsx
-msgctxt "Button"
-msgid "Reveal download folder"
-msgstr "Reveal download folder"
-
-#: src/ui/downloads/reveal-download-folder-in-explorer-button.tsx
-msgctxt "Tooltip"
-msgid "A download folder is required. You can change it from settings."
-msgstr "A download folder is required. You can change it from settings."
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Error on download"
-msgstr "Error on download"
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Not downloaded"
-msgstr "Not downloaded"
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Downloading…"
-msgstr "Downloading…"
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Expired"
-msgstr "Expired"
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Corrupted"
-msgstr "Corrupted"
-
-#: src/ui/downloads/sidebar/match-download-status.tsx
-msgctxt "Download status"
-msgid "Downloaded"
-msgstr "Downloaded"
-
-#: src/ui/downloads/sidebar/match-result-text.tsx
-msgid "Defeat"
-msgstr "Defeat"
-
-#: src/ui/downloads/sidebar/match-result-text.tsx
-msgid "Victory"
-msgstr "Victory"
-
-#: src/ui/downloads/sidebar/match-result-text.tsx
-msgid "Tied"
-msgstr "Tied"
-
-#: src/ui/downloads/sidebar/match-result-text.tsx
-msgid "Unplayed"
-msgstr "Unplayed"
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Invalid arguments provided to boiler."
-msgstr "Invalid arguments provided to boiler."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Error while contacting Steam, make sure your Steam account is not currently in-game on another device, otherwise please retry later."
-msgstr "Error while contacting Steam, make sure your Steam account is not currently in-game on another device, otherwise please retry later."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "You are already connected to the CS game coordinator, make sure to close CS and retry."
-msgstr "You are already connected to the CS game coordinator, make sure to close CS and retry."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Steam needs to be restarted."
-msgstr "Steam needs to be restarted."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Steam is not running or the current account is not logged in."
-msgstr "Steam is not running or the current account is not logged in."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Steam account not connected."
-msgstr "Steam account not connected."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "No matches found."
-msgstr "No matches found."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "An error occurred while writing the matches file."
-msgstr "An error occurred while writing the matches file."
-
-#: src/ui/downloads/use-get-boiler-error-message-from-error-code.ts
-msgctxt "Boiler-writter error message"
-msgid "Matches file not found."
-msgstr "Matches file not found."
-
-#: src/ui/downloads/valve/fetch-matches-confirmation.tsx
-msgid "It will close Counter-Strike if it's running and start automatically for a few seconds."
-msgstr "It will close Counter-Strike if it's running and start automatically for a few seconds."
-
-#: src/ui/downloads/valve/fetch-matches-confirmation.tsx
-msgid "Continue"
-msgstr "Continue"
-
-#: src/ui/downloads/valve/no-matches-found.tsx
-msgid "No matches found for the current Steam account."
-msgstr "No matches found for the current Steam account."
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Could not save your account locally. Check that app storage is writable and try again."
+msgstr "Could not save your account locally. Check that app storage is writable and try again."
+
+#: src/ui/habits/habits-dashboard.tsx
+#: src/ui/videos/video-entry.tsx
+msgid "Map"
+msgstr "Map"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "All maps"
+msgstr "All maps"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Side"
+msgstr "Side"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Both sides"
+msgstr "Both sides"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Refresh"
+msgstr "Refresh"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "CS2 · your linked account · all imported dates"
+msgstr "CS2 · your linked account · all imported dates"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Building your cross-match profile…"
+msgstr "Building your cross-match profile…"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Could not load your match history. Use Refresh to try again."
+msgstr "Could not load your match history. Use Refresh to try again."
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Matches / rounds"
+msgstr "Matches / rounds"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Rounds included in this selection"
+msgstr "Rounds included in this selection"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Kills / deaths"
+msgstr "Kills / deaths"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Across your selected matches"
+msgstr "Across your selected matches"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Opening kills / deaths"
+msgstr "Opening kills / deaths"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "First enemy elimination of each round"
+msgstr "First enemy elimination of each round"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Position coverage"
+msgstr "Position coverage"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Rounds with usable position data"
+msgstr "Rounds with usable position data"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Your profile is ready for matches"
+msgstr "Your profile is ready for matches"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "No analyzed matches match this account and filter. Add your Perfect World demo folders or choose another map."
+msgstr "No analyzed matches match this account and filter. Add your Perfect World demo folders or choose another map."
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Where you spend your rounds"
+msgstr "Where you spend your rounds"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Matches are grouped by map and game build. The installed radar is a reference and may differ from older map layouts."
+msgstr "Matches are grouped by map and game build. The installed radar is a reference and may differ from older map layouts."
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "{map} · build {version} · {mode} · {source} · {count} matches"
+msgstr "{map} · build {version} · {mode} · {source} · {count} matches"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Some rounds have no usable positions. Their combat events still count; enable position analysis in settings and reanalyze older demos to fill the map."
+msgstr "Some rounds have no usable positions. Their combat events still count; enable position analysis in settings and reanalyze older demos to fill the map."
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Return to the evidence"
+msgstr "Return to the evidence"
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Review the fight, your teammates and your equipment before deciding what to change."
+msgstr "Review the fight, your teammates and your equipment before deciding what to change."
+
+#: src/ui/habits/habits-dashboard.tsx
+msgid "Showing {evidenceCount} stored examples from {evidenceTotal} events. This is a review sample, not the full event export."
+msgstr "Showing {evidenceCount} stored examples from {evidenceTotal} events. This is a review sample, not the full event export."
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Position"
+msgstr "Position"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Opening position"
+msgstr "Opening position"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Kill"
+msgstr "Kill"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Death"
+msgstr "Death"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "No matching evidence yet."
+msgstr "No matching evidence yet."
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Match"
+msgstr "Match"
+
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/learning-review-card.tsx
+#: src/ui/match/rounds/overview/rounds-history.tsx
+msgid "Round"
+msgstr "Round"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Event"
+msgstr "Event"
+
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/habits-layout.tsx
+msgid "Review"
+msgstr "Review"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "2D evidence"
+msgstr "2D evidence"
+
+#: src/ui/habits/habits-evidence.tsx
+msgid "Show more evidence"
+msgstr "Show more evidence"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Reviewing {name}"
+msgstr "Reviewing {name}"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Account linked. Future name changes will not split your match history."
+msgstr "Account linked. Future name changes will not split your match history."
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Change player"
+msgstr "Change player"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Start with your recorded nickname"
+msgstr "Start with your recorded nickname"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Add your demo folders, then enter the exact nickname used when the demo was recorded. An old nickname works too. We will find your account after a demo is analyzed."
+msgstr "Add your demo folders, then enter the exact nickname used when the demo was recorded. An old nickname works too. We will find your account after a demo is analyzed."
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Your in-game nickname"
+msgstr "Your in-game nickname"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Exact nickname, including symbols"
+msgstr "Exact nickname, including symbols"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Find my account"
+msgstr "Find my account"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Looking through analyzed matches…"
+msgstr "Looking through analyzed matches…"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Account lookup failed. Try again after checking the database connection."
+msgstr "Account lookup failed. Try again after checking the database connection."
+
+#: src/ui/habits/habits-identity.tsx
+msgid "Waiting for an analyzed CS2 match with this nickname. New matches will be checked automatically."
+msgstr "Waiting for an analyzed CS2 match with this nickname. New matches will be checked automatically."
+
+#: src/ui/habits/habits-identity.tsx
+msgid "More than one account uses this name. Confirm your account once:"
+msgstr "More than one account uses this name. Confirm your account once:"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "{matchCount} matches · last seen {lastSeen}"
+msgstr "{matchCount} matches · last seen {lastSeen}"
+
+#: src/ui/habits/habits-identity.tsx
+msgid "This is me"
+msgstr "This is me"
+
+#: src/ui/habits/habits-layout.tsx
+msgid "Your local review workspace"
+msgstr "Your local review workspace"
+
+#: src/ui/habits/habits-layout.tsx
+msgid "From matches to better habits"
+msgstr "From matches to better habits"
+
+#: src/ui/habits/habits-layout.tsx
+msgid "Demo folders"
+msgstr "Demo folders"
+
+#: src/ui/habits/habits-layout.tsx
+#: src/ui/habits/habits-links.tsx
+#: src/ui/settings/ui/initial-page-select.tsx
+msgid "My habits"
+msgstr "My habits"
+
+#: src/ui/habits/habits-layout.tsx
+#: src/ui/habits/habits-links.tsx
+#: src/ui/settings/ui/initial-page-select.tsx
+msgid "Learn from a player"
+msgstr "Learn from a player"
+
+#: src/ui/habits/habits-layout.tsx
+msgid "Match library"
+msgstr "Match library"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Alive time"
+msgstr "Alive time"
+
+#: src/ui/habits/habits-map.tsx
+msgid "First {openingWindowSeconds} seconds"
+msgstr "First {openingWindowSeconds} seconds"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Upper floor"
+msgstr "Upper floor"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Lower floor"
+msgstr "Lower floor"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Unknown floor"
+msgstr "Unknown floor"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Time spent by map area"
+msgstr "Time spent by map area"
+
+#: src/ui/habits/habits-map.tsx
+msgid "{seconds} observed seconds"
+msgstr "{seconds} observed seconds"
+
+#: src/ui/habits/habits-map.tsx
+msgid "The radar for this map is unavailable. You can still review the evidence below."
+msgstr "The radar for this map is unavailable. You can still review the evidence below."
+
+#: src/ui/habits/habits-map.tsx
+msgid "Your most occupied areas"
+msgstr "Your most occupied areas"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Color intensity represents observed alive time, not the number of recorded ticks. Select an area to see example rounds."
+msgstr "Color intensity represents observed alive time, not the number of recorded ticks. Select an area to see example rounds."
+
+#: src/ui/habits/habits-map.tsx
+msgid "No position samples for this floor and time window."
+msgstr "No position samples for this floor and time window."
+
+#: src/ui/habits/habits-map.tsx
+msgid "Area {areaNumber}"
+msgstr "Area {areaNumber}"
+
+#: src/ui/habits/habits-map.tsx
+msgid "{rounds} rounds · {seconds}s observed"
+msgstr "{rounds} rounds · {seconds}s observed"
+
+#: src/ui/habits/habits-map.tsx
+msgid "Shares use this map/version group's observed time across all floors. Radar artwork uses the installed map assets."
+msgstr "Shares use this map/version group's observed time across all floors. Radar artwork uses the installed map assets."
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Could not open the demo in CS2. Check that the demo file and the game are available."
+msgstr "Could not open the demo in CS2. Check that the demo file and the game are available."
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Could not check the CS2 connection. Please try again."
+msgstr "Could not check the CS2 connection. Please try again."
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Watch POV in CS2"
+msgstr "Watch POV in CS2"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Find a match"
+msgstr "Find a match"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Search player, map or demo name"
+msgstr "Search player, map or demo name"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "No matching analyzed demos. Add a folder or change your search."
+msgstr "No matching analyzed demos. Add a folder or change your search."
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Showing up to 100 matches. Refine your search to find older demos."
+msgstr "Showing up to 100 matches. Refine your search to find older demos."
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Loading the selected match…"
+msgstr "Loading the selected match…"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "This match could not be opened. Select another match or refresh the library."
+msgstr "This match could not be opened. Select another match or refresh the library."
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Open full 2D replay"
+msgstr "Open full 2D replay"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "One thing to practice"
+msgstr "One thing to practice"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "What did you notice? What will you try in your next match?"
+msgstr "What did you notice? What will you try in your next match?"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Save with this round"
+msgstr "Save with this round"
+
+#: src/ui/habits/learning-review-card.tsx
+msgid "Saved locally"
+msgstr "Saved locally"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Loading route and view direction…"
+msgstr "Loading route and view direction…"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Could not load this round's positions. Reopen the round to retry."
+msgstr "Could not load this round's positions. Reopen the round to retry."
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "No alive position samples for this player. Reanalyze with positions enabled, or watch the original demo in CS2."
+msgstr "No alive position samples for this player. Reanalyze with positions enabled, or watch the original demo in CS2."
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "No radar available for this map. Open the original demo to review the round."
+msgstr "No radar available for this map. Open the original demo to review the round."
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Player route and horizontal view direction"
+msgstr "Player route and horizontal view direction"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "{seconds}s after freeze time"
+msgstr "{seconds}s after freeze time"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Scrub recorded positions"
+msgstr "Scrub recorded positions"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Blue: route. White: horizontal view direction. Drag through recorded positions; use CS2 for the full first-person view."
+msgstr "Blue: route. White: horizontal view direction. Drag through recorded positions; use CS2 for the full first-person view."
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Crouching"
+msgstr "Crouching"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Scoped"
+msgstr "Scoped"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Airborne"
+msgstr "Airborne"
+
+#: src/ui/habits/learning-round-preview.tsx
+msgid "Flashed"
+msgstr "Flashed"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Study a round. Keep one idea."
+msgstr "Study a round. Keep one idea."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Import a player's demo, choose their perspective, then compare movement and view direction with your own round. Match the map, side and situation before drawing conclusions."
+msgstr "Import a player's demo, choose their perspective, then compare movement and view direction with your own round. Match the map, side and situation before drawing conclusions."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Refresh library"
+msgstr "Refresh library"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Loading your demo library…"
+msgstr "Loading your demo library…"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Could not load the match library. Try Refresh library."
+msgstr "Could not load the match library. Try Refresh library."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Reference player"
+msgstr "Reference player"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "My comparison round"
+msgstr "My comparison round"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Add your perspective"
+msgstr "Add your perspective"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Link your nickname to compare the reference round with your own matches."
+msgstr "Link your nickname to compare the reference round with your own matches."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Set up my profile"
+msgstr "Set up my profile"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "My practice notebook"
+msgstr "My practice notebook"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Notes stay on this computer and keep a link to the exact reference round."
+msgstr "Notes stay on this computer and keep a link to the exact reference round."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Could not save the notebook. Your text is still in the editor; check available app storage and retry."
+msgstr "Could not save the notebook. Your text is still in the editor; check available app storage and retry."
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "No practice notes yet. Review a reference round and save the first adjustment you want to try."
+msgstr "No practice notes yet. Review a reference round and save the first adjustment you want to try."
+
+#: src/ui/habits/learning-workspace.tsx
+#: src/ui/match/players/kills-panel.tsx
+#: src/ui/match/rounds/overview/round-entry.tsx
+#: src/ui/search/results/result-row.tsx
+msgid "Round {roundNumber}"
+msgstr "Round {roundNumber}"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Revisit 2D round"
+msgstr "Revisit 2D round"
+
+#: src/ui/habits/learning-workspace.tsx
+msgid "Remove note"
+msgstr "Remove note"
 
 #: src/ui/hooks/chart/use-match-result-pie.tsx
 msgctxt "Match result"
@@ -3707,6 +3547,138 @@ msgstr "Unassigned"
 msgid "Select demo's path"
 msgstr "Select demo's path"
 
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Preparing your demo library"
+msgstr "Preparing your demo library"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Import status is unavailable. Retry the connection to continue."
+msgstr "Import status is unavailable. Retry the connection to continue."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Checking folder and analysis progress…"
+msgstr "Checking folder and analysis progress…"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Retry connection"
+msgstr "Retry connection"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Manage demo folders"
+msgstr "Manage demo folders"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Some demo files need attention"
+msgstr "Some demo files need attention"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Waiting for file to finish writing"
+msgstr "Waiting for file to finish writing"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Queued"
+msgstr "Queued"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Parsing demo"
+msgstr "Parsing demo"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Saving match data"
+msgstr "Saving match data"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Ready"
+msgstr "Ready"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Failed"
+msgstr "Failed"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Skipped"
+msgstr "Skipped"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "This recording is incomplete or is not a supported CS2 demo."
+msgstr "This recording is incomplete or is not a supported CS2 demo."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "This file is still changing. It will be checked again automatically."
+msgstr "This file is still changing. It will be checked again automatically."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "The demo could not be parsed. Check the file and retry."
+msgstr "The demo could not be parsed. Check the file and retry."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "The parsed match could not be saved. Check the database and retry."
+msgstr "The parsed match could not be saved. Check the database and retry."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "The file could not be read. Check that the folder is available."
+msgstr "The file could not be read. Check that the folder is available."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Analysis was cancelled. Retry when you are ready."
+msgstr "Analysis was cancelled. Retry when you are ready."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Import stopped before this file was ready."
+msgstr "Import stopped before this file was ready."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Import results"
+msgstr "Import results"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Browsing will unlock when this batch finishes. You can still manage folders and settings."
+msgstr "Browsing will unlock when this batch finishes. You can still manage folders and settings."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Ready matches are available. Review the files below before retrying."
+msgstr "Ready matches are available. Review the files below before retrying."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Finding demo files…"
+msgstr "Finding demo files…"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "{settled} of {total} files processed"
+msgstr "{settled} of {total} files processed"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Demo import progress"
+msgstr "Demo import progress"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "{completed} ready · {failed} failed · {skipped} skipped · {waiting} waiting · {pending} queued"
+msgstr "{completed} ready · {failed} failed · {skipped} skipped · {waiting} waiting · {pending} queued"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Progress counts files that have finished processing, including failures and skips."
+msgstr "Progress counts files that have finished processing, including failures and skips."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Files to review"
+msgstr "Files to review"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "This demo could not be imported."
+msgstr "This demo could not be imported."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Technical details"
+msgstr "Technical details"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Retry files needing attention"
+msgstr "Retry files needing attention"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Retry could not start. Check the folders and try again."
+msgstr "Retry could not start. Check the folders and try again."
+
 #: src/ui/left-bar/analyses-link.tsx
 msgctxt "Tooltip"
 msgid "Analyses"
@@ -3721,11 +3693,6 @@ msgstr "VAC bans"
 msgctxt "Tooltip"
 msgid "Demos"
 msgstr "Demos"
-
-#: src/ui/left-bar/downloads-link.tsx
-msgctxt "Tooltip"
-msgid "Downloads"
-msgstr "Downloads"
 
 #: src/ui/left-bar/matches-link.tsx
 msgctxt "Tooltip"
@@ -3750,6 +3717,10 @@ msgstr "Search"
 #: src/ui/left-bar/settings-button.tsx
 msgid "Settings ({shortcut})"
 msgstr "Settings ({shortcut})"
+
+#: src/ui/left-bar/settings-button.tsx
+msgid "Settings"
+msgstr "Settings"
 
 #: src/ui/left-bar/teams-link.tsx
 msgctxt "Tooltip"
@@ -4457,6 +4428,20 @@ msgid "Rank"
 msgstr "Rank"
 
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header kill death ratio"
+msgid "K/D"
+msgstr "K/D"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header tooltip"
+msgid "Kill-Death Ratio"
+msgstr "Kill-Death Ratio"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 msgctxt "Table header damage health"
 msgid "DMG"
 msgstr "DMG"
@@ -4474,9 +4459,89 @@ msgstr "Damages"
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 #: src/ui/players/table/use-players-columns.ts
 #: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header kast"
+msgid "KAST"
+msgstr "KAST"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header tooltip"
+msgid "Percentage of rounds in which the player either had a kill, assist, survived or was traded"
+msgstr "Percentage of rounds in which the player either had a kill, assist, survived or was traded"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header average damage per round"
+msgid "ADR"
+msgstr "ADR"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header tooltip"
+msgid "Average Damage per Round"
+msgstr "Average Damage per Round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Dropdown column visibility"
+msgid "Average Damage per Round"
+msgstr "Average Damage per Round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+msgctxt "Table header utility damage per round"
+msgid "UDR"
+msgstr "UDR"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+msgctxt "Table header tooltip"
+msgid "Utility damage per round"
+msgstr "Utility damage per round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Dropdown column visibility"
+msgid "Utility Damage per Round"
+msgstr "Utility Damage per Round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header headshot count"
+msgid "HS"
+msgstr "HS"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header tooltip"
+msgid "Headshot"
+msgstr "Headshot"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
 msgctxt "Dropdown column visibility"
 msgid "Headshot"
 msgstr "Headshot"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header headshot percentage"
+msgid "HS%"
+msgstr "HS%"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+#: src/ui/players/table/use-players-columns.ts
+#: src/ui/teams/table/use-teams-columns.ts
+msgctxt "Table header tooltip"
+msgid "Headshot Percentage"
+msgstr "Headshot Percentage"
 
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 msgctxt "Dropdown column visibility"
@@ -4511,6 +4576,36 @@ msgstr "Total Utility Damage Dealt"
 msgctxt "Dropdown column visibility"
 msgid "Utility Damage"
 msgstr "Utility Damage"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Table header first kill count"
+msgid "FK"
+msgstr "FK"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Table header tooltip"
+msgid "First kills of a round"
+msgstr "First kills of a round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Dropdown column visibility"
+msgid "First Kills"
+msgstr "First Kills"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Table header first death count"
+msgid "FD"
+msgstr "FD"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Table header tooltip"
+msgid "First deaths of a round"
+msgstr "First deaths of a round"
+
+#: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
+msgctxt "Dropdown column visibility"
+msgid "First Deaths"
+msgstr "First Deaths"
 
 #: src/ui/match/overview/scoreboard/use-scoreboard-columns.ts
 msgctxt "Table header trade kill count"
@@ -4749,12 +4844,6 @@ msgid "Watch clutch"
 msgstr "Watch clutch"
 
 #: src/ui/match/players/kills-panel.tsx
-#: src/ui/match/rounds/overview/round-entry.tsx
-#: src/ui/search/results/result-row.tsx
-msgid "Round {roundNumber}"
-msgstr "Round {roundNumber}"
-
-#: src/ui/match/players/kills-panel.tsx
 #: src/ui/match/rounds/round/kill-feed.tsx
 msgctxt "Tooltip"
 msgid "Watch kill"
@@ -4765,9 +4854,6 @@ msgid "No players found."
 msgstr "No players found."
 
 #: src/ui/match/players/match-players.tsx
-#: src/ui/settings/downloads/use-add-5eplay-account.tsx
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-#: src/ui/settings/downloads/use-add-renown-account.tsx
 msgid "Player not found."
 msgstr "Player not found."
 
@@ -4848,10 +4934,6 @@ msgstr "Economy type"
 msgctxt "Tooltip"
 msgid "Watch round"
 msgstr "Watch round"
-
-#: src/ui/match/rounds/overview/rounds-history.tsx
-msgid "Round"
-msgstr "Round"
 
 #: src/ui/match/rounds/overview/rounds.tsx
 msgid "No rounds found."
@@ -6911,13 +6993,12 @@ msgid "Search"
 msgstr "Search"
 
 #: src/ui/settings/about/about.tsx
-msgid "Automatically download updates."
-msgstr "Automatically download updates."
+msgid "A local demo habits and learning app based on CS Demo Manager."
+msgstr "A local demo habits and learning app based on CS Demo Manager."
 
 #: src/ui/settings/about/about.tsx
-msgctxt "Settings title"
-msgid "Auto update"
-msgstr "Auto update"
+msgid "Open-source foundation:"
+msgstr "Open-source foundation:"
 
 #: src/ui/settings/about/about.tsx
 msgid "Information"
@@ -6971,6 +7052,83 @@ msgstr "<0>@markus-wa</0> for creating and maintaining <1>demoinfocs-golang</1>,
 msgid "<0>@saul</0>, a Source Engine/CS wizard who created a <1>CSGO</1> and <2>CS2</2> demo parser and share his CS related knowledge through various <3>open-source</3> <4>projects</4>. You can support him on <5>GitHub</5>."
 msgstr "<0>@saul</0>, a Source Engine/CS wizard who created a <1>CSGO</1> and <2>CS2</2> demo parser and share his CS related knowledge through various <3>open-source</3> <4>projects</4>. You can support him on <5>GitHub</5>."
 
+#: src/ui/settings/about/app-updates.tsx
+#: src/ui/title-bar/update-available-button.tsx
+msgid "Application updates"
+msgstr "Application updates"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Current version: {APP_VERSION}"
+msgstr "Current version: {APP_VERSION}"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Check GitHub Releases for new versions."
+msgstr "Check GitHub Releases for new versions."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Checking for updates…"
+msgstr "Checking for updates…"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "You are using the latest version."
+msgstr "You are using the latest version."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Version {version} is available."
+msgstr "Version {version} is available."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Downloading update: {percent}%"
+msgstr "Downloading update: {percent}%"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Update download progress"
+msgstr "Update download progress"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Version {version} is ready. Restart to finish updating."
+msgstr "Version {version} is ready. Restart to finish updating."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Closing the database safely and restarting…"
+msgstr "Closing the database safely and restarting…"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Update checks are available in the installed application."
+msgstr "Update checks are available in the installed application."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Could not check or download the update. Check your connection and retry."
+msgstr "Could not check or download the update. Check your connection and retry."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Parsing or another task is still running. Wait for it to finish before restarting."
+msgstr "Parsing or another task is still running. Wait for it to finish before restarting."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "The update could not be installed. Restart the application and try again, or use the installer from GitHub Releases."
+msgstr "The update could not be installed. Restart the application and try again, or use the installer from GitHub Releases."
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Check for updates"
+msgstr "Check for updates"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Download update"
+msgstr "Download update"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Restart and update"
+msgstr "Restart and update"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Release notes"
+msgstr "Release notes"
+
+#: src/ui/settings/about/app-updates.tsx
+msgid "Updates keep your demo folders, parsed matches, account and learning notes."
+msgstr "Updates keep your demo folders, parsed matches, account and learning notes."
+
 #: src/ui/settings/about/clear-logs-button.tsx
 msgid "Log file cleared"
 msgstr "Log file cleared"
@@ -6998,8 +7156,8 @@ msgstr "Reveal {gameName} log file"
 
 #: src/ui/settings/about/see-changelog-button.tsx
 msgctxt "Button"
-msgid "See Changelog"
-msgstr "See Changelog"
+msgid "Upstream changelog"
+msgstr "Upstream changelog"
 
 #: src/ui/settings/analyze/ignore-ban-before-first-seen.tsx
 msgid "Bans that happened before the player was first seen in a match will be ignored."
@@ -7019,8 +7177,8 @@ msgid "Maximum number of analyses that can run at the same time."
 msgstr "Maximum number of analyses that can run at the same time."
 
 #: src/ui/settings/analyze/toggle-analyze-positions.tsx
-msgid "Analyze player/grenade positions during analysis. Positions are required only for the 2D viewer. When enabled it increases time to insert matches into database and disk space usage."
-msgstr "Analyze player/grenade positions during analysis. Positions are required only for the 2D viewer. When enabled it increases time to insert matches into database and disk space usage."
+msgid "Analyze player/grenade positions during manual analysis. Positions are required for habit analysis and the 2D viewer. Automatic folder imports always include positions. This increases import time and disk space usage."
+msgstr "Analyze player/grenade positions during manual analysis. Positions are required for habit analysis and the 2D viewer. Automatic folder imports always include positions. This increases import time and disk space usage."
 
 #: src/ui/settings/analyze/toggle-analyze-positions.tsx
 msgid "Analyze player/grenade positions"
@@ -7039,6 +7197,12 @@ msgstr "The Steam account will be ignored from VAC ban stats."
 msgctxt "Input label"
 msgid "SteamID64 or Steam community profile URL"
 msgstr "SteamID64 or Steam community profile URL"
+
+#: src/ui/settings/bans/add-ignored-steam-account-dialog.tsx
+#: src/ui/settings/tags/add-tag.tsx
+msgctxt "Button"
+msgid "Add"
+msgstr "Add"
 
 #: src/ui/settings/bans/ignored-steam-accounts.tsx
 msgctxt "Settings title"
@@ -7222,6 +7386,10 @@ msgstr "Pitch"
 msgctxt "Input label"
 msgid "Yaw"
 msgstr "Yaw"
+
+#: src/ui/settings/close-settings-button.tsx
+msgid "Close settings"
+msgstr "Close settings"
 
 #: src/ui/settings/database/database-mode-option-cards.tsx
 msgid "Embedded (recommended)"
@@ -7418,107 +7586,18 @@ msgctxt "Button"
 msgid "Reset database"
 msgstr "Reset database"
 
-#: src/ui/settings/downloads/5eplay-settings.tsx
-msgid "Add 5EPlay account"
-msgstr "Add 5EPlay account"
-
-#: src/ui/settings/downloads/5eplay-settings.tsx
-msgctxt "Input label"
-msgid "5EPlay ID"
-msgstr "5EPlay ID"
-
-#: src/ui/settings/downloads/5eplay-settings.tsx
-msgctxt "Input placeholder"
-msgid "ID"
-msgstr "ID"
-
-#: src/ui/settings/downloads/auto-download-third-party-demos-background.tsx
-msgid "Automatically download {name} demos in the background."
-msgstr "Automatically download {name} demos in the background."
-
-#: src/ui/settings/downloads/auto-download-third-party-demos-background.tsx
-msgctxt "Settings title"
-msgid "Background download"
-msgstr "Background download"
-
-#: src/ui/settings/downloads/auto-download-third-party-demos.tsx
-msgid "Automatically download {name} demos at application startup."
-msgstr "Automatically download {name} demos at application startup."
-
-#: src/ui/settings/downloads/auto-download-third-party-demos.tsx
-msgctxt "Settings title"
-msgid "Startup download"
-msgstr "Startup download"
-
-#: src/ui/settings/downloads/download-folder-path.tsx
-msgid "Download folder"
-msgstr "Download folder"
-
-#: src/ui/settings/downloads/faceit-downloads-warning.tsx
-msgid "FACEIT restricted demo downloads through a <0>private API</0> and recently gave us a server-side API key with the maximum rate limit."
-msgstr "FACEIT restricted demo downloads through a <0>private API</0> and recently gave us a server-side API key with the maximum rate limit."
-
-#: src/ui/settings/downloads/faceit-downloads-warning.tsx
-msgid "You <0>don't have to ask</0> FACEIT for an API key. It requires some work, but demo downloads will be back in a near future."
-msgstr "You <0>don't have to ask</0> FACEIT for an API key. It requires some work, but demo downloads will be back in a near future."
-
-#: src/ui/settings/downloads/faceit-downloads-warning.tsx
-msgid "In the meantime, you have to download demos from your browser."
-msgstr "In the meantime, you have to download demos from your browser."
-
-#: src/ui/settings/downloads/faceit-settings.tsx
-msgid "Add FACEIT account"
-msgstr "Add FACEIT account"
-
-#: src/ui/settings/downloads/faceit-settings.tsx
-msgctxt "Input label"
-msgid "FACEIT nickname"
-msgstr "FACEIT nickname"
-
-#: src/ui/settings/downloads/faceit-settings.tsx
-msgctxt "Input placeholder"
-msgid "Nickname"
-msgstr "Nickname"
-
-#: src/ui/settings/downloads/renown-settings.tsx
-msgid "Add Renown account"
-msgstr "Add Renown account"
-
-#: src/ui/settings/downloads/renown-settings.tsx
-msgctxt "Input label"
-msgid "Steam ID64"
-msgstr "Steam ID64"
-
-#: src/ui/settings/downloads/renown-settings.tsx
-msgctxt "Input placeholder"
-msgid "Steam ID64 (e.g. 76561198000000000)"
-msgstr "Steam ID64 (e.g. 76561198000000000)"
-
-#: src/ui/settings/downloads/third-party-accounts.tsx
-msgid "No accounts"
-msgstr "No accounts"
-
-#: src/ui/settings/downloads/third-party-accounts.tsx
-msgid "Set as current account"
-msgstr "Set as current account"
-
-#: src/ui/settings/downloads/third-party-accounts.tsx
-msgid "Accounts"
-msgstr "Accounts"
-
-#: src/ui/settings/downloads/third-party-accounts.tsx
-msgctxt "Button"
-msgid "Add account"
-msgstr "Add account"
-
-#: src/ui/settings/downloads/use-add-faceit-account.tsx
-msgid "The API returned a 401 code, please check you API key."
-msgstr "The API returned a 401 code, please check you API key."
-
 #: src/ui/settings/folders/add-folder-button.tsx
 msgctxt "Button"
-msgid "Add a folder"
-msgstr "Add a folder"
+msgid "Add folders"
+msgstr "Add folders"
+
+#: src/ui/settings/folders/automatic-folder-analysis.tsx
+msgid "Automatically analyze demos in these folders"
+msgstr "Automatically analyze demos in these folders"
+
+#: src/ui/settings/folders/automatic-folder-analysis.tsx
+msgid "While the app is running, complete CS2 .dem files are imported with positions for habit analysis. New and existing files are checked every 5 seconds after they stop changing for 10 seconds. Progress appears in Analyses. Failed files are retried when they change, or you can select Analyze in Demos to retry manually. Extract downloaded archives first."
+msgstr "While the app is running, complete CS2 .dem files are imported with positions for habit analysis. New and existing files are checked every 5 seconds after they stop changing for 10 seconds. Progress appears in Analyses. Failed files are retried when they change, or you can select Analyze in Demos to retry manually. Extract downloaded archives first."
 
 #: src/ui/settings/folders/demo-archive-extraction-settings.tsx
 msgid "Automatic demo extraction from archives"
@@ -7546,29 +7625,8 @@ msgid "Include subfolders"
 msgstr "Include subfolders"
 
 #: src/ui/settings/folders/use-add-folder.tsx
-msgid "This folder is already in your settings"
-msgstr "This folder is already in your settings"
-
-#: src/ui/settings/integrations/faceit-api-key.tsx
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "API key applied"
-msgstr "API key applied"
-
-#: src/ui/settings/integrations/faceit-api-key.tsx
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Invalid API key"
-msgstr "Invalid API key"
-
-#: src/ui/settings/integrations/faceit-api-key.tsx
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Network error"
-msgstr "Network error"
-
-#: src/ui/settings/integrations/faceit-api-key.tsx
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgctxt "Input placeholder"
-msgid "API key"
-msgstr "API key"
+msgid "The selected folders are already in your settings"
+msgstr "The selected folders are already in your settings"
 
 #: src/ui/settings/integrations/integrations-settings.tsx
 msgid "Steam API key"
@@ -7578,13 +7636,22 @@ msgstr "Steam API key"
 msgid "Custom Steam API key used to retrieve information from Steam"
 msgstr "Custom Steam API key used to retrieve information from Steam"
 
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "FACEIT API key"
-msgstr "FACEIT API key"
+#: src/ui/settings/integrations/steam-api-key.tsx
+msgid "API key applied"
+msgstr "API key applied"
 
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "Custom FACEIT API key used to retrieve information from FACEIT"
-msgstr "Custom FACEIT API key used to retrieve information from FACEIT"
+#: src/ui/settings/integrations/steam-api-key.tsx
+msgid "Invalid API key"
+msgstr "Invalid API key"
+
+#: src/ui/settings/integrations/steam-api-key.tsx
+msgid "Network error"
+msgstr "Network error"
+
+#: src/ui/settings/integrations/steam-api-key.tsx
+msgctxt "Input placeholder"
+msgid "API key"
+msgstr "API key"
 
 #: src/ui/settings/maps/add-map-button.tsx
 msgctxt "Button"
@@ -7967,10 +8034,6 @@ msgid "Maps"
 msgstr "Maps"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "Download"
-msgstr "Download"
-
-#: src/ui/settings/settings-tabs.tsx
 msgid "Playback"
 msgstr "Playback"
 
@@ -8086,11 +8149,6 @@ msgstr "Demos"
 msgctxt "Select option initial page"
 msgid "Players"
 msgstr "Players"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Download"
-msgstr "Download"
 
 #: src/ui/settings/ui/initial-page-select.tsx
 msgctxt "Select option initial page"
@@ -8521,20 +8579,6 @@ msgstr "{0, plural, one {# team} other {# teams}}"
 msgid "Loading teams…"
 msgstr "Loading teams…"
 
-#: src/ui/title-bar/history/history-back-button.tsx
-msgctxt "Tooltip"
-msgid "Back in history"
-msgstr "Back in history"
-
-#: src/ui/title-bar/history/history-forward-button.tsx
-msgctxt "Tooltip"
-msgid "Forward in history"
-msgstr "Forward in history"
-
-#: src/ui/title-bar/update-available-button.tsx
-msgid "Update ready!"
-msgstr "Update ready!"
-
 #: src/ui/videos/remove-all-videos-button.tsx
 msgctxt "Button"
 msgid "Remove all"
@@ -8586,10 +8630,6 @@ msgstr "Video generation done"
 #: src/ui/videos/video-entry.tsx
 msgid "The folder doesn't exist yet"
 msgstr "The folder doesn't exist yet"
-
-#: src/ui/videos/video-entry.tsx
-msgid "Map"
-msgstr "Map"
 
 #: src/ui/videos/video-entry.tsx
 msgid "Video ID"

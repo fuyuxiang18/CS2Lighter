@@ -1,4 +1,6 @@
 export const RoutePath = {
+  Habits: '/habits',
+  Learning: '/learning',
   Demos: '/demos',
   Matches: '/matches',
   MatchHeatmap: 'heatmap',
@@ -24,10 +26,6 @@ export const RoutePath = {
   PinnerPlayer: '/pinned-player',
   Search: '/search',
   Downloads: '/downloads',
-  DownloadsFaceit: 'faceit',
-  DownloadsRenown: 'renown',
-  Downloads5EPlay: '5eplay',
-  DownloadsPending: 'pending',
   Ban: '/ban',
   Teams: '/teams',
   TeamHeatmap: 'heatmap',
@@ -73,10 +71,6 @@ export function buildPlayerPath(playerSteamId: string) {
 
 export function buildPlayerMatchesPath(playerSteamId: string) {
   return `${buildPlayerPath(playerSteamId)}/${RoutePath.PlayerMatches}`;
-}
-
-export function buildPendingDownloadPath() {
-  return `${RoutePath.Downloads}/${RoutePath.DownloadsPending}`;
 }
 
 export function buildTeamPath(name: string) {

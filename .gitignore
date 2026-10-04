@@ -20,9 +20,11 @@ build
 !build/Release/*.node
 *.local.json
 
-# Only the English source catalogs are committed. The other locales are managed on
-# Crowdin and downloaded at build time.
+# The fork ships English and Simplified Chinese catalogs locally, without Crowdin.
+# Ignore leftover catalogs from the upstream multi-language extraction workflow.
 src/ui/translations/*
 !src/ui/translations/en
+!src/ui/translations/zh-CN
 src/electron-main/translations/*
 !src/electron-main/translations/en
+!src/electron-main/translations/zh-CN

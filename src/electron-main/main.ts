@@ -23,9 +23,11 @@ import { getSettingsFilePath } from 'csdm/node/settings/get-settings-file-path';
 import { updateSystemStartupBehavior } from 'csdm/electron-main/system-startup-behavior';
 import { StartupBehavior } from 'csdm/common/types/startup-behavior';
 import { initialize } from './auto-updater';
+import { prepareUpdateInstall } from './prepare-update-install';
 import { getSettings, getSettingsSync } from 'csdm/node/settings/get-settings';
 import { attachOrSpawnDaemon } from 'csdm/node/daemon/attach-or-spawn-daemon';
 import { WEB_SOCKET_SERVER_PORT_ENV_NAME } from 'csdm/server/port';
+import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 
 process.on('uncaughtException', logger.error);
 process.on('unhandledRejection', logger.error);
@@ -33,7 +35,9 @@ process.on('unhandledRejection', logger.error);
 let tray: Tray | undefined;
 
 // To show the correct app name/icon in notifications on Windows.
-app.setAppUserModelId('com.akiver.csdm');
+app.setAppUserModelId('local.cs2.parser');
+app.setName('CS2Lighter');
+app.setPath('userData', path.join(getAppFolderPath(), 'ui'));
 
 const settings = getSettingsSync();
 if (settings.ui.enableHardwareAcceleration === false) {
@@ -121,15 +125,14 @@ async function start() {
   if (!settingsFileExists) {
     // Must run after the settings migration as it writes to the settings file on macOS. Writing it earlier would
     // create the file with the current schema version and skip the migrations required by a fresh installation.
-    await updateSystemStartupBehavior(StartupBehavior.Minimized);
+    await updateSystemStartupBehavior(StartupBehavior.Off);
     settings = await getSettings();
   }
   await loadI18n(settings.ui.locale);
 
-  initialize(settings.autoDownloadUpdates);
-
   tray = createTray();
   const client = createWebSocketClient();
+  initialize(settings.autoDownloadUpdates, () => prepareUpdateInstall(client));
   createApplicationMenu(client);
   registerMainProcessListeners();
 

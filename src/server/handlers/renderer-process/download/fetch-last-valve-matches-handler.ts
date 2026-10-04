@@ -1,9 +1,11 @@
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
+import { assertNetworkDemoDownloadsEnabled } from 'csdm/server/network-demo-downloads';
 import { server } from 'csdm/server/server';
 import { getErrorCodeFromError } from 'csdm/server/get-error-code-from-error';
 import { fetchLastValveMatches } from 'csdm/node/valve-match/fetch-last-valve-matches';
 
 export async function fetchLastValveMatchesHandler() {
+  assertNetworkDemoDownloadsEnabled();
   try {
     server.sendPushMessage({
       name: ServerPushMessageName.FetchLastValveMatchesStart,

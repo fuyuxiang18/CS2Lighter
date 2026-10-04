@@ -1,7 +1,6 @@
 import React from 'react';
 import { createHashRouter, createRoutesFromElements, Route } from 'react-router';
 import { Root } from 'csdm/ui/bootstrap/root';
-import { Downloads } from 'csdm/ui/downloads/downloads';
 import { Matches } from 'csdm/ui/matches/matches';
 import { Demos } from 'csdm/ui/demos/demos';
 import { Analyses } from 'csdm/ui/analyses/analyses';
@@ -24,12 +23,8 @@ import { VideoLoader } from 'csdm/ui/match/video/video-loader';
 import { ChatMessages } from 'csdm/ui/match/chat-messages/chat-messages';
 import { Economy } from 'csdm/ui/match/economy/economy';
 import { Weapons } from 'csdm/ui/match/weapons/weapons';
-import { LastMatchesLoader as ValveLastMatchesLoader } from 'csdm/ui/downloads/valve/last-matches-loader';
-import { PendingDownloads } from 'csdm/ui/downloads/pending/pending-downloads';
 import { GrenadesStats } from 'csdm/ui/match/grenades/stats/grenades-stats';
 import { GrenadesFinderLoader } from 'csdm/ui/match/grenades/finder/grenades-finder-loader';
-import { LastMatches as FaceitLastMatches } from 'csdm/ui/downloads/faceit/last-matches';
-import { LastMatches as RenownLastMatches } from 'csdm/ui/downloads/renown/last-matches';
 import { BanStats } from 'csdm/ui/ban/stats/ban-stats';
 import { MatchPlayers } from 'csdm/ui/match/players/match-players';
 import { MatchPlayersLoader } from 'csdm/ui/match/players/match-players-loader';
@@ -49,13 +44,16 @@ import { TeamMatchesTable } from './team/matches/team-matches-table';
 import { TeamMaps } from './team/maps/team-maps';
 import { TeamHeatmap } from './team/heatmap/team-heatmap';
 import { Videos } from './videos/videos';
-import { FiveEPlayLastMatches } from './downloads/five-eplay/5eplay-last-matches';
 import { TeamPerformance } from './team/performance/team-performance';
 import { PlayerHeatmap } from './player/heatmap/player-heatmap';
+import { HabitsDashboard } from 'csdm/ui/habits/habits-dashboard';
+import { LearningWorkspace } from 'csdm/ui/habits/learning-workspace';
 
 export const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />} errorElement={<ErrorBoundary />}>
+      <Route path={RoutePath.Habits} element={<HabitsDashboard />} />
+      <Route path={RoutePath.Learning} element={<LearningWorkspace />} />
       <Route path={RoutePath.PinnerPlayer} element={<PinnedPlayer />} />
       <Route path={RoutePath.Matches} element={<Matches />} />
       <Route path={`${RoutePath.Matches}/:checksum`} element={<MatchLoader />}>
@@ -109,13 +107,7 @@ export const router = createHashRouter(
       <Route path={RoutePath.Search} element={<Search />} />
       <Route path={RoutePath.Ban} element={<BanStats />} />
       <Route path={RoutePath.Analyses} element={<Analyses />} />
-      <Route path={RoutePath.Downloads} element={<Downloads />}>
-        <Route index={true} element={<ValveLastMatchesLoader />} />
-        <Route path={RoutePath.DownloadsFaceit} element={<FaceitLastMatches />} />
-        <Route path={RoutePath.DownloadsRenown} element={<RenownLastMatches />} />
-        <Route path={RoutePath.Downloads5EPlay} element={<FiveEPlayLastMatches />} />
-        <Route path={RoutePath.DownloadsPending} element={<PendingDownloads />} />
-      </Route>
+      <Route path={`${RoutePath.Downloads}/*`} element={<InitialRouteRedirector />} />
       <Route path={RoutePath.Videos} element={<Videos />} />
       <Route index={true} element={<InitialRouteRedirector />} />
     </Route>,

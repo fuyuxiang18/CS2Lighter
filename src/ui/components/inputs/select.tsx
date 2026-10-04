@@ -41,9 +41,9 @@ export function Select<ValueType extends string | number = string>({
       multiple={false}
     >
       {label && <BaseSelect.Label className="cursor-default">{label}</BaseSelect.Label>}
-      <BaseSelect.Trigger className="flex h-30 items-center rounded-4 border border-gray-400 bg-gray-50 pr-8 pl-12 outline-hidden not-data-disabled:hover:border-gray-900 focus:border-gray-900 data-disabled:bg-gray-400">
+      <BaseSelect.Trigger className="flex h-30 max-w-full min-w-0 items-center rounded-4 border border-gray-400 bg-gray-50 pr-8 pl-12 outline-hidden not-data-disabled:hover:border-gray-900 focus:border-gray-900 data-disabled:bg-gray-400">
         <BaseSelect.Value
-          className="flex-1 text-left"
+          className="min-w-0 flex-1 truncate text-left"
           render={
             renderItem
               ? (props, state) => {
@@ -57,13 +57,13 @@ export function Select<ValueType extends string | number = string>({
               : undefined
           }
         />
-        <BaseSelect.Icon className="ml-4 flex items-center">
+        <BaseSelect.Icon className="ml-4 flex shrink-0 items-center">
           <ChevronDownIcon className="size-16" />
         </BaseSelect.Icon>
       </BaseSelect.Trigger>
       <BaseSelect.Portal>
         <BaseSelect.Positioner className="z-select outline-hidden" sideOffset={4} alignItemWithTrigger={false}>
-          <BaseSelect.Popup className="max-h-[min(24rem,var(--available-height))] min-w-(--anchor-width) origin-(--transform-origin) overflow-y-auto rounded-4 border border-gray-400 bg-gray-50 py-4 shadow-lg transition-[transform,scale,opacity] duration-100 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
+          <BaseSelect.Popup className="max-h-[min(24rem,var(--available-height))] max-w-(--available-width) min-w-(--anchor-width) origin-(--transform-origin) overflow-y-auto rounded-4 border border-gray-400 bg-gray-50 py-4 shadow-lg transition-[transform,scale,opacity] duration-100 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
             <BaseSelect.List className="outline-hidden">
               {options.map((option) => {
                 return (
@@ -75,7 +75,7 @@ export function Select<ValueType extends string | number = string>({
                     <BaseSelect.ItemIndicator className="col-start-1">
                       <CheckIcon className="size-12" />
                     </BaseSelect.ItemIndicator>
-                    <BaseSelect.ItemText className="col-start-2">
+                    <BaseSelect.ItemText className="col-start-2 min-w-0 wrap-break-word">
                       {renderItem ? renderItem(option) : option.label}
                     </BaseSelect.ItemText>
                   </BaseSelect.Item>

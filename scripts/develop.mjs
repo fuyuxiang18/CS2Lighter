@@ -10,6 +10,7 @@ import electronPath from 'electron';
 import { watch } from 'vite/rolldown';
 import nativeNodeModulesPlugin from './rolldown-native-node-modules-plugin.mjs';
 import { node } from './electron-vendors.mjs';
+import { compileMainTranslations } from './compile-main-translations.mjs';
 import { killDaemonProcess } from './kill-daemon-process.mjs';
 import { resolveAppFolderPath } from '../src/node/filesystem/resolve-app-folder-path.ts';
 import { SERVER_INSPECTOR_PORT, RENDERER_REMOTE_DEBUGGING_PORT } from '../src/node/debug-ports.ts';
@@ -175,9 +176,7 @@ async function buildAndWatchMainProcessBundles() {
       {
         name: 'copy-translations',
         async writeBundle() {
-          const translationsFolder = path.resolve(srcFolderPath, 'electron-main', 'translations');
-          const outputFolder = path.resolve(outFolderPath, 'translations');
-          await fs.copy(translationsFolder, outputFolder);
+          await compileMainTranslations(rootFolderPath, outFolderPath);
         },
       },
     ],

@@ -12,10 +12,13 @@ import { getSettings } from 'csdm/node/settings/get-settings';
 import { getErrorCodeFromError } from './get-error-code-from-error';
 import type { ErrorCode } from 'csdm/common/error-code';
 import { MAX_CONCURRENT_ANALYSES } from 'csdm/common/analyses';
+import { importProgress } from 'csdm/server/import-progress';
+import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
 
 class AnalysesListener {
   private analyses: Analysis[] = [];
   private currentAnalyses: Analysis[] = [];
+  private completionListeners = new Set<(analysis: Analysis) => void>();
   // Tracks which client connections queued or wait for a demo so its pending analysis can be canceled when the last
   // of them disconnects. Demos queued by the GUI are not tracked and never canceled on disconnect.
   private clientIdsPerChecksum = new Map<string, Set<string>>();
@@ -27,6 +30,9 @@ class AnalysesListener {
 
   public removeDemosByChecksums(checksums: string[]) {
     this.analyses = this.analyses.filter((analysis) => {
+      if (checksums.includes(analysis.demoChecksum)) {
+        importProgress.update(analysis.demoPath, 'skipped', { reason: 'cancelled' });
+      }
       return !checksums.includes(analysis.demoChecksum);
     });
     for (const checksum of checksums) {
@@ -54,10 +60,21 @@ class AnalysesListener {
     }
   }
 
-  public async addDemosToAnalyses(demos: Demo[], options?: { analyzePositions?: boolean; clientId?: string }) {
+  public async addDemosToAnalyses(
+    demos: Demo[],
+    options?: { analyzePositions?: boolean; clientId?: string; allowCorrupted?: boolean },
+  ) {
+    if (isUpdateMaintenance()) {
+      throw new Error('Application update is in progress');
+    }
     const clientId = options?.clientId;
+    const queuedChecksums = new Set(this.getAnalyses().map((analysis) => analysis.demoChecksum));
     const demosNotInPendingAnalyses = demos.filter((demo) => {
-      return !this.analyses.some((analysis) => analysis.demoChecksum === demo.checksum);
+      if (queuedChecksums.has(demo.checksum)) {
+        return false;
+      }
+      queuedChecksums.add(demo.checksum);
+      return true;
     });
 
     if (typeof clientId === 'string') {
@@ -83,11 +100,15 @@ class AnalysesListener {
         source: demo.source,
         output: '',
         analyzePositions: options?.analyzePositions,
+        allowCorrupted: options?.allowCorrupted,
       };
 
       return analysis;
     });
     this.analyses.push(...analyses);
+    for (const analysis of analyses) {
+      importProgress.update(analysis.demoPath, 'pending');
+    }
     if (typeof clientId === 'string') {
       for (const analysis of analyses) {
         this.clientIdsPerChecksum.set(analysis.demoChecksum, new Set([clientId]));
@@ -105,6 +126,14 @@ class AnalysesListener {
   public getAnalyses = () => {
     return [...this.analyses, ...this.currentAnalyses];
   };
+
+  public onAnalysisCompleted(listener: (analysis: Analysis) => void) {
+    this.completionListeners.add(listener);
+
+    return () => {
+      this.completionListeners.delete(listener);
+    };
+  }
 
   public hasAnalysesInProgress = () => {
     return this.hasPendingAnalyses() || this.currentAnalyses.length > 0;
@@ -140,9 +169,25 @@ class AnalysesListener {
             logger.error(error);
           })
           .finally(() => {
+            importProgress.update(
+              analysis.demoPath,
+              analysis.status === AnalysisStatus.InsertSuccess ? 'completed' : 'failed',
+              {
+                reason: analysis.status === AnalysisStatus.InsertError ? 'insertion' : 'analysis',
+                message: analysis.status === AnalysisStatus.InsertSuccess ? undefined : analysis.output.slice(-1000),
+              },
+            );
             this.currentAnalyses = this.currentAnalyses.filter(
               ({ demoChecksum }) => demoChecksum !== analysis.demoChecksum,
             );
+            for (const listener of this.completionListeners) {
+              try {
+                listener(analysis);
+              } catch (error) {
+                logger.error('Error in analysis completion listener');
+                logger.error(error);
+              }
+            }
           });
 
         promises.push(analysisPromise);
@@ -197,7 +242,7 @@ class AnalysesListener {
       }
       this.updateAnalysisStatus(analysis, AnalysisStatus.AnalyzeError);
       // If the demo is corrupted, we still want to try to insert it in the database.
-      if (isCorruptedDemo) {
+      if (isCorruptedDemo && analysis.allowCorrupted !== false) {
         await this.insertMatch(analysis, checksum, demoPath);
       }
     }
@@ -241,6 +286,13 @@ class AnalysesListener {
   private updateAnalysisStatus = (analysis: Analysis, status: AnalysisStatus, errorCode?: ErrorCode) => {
     analysis.status = status;
     analysis.errorCode = errorCode;
+    // AnalyzeSuccess is not a completed import: keep the gate closed until database insertion has settled.
+    // AnalyzeError may still enter the legacy manual recovery path; final failure is recorded in finally().
+    if (status === AnalysisStatus.Analyzing) {
+      importProgress.update(analysis.demoPath, 'analyzing');
+    } else if (status === AnalysisStatus.AnalyzeSuccess || status === AnalysisStatus.Inserting) {
+      importProgress.update(analysis.demoPath, 'inserting');
+    }
     server.sendPushMessage({
       name: ServerPushMessageName.AnalysisUpdated,
       payload: analysis,

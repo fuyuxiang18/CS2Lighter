@@ -8,7 +8,7 @@ export function AddFolderButton() {
 
   return (
     <Button onClick={addFolder} variant={ButtonVariant.Primary}>
-      <Trans context="Button">Add a folder</Trans>
+      <Trans context="Button">Add folders</Trans>
     </Button>
   );
 }

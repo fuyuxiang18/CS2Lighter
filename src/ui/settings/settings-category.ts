@@ -3,7 +3,6 @@ export const SettingsCategory = {
   Database: 'database',
   UI: 'ui',
   Analyze: 'analyze',
-  Download: 'download',
   Playback: 'playback',
   Video: 'video',
   Maps: 'maps',

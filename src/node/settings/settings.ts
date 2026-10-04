@@ -37,8 +37,7 @@ type DemosSettings = DemosTableFilter & {
 };
 
 type UISettings = {
-  // Comes from the Electron API app.getLocale();
-  // Possible values https://source.chromium.org/chromium/chromium/src/+/main:ui/base/l10n/l10n_util.cc
+  // The fork supports zh-CN and en. Keep string to read settings from older releases.
   locale: string;
   theme: ThemeName;
   initialPage: Page;
@@ -51,6 +50,7 @@ type UISettings = {
 type AnalyzeSettings = {
   maxConcurrentAnalyses?: number;
   analyzePositions: boolean;
+  autoAnalyzeFolders: boolean;
 };
 
 export type HlaeSettings = {
@@ -120,7 +120,7 @@ export type FfmpegSettings = {
   outputParameters: string;
 };
 
-export type DownloadSettings = {
+type DownloadSettings = {
   folderPath: string | undefined;
   downloadValveDemosAtStartup: boolean;
   downloadFaceitDemosAtStartup: boolean;

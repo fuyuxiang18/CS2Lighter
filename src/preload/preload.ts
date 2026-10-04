@@ -11,6 +11,7 @@ import type {
 import { ipcRenderer, contextBridge, webUtils } from 'electron';
 import fs from 'fs-extra';
 import type { PreloadResult } from './preload-result';
+import type { AppUpdateState } from 'csdm/common/types/app-update';
 import { getRankImageSrc } from 'csdm/node/filesystem/get-rank-image-src';
 import { getPremierRankImageSrc } from 'csdm/node/filesystem/get-premier-rank-image-src';
 import { isMac } from 'csdm/node/os/is-mac';
@@ -274,33 +275,28 @@ const api: PreloadApi = {
     };
   },
 
-  onUpdateDownloaded: (callback: () => void) => {
-    ipcRenderer.addListener(IPCChannel.UpdateDownloaded, callback);
+  onUpdateStateChanged: (callback: (state: AppUpdateState) => void) => {
+    const listener = (_event: IpcRendererEvent, state: AppUpdateState) => callback(state);
+    ipcRenderer.addListener(IPCChannel.UpdateStateChanged, listener);
 
     return () => {
-      ipcRenderer.removeListener(IPCChannel.UpdateDownloaded, callback);
+      ipcRenderer.removeListener(IPCChannel.UpdateStateChanged, listener);
     };
   },
 
-  hasUpdateReadyToInstall: () => {
-    return ipcRenderer.invoke(IPCChannel.HasUpdateReadyToInstall);
+  getUpdateState: () => {
+    return ipcRenderer.invoke(IPCChannel.GetUpdateState);
   },
 
+  checkForUpdates: () => ipcRenderer.invoke(IPCChannel.CheckForUpdates),
+  downloadUpdate: () => ipcRenderer.invoke(IPCChannel.DownloadUpdate),
+
   installUpdate: async () => {
-    await ipcRenderer.invoke(IPCChannel.InstallUpdate);
+    return ipcRenderer.invoke(IPCChannel.InstallUpdate);
   },
 
   toggleAutoDownloadUpdates: async (isEnabled: boolean) => {
     await ipcRenderer.invoke(IPCChannel.ToggleAutoUpdate, isEnabled);
-  },
-
-  shouldShowChangelog: async () => {
-    const changelogFilePath = path.join(getStaticFolderPath(), 'changelog');
-    const fileExists = await fs.pathExists(changelogFilePath);
-    // Delete the file to prevent the changelog dialog from showing next time the app is opened.
-    await fs.remove(changelogFilePath);
-
-    return fileExists;
   },
 
   getWebFilePath: (file: File) => {

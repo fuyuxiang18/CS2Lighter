@@ -1,0 +1,14 @@
+CS2Lighter 0.2.0
+
+This preview is an independent local fork of CS Demo Manager.
+Upstream: https://github.com/akiver/cs-demo-manager
+Base commit: 4d8f608443765e5830e43989fa69ca3ebd8b4a3e
+Copyright (c) 2014-present AkiVer and contributors. MIT license included in LICENSE.
+
+This fork adds explicit folder auto-import, account matching, cross-match habits,
+and a player learning workspace. It uses an independent application/data identity
+and downloads application updates only from its own GitHub Releases feed.
+Demo files are only read from folders explicitly configured by the user.
+
+Bundled components retain their own licenses, including Electron, PostgreSQL,
+cs-demo-analyzer, demoinfocs-golang, and CS Demo Manager's runtime components.

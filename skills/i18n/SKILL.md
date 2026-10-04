@@ -223,4 +223,4 @@ Re-generate the catalogs (both UI and electron-main):
 vp run i18n:extract
 ```
 
-Only the **English** source catalogs (`src/ui/translations/en/messages.po` and `src/electron-main/translations/en/messages.json`) are committed — commit those. The other locales are gitignored, managed on Crowdin, and downloaded at build time, so leave them untracked and never translate them by hand.
+This fork commits both **English (`en`) and Simplified Chinese (`zh-CN`)** catalogs. Translate the new Chinese entries after extraction and run `node scripts/validate-translations.mjs` to check completeness, ICU placeholders and component tags. Catalogs ship locally without a Crowdin token or network download. Do not run a global extraction while another agent is changing UI strings; coordinate a final extraction. See `LOCALIZATION.md` for provenance. This replaces the upstream English-only/Crowdin rule for the fork.

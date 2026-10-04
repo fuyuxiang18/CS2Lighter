@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { assertNetworkDemoDownloadsEnabled } from 'csdm/server/network-demo-downloads';
 import { pipeline } from 'node:stream';
 import { Client, interceptors } from 'undici';
 import unzipper from 'unzipper';
@@ -46,6 +47,7 @@ class DownloadDemoQueue {
   private abortControllersPerMatchId: { [matchId: string]: AbortController | undefined } = {};
 
   public addDownload = async (download: Download) => {
+    assertNetworkDemoDownloadsEnabled();
     const downloadFolderPath = await this.getDownloadFolderPath();
 
     if (this.isMatchAlreadyInQueue(download.matchId)) {
@@ -72,6 +74,7 @@ class DownloadDemoQueue {
   };
 
   public addDownloads = async (downloads: Download[]) => {
+    assertNetworkDemoDownloadsEnabled();
     if (downloads.length === 0) {
       return [];
     }

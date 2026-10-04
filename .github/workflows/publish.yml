@@ -1,176 +1,56 @@
-name: Publish new release
+name: Release CS2Lighter
 
 on:
+  push:
+    tags: ['v*.*.*']
   workflow_dispatch:
-    inputs:
-      release-type:
-        type: choice
-        description: Select the release type
-        required: true
-        options:
-          - patch
-          - minor
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  ensure-changes:
-    name: Ensure there are changes
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0 # Required to get all existing tags
-          fetch-tags: true
-
-      - name: Stop if there are no new changes
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 --always)
-          LAST_COMMIT=$(git rev-parse HEAD)
-          LASTEST_TAG_COMMIT=$(git rev-list -n 1 $LATEST_TAG)
-          if [ "$LASTEST_TAG_COMMIT" == "$LAST_COMMIT" ]; then
-            echo "No new changes since the last tag. Stopping the workflow."
-            exit 1
-          fi
-          exit 0
-
-  build-macos:
-    name: Build macOS
-    runs-on: macos-latest
-    needs: ensure-changes
-
-    steps:
-      - name: Install Apple certificate
-        run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-        env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.APPLE_APPLICATION_CERTIFICATE }}
-          P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-
-      - name: Install required tools
-        run: |
-          brew install python-setuptools
-
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          version-file: package.json
-
-      - name: Create new version
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          npm version ${{ github.event.inputs.release-type }} -m "chore: v%s"
-
-      - name: Package and create release
-        run: |
-          vp run build
-          vp run package --mac --publish always
-        env:
-          STEAM_API_KEYS: ${{ secrets.STEAM_API_KEYS }}
-          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-
-  build-linux:
-    name: Build Linux
-    runs-on: ubuntu-latest
-    needs: ensure-changes
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          version-file: package.json
-
-      - name: Create new version
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          npm version ${{ github.event.inputs.release-type }} -m "chore: v%s"
-
-      - name: Package and create release
-        run: |
-          vp run build
-          vp run package --linux --publish always
-        env:
-          STEAM_API_KEYS: ${{ secrets.STEAM_API_KEYS }}
-          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-  build-windows:
-    name: Build Windows
+  windows:
     runs-on: windows-latest
-    needs: ensure-changes
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          node-version-file: package.json
-
-      - name: Create new version
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          npm version ${{ github.event.inputs.release-type }} -m "chore: v%s"
-
-      - name: Package and create release
-        run: |
-          vp run build
-          vp run package --win --publish=always
-        env:
-          STEAM_API_KEYS: ${{ secrets.STEAM_API_KEYS }}
-          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-  publish-on-github:
-    name: Publish on GitHub
-    runs-on: ubuntu-latest
-    needs: [build-macos, build-linux, build-windows]
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ssh-key: ${{ secrets.SSH_DEPLOYMENT_PRIVATE_KEY }}
-          persist-credentials: true
-
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
         with:
           version-file: package.json
-
-      - name: Create new version
+      - name: Validate version
+        shell: pwsh
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          npm version ${{ github.event.inputs.release-type }} -m "chore: v%s"
-
-      - name: Push the tag to GitHub
-        run: git push origin main --tags
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          if ($env:GITHUB_REF -ne "refs/tags/v$version") { throw 'Run this workflow on the tag matching package.json.' }
+      - run: vp check --no-fmt
+      - run: vp run test
+      - run: vp run deadcode
+      - name: Validate translation catalogs
+        shell: pwsh
+        run: |
+          vp run i18n:extract
+          git diff --exit-code -- src/ui/translations src/electron-main/translations
+      - run: vp run build
+      - name: Package Windows installer and update manifest
+        run: vp run package --win --publish never
+      - name: Publish complete release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $tag = "v$version"
+          $existing = gh release view $tag --json isDraft 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            if (!(($existing | ConvertFrom-Json).isDraft)) { throw "Release $tag is already public. Do not replace published updates." }
+          } else {
+            gh release create $tag --draft --verify-tag --title "CS2Lighter $version" --notes-file "releases/$version.md"
+            if ($LASTEXITCODE -ne 0) { throw 'Could not create release draft' }
+          }
+          gh release upload $tag "dist/CS2Lighter-$version-x64.exe" "dist/CS2Lighter-$version-x64.exe.blockmap" "dist/latest.yml" --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Release stays draft because upload failed' }
+          gh release edit $tag --draft=false --latest
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish release' }

@@ -1,5 +1,9 @@
 // Message names sent from the renderer Electron process to the WebSocket server.
 export const RendererClientMessageName = {
+  GetImportProgress: 'get-import-progress',
+  RetryFailedImports: 'retry-failed-imports',
+  FindHabitsIdentity: 'find-habits-identity',
+  FetchHabitsSummary: 'fetch-habits-summary',
   InitializeApplication: 'init-application',
   IsCs2ConnectedToServer: 'is-cs2-connected-to-server',
   AbortCurrentTask: 'abort-current-task',

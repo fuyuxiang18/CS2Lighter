@@ -1,5 +1,6 @@
 globalThis.logger = window.csdm.logger;
-document.title = 'CS Demo Manager';
+import { applicationName } from 'csdm/common/application-name';
+document.title = applicationName;
 import React, { type ErrorInfo } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router';

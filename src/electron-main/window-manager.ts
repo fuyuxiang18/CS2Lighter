@@ -76,10 +76,10 @@ class WindowManager {
       // Persist bounds and display mode (maximized, fullscreen...) across restarts, requires a unique window name.
       name: 'main',
       windowStatePersistence: true,
-      width: 1024,
-      height: 768,
-      minWidth: 500,
-      minHeight: 400,
+      width: 1280,
+      height: 800,
+      minWidth: 960,
+      minHeight: 720,
       webPreferences: {
         preload: path.join(app.getAppPath(), 'preload.js'),
         sandbox: false,

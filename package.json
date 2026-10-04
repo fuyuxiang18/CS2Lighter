@@ -1,7 +1,7 @@
 {
-  "name": "cs-demo-manager",
-  "version": "3.20.1",
-  "description": "Companion application for your Counter-Strike demos.",
+  "name": "cs2lighter",
+  "version": "0.2.0",
+  "description": "Local CS2 demo habits and learning desktop app, based on CS Demo Manager.",
   "keywords": [
     "CS",
     "CS2",
@@ -11,16 +11,15 @@
     "electron",
     "react"
   ],
-  "homepage": "https://cs-demo-manager.com",
+  "homepage": "https://github.com/fuyuxiang18/CS2Lighter",
   "bugs": {
-    "url": "https://github.com/akiver/cs-demo-manager/issues"
+    "url": "https://github.com/fuyuxiang18/CS2Lighter/issues"
   },
   "license": "MIT",
   "author": {
-    "name": "AkiVer",
-    "email": "ys.renaud@gmail.com"
+    "name": "CS2Lighter contributors"
   },
-  "repository": "https://github.com/akiver/cs-demo-manager",
+  "repository": "https://github.com/fuyuxiang18/CS2Lighter",
   "main": "main.js",
   "scripts": {
     "build": "node ./scripts/build.mjs",
@@ -145,7 +144,7 @@
   },
   "packageManager": "pnpm@12.6.0",
   "download": {
-    "url": "https://cs-demo-manager.com/download"
+    "url": "https://github.com/fuyuxiang18/CS2Lighter/releases/latest"
   },
   "tutorial": {
     "url": "https://cs-demo-manager.com/docs"

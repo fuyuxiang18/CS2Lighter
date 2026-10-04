@@ -12,7 +12,7 @@ import { DatabaseMode } from 'csdm/common/types/database-mode';
 
 export const defaultSettings: Settings = {
   schemaVersion: CURRENT_SCHEMA_VERSION,
-  autoDownloadUpdates: true,
+  autoDownloadUpdates: false,
   startMinimizedAtLogin: false,
   database: {
     mode: DatabaseMode.Embedded,
@@ -39,15 +39,16 @@ export const defaultSettings: Settings = {
   steamApiKey: '',
   faceitApiKey: '',
   ui: {
-    locale: 'en',
+    locale: 'zh-CN',
     theme: 'dark',
-    initialPage: Page.Matches,
+    initialPage: Page.Habits,
     redirectDemoToMatch: false,
     enableHardwareAcceleration: true,
   },
   analyze: {
-    maxConcurrentAnalyses: 4,
-    analyzePositions: false,
+    maxConcurrentAnalyses: 2,
+    analyzePositions: true,
+    autoAnalyzeFolders: true,
   },
   playback: {
     width: 1024,
@@ -126,14 +127,14 @@ export const defaultSettings: Settings = {
   },
   download: {
     folderPath: undefined,
-    downloadValveDemosAtStartup: true,
-    downloadValveDemosInBackground: true,
-    downloadFaceitDemosAtStartup: true,
-    downloadFaceitDemosInBackground: true,
-    download5EPlayDemosAtStartup: true,
-    download5EPlayDemosInBackground: true,
-    downloadRenownDemosAtStartup: true,
-    downloadRenownDemosInBackground: true,
+    downloadValveDemosAtStartup: false,
+    downloadValveDemosInBackground: false,
+    downloadFaceitDemosAtStartup: false,
+    downloadFaceitDemosInBackground: false,
+    download5EPlayDemosAtStartup: false,
+    download5EPlayDemosInBackground: false,
+    downloadRenownDemosAtStartup: false,
+    downloadRenownDemosInBackground: false,
   },
   matches: {
     gameModes: [],

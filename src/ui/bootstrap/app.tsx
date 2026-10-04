@@ -3,16 +3,14 @@ import { LeftBar } from 'csdm/ui/left-bar/left-bar';
 import { AppWrapper } from './app-wrapper';
 import { AppContent } from './app-content';
 import { NavigationListener } from './navigation-listener';
-import { DropZone } from './drop-zone';
 import { ContextMenuProvider } from '../components/context-menu/context-menu-provider';
 import { useArgumentsContext } from './use-arguments-context';
 import { Outlet } from 'react-router';
-import { useDialog } from '../components/dialogs/use-dialog';
-import { ChangelogDialog } from '../changelog/changelog-dialog';
+import { ImportProgressProvider } from 'csdm/ui/imports/import-progress-provider';
+import { ImportProgressGate } from 'csdm/ui/imports/import-progress-gate';
 
 export function App() {
   const { clearArguments } = useArgumentsContext();
-  const { showDialog } = useDialog();
 
   useEffect(() => {
     // The app has been renderer, we can now clear startup arguments so that they will be ignored when
@@ -20,26 +18,20 @@ export function App() {
     clearArguments();
   }, [clearArguments]);
 
-  useEffect(() => {
-    void (async () => {
-      if (await window.csdm.shouldShowChangelog()) {
-        showDialog(<ChangelogDialog />);
-      }
-    })();
-  }, [showDialog]);
-
   return (
     <NavigationListener>
-      <DropZone>
+      <ImportProgressProvider>
         <ContextMenuProvider>
           <AppWrapper>
             <LeftBar />
             <AppContent>
-              <Outlet />
+              <ImportProgressGate>
+                <Outlet />
+              </ImportProgressGate>
             </AppContent>
           </AppWrapper>
         </ContextMenuProvider>
-      </DropZone>
+      </ImportProgressProvider>
     </NavigationListener>
   );
 }

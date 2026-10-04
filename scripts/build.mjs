@@ -3,12 +3,12 @@
 import './load-dot-env-variables.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
-import fs from 'fs-extra';
 import { build } from 'vite-plus';
 import { build as rolldownBuild } from 'vite/rolldown';
 import nativeNodeModulesPlugin from './rolldown-native-node-modules-plugin.mjs';
 import { node } from './electron-vendors.mjs';
+import { validateTranslations } from './validate-translations.mjs';
+import { compileMainTranslations } from './compile-main-translations.mjs';
 
 const rootFolderPath = fileURLToPath(new URL('..', import.meta.url));
 const srcFolderPath = path.resolve(rootFolderPath, 'src');
@@ -18,33 +18,6 @@ const commonDefine = {
   IS_PRODUCTION: 'true',
   IS_DEV: 'false',
 };
-
-function downloadTranslations() {
-  if (!process.env.CROWDIN_PERSONAL_TOKEN) {
-    console.warn(
-      'CROWDIN_PERSONAL_TOKEN is not set, skipping translations download. The build will only include English.',
-    );
-    console.warn(
-      `If you want to download translations, you must:
-      1. Create a Crowdin account (https://crowdin.com)
-      2. Request to join the project on Crowdin and wait to be granted access
-      3. Generate a personal access token (https://crowdin.com/settings#api-key)
-      4. Set the CROWDIN_PERSONAL_TOKEN environment variable to your token
-      5. Re-run this build script`,
-    );
-    return;
-  }
-
-  const result = spawnSync('crowdin download', {
-    cwd: rootFolderPath,
-    stdio: 'inherit',
-    shell: true,
-  });
-
-  if (result.status !== 0) {
-    throw new Error('Failed to download translations from Crowdin.');
-  }
-}
 
 async function buildRendererProcessBundle() {
   await build({
@@ -133,13 +106,7 @@ async function buildMainProcessBundle() {
     }),
   );
 
-  async function copyTranslations() {
-    const translationsFolder = path.resolve(srcFolderPath, 'electron-main', 'translations');
-    const outputFolder = path.resolve(outFolderPath, 'translations');
-    await fs.copy(translationsFolder, outputFolder);
-  }
-
-  await copyTranslations();
+  await compileMainTranslations(rootFolderPath, outFolderPath);
 }
 
 async function buildPreloadBundle() {
@@ -168,7 +135,7 @@ async function buildCliBundle() {
 }
 
 try {
-  downloadTranslations();
+  await validateTranslations(rootFolderPath);
   await buildRendererProcessBundle();
   await Promise.all([buildWebSocketServerBundle(), buildMainProcessBundle(), buildPreloadBundle(), buildCliBundle()]);
 } catch (error) {

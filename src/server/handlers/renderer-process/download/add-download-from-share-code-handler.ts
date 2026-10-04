@@ -1,8 +1,10 @@
 import { buildDownloadFromShareCode } from 'csdm/node/download/build-download-from-share-code';
+import { assertNetworkDemoDownloadsEnabled } from 'csdm/server/network-demo-downloads';
 import { downloadDemoQueue } from 'csdm/server/download-queue';
 import { handleError } from '../../handle-error';
 
 export async function addDownloadFromShareCodeHandler(shareCode: string) {
+  assertNetworkDemoDownloadsEnabled();
   try {
     const download = await buildDownloadFromShareCode(shareCode);
     await downloadDemoQueue.addDownload(download);

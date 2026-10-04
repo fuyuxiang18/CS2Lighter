@@ -1,4 +1,5 @@
 import type { Settings } from 'csdm/node/settings/settings';
+import type { ImportProgress } from 'csdm/common/types/import-progress';
 import type { Analysis } from 'csdm/common/types/analysis';
 import type { MatchTable } from 'csdm/common/types/match-table';
 import type { Download, DownloadDemoProgressPayload, DownloadDemoSuccess } from 'csdm/common/download/download-types';
@@ -17,6 +18,7 @@ import type { CounterStrikeErrorPayload } from 'csdm/server/counter-strike';
 
 // Message names pushed from the WebSocket server to the renderer Electron process and the connected CLI processes.
 export const ServerPushMessageName = {
+  ImportProgressUpdated: 'import-progress-updated',
   SettingsUpdated: 'settings-updated',
   OptimizeDatabaseSuccess: 'optimize-database-success',
   FetchDemosProgress: 'demos-to-fetch-progress',
@@ -62,6 +64,7 @@ export type ServerPushMessageName =
   | SharedServerMessageName;
 
 export interface ServerPushMessagePayload extends SharedServerMessagePayload {
+  [ServerPushMessageName.ImportProgressUpdated]: ImportProgress;
   [ServerPushMessageName.SettingsUpdated]: Settings;
   [ServerPushMessageName.OptimizeDatabaseSuccess]: void;
   [ServerPushMessageName.FetchDemosProgress]: LoadDemosProgress;

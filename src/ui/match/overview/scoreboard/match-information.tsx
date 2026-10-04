@@ -21,7 +21,7 @@ type TeamScoresProps = {
 
 function TeamScores({ teamNameA, teamNameB, scoreTeamA, scoreTeamB }: TeamScoresProps) {
   return (
-    <div className="flex items-center">
+    <div className="flex flex-wrap items-center">
       <p className={clsx('selectable text-subtitle', getTeamScoreClassName(scoreTeamA, scoreTeamB))}>{scoreTeamA}</p>
       <p className="ml-4 selectable text-gray-900">{teamNameA}</p>
       <p className="mx-4">
@@ -40,7 +40,7 @@ type FieldProps = {
 
 function Field({ name, value }: FieldProps) {
   return (
-    <div className="flex items-center">
+    <div className="flex min-w-0 items-start">
       <p className="shrink-0">{name}</p>
       <p className="ml-8 selectable break-all text-gray-900">{value}</p>
     </div>
@@ -63,32 +63,38 @@ export function MatchInformation({ match }: Props) {
   };
 
   return (
-    <div className="flex">
-      <img src={getMapThumbnailSrc(match.mapName, match.game)} alt={match.mapName} className="mr-8 h-[124px]" />
-      <div className="flex shrink-0 flex-col">
-        <p className="selectable text-gray-900">{match.mapName}</p>
-        <TeamScores
-          teamNameA={match.teamA.name}
-          teamNameB={match.teamB.name}
-          scoreTeamA={match.teamA.score}
-          scoreTeamB={match.teamB.score}
+    <div className="grid min-w-0 grid-cols-1 gap-16 lg:grid-cols-2">
+      <div className="flex min-w-0 gap-12">
+        <img
+          src={getMapThumbnailSrc(match.mapName, match.game)}
+          alt={match.mapName}
+          className="w-1/3 self-start rounded-4 object-cover"
         />
-        <p className="selectable">{formatDate(match.date, { timeZone: 'UTC' })}</p>
-        <p className="selectable">{secondsToFormattedMinutes(match.duration)}</p>
-        <Tags tagIds={match.tagIds} onEditClick={onEditTagsClick} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <p className="selectable text-gray-900">{match.mapName}</p>
+          <TeamScores
+            teamNameA={match.teamA.name}
+            teamNameB={match.teamB.name}
+            scoreTeamA={match.teamA.score}
+            scoreTeamB={match.teamB.score}
+          />
+          <p className="selectable">{formatDate(match.date, { timeZone: 'UTC' })}</p>
+          <p className="selectable">{secondsToFormattedMinutes(match.duration)}</p>
+          <Tags tagIds={match.tagIds} onEditClick={onEditTagsClick} />
+        </div>
       </div>
-      <div className="ml-16 flex w-full flex-col">
+      <div className="flex min-w-0 flex-col">
         <Field name={<Trans>Source</Trans>} value={getDemoSourceName(match.source)} />
         <Field name={<Trans>Name</Trans>} value={match.name} />
         <Field name={<Trans>Client name</Trans>} value={match.clientName} />
         <Field name={<Trans>Server name</Trans>} value={match.serverName} />
-        <div className="flex items-center gap-x-12">
+        <div className="flex flex-wrap items-center gap-x-12">
           <Field name={<Trans>Tickrate</Trans>} value={Math.round(match.tickrate)} />
           <Field name={<Trans>Framerate</Trans>} value={Math.round(match.frameRate)} />
         </div>
         <Field name={<Trans>Checksum</Trans>} value={match.checksum} />
       </div>
-      <div className="ml-16 max-h-[126px] w-full">
+      <div className="min-w-0 lg:col-span-2">
         <MatchCommentInput isResizable={false} />
       </div>
     </div>

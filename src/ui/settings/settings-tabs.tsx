@@ -6,7 +6,7 @@ import { SettingsCategory } from './settings-category';
 
 export function SettingsTabs() {
   return (
-    <div className="flex h-full flex-col overflow-y-auto border-r border-r-gray-300 bg-gray-50 p-16">
+    <div className="flex h-full shrink-0 flex-col overflow-y-auto border-r border-r-gray-300 bg-gray-50 p-12">
       <CloseSettingsButton />
       <SettingsCategoryButton category={SettingsCategory.UI}>
         <Trans>UI</Trans>
@@ -19,9 +19,6 @@ export function SettingsTabs() {
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Maps}>
         <Trans>Maps</Trans>
-      </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Download}>
-        <Trans>Download</Trans>
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Playback}>
         <Trans>Playback</Trans>

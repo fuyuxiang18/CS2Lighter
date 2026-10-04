@@ -10,7 +10,7 @@ export function createTrayMenu() {
     {
       label: i18n.t({
         id: 'trayMenu.openApp',
-        message: 'Open CS:DM',
+        message: 'Open CS2Lighter',
       }),
       click: async () => {
         const mainWindow = await windowManager.getOrCreateMainWindow();

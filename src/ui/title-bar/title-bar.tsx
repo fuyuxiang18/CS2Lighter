@@ -1,13 +1,10 @@
 import React from 'react';
-import { DatabaseStatus } from 'csdm/ui/bootstrap/database-status';
-import { useDatabaseStatus } from 'csdm/ui/bootstrap/use-database-status';
-import { HistoryNavigation } from './history/history-navigation';
+import { applicationName } from 'csdm/common/application-name';
 import { MenuButton } from './menu-button';
 import { WindowControls } from './window-controls/window-controls';
 import { UpdateAvailableButton } from './update-available-button';
 
 export function TitleBar() {
-  const databaseStatus = useDatabaseStatus();
   const onDoubleClick = async () => {
     if (!window.csdm.isMac) {
       return;
@@ -28,8 +25,7 @@ export function TitleBar() {
     >
       {!window.csdm.isMac && <MenuButton />}
       <div className="mx-auto flex items-center gap-x-16">
-        {databaseStatus === DatabaseStatus.Connected && <HistoryNavigation />}
-        <p>{`CS Demo Manager ${APP_VERSION}`}</p>
+        <p>{`${applicationName} ${APP_VERSION}`}</p>
         <UpdateAvailableButton />
       </div>
       {!window.csdm.isMac && <WindowControls />}

@@ -25,8 +25,8 @@ export function ToggleAnalyzePositions() {
       }
       description={
         <Trans>
-          Analyze player/grenade positions during analysis. Positions are required only for the 2D viewer. When enabled
-          it increases time to insert matches into database and disk space usage.
+          Analyze player/grenade positions during manual analysis. Positions are required for habit analysis and the 2D
+          viewer. Automatic folder imports always include positions. This increases import time and disk space usage.
         </Trans>
       }
       title={<Trans>Analyze player/grenade positions</Trans>}

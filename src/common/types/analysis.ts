@@ -12,4 +12,6 @@ export type Analysis = {
   output: string;
   errorCode?: ErrorCode;
   analyzePositions?: boolean;
+  // Automatic imports must not insert incomplete results from a corrupted recording.
+  allowCorrupted?: boolean;
 };

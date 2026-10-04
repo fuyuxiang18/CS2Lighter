@@ -5,6 +5,8 @@ import { downloadDemoQueue } from 'csdm/server/download-queue';
 import { exitDaemon } from 'csdm/server/exit-daemon';
 import { createIdleMonitor } from './create-idle-monitor';
 import { isDatabaseConnectionPending } from 'csdm/server/ensure-database-connection';
+import { isAutoImportScanning } from 'csdm/server/tasks/auto-import-demo-folders';
+import { importProgress } from 'csdm/server/import-progress';
 
 // The daemon has work in progress, regardless of connected clients.
 // A pending database connection counts: it may be starting the embedded server or running migrations, exiting in
@@ -14,7 +16,9 @@ export function hasWorkInProgress() {
     analysesListener.hasAnalysesInProgress() ||
     videoQueue.isBusy() ||
     downloadDemoQueue.hasDownloads() ||
-    isDatabaseConnectionPending()
+    isDatabaseConnectionPending() ||
+    isAutoImportScanning() ||
+    importProgress.snapshot().isBlocking
   );
 }
 

@@ -1,4 +1,15 @@
 import type { Download } from 'csdm/common/download/download-types';
+import type { ImportProgress } from 'csdm/common/types/import-progress';
+import { getImportProgressHandler } from './renderer-process/demo/get-import-progress-handler';
+import { retryFailedImportsHandler } from './renderer-process/demo/retry-failed-imports-handler';
+import type {
+  FetchHabitsPayload,
+  FindHabitsIdentityPayload,
+  HabitsIdentityCandidate,
+  HabitsSummary,
+} from 'csdm/common/types/habits';
+import { findHabitsIdentityHandler } from './renderer-process/habits/find-habits-identity-handler';
+import { fetchHabitsSummaryHandler } from './renderer-process/habits/fetch-habits-summary-handler';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import type { FaceitAccount } from 'csdm/common/types/faceit-account';
 import { addDownloadHandler } from './renderer-process/download/add-download-handler';
@@ -231,6 +242,10 @@ import type { RenownMatch } from 'csdm/common/types/renown-match';
 import { fetchLastRenownMatchesHandler } from './renderer-process/renown/fetch-last-renown-matches-handler';
 
 export interface RendererMessageHandlers {
+  [RendererClientMessageName.GetImportProgress]: Handler<void, ImportProgress>;
+  [RendererClientMessageName.RetryFailedImports]: Handler;
+  [RendererClientMessageName.FindHabitsIdentity]: Handler<FindHabitsIdentityPayload, HabitsIdentityCandidate[]>;
+  [RendererClientMessageName.FetchHabitsSummary]: Handler<FetchHabitsPayload, HabitsSummary>;
   [RendererClientMessageName.InitializeApplication]: Handler<void, InitializeApplicationSuccessPayload>;
   [RendererClientMessageName.IsCs2ConnectedToServer]: Handler<void, boolean>;
   [RendererClientMessageName.AbortCurrentTask]: Handler;
@@ -360,6 +375,10 @@ export interface RendererMessageHandlers {
 
 // Mapping between message names and server handlers sent from the Electron renderer process to the WebSocket server.
 export const rendererHandlers: RendererMessageHandlers = {
+  [RendererClientMessageName.GetImportProgress]: getImportProgressHandler,
+  [RendererClientMessageName.RetryFailedImports]: retryFailedImportsHandler,
+  [RendererClientMessageName.FindHabitsIdentity]: findHabitsIdentityHandler,
+  [RendererClientMessageName.FetchHabitsSummary]: fetchHabitsSummaryHandler,
   [RendererClientMessageName.InitializeApplication]: initializeApplicationHandler,
   [RendererClientMessageName.IsCs2ConnectedToServer]: isCs2ConnectedToServerHandler,
   [RendererClientMessageName.AbortCurrentTask]: abortCurrentTaskHandler,

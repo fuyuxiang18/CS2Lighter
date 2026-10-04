@@ -30,10 +30,18 @@ export class WebSocketClient {
   private listeners: Map<MainServerMessageName, Listener[]> = new Map();
   private replyHandlers: Map<string, ReplyHandler> = new Map();
   private socket!: WebSocket;
+  private isClosed = false;
   public isConnected: boolean = false;
 
   public constructor() {
     this.connect();
+  }
+
+  public disconnect() {
+    this.isClosed = true;
+    this.isConnected = false;
+    this.socket.removeAllListeners();
+    this.socket.terminate();
   }
 
   public on<MessageName extends MainServerMessageName>(name: MessageName, listener: Listener<MessageName>): void {
@@ -90,6 +98,9 @@ export class WebSocketClient {
   }
 
   private connect = () => {
+    if (this.isClosed) {
+      return;
+    }
     logger.log('WS:: connecting to server');
     const url = `ws://localhost:${getWebSocketServerPort()}?process=main`;
     this.socket = new WebSocket(url);

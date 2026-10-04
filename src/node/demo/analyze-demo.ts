@@ -1,4 +1,4 @@
-import type { DemoSource } from 'csdm/common/types/counter-strike';
+import { DemoSource } from 'csdm/common/types/counter-strike';
 import { runDemoAnalyzer } from 'csdm/node/demo-analyzer/run-demo-analyzer';
 import { assertDemoExists } from 'csdm/node/counter-strike/launcher/assert-demo-exists';
 
@@ -24,7 +24,7 @@ export async function analyzeDemo({
   await runDemoAnalyzer({
     outputFolderPath,
     demoPath,
-    source,
+    source: source === DemoSource.Unknown ? undefined : source,
     analyzePositions,
     onStart: (command) => {
       logger.log('starting demo analyzer with command', command);

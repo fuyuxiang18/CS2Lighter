@@ -1,5 +1,4 @@
 import { Arch } from 'electron-builder';
-import pkg from './package.json' with { type: 'json' };
 
 let shouldNotarize = process.platform === 'darwin';
 
@@ -25,28 +24,28 @@ if (shouldNotarize) {
  * @see https://www.electron.build/configuration/configuration
  */
 const config = {
-  appId: 'com.akiver.csdm',
+  appId: 'local.cs2.parser',
   copyright: 'Copyright © 2014-present AkiVer',
-  productName: 'CS Demo Manager',
+  productName: 'CS2Lighter',
+  artifactName: 'CS2Lighter-${version}-${arch}.${ext}',
   publish: {
     provider: 'github',
+    owner: 'fuyuxiang18',
+    repo: 'CS2Lighter',
+    releaseType: 'release',
   },
-  releaseInfo: {
-    releaseName: `v${pkg.version}`,
-    releaseNotes: `https://cs-demo-manager.com/changelog#v${pkg.version.replaceAll('.', '')}`,
-  },
-  fileAssociations: {
-    ext: 'dem',
-    name: 'DEM',
-    description: 'CS demo file',
-    role: 'Viewer',
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    runAfterFinish: false,
   },
   win: {
     target: {
       target: 'nsis',
       arch: ['x64'],
     },
-    executableName: 'cs-demo-manager',
+    executableName: 'cs2-parser',
     extraFiles: [
       {
         from: 'build-assets/bin/csdm.cmd',
@@ -75,7 +74,7 @@ const config = {
       },
     ],
     category: 'public.app-category.developer-tools',
-    appId: 'com.akiver.csdm',
+    appId: 'local.cs2.parser',
     notarize: shouldNotarize,
     extraResources: [
       // From https://developer.apple.com/forums/thread/128166
@@ -127,12 +126,16 @@ const config = {
   },
   files: [
     'package.json',
+    'LICENSE',
+    'NOTICE.txt',
     {
       from: 'out',
       to: '.',
     },
   ],
   beforePack: async (context) => {
+    const { collectThirdPartyLicenses } = await import('./scripts/collect-third-party-licenses.mjs');
+    await collectThirdPartyLicenses();
     const { installBoilerWritter, installCounterStrikeVoiceExtractor, installDemoAnalyzer, installEmbeddedPostgreSql } =
       await import('./scripts/install-deps.mjs');
     const arch = Arch[context.arch];

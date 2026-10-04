@@ -93,11 +93,14 @@ declare global {
     minimizeWindow: () => void;
     onNavigateToPendingDownloads: (callback: () => void) => () => void;
     onNavigateToBans: (callback: () => void) => () => void;
-    onUpdateDownloaded: (callback: () => void) => () => void;
-    hasUpdateReadyToInstall: () => Promise<boolean>;
-    installUpdate: () => void;
+    onUpdateStateChanged: (
+      callback: (state: import('csdm/common/types/app-update').AppUpdateState) => void,
+    ) => () => void;
+    getUpdateState: () => Promise<import('csdm/common/types/app-update').AppUpdateState>;
+    checkForUpdates: () => Promise<import('csdm/common/types/app-update').AppUpdateState>;
+    downloadUpdate: () => Promise<import('csdm/common/types/app-update').AppUpdateState>;
+    installUpdate: () => Promise<import('csdm/common/types/app-update').AppUpdateState>;
     toggleAutoDownloadUpdates: (isEnabled: boolean) => void;
-    shouldShowChangelog: () => Promise<boolean>;
     getDemoAudioFilePath: typeof getDemoAudioFilePath;
     getDemoAudioData: typeof getDemoAudioData;
     getCounterStrikeLogFilePath: (game: Game) => Promise<PreloadResult<string>>;

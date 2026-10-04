@@ -5,7 +5,6 @@ import { matchesReducer } from 'csdm/ui/matches/matches-reducer';
 import { matchReducer } from 'csdm/ui/match/match-reducer';
 import { demoReducer } from 'csdm/ui/demo/demo-reducer';
 import { banReducer } from 'csdm/ui/ban/ban-reducer';
-import { downloadsReducer } from 'csdm/ui/downloads/downloads-reducer';
 import { cacheReducer } from 'csdm/ui/cache/cache-reducer';
 import { mapsReducer } from 'csdm/ui/maps/maps-reducer';
 import { playersReducer } from '../players/players-reducer';
@@ -28,7 +27,6 @@ export const reducers = combineReducers({
   demo: demoReducer,
   match: matchReducer,
   ban: banReducer,
-  downloads: downloadsReducer,
   cache: cacheReducer,
   players: playersReducer,
   player: playerReducer,

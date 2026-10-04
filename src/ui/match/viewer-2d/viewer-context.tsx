@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import React, { createContext, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
 import type { BombDefused } from 'csdm/common/types/bomb-defused';
 import type { BombPlanted } from 'csdm/common/types/bomb-planted';
 import type { BombExploded } from 'csdm/common/types/bomb-exploded';
@@ -36,6 +36,8 @@ import { useViewer2DState } from './use-viewer-state';
 import { deleteDemoAudioOffset, persistDemoAudioOffset } from './audio/audio-offset';
 import type { DrawingTool } from './drawing/use-drawable-canvas';
 import { isDefuseMapFromName } from 'csdm/common/counter-strike/is-defuse-map-from-name';
+import { buildPlayerId } from './build-player-id';
+import { resolveEntryTick } from './resolve-entry-tick';
 
 type ViewerMode = 'drawing' | 'playback';
 
@@ -160,11 +162,21 @@ export function ViewerProvider({
   const dispatch = useDispatch();
   const match = useCurrentMatch();
   const viewerState = useViewer2DState();
+  const [searchParams] = useSearchParams();
+  const requestedPlayer = searchParams.get('player');
   const [mode, setMode] = useState<ViewerMode>('playback');
   const [drawingTool, setDrawingTool] = useState<DrawingTool>('pen');
   const [drawingSize, setDrawingSize] = useState(2);
   const [drawingColor, setDrawingColor] = useState('#ff0000');
-  const [currentTick, setCurrentTick] = useState(round.freezetimeEndTick);
+  const [currentTick, setCurrentTick] = useState(() => {
+    return resolveEntryTick(
+      searchParams.get('tick'),
+      round.startTick,
+      round.freezetimeEndTick,
+      Math.max(round.endOfficiallyTick, round.endTick),
+      playerPositions.map((position) => position.tick),
+    );
+  });
   const [isPlaying, setIsPlaying] = useState(false);
   const [lowerRadarOffsetX, setLowerRadarOffsetX] = useState(() => {
     const value = window.localStorage.getItem(`${match.game}_${match.mapName}_lower_radar_offset_x`);
@@ -184,6 +196,16 @@ export function ViewerProvider({
   const shouldDrawBombs = isDefuseMapFromName(match.mapName);
   const navigate = useNavigate();
   const { audioOffsetSeconds, volume } = viewerState;
+
+  useEffect(() => {
+    const position = playerPositions.find((position) => position.playerSteamId === requestedPlayer);
+    const player = match.players.find((player) => player.steamId === requestedPlayer);
+    if (position) {
+      dispatch(focusedPlayerChanged({ focusedPlayerId: buildPlayerId(position.playerSteamId, position.playerName) }));
+    } else if (player) {
+      dispatch(focusedPlayerChanged({ focusedPlayerId: buildPlayerId(player.steamId, player.name) }));
+    }
+  }, [dispatch, match.players, playerPositions, requestedPlayer]);
 
   const clampAudioTime = (seconds: number): number => {
     if (!audio || isNaN(audio.duration)) {

@@ -34,17 +34,17 @@ export type ValveDownload = BaseDownload & {
   match: ValveMatch;
 };
 
-export type FaceitDownload = BaseDownload & {
+type FaceitDownload = BaseDownload & {
   source: typeof DownloadSource.Faceit;
   match: FaceitMatch;
 };
 
-export type FiveEPlayDownload = BaseDownload & {
+type FiveEPlayDownload = BaseDownload & {
   source: (typeof DownloadSource)['5EPlay'];
   match: FiveEPlayMatch;
 };
 
-export type RenownDownload = BaseDownload & {
+type RenownDownload = BaseDownload & {
   source: typeof DownloadSource.Renown;
   match: RenownMatch;
 };

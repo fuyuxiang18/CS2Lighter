@@ -8,7 +8,7 @@ async function loadLocale(locale: string) {
   const jsonPath = path.join(__dirname, 'translations', folderName, 'messages.json');
   const content = await fs.readFile(jsonPath, 'utf8');
   const messages = JSON.parse(content);
-  i18n.loadAndActivate({ locale, messages });
+  i18n.loadAndActivate({ locale: folderName, messages });
 }
 
 export async function loadI18n(locale: string) {

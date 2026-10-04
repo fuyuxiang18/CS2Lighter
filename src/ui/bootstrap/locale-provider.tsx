@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { useLocale } from 'csdm/ui/settings/ui/use-locale';
-import { getLocaleFolderName } from 'csdm/common/get-locale-folder-name';
+import { messages as englishMessages } from 'csdm/ui/translations/en/messages.po';
+import { messages as chineseMessages } from 'csdm/ui/translations/zh-CN/messages.po';
 
 type Props = {
   children: ReactNode;
@@ -13,18 +14,10 @@ export function LocaleProvider({ children }: Props) {
   const locale = useLocale();
 
   useEffect(() => {
-    const loadLocaleMessages = async () => {
-      try {
-        const folderName = getLocaleFolderName(locale);
-        const po = await import(`../translations/${folderName}/messages.po`);
-        i18n.loadAndActivate({ locale, messages: po.messages });
-      } catch (error) {
-        const en = await import('../translations/en/messages.po');
-        i18n.loadAndActivate({ locale: 'en', messages: en.messages });
-      }
-    };
-
-    void loadLocaleMessages();
+    // Both catalogs are bundled locally. Synchronous activation also avoids stale
+    // asynchronous imports winning when the user switches languages quickly.
+    i18n.loadAndActivate({ locale, messages: locale === 'en' ? englishMessages : chineseMessages });
+    document.documentElement.lang = locale;
   }, [locale]);
 
   return <I18nProvider i18n={i18n}>{children}</I18nProvider>;

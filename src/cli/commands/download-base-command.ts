@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { assertNetworkDemoDownloadsEnabled } from 'csdm/server/network-demo-downloads';
 import { migrateSettings } from 'csdm/node/settings/migrate-settings';
 import { Command } from './command';
 import {
@@ -12,6 +13,7 @@ export abstract class DownloadBaseCommand extends Command {
   protected outputFlag = '--output';
 
   protected async getOutputFolder() {
+    assertNetworkDemoDownloadsEnabled();
     if (this.outputFolderPath !== '') {
       return this.outputFolderPath;
     }

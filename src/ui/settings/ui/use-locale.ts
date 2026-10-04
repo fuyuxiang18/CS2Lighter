@@ -1,7 +1,8 @@
 import { useUiSettings } from './use-ui-settings';
+import { getLocaleFolderName } from 'csdm/common/get-locale-folder-name';
 
 export function useLocale() {
   const ui = useUiSettings();
 
-  return ui.locale;
+  return getLocaleFolderName(ui.locale);
 }

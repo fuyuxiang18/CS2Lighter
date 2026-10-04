@@ -14,8 +14,8 @@ type Props = {
 export function FolderRow({ folder }: Props) {
   return (
     <div className="flex flex-col rounded-4 border border-gray-300 p-8">
-      <p className="selectable font-semibold">{folder.path}</p>
-      <div className="mt-4 flex items-center justify-between">
+      <p className="selectable font-semibold break-all">{folder.path}</p>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-12">
         <IncludeSubFoldersSwitch folder={folder} />
         <div className="flex gap-x-8">
           <RevealFolderInExplorerButton path={folder.path} />

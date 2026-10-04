@@ -33,9 +33,6 @@
         MessageBox MB_OK "Unable to delete $INSTDIR to PATH"
     ${EndIf}
 
-    ; Delete the CSDM folder
-    RMDir /r "$PROFILE\.csdm"
-    ; Delete the updater folder
-    RMDir /r "$PROFILE\AppData\Local\cs-demo-manager-updater"
+    ; Keep all user demo/database/settings folders. This fork must never remove upstream CSDM data.
   ${endIf}
 !macroend

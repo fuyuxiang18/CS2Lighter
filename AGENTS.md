@@ -2,10 +2,15 @@
 
 ## Project
 
-CS Demo Manager is a cross-platform Electron desktop application and CLI for analyzing Counter-Strike (CS2 / CS:GO) demo
-files. It parses demos and stores data in a database. Features include match/player/team statistics, graphs,
-a 2D round viewer, heatmaps, video generation, demo downloads from Valve and third-party services, XLSX/JSON export,
-ban tracking, voice audio extraction and more.
+CS2Lighter is a local CS2 habits and learning desktop application based on CS Demo Manager (MIT).
+It only imports demos from explicitly configured folders; do not restore remote demo downloading or automatic folder discovery.
+The default language is Simplified Chinese; English is the only alternative. Both catalogs ship with the app.
+
+The user requests ongoing GitHub synchronization: after completing and validating authorized changes, commit and push
+to origin (fuyuxiang18/CS2Lighter). Upstream is the original project and must not receive pushes.
+Use patch versions for small bug fixes, minor versions for larger features, and major versions for major milestones.
+See docs/RELEASING.md for releases and data compatibility. Never change the legacy appId, data path, or identity/notes
+storage keys just to rename the product. Never commit demos, user profiles, databases, credentials or QA fixtures with personal data.
 
 ## Stack
 
@@ -15,7 +20,7 @@ ban tracking, voice audio extraction and more.
 - **Languages**: TypeScript (app/CLI), C++ (CS2/CS:GO plugins and Node.js native addons).
 - **UI**: React, Redux Toolkit, React Router, Tailwind CSS, ECharts, Motion, etc.
 - **Backend**: PostgreSQL database (`pg` + `kysely`), WebSocket server (`ws`). PostgreSQL is bundled with the app and started by the server daemon, an external mode also allows connecting to an existing PostgreSQL database.
-- **i18n**: LinguiJS + Crowdin.
+- **i18n**: LinguiJS, locally maintained English and Simplified Chinese catalogs.
 - **Linting**: oxlint with custom rules in `linter/`.
 - **Testing**: Vitest via `vite-plus/test`.
 - **Build**: Vite+, esbuild, electron-builder for packaging.
@@ -32,7 +37,7 @@ Build:
 
 - `vp run build` — production build (bundles main/server/preload with esbuild, renderer with Vite).
 - `vp run package` — package as distributable with electron-builder (runs `build` first).
-- `vp run i18n:extract` — extract localizable strings into .po files for Crowdin.
+- `vp run i18n:extract` — extract localizable strings into local catalogs; update Chinese translations afterward.
 
 Code quality:
 
@@ -52,7 +57,7 @@ Before submitting changes, all of the following must pass:
 1. `vp check` — lint, format, and type-check
 2. `vp run test` — all tests
 3. `vp run deadcode` — no unused code introduced
-4. `vp run i18n:extract` — if any user-visible strings were added or changed, run this and commit the updated English source catalogs.
+4. `vp run i18n:extract` — if any user-visible strings were added or changed, run this and commit both English and Simplified Chinese catalogs. Run `node scripts/validate-translations.mjs` afterward.
 
 ## Architecture
 
@@ -119,9 +124,9 @@ Only unit tests exist today — integration and E2E tests may be added later. Te
 
 The app is localized with **LinguiJS**. Source strings are written in English and extracted with `vp run i18n:extract` into per-locale catalogs (`src/ui/translations/{locale}/messages.po` for the renderer, `src/electron-main/translations/{locale}/*.json` for the main process).
 
-Only the **English** source catalogs (`en/messages.po` and `en/messages.json`) are committed to the repository. The other locales are managed on **Crowdin** and downloaded at build time (`scripts/build.mjs`), so they are gitignored and never committed. Local/dev builds without a `CROWDIN_PERSONAL_TOKEN` skip the download and fall back to English at runtime.
+This fork supports **Simplified Chinese (`zh-CN`) and English (`en`)**. Commit both renderer PO catalogs and both main-process JSON catalogs. Simplified Chinese is the default; user language changes persist. Catalogs are bundled locally, and builds must not depend on Crowdin credentials or downloads.
 
-When you add or change a string, only commit the updated English source. Do **not** manually translate the `.po`/`.json` files yourself — Crowdin contributors fill in the other locales and the build pulls them in.
+After extraction, translate new Chinese entries and run `node scripts/validate-translations.mjs`. See `LOCALIZATION.md` for provenance and validation. This fork policy supersedes the upstream English-only/Crowdin workflow.
 
 Use the `/i18n` skill when adding or updating any user-visible string in the UI.
 

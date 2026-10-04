@@ -17,7 +17,6 @@ import {
   demosDeleted,
 } from './demos-actions';
 import { commentUpdated } from 'csdm/ui/comment/comment-actions';
-import { demoDownloadedInCurrentFolderLoaded } from 'csdm/ui/downloads/downloads-actions';
 import { checksumsTagsUpdated, tagDeleted } from 'csdm/ui/tags/tags-actions';
 import { insertMatchSuccess } from '../analyses/analyses-actions';
 import { matchesTypeUpdated } from '../matches/matches-actions';
@@ -107,12 +106,6 @@ export const demosReducer = createReducer(initialState, (builder) => {
     })
     .addCase(fuzzySearchTextChanged, (state, action) => {
       state.fuzzySearchText = action.payload.text;
-    })
-    .addCase(demoDownloadedInCurrentFolderLoaded, (state, action) => {
-      const demo = state.entities.find((demo) => demo.filePath === action.payload.filePath);
-      if (demo === undefined) {
-        state.entities.push(action.payload);
-      }
     })
     .addCase(insertMatchSuccess, (state, action) => {
       const demos = state.entities.filter((demo) => demo.checksum === action.payload.checksum);

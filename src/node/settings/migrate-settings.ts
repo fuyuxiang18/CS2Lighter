@@ -16,7 +16,7 @@ function getMigrationsForUpgrade(migrations: Migration[], currentSchemaVersion: 
 
 export async function migrateSettings(): Promise<Settings> {
   // Fresh installation: the default settings go through every migration, some of them initialize values that depend
-  // on the machine (locale, recording system...).
+  // on the machine (recording system...).
   // ! Always work on a copy, the default settings are a module-level object shared by the whole process and
   // migrations mutate the settings they receive.
   let settings = structuredClone(defaultSettings);

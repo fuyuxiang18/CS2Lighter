@@ -1,4 +1,5 @@
 import type { RawData } from 'ws';
+import { isUpdateMaintenance } from './update-maintenance';
 import type WebSocket from 'ws';
 import { WebSocketServer as WSServer } from 'ws';
 import type { IncomingMessage } from 'node:http';
@@ -7,7 +8,7 @@ import { randomUUID } from 'node:crypto';
 import { rendererHandlers } from 'csdm/server/handlers/renderer-handlers-mapping';
 import { mainHandlers } from 'csdm/server/handlers/main-handlers-mapping';
 import { cliHandlers, probeHandlers } from 'csdm/server/handlers/cli-handlers-mapping';
-import type { MainClientMessageName } from 'csdm/server/messages/main-client-message-name';
+import { MainClientMessageName } from 'csdm/server/messages/main-client-message-name';
 import { getWebSocketServerPort, WEB_SOCKET_SERVER_PORT_ENV_NAME } from './port';
 import type { SharedServerMessagePayload } from 'csdm/server/messages/shared-server-message-name';
 import { SharedServerMessageName } from 'csdm/server/messages/shared-server-message-name';
@@ -19,6 +20,8 @@ import type {
 } from 'csdm/server/messages/main-server-message-name';
 import { ErrorCode } from '../common/error-code';
 import { probeDaemon } from 'csdm/node/daemon/probe-daemon';
+import { readDaemonInfoFile } from 'csdm/node/daemon/daemon-info-file';
+import { isProcessAlive } from 'csdm/node/os/is-process-alive';
 import type { ServerPushMessagePayload, ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 import type { Handler, HandlerContext } from 'csdm/server/messages/handler';
 import { videoQueue } from 'csdm/server/video-queue';
@@ -26,6 +29,13 @@ import { analysesListener } from 'csdm/server/analyses-listener';
 import type { GameServerMessageName, GameServerMessagePayload } from 'csdm/server/messages/game-server-message-name';
 import type { GameClientMessageName, GameClientMessagePayload } from 'csdm/server/messages/game-client-message-name';
 import type { Message } from 'csdm/server/messages/message';
+
+let activeRequestCount = 0;
+
+/** Includes exports and other awaited handlers that do not have a dedicated background queue. */
+export function getActiveRequestCount() {
+  return activeRequestCount;
+}
 
 type SendablePushMessage<MessageName extends ServerPushMessageName = ServerPushMessageName> = Message<
   MessageName,
@@ -76,6 +86,7 @@ class WebSocketServer {
   private createServer(port: number, onListening: (port: number) => void) {
     this.server = new WSServer({
       port,
+      host: '127.0.0.1',
     });
 
     this.server.on('listening', () => {
@@ -300,7 +311,15 @@ class WebSocketServer {
       return;
     }
 
+    let counted = false;
     try {
+      if (isUpdateMaintenance()) {
+        throw new Error('Application update in progress');
+      }
+      if (name !== MainClientMessageName.PrepareForUpdate) {
+        activeRequestCount += 1;
+        counted = true;
+      }
       const result = await handler(payload, context);
       socket.send(
         JSON.stringify({
@@ -329,6 +348,10 @@ class WebSocketServer {
           uuid,
         }),
       );
+    } finally {
+      if (counted) {
+        activeRequestCount -= 1;
+      }
     }
   };
 
@@ -471,15 +494,16 @@ class WebSocketServer {
     this.server?.close();
 
     const status = await probeDaemon(port);
-    if (status !== null && status.isDev === IS_DEV) {
+    const ownDaemon = await readDaemonInfoFile();
+    if (status !== null && status.isDev === IS_DEV && ownDaemon?.port === port && isProcessAlive(ownDaemon.pid)) {
       // Another daemon is already listening on this port, typically because two processes spawned a daemon at the same
       // time. The process that spawned this daemon will discover the other one through the daemon info file.
       logger.log(`WS:: a daemon is already listening on port ${port}, exiting`);
       process.exit(0);
     }
 
-    // The port is used by a daemon of the other flavor (dev/production daemons use separate discovery files, so the
-    // spawner would never find it) or by an unrelated application, let the OS pick a free port.
+    // Other profiles and the upstream app have separate discovery files, so their daemons cannot be reused.
+    // Let the OS pick a free port instead of exiting and leaving this profile unable to start.
     // Clients discover the actual port through the daemon info file.
     logger.warn(`WS:: port ${port} is used by another application, falling back to a random port`);
     this.createServer(0, onListening);

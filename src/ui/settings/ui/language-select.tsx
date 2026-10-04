@@ -13,32 +13,12 @@ export function LanguageSelect() {
   /* oxlint-disable lingui/no-unlocalized-strings */
   const options: SelectOption[] = [
     {
-      value: 'en',
-      label: 'English',
-    },
-    {
-      value: 'fr',
-      label: 'Français',
-    },
-    {
-      value: 'pt-BR',
-      label: 'Português (Brasil)',
-    },
-    {
       value: 'zh-CN',
       label: '简体中文',
     },
     {
-      value: 'zh-TW',
-      label: '繁體中文',
-    },
-    {
-      value: 'de',
-      label: 'Deutsch',
-    },
-    {
-      value: 'ru',
-      label: 'Русский',
+      value: 'en',
+      label: 'English',
     },
   ];
   /* oxlint-enable lingui/no-unlocalized-strings */

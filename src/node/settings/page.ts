@@ -1,4 +1,6 @@
 export const Page = {
+  Habits: 'habits',
+  Learning: 'learning',
   Download: 'download',
   Demos: 'demos',
   Matches: 'matches',
