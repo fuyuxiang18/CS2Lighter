@@ -22,6 +22,7 @@ export type ReviewDuel = {
   eventTick: number;
   endTick: number;
   opponent: string;
+  opponentSteamId: string;
   weapon: string;
   kind: 'kill' | 'death' | 'damage';
   opening: boolean;

@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/ui/analyses/action-bar/remove-all-analyses-button.tsx
-msgid "Remove all"
-msgstr "Remove all"
+msgid "Remove pending and finished"
+msgstr "Remove pending and finished"
 
 #: src/ui/analyses/action-bar/remove-analyses-succeed-button.tsx
 msgid "Remove succeed analyses"
@@ -47,6 +47,10 @@ msgid "Inserting match…"
 msgstr "Inserting match…"
 
 #: src/ui/analyses/analysis-logs.tsx
+msgid "Parsing was cancelled. The original demo was not changed."
+msgstr "Parsing was cancelled. The original demo was not changed."
+
+#: src/ui/analyses/analysis-logs.tsx
 msgctxt "Analysis status"
 msgid "Match inserted into the database."
 msgstr "Match inserted into the database."
@@ -73,6 +77,11 @@ msgid "No demo analysis in progress."
 msgstr "No demo analysis in progress."
 
 #: src/ui/analyses/table/context-menu/remove-demo-from-analyses-item.tsx
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Cancel current parsing"
+msgstr "Cancel current parsing"
+
+#: src/ui/analyses/table/context-menu/remove-demo-from-analyses-item.tsx
 #: src/ui/match/video/sequence/match-timeline/camera-item.tsx
 #: src/ui/match/video/sequence/match-timeline/custom-camera-item.tsx
 msgctxt "Context menu"
@@ -90,6 +99,11 @@ msgstr "See demo"
 msgctxt "Context menu"
 msgid "See match"
 msgstr "See match"
+
+#: src/ui/analyses/table/status-cell.tsx
+msgctxt "Analysis status"
+msgid "Cancelled"
+msgstr "Cancelled"
 
 #: src/ui/analyses/table/status-cell.tsx
 msgctxt "Analysis status"
@@ -654,7 +668,6 @@ msgstr "You need to install <0>Rosetta</0>."
 #: src/ui/players/players-table.tsx
 #: src/ui/search/search-results.tsx
 #: src/ui/settings/cameras/delete-camera-dialog.tsx
-#: src/ui/settings/database/database-size.tsx
 #: src/ui/settings/database/import-v2-data-button.tsx
 #: src/ui/settings/database/optimize-database-button.tsx
 #: src/ui/settings/maps/delete-map-dialog.tsx
@@ -2646,6 +2659,7 @@ msgid "Opens the event context in the 2D viewer. Verify the interpretation in th
 msgstr "Opens the event context in the 2D viewer. Verify the interpretation in the round."
 
 #: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Round {round}"
 msgstr "Round {round}"
@@ -2715,51 +2729,13 @@ msgid "No POV images were sent. Event statistics cannot assess pre-aim, visibili
 msgstr "No POV images were sent. Event statistics cannot assess pre-aim, visibility or mouse control."
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Set an AI provider, server address and model before generating a review."
-msgstr "Set an AI provider, server address and model before generating a review."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
-msgstr "Encrypted key storage is unavailable on this device. Check the AI settings."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The API key is missing or could not be read. Save it in the AI settings."
-msgstr "The API key is missing or could not be read. Save it in the AI settings."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "This player or match is not available for an AI review."
-msgstr "This player or match is not available for an AI review."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "No usable rounds match this selection. Import demos or change the filters first."
-msgstr "No usable rounds match this selection. Import demos or change the filters first."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The AI request failed. Check the server address, model and credentials, then try again."
-msgstr "The AI request failed. Check the server address, model and credentials, then try again."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The model did not respond in time. Try again or choose a faster model."
-msgstr "The model did not respond in time. Try again or choose a faster model."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
-msgstr "The model returned a report that could not be verified. It was not saved. Try another model or retry."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The report could not be saved locally. Check available disk space and try again."
-msgstr "The report could not be saved locally. Check available disk space and try again."
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
-msgstr "Another AI review is being generated. Wait for it to finish, then refresh this panel."
-
-#: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "OpenAI-compatible API"
 msgstr "OpenAI-compatible API"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Ollama"
 msgstr "Ollama"
 
@@ -2777,6 +2753,7 @@ msgid "Turn your recorded situations into a small set of actions to verify in th
 msgstr "Turn your recorded situations into a small set of actions to verify in the next match."
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "AI settings"
 msgstr "AI settings"
 
@@ -2789,6 +2766,7 @@ msgid "Generation sends aggregate numbers and sampled round events to your confi
 msgstr "Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files, videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this input."
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Generation target: {target} · {serverHost} · {model}"
 msgstr "Generation target: {target} · {serverHost} · {model}"
 
@@ -2830,6 +2808,7 @@ msgid "Refresh local report"
 msgstr "Refresh local report"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Choose a provider and model in AI settings to start."
 msgstr "Choose a provider and model in AI settings to start."
 
@@ -3188,7 +3167,7 @@ msgid "Close the running CS2 session before opening this POV."
 msgstr "Close the running CS2 session before opening this POV."
 
 #: src/ui/habits/habits-playback-button.tsx
-#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/use-review-clip-messages.ts
 msgid "An unfinished replay setup was found in the game folder. Finish or restore that setup before recording."
 msgstr "An unfinished replay setup was found in the game folder. Finish or restore that setup before recording."
 
@@ -3197,7 +3176,7 @@ msgid "Could not open the POV. Start Steam and check the CS2 path, HLAE installa
 msgstr "Could not open the POV. Start Steam and check the CS2 path, HLAE installation and original demo. Your existing game will not be closed automatically."
 
 #: src/ui/habits/habits-playback-button.tsx
-#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/review-batch-studio.tsx
 msgid "Recording setup"
 msgstr "Recording setup"
 
@@ -3660,6 +3639,113 @@ msgstr "Result"
 msgid "Show more matches"
 msgstr "Show more matches"
 
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Edited review videos"
+msgstr "Edited review videos"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{selectedCount} selected events · {demoCount} matches"
+msgstr "{selectedCount} selected events · {demoCount} matches"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "One game start per demo. Record selected events together, then watch the saved videos instantly."
+msgstr "One game start per demo. Record selected events together, then watch the saved videos instantly."
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Include the opponent POV after each of my encounters"
+msgstr "Include the opponent POV after each of my encounters"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
+msgstr "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Record selected events"
+msgstr "Record selected events"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Cancel this recording batch"
+msgstr "Cancel this recording batch"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Retry this batch"
+msgstr "Retry this batch"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Select up to 20 combat events below. Your selection stays when changing pages."
+msgstr "Select up to 20 combat events below. Your selection stays when changing pages."
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Recording batch progress"
+msgstr "Recording batch progress"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{completedSegments} / {totalSegments} camera segments · {completedDemos} / {batchDemoCount} demos · {launchCount} game starts"
+msgstr "{completedSegments} / {totalSegments} camera segments · {completedDemos} / {batchDemoCount} demos · {launchCount} game starts"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Processing demo {currentDemo} of {batchDemoCount}"
+msgstr "Processing demo {currentDemo} of {batchDemoCount}"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Event {currentEvent}"
+msgstr "Event {currentEvent}"
+
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Your POV"
+msgstr "Your POV"
+
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Opponent POV"
+msgstr "Opponent POV"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Game setup"
+msgstr "Game setup"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Event {eventNumber}"
+msgstr "Event {eventNumber}"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Recent recording batches"
+msgstr "Recent recording batches"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{count} events"
+msgstr "{count} events"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Could not load or start this recording batch. Check the demo and recording setup, then retry."
+msgstr "Could not load or start this recording batch. Check the demo and recording setup, then retry."
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Watch the compilation"
+msgstr "Watch the compilation"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "This saved video could not be played. Check that its local file still exists."
+msgstr "This saved video could not be played. Check that its local file still exists."
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Each event shows your POV first, then the verified opponent when included. Each camera stops before that player dies; no unrelated spectator footage is added."
+msgstr "Each event shows your POV first, then the verified opponent when included. Each camera stops before that player dies; no unrelated spectator footage is added."
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Stops at death"
+msgstr "Stops at death"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "No verified opponent view is available for this event."
+msgstr "No verified opponent view is available for this event."
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Choose one event above to preview its key frames and request a focused AI video review."
+msgstr "Choose one event above to preview its key frames and request a focused AI video review."
+
 #: src/ui/habits/review-clip-viewer.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Close POV"
@@ -3671,140 +3757,12 @@ msgid "Watch real POV"
 msgstr "Watch real POV"
 
 #: src/ui/habits/review-clip-viewer.tsx
-msgid "Clip recording currently requires Windows."
-msgstr "Clip recording currently requires Windows."
+msgid "Previously saved single POV clip"
+msgstr "Previously saved single POV clip"
 
 #: src/ui/habits/review-clip-viewer.tsx
-msgid "Choose your CS2 installation in Playback settings."
-msgstr "Choose your CS2 installation in Playback settings."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Install HLAE in Video settings to record the game."
-msgstr "Install HLAE in Video settings to record the game."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Install FFmpeg in Video settings to save MP4 clips."
-msgstr "Install FFmpeg in Video settings to save MP4 clips."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Start Steam, then check again."
-msgstr "Start Steam, then check again."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Close CS2 before recording. Your running game will not be stopped automatically."
-msgstr "Close CS2 before recording. Your running game will not be stopped automatically."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Another video is being recorded. Wait for it to finish."
-msgstr "Another video is being recorded. Wait for it to finish."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "The original demo is missing. Restore it to its imported folder."
-msgstr "The original demo is missing. Restore it to its imported folder."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "The demo changed since import. Import the new file before recording."
-msgstr "The demo changed since import. Import the new file before recording."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "This event has no valid recording range. Choose another event."
-msgstr "This event has no valid recording range. Choose another event."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording requires a writable path without special characters. Check the app and game locations."
-msgstr "Recording requires a writable path without special characters. Check the app and game locations."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "There is not enough free space for the recording."
-msgstr "There is not enough free space for the recording."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "CS2 recording failed. Check game compatibility and HLAE, then retry."
-msgstr "CS2 recording failed. Check game compatibility and HLAE, then retry."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "No playable video was produced. Check CS2 and recording tools, then retry."
-msgstr "No playable video was produced. Check CS2 and recording tools, then retry."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording was interrupted. You can retry this clip."
-msgstr "Recording was interrupted. You can retry this clip."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "An update is being installed. Retry after the app restarts."
-msgstr "An update is being installed. Retry after the app restarts."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "No saved clip yet"
-msgstr "No saved clip yet"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Waiting to record"
-msgstr "Waiting to record"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Preparing CS2"
-msgstr "Preparing CS2"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording real POV…"
-msgstr "Recording real POV…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Saving the video…"
-msgstr "Saving the video…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Saved locally"
-msgstr "Saved locally"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording failed"
-msgstr "Recording failed"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording canceled"
-msgstr "Recording canceled"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Real first-person replay"
-msgstr "Real first-person replay"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Checking saved video…"
-msgstr "Checking saved video…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Rendered from the CS2 demo · player POV · no X-ray · not a screen recording from the original match."
-msgstr "Rendered from the CS2 demo · player POV · no X-ray · not a screen recording from the original match."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "This saved video could not be played. Open the POV directly in CS2, or check the recording tools."
-msgstr "This saved video could not be played. Open the POV directly in CS2, or check the recording tools."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Open this moment in CS2, or record it once for playback here. Recording opens a CS2 window and uses the game installation; keep Steam running."
-msgstr "Open this moment in CS2, or record it once for playback here. Recording opens a CS2 window and uses the game installation; keep Steam running."
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Cancel recording"
-msgstr "Cancel recording"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Record this POV clip"
-msgstr "Record this POV clip"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Check again"
-msgstr "Check again"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Game setup"
-msgstr "Game setup"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Could not load or start this clip. Check the demo and recording setup, then retry."
-msgstr "Could not load or start this clip. Check the demo and recording setup, then retry."
+msgid "Your older video is still available. Edited review videos are saved separately."
+msgstr "Your older video is still available. Edited review videos are saved separately."
 
 #: src/ui/habits/review-duels.tsx
 msgid "Your combat events"
@@ -3843,6 +3801,18 @@ msgstr "Deaths"
 #: src/ui/habits/review-duels.tsx
 msgid "Damage without a kill"
 msgstr "Damage without a kill"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Select this page for recording"
+msgstr "Select this page for recording"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Clear recording selection"
+msgstr "Clear recording selection"
+
+#: src/ui/habits/review-duels.tsx
+msgid "{selectedCount} / 20 selected"
+msgstr "{selectedCount} / 20 selected"
 
 #: src/ui/habits/review-duels.tsx
 msgid "Loading combat events…"
@@ -3887,6 +3857,10 @@ msgstr "Headshot"
 #: src/ui/habits/review-duels.tsx
 msgid "Dealt {damageGiven} / taken {damageTaken}"
 msgstr "Dealt {damageGiven} / taken {damageTaken}"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Include in recording batch"
+msgstr "Include in recording batch"
 
 #: src/ui/habits/review-duels.tsx
 msgid "2D context"
@@ -4228,6 +4202,163 @@ msgstr "This replaces your current practice focus and starts a new tracking peri
 msgid "Start this practice"
 msgstr "Start this practice"
 
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Set an AI provider, server address and model before generating a review."
+msgstr "Set an AI provider, server address and model before generating a review."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
+msgstr "Encrypted key storage is unavailable on this device. Check the AI settings."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The API key is missing or could not be read. Save it in the AI settings."
+msgstr "The API key is missing or could not be read. Save it in the AI settings."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This player or match is not available for an AI review."
+msgstr "This player or match is not available for an AI review."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "No usable rounds match this selection. Import demos or change the filters first."
+msgstr "No usable rounds match this selection. Import demos or change the filters first."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The AI request failed. Check the server address, model and credentials, then try again."
+msgstr "The AI request failed. Check the server address, model and credentials, then try again."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model did not respond in time. Try again or choose a faster model."
+msgstr "The model did not respond in time. Try again or choose a faster model."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
+msgstr "The model returned a report that could not be verified. It was not saved. Try another model or retry."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report could not be saved locally. Check available disk space and try again."
+msgstr "The report could not be saved locally. Check available disk space and try again."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This recorded video is unavailable or incomplete. Generate the video before preparing an AI review."
+msgstr "This recorded video is unavailable or incomplete. Generate the video before preparing an AI review."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The video frames could not be read. Check FFmpeg and the recorded video, then try again."
+msgstr "The video frames could not be read. Check FFmpeg and the recorded video, then try again."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This preview has expired or the AI target changed. Preview the frames again before sending."
+msgstr "This preview has expired or the AI target changed. Preview the frames again before sending."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The server or model could not accept this visual request, or reported that it could not see the images. Choose a vision-capable model that supports image inputs and JSON responses. No text-only fallback was generated."
+msgstr "The server or model could not accept this visual request, or reported that it could not see the images. Choose a vision-capable model that supports image inputs and JSON responses. No text-only fallback was generated."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
+msgstr "Another AI review is being generated. Wait for it to finish, then refresh this panel."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Not recorded"
+msgstr "Not recorded"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Waiting to record"
+msgstr "Waiting to record"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Preparing CS2"
+msgstr "Preparing CS2"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording the selected perspectives…"
+msgstr "Recording the selected perspectives…"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Editing and saving the video…"
+msgstr "Editing and saving the video…"
+
+#: src/ui/habits/use-review-clip-messages.ts
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Saved locally"
+msgstr "Saved locally"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording failed"
+msgstr "Recording failed"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording canceled"
+msgstr "Recording canceled"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Clip recording currently requires Windows."
+msgstr "Clip recording currently requires Windows."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Choose your CS2 installation in Playback settings."
+msgstr "Choose your CS2 installation in Playback settings."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Install HLAE in Video settings to record the game."
+msgstr "Install HLAE in Video settings to record the game."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Install FFmpeg in Video settings to save MP4 clips."
+msgstr "Install FFmpeg in Video settings to save MP4 clips."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Start Steam, then check again."
+msgstr "Start Steam, then check again."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Close CS2 before recording. Your running game will not be stopped automatically."
+msgstr "Close CS2 before recording. Your running game will not be stopped automatically."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Another video is being recorded. Wait for it to finish."
+msgstr "Another video is being recorded. Wait for it to finish."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "The original demo is missing. Restore it to its imported folder."
+msgstr "The original demo is missing. Restore it to its imported folder."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "The demo changed since import. Import the new file before recording."
+msgstr "The demo changed since import. Import the new file before recording."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "This event has no valid recording range. Choose another event."
+msgstr "This event has no valid recording range. Choose another event."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording requires a writable path without special characters. Check the app and game locations."
+msgstr "Recording requires a writable path without special characters. Check the app and game locations."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "There is not enough free space for the recording."
+msgstr "There is not enough free space for the recording."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "CS2 recording failed. Check game compatibility and HLAE, then retry."
+msgstr "CS2 recording failed. Check game compatibility and HLAE, then retry."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "No playable video was produced. Check CS2 and recording tools, then retry."
+msgstr "No playable video was produced. Check CS2 and recording tools, then retry."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording was interrupted. You can retry this clip."
+msgstr "Recording was interrupted. You can retry this clip."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "An update is being installed. Retry after the app restarts."
+msgstr "An update is being installed. Retry after the app restarts."
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording failed. Check the recording setup and retry."
+msgstr "Recording failed. Check the recording setup and retry."
+
 #: src/ui/habits/use-review-labels.ts
 msgid "First contact, first death"
 msgstr "First contact, first death"
@@ -4379,6 +4510,151 @@ msgstr "Traded deaths"
 #: src/ui/habits/use-review-labels.ts
 msgid "Utility round share"
 msgstr "Utility round share"
+
+#: src/ui/habits/video-ai-report-content.tsx
+#: src/ui/search/results/result-row.tsx
+msgid "{seconds}s"
+msgstr "{seconds}s"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
+msgstr "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Choices in this encounter"
+msgstr "Choices in this encounter"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Observe → interpret → try an alternative"
+msgstr "Observe → interpret → try an alternative"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Player-visible evidence"
+msgstr "Player-visible evidence"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Opponent view · Hindsight only"
+msgstr "Opponent view · Hindsight only"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Information uncertain"
+msgstr "Information uncertain"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Observation"
+msgstr "Observation"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Interpretation"
+msgstr "Interpretation"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Alternative action"
+msgstr "Alternative action"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Uncertainty"
+msgstr "Uncertainty"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "One comparable situation to practice"
+msgstr "One comparable situation to practice"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Next-match check"
+msgstr "Next-match check"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "What remains uncertain"
+msgstr "What remains uncertain"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "AI video review"
+msgstr "AI video review"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
+msgstr "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
+msgstr "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Preparing frame preview…"
+msgstr "Preparing frame preview…"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Preview frames for AI"
+msgstr "Preview frames for AI"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "{frameCount, plural, one {# exact image for this request} other {# exact images for this request}}"
+msgstr "{frameCount, plural, one {# exact image for this request} other {# exact images for this request}}"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
+msgstr "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
+msgstr "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Only the player's recorded view is available for this review. No opponent view is inferred."
+msgstr "Only the player's recorded view is available for this review. No opponent view is inferred."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
+msgstr "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
+msgstr "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Selected preview frame"
+msgstr "Selected preview frame"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Sampled video frame"
+msgstr "Sampled video frame"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Exact round facts and frame metadata sent with the images"
+msgstr "Exact round facts and frame metadata sent with the images"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
+msgstr "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Reviewing the sampled frames…"
+msgstr "Reviewing the sampled frames…"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Send frames and regenerate"
+msgstr "Send frames and regenerate"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Send frames and review"
+msgstr "Send frames and review"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "One request to the configured vision model. Cloud image inputs may incur API charges."
+msgstr "One request to the configured vision model. Cloud image inputs may incur API charges."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
+msgstr "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Player POV"
+msgstr "Player POV"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "{seconds}s · tick {tick}"
+msgstr "{seconds}s · tick {tick}"
 
 #: src/ui/hooks/chart/use-match-result-pie.tsx
 msgctxt "Match result"
@@ -4636,8 +4912,12 @@ msgid "Retry connection"
 msgstr "Retry connection"
 
 #: src/ui/imports/import-progress-gate.tsx
-msgid "Some demo files need attention"
-msgstr "Some demo files need attention"
+msgid "Imports run in the background. Ready matches remain available."
+msgstr "Imports run in the background. Ready matches remain available."
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Import progress and files"
+msgstr "Import progress and files"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Waiting for file to finish writing"
@@ -4712,8 +4992,8 @@ msgid "Import results"
 msgstr "Import results"
 
 #: src/ui/imports/import-progress-gate.tsx
-msgid "Browsing will unlock when this batch finishes. You can still manage folders and settings."
-msgstr "Browsing will unlock when this batch finishes. You can still manage folders and settings."
+msgid "You can browse ready matches while this batch continues."
+msgstr "You can browse ready matches while this batch continues."
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Ready matches are available. Review the files below before retrying."
@@ -4767,6 +5047,38 @@ msgstr "Retry files needing attention"
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Retry could not start. Check the folders and try again."
 msgstr "Retry could not start. Check the folders and try again."
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Resume queue"
+msgstr "Resume queue"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Pause queue"
+msgstr "Pause queue"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Cancel cache generation"
+msgstr "Cancel cache generation"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Remove queued analyses"
+msgstr "Remove queued analyses"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Pausing stops new analyses. Saving already parsed data finishes safely."
+msgstr "Pausing stops new analyses. Saving already parsed data finishes safely."
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Paused jobs stay in the background. Finish or remove queued jobs before updating or stopping the background service."
+msgstr "Paused jobs stay in the background. Finish or remove queued jobs before updating or stopping the background service."
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Saving match data cannot be interrupted. Pause the queue to stop after the current save."
+msgstr "Saving match data cannot be interrupted. Pause the queue to stop after the current save."
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Could not change the queue. Please retry."
+msgstr "Could not change the queue. Please retry."
 
 #: src/ui/left-bar/analyses-link.tsx
 msgctxt "Tooltip"
@@ -7909,10 +8221,6 @@ msgstr "CT {ctAliveCount}"
 msgid "T {tAliveCount}"
 msgstr "T {tAliveCount}"
 
-#: src/ui/search/results/result-row.tsx
-msgid "{seconds}s"
-msgstr "{seconds}s"
-
 #: src/ui/search/search-results.tsx
 msgid "You have to analyze demos first to search for events."
 msgstr "You have to analyze demos first to search for events."
@@ -8174,12 +8482,16 @@ msgid "Remove saved key"
 msgstr "Remove saved key"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Start Ollama and install a text model before generating. The local option only accepts localhost addresses; no cloud account is required."
-msgstr "Start Ollama and install a text model before generating. The local option only accepts localhost addresses; no cloud account is required."
+msgid "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
+msgstr "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Your chosen API provider may charge for generation. Only aggregate numbers and sampled round events are sent; demos, videos, names and account IDs stay on this device."
-msgstr "Your chosen API provider may charge for generation. Only aggregate numbers and sampled round events are sent; demos, videos, names and account IDs stay on this device."
+msgid "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
+msgstr "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
+
+#: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
+msgid "Automatic (recommended: 2–3)"
+msgstr "Automatic (recommended: 2–3)"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgctxt "Settings title"
@@ -8187,8 +8499,8 @@ msgid "Maximum number of concurrent analyses"
 msgstr "Maximum number of concurrent analyses"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
-msgid "Maximum number of analyses that can run at the same time."
-msgstr "Maximum number of analyses that can run at the same time."
+msgid "Automatic limits disk and memory contention. Manual values are preserved; saving match data runs one at a time."
+msgstr "Automatic limits disk and memory contention. Manual values are preserved; saving match data runs one at a time."
 
 #: src/ui/settings/analyze/toggle-analyze-positions.tsx
 msgid "Analyze player/grenade positions during manual analysis. Positions are required for habit analysis and the 2D viewer. Automatic folder imports always include positions. This increases import time and disk space usage."
@@ -8356,8 +8668,60 @@ msgid "Use your own PostgreSQL server, local or remote."
 msgstr "Use your own PostgreSQL server, local or remote."
 
 #: src/ui/settings/database/database-size.tsx
-msgid "Database size: <0>{size}</0>."
-msgstr "Database size: <0>{size}</0>."
+msgid "Player trajectories"
+msgstr "Player trajectories"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Grenade, fire and hostage trajectories"
+msgstr "Grenade, fire and hostage trajectories"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Legacy decorative chicken trajectories"
+msgstr "Legacy decorative chicken trajectories"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Other match data and database overhead"
+msgstr "Other match data and database overhead"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "{size} GiB"
+msgstr "{size} GiB"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Database storage"
+msgstr "Database storage"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Refresh storage"
+msgstr "Refresh storage"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Storage information could not be read. Check the database connection and retry."
+msgstr "Storage information could not be read. Check the database connection and retry."
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
+msgstr "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Actual database directory"
+msgstr "Actual database directory"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Managed by the external PostgreSQL server"
+msgstr "Managed by the external PostgreSQL server"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "The physical directory could not be resolved"
+msgstr "The physical directory could not be resolved"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
+msgstr "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
+msgstr "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
 
 #: src/ui/settings/database/database.tsx
 msgid "Host"
@@ -8496,29 +8860,20 @@ msgid "Import V2 data"
 msgstr "Import V2 data"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Optimize database"
-msgstr "Optimize database"
+msgid "Clean library references"
+msgstr "Clean library references"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Delete positions"
-msgstr "Delete positions"
+msgid "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
+msgstr "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "It will delete all data required for the 2D viewer!"
-msgstr "It will delete all data required for the 2D viewer!"
+msgid "Remove unavailable file references"
+msgstr "Remove unavailable file references"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Delete demos that are not on the filesystem anymore"
-msgstr "Delete demos that are not on the filesystem anymore"
-
-#: src/ui/settings/database/optimize-database-button.tsx
-msgid "Clear demos cache"
-msgstr "Clear demos cache"
-
-#: src/ui/settings/database/optimize-database-button.tsx
-msgctxt "Button"
-msgid "Optimize database"
-msgstr "Optimize database"
+msgid "Clear unimported demo metadata"
+msgstr "Clear unimported demo metadata"
 
 #: src/ui/settings/database/reset-database-button.tsx
 msgctxt "Dialog title"

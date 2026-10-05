@@ -40,6 +40,18 @@ function cache(): DemoDataCache {
 }
 
 describe('versioned atomic demo files', () => {
+  it('shares a validated immutable-on-disk result across repeated readers, invalidating it after replacement or deletion', async () => {
+    await writeCacheFile(folder, cache());
+    const [first, second] = await Promise.all([readCacheFile(folder, 'abcd'), readCacheFile(folder, 'abcd')]);
+    expect(first).toBe(second);
+    expect(await readCacheFile(folder, 'abcd')).toBe(first);
+    await writeCacheFile(folder, { ...cache(), revision: 'replacement' });
+    const replacement = await readCacheFile(folder, 'abcd');
+    expect(replacement).not.toBe(first);
+    expect(replacement?.revision).toBe('replacement');
+    await rm(path.join(folder, 'abcd.json'));
+    expect(await readCacheFile(folder, 'abcd')).toBeUndefined();
+  });
   it('round-trips a Unicode path and atomically replaces one per-demo file', async () => {
     await writeCacheFile(folder, cache());
     expect(await readCacheFile(folder, 'abcd')).toMatchObject(cache());

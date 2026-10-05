@@ -1,6 +1,7 @@
 // Message names sent from the main Electron process to the WebSocket server.
 export const MainClientMessageName = {
   PrepareAiReport: 'prepare-ai-report',
+  PrepareVideoAiReview: 'prepare-video-ai-review',
   PrepareForUpdate: 'prepare-for-update',
   StartMinimizedMode: 'start-minimized-mode',
   StartCounterStrike: 'start-counter-strike',

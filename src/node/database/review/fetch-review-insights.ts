@@ -36,6 +36,7 @@ export async function fetchReviewInsights(payload: FetchReviewInsightsPayload): 
       facts.push(...cache.metrics.filter((player) => player.steamId === payload.steamId));
       if (index === total) result = buildReviewInsights(facts, payload, availableMatches);
     },
+    { allowPartial: true },
   );
-  return result ?? buildReviewInsights([], payload, availableMatches);
+  return result ?? buildReviewInsights(facts, payload, availableMatches);
 }

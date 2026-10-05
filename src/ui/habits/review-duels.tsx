@@ -9,6 +9,21 @@ import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { ReviewButton } from './review-button';
 import { ReviewClipViewer } from './review-clip-viewer';
+import { Checkbox } from 'csdm/ui/components/inputs/checkbox';
+import { ReviewBatchStudio } from './review-batch-studio';
+import type { ReviewBattleRequest } from 'csdm/common/types/review-batch';
+
+function battleRequest(event: ReviewDuel): ReviewBattleRequest {
+  return {
+    checksum: event.checksum,
+    steamId: event.steamId,
+    roundNumber: event.roundNumber,
+    startTick: event.startTick,
+    endTick: event.endTick,
+    eventTick: event.eventTick,
+    opponentSteamId: event.opponentSteamId,
+  };
+}
 
 export function ReviewDuels({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'> }) {
   return <DuelList key={JSON.stringify(scope)} scope={scope} />;
@@ -22,6 +37,7 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
   const [page, setPage] = useState(0);
   const [data, setData] = useState<ReviewDuelsPage | null>(null);
   const [selected, setSelected] = useState<ReviewDuel | null>(null);
+  const [recordingSelection, setRecordingSelection] = useState<ReviewDuel[]>([]);
   const playerRef = useRef<HTMLElement>(null);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -70,6 +86,16 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
   const total = data?.total ?? 0;
   const pageNumber = (data?.page ?? 0) + 1;
   const pages = Math.max(1, Math.ceil(total / (data?.pageSize ?? 20)));
+  const selectedCount = recordingSelection.length;
+  const toggleSelection = (event: ReviewDuel) => {
+    setRecordingSelection((previous) =>
+      previous.some((entry) => entry.id === event.id)
+        ? previous.filter((entry) => entry.id !== event.id)
+        : previous.length < 20
+          ? [...previous, event]
+          : previous,
+    );
+  };
   return (
     <div className="flex min-w-0 flex-col gap-16">
       <div className="flex flex-wrap items-start justify-between gap-16 rounded-12 border border-gray-300 bg-gray-100 p-20">
@@ -120,6 +146,28 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
           </ReviewButton>
         ))}
       </nav>
+      <div className="flex flex-wrap items-center gap-8">
+        <ReviewButton
+          disabled={loading || !data?.events.length || selectedCount >= 20}
+          onClick={() => {
+            setRecordingSelection((previous) =>
+              [
+                ...previous,
+                ...(data?.events ?? []).filter((event) => !previous.some((entry) => entry.id === event.id)),
+              ].slice(0, 20),
+            );
+          }}
+        >
+          <Trans>Select this page for recording</Trans>
+        </ReviewButton>
+        <ReviewButton disabled={selectedCount === 0} onClick={() => setRecordingSelection([])}>
+          <Trans>Clear recording selection</Trans>
+        </ReviewButton>
+        <span className="text-caption text-gray-600">
+          <Trans>{selectedCount} / 20 selected</Trans>
+        </span>
+      </div>
+      <ReviewBatchStudio requests={recordingSelection.map(battleRequest)} steamId={scope.steamId} />
       {loading ? (
         <p role="status">
           <Trans>Loading combat events…</Trans>
@@ -154,16 +202,7 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
                   <Trans>Close POV</Trans>
                 </ReviewButton>
               </div>
-              <ReviewClipViewer
-                key={selected.id}
-                request={{
-                  checksum: selected.checksum,
-                  steamId: selected.steamId,
-                  roundNumber: selected.roundNumber,
-                  startTick: selected.startTick,
-                  endTick: selected.endTick,
-                }}
-              />
+              <ReviewClipViewer key={selected.id} request={battleRequest(selected)} />
             </section>
           )}
           <p className="text-caption text-gray-600">
@@ -206,6 +245,12 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-12">
+                    <Checkbox
+                      label={t`Include in recording batch`}
+                      isChecked={recordingSelection.some((entry) => entry.id === event.id)}
+                      isDisabled={selectedCount >= 20 && !recordingSelection.some((entry) => entry.id === event.id)}
+                      onChange={() => toggleSelection(event)}
+                    />
                     <ReviewButton primary={true} onClick={() => setSelected(event)}>
                       <Trans>Watch real POV</Trans>
                     </ReviewButton>

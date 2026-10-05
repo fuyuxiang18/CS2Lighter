@@ -29,7 +29,7 @@ export function AnalyzeConfirmationDialog({
   const demoAlreadyInDatabaseCount = demosAlreadyInDatabase.length;
 
   const onConfirm = async () => {
-    await addDemosToAnalyses(demosToAnalyze);
+    await addDemosToAnalyses(demosToAnalyze, shouldReanalyzeDemos);
   };
 
   return (

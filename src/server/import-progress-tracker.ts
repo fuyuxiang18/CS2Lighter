@@ -1,5 +1,6 @@
 import type { ImportFileProgress, ImportFileStatus, ImportProgress } from 'csdm/common/types/import-progress';
 import type { DemoCacheDirectory } from 'csdm/common/types/demo-data-cache';
+import { normalizeDemoPath } from 'csdm/common/normalize-demo-path';
 
 const terminal = new Set<ImportFileStatus>(['completed', 'failed', 'skipped']);
 
@@ -9,6 +10,15 @@ export class ImportProgressTracker {
   private discoveryDepth = 0;
   private batch = 0;
   private cacheDirectory: DemoCacheDirectory | null = null;
+  private queuePaused = false;
+  private effectiveConcurrency = 2;
+
+  setQueueState(paused: boolean, concurrency: number) {
+    if (this.queuePaused === paused && this.effectiveConcurrency === concurrency) return;
+    this.queuePaused = paused;
+    this.effectiveConcurrency = concurrency;
+    this.onChange();
+  }
 
   constructor(private readonly onChange: () => void = () => {}) {}
 
@@ -35,13 +45,16 @@ export class ImportProgressTracker {
   }
 
   update(filePath: string, status: ImportFileStatus, details?: { reason?: string; message?: string }) {
-    const previous = this.files.get(filePath);
+    const key = normalizeDemoPath(filePath);
+    const previous = this.files.get(key);
+    if (previous?.status === status && previous.reason === details?.reason && previous.message === details?.message)
+      return;
     if (!terminal.has(status) && (previous === undefined || terminal.has(previous.status))) {
       this.newBatchIfFinished();
     }
-    this.files.set(filePath, {
-      filePath,
-      index: this.files.get(filePath)?.index ?? this.files.size + 1,
+    this.files.set(key, {
+      filePath: previous?.filePath ?? filePath,
+      index: this.files.get(key)?.index ?? this.files.size + 1,
       status,
       ...details,
     });
@@ -89,6 +102,8 @@ export class ImportProgressTracker {
     const discovering = this.discoveryDepth > 0;
     const isBlocking = discovering || active > 0;
     return {
+      queuePaused: this.queuePaused,
+      effectiveConcurrency: this.effectiveConcurrency,
       batchId: String(this.batch),
       phase: discovering
         ? 'discovering'

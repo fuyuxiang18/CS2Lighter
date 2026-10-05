@@ -7,6 +7,7 @@ type Options = {
   demoPath: string;
   source: DemoSource;
   analyzePositions: boolean;
+  signal?: AbortSignal;
   onStdout?: (data: string) => void;
   onStderr?: (data: string) => void;
 };
@@ -16,6 +17,7 @@ export async function analyzeDemo({
   demoPath,
   source,
   analyzePositions,
+  signal,
   onStdout,
   onStderr,
 }: Options) {
@@ -26,6 +28,7 @@ export async function analyzeDemo({
     demoPath,
     source: source === DemoSource.Unknown ? undefined : source,
     analyzePositions,
+    signal,
     onStart: (command) => {
       logger.log('starting demo analyzer with command', command);
     },

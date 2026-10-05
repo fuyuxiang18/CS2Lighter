@@ -9,6 +9,7 @@ import { isAutoImportScanning } from 'csdm/server/tasks/auto-import-demo-folders
 import { importProgress } from 'csdm/server/import-progress';
 import { reviewClips } from 'csdm/node/video/review-clips/review-clips';
 import { isReviewPovBusy } from 'csdm/node/video/review-clips/watch-review-pov';
+import { isReviewBatchBusy } from 'csdm/node/video/review-clips/review-batches';
 
 // The daemon has work in progress, regardless of connected clients.
 // A pending database connection counts: it may be starting the embedded server or running migrations, exiting in
@@ -19,6 +20,7 @@ export function hasWorkInProgress() {
     videoQueue.isBusy() ||
     reviewClips.isBusy() ||
     isReviewPovBusy() ||
+    isReviewBatchBusy() ||
     downloadDemoQueue.hasDownloads() ||
     isDatabaseConnectionPending() ||
     isAutoImportScanning() ||

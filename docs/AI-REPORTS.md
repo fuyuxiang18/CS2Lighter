@@ -2,13 +2,15 @@
 
 本功能支持用户配置的 OpenAI 兼容 Chat Completions 服务，以及本机 Ollama 的 `/v1` 兼容接口。它不使用 ChatGPT/Codex 订阅额度；云端 API 的权限和计费由用户配置的服务决定。本项目不捆绑模型或 API 密钥。
 
+本文说明个人及单场的**统计点评**。从 0.6 版起，已录制的单个对枪还可单独生成[视频点评](VIDEO-AI-REVIEW.md)。两者共用服务与模型配置，但使用不同输入、提示词和缓存；统计点评的去身份化范围和评分规则不能套用于视频点评。
+
 ## 发送范围与触发
 
 - 进入页面、读取已缓存报告、保存配置均不调用模型。只有明确点击生成/重新生成，才执行最多一次请求；失败不自动重试。
 - 个人报告使用当前地图、来源、阵营筛选下最近最多十场；单场报告只使用所选比赛及本人参赛回合。生成前展示场次、回合和可引用证据数。
 - 发送合计数字指标、计算口径、地图/阵营/来源/模式/build 分组和抽样回合事实。个人报告每场最多四回合（总计最多 40），单场最多 24 回合。优先选择首杀/首死、残局、队友致盲、死亡未补等复盘候选，再按回合排序。这不是随机样本，不能从这些回合推算总体频率；频率应使用合计指标。
 - 昵称、SteamID、checksum、比赛确切日期、demo 文件路径、配置密钥和本地证据映射不进入模型 payload。比赛仅标为 `M1` 等、回合证据为 `r001` 等；非标准地图名转为 `custom-map`。聚合统计仍属于个人数据，选择云端时会发送到用户指定服务。
-- 当前 AI 输入只有统计事实，不含视频、截图、音频或位置轨迹。即使另行生成了 POV 片段，本功能也不会自动上传它。
+- 统计点评的 AI 输入只有统计事实，不含视频、截图、音频或位置轨迹。即使另行生成了 POV 片段，统计点评也不会上传它。视频点评另有“预览画面 → 发送画面并点评”流程，图片可能包含游戏昵称、头像或聊天。
 
 ## 内容与评分边界
 
@@ -26,7 +28,7 @@
 
 Electron main 持有密钥；配置通过 OS safeStorage 加密后另存 `ai-config.json`，普通 settings 和 daemon 不接收密钥。renderer 只得到是否已配置密钥，不可读取明文。加密不可用（含 Linux `basic_text`）时拒绝保存密钥；无密钥的本机 Ollama 仍可使用。Windows DPAPI 保护不等于能防御已在同一 Windows 用户下运行的恶意程序。
 
-服务端地址必须 HTTPS；仅回环地址可用 HTTP。Ollama 选项限定回环地址。拒绝 URL 内嵌用户名/密码、查询串和片段，禁止 HTTP 重定向；返回体最多 256 KiB，请求最多 120 秒。兼容服务使用 `max_tokens=2400`；官方 `api.openai.com` 使用 `max_completion_tokens=4096`，包含可能的隐藏推理用量。模型/代理是否支持 JSON 模式和这些参数取决于其实现；本版不承诺所有兼容服务都可用。
+服务端地址必须 HTTPS；仅回环地址可用 HTTP。Ollama 选项限定回环地址。拒绝 URL 内嵌用户名/密码、查询串和片段，禁止 HTTP 重定向。统计点评的返回体最多 256 KiB，请求最多 120 秒；兼容服务使用 `max_tokens=2400`，官方 `api.openai.com` 使用 `max_completion_tokens=4096`，包含可能的隐藏推理用量。视频点评有独立的请求上限，详见其文档。模型/代理是否支持 JSON 模式和这些参数取决于其实现；本版不承诺所有兼容服务都可用。
 
 依据：[Electron safeStorage](https://www.electronjs.org/docs/latest/api/safe-storage)、[Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)、[OpenAI Chat Completions](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create)。
 

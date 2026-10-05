@@ -39,6 +39,7 @@ export async function fetchHabitsSummary(payload: FetchHabitsPayload): Promise<H
           payload.side === TeamNumber.T ? player.t : payload.side === TeamNumber.CT ? player.ct : player.all,
         );
     },
+    { allowPartial: true },
   );
   return merger.summary;
 }

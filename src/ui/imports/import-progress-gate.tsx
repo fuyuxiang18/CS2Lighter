@@ -3,22 +3,21 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import type { ImportFileStatus, ImportProgress } from 'csdm/common/types/import-progress';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { Button } from 'csdm/ui/components/buttons/button';
-import { Content } from 'csdm/ui/components/content';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
 import { SettingsCategory } from 'csdm/ui/settings/settings-category';
 import { useImportProgress } from './import-progress-provider';
 import { DemoCacheLocation } from './demo-cache-location';
+import { ImportQueueControls } from './import-queue-controls';
 
 export function ImportProgressGate({ children }: { children: ReactNode }) {
   const { progress, failed, refresh } = useImportProgress();
   const { openSettings } = useSettingsOverlay();
-  const blocked = !progress || progress.isBlocking;
 
   return (
     <>
       {!progress && (
-        <Content>
+        <div className="shrink-0 border-b border-gray-300 p-12">
           <div className="flex flex-col gap-16 text-gray-900" role="status">
             <h1 className="text-title">
               <Trans>Preparing your demo library</Trans>
@@ -43,29 +42,23 @@ export function ImportProgressGate({ children }: { children: ReactNode }) {
               </Button>
             </div>
           </div>
-        </Content>
+        </div>
       )}
-      {progress?.isBlocking && (
-        <Content>
-          <ImportProgressDetails progress={progress} />
-        </Content>
+      {progress && (progress.isBlocking || progress.queuePaused || progress.failures.length > 0) && (
+        <div className="shrink-0 border-b border-gray-300 bg-gray-50 p-12 text-gray-900">
+          <p className="mb-8 text-body-strong" role="status">
+            <Trans>Imports run in the background. Ready matches remain available.</Trans>
+          </p>
+          <ImportQueueControls />
+          <details className="mt-8 overflow-y-auto">
+            <summary className="cursor-pointer text-blue-500">
+              <Trans>Import progress and files</Trans>
+            </summary>
+            <ImportProgressDetails progress={progress} />
+          </details>
+        </div>
       )}
-      {progress && !progress.isBlocking && progress.failures.length > 0 && (
-        <details className="max-h-full shrink-0 overflow-y-auto border-b border-orange-500 bg-gray-50 p-12 text-gray-900">
-          <summary className="cursor-pointer text-orange-500">
-            <Trans>Some demo files need attention</Trans>
-          </summary>
-          <ImportProgressDetails progress={progress} />
-        </details>
-      )}
-      {/* Keep the requesting page mounted: generating its profile must not trigger a new request on every unlock. */}
-      <div
-        className={blocked ? 'hidden' : 'flex min-h-0 min-w-0 flex-1 flex-col'}
-        inert={blocked}
-        aria-hidden={blocked}
-      >
-        {children}
-      </div>
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</div>
     </>
   );
 }
@@ -131,7 +124,7 @@ function ImportProgressDetails({ progress }: { progress: ImportProgress }) {
           </h1>
           <p className="mt-8 text-gray-700">
             {progress.isBlocking ? (
-              <Trans>Browsing will unlock when this batch finishes. You can still manage folders and settings.</Trans>
+              <Trans>You can browse ready matches while this batch continues.</Trans>
             ) : (
               <Trans>Ready matches are available. Review the files below before retrying.</Trans>
             )}

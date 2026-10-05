@@ -34,8 +34,9 @@ export async function fetchPersonalStats(payload: FetchPersonalStatsPayload): Pr
       facts.push(...cache.metrics.filter((player) => player.steamId === payload.steamId));
       if (index === total) result = aggregatePersonalStats(facts, payload, selected.length);
     },
+    { allowPartial: true },
   );
-  const summary = result ?? aggregatePersonalStats([], payload, selected.length);
+  const summary = result ?? aggregatePersonalStats(facts, payload, selected.length);
   summary.mapNames = [...new Set(library.map((match) => match.mapName))].sort();
   return summary;
 }

@@ -1,7 +1,7 @@
 import type { Download } from 'csdm/common/download/download-types';
 import type { ReviewDuelsPage, ReviewDuelsPayload } from 'csdm/common/types/review-duels';
 import { fetchReviewDuelsHandler } from './renderer-process/habits/fetch-review-duels-handler';
-import type { ImportProgress } from 'csdm/common/types/import-progress';
+import type { ImportProgress, ControlImportQueuePayload } from 'csdm/common/types/import-progress';
 import type {
   ReviewClip,
   ReviewClipInspection,
@@ -15,6 +15,7 @@ import {
   watchReviewPovHandler,
 } from './renderer-process/video/review-clips-handlers';
 import { getImportProgressHandler } from './renderer-process/demo/get-import-progress-handler';
+import { controlImportQueueHandler } from './renderer-process/demo/control-import-queue-handler';
 import { retryFailedImportsHandler } from './renderer-process/demo/retry-failed-imports-handler';
 import type {
   FetchHabitsPayload,
@@ -56,7 +57,10 @@ import { fetchDemosTableHandler } from './renderer-process/demo/fetch-demos-tabl
 import type { FetchDemosTableResponse } from './renderer-process/demo/fetch-demos-table-handler';
 import { loadDemoHandler } from './renderer-process/demo/load-demo-handler';
 import { navigateToDemoOrMatch } from './renderer-process/navigate-to-demo-or-match-handler';
-import { addDemosToAnalysesHandler } from './renderer-process/demo/add-demos-to-analyses-handler';
+import {
+  addDemosToAnalysesHandler,
+  type AddDemosToAnalysesPayload,
+} from './renderer-process/demo/add-demos-to-analyses-handler';
 import { removeDemosFromAnalysesHandler } from './renderer-process/demo/remove-demos-from-analyses-handler';
 import { deleteMatchesHandler } from './renderer-process/match/delete-matches-handler';
 import { fetchLastValveMatchesHandler } from './renderer-process/download/fetch-last-valve-matches-handler';
@@ -87,6 +91,8 @@ import { updateFfmpegHandler } from './renderer-process/video/update-ffmpeg-hand
 import { removeVideosFromQueueHandler } from './renderer-process/video/remove-videos-from-queue-handler';
 import { fetchMatchGrenadesThrowHandler } from './renderer-process/match/fetch-match-grenades-throw-handler';
 import { getDatabaseSizeHandler } from './renderer-process/database/get-database-size-handler';
+import { getDatabaseStorageHandler } from './renderer-process/database/get-database-storage-handler';
+import type { DatabaseStorage } from 'csdm/common/types/database-storage';
 import type { OptimizeDatabasePayload } from './renderer-process/database/optimize-database-handler';
 import { optimizeDatabaseHandler } from './renderer-process/database/optimize-database-handler';
 import { fetchPlayersHandler } from './renderer-process/player/fetch-players-table-handler';
@@ -257,10 +263,15 @@ import { fetchLastRenownMatchesHandler } from './renderer-process/renown/fetch-l
 export interface RendererMessageHandlers {
   [RendererClientMessageName.FetchReviewDuels]: Handler<ReviewDuelsPayload, ReviewDuelsPage>;
   [RendererClientMessageName.GetReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
+  [RendererClientMessageName.GenerateReviewBatch]: Handler<ReviewBatchRequest, ReviewBatchInspection>;
+  [RendererClientMessageName.GetReviewBatch]: Handler<{ id: string }, ReviewBatchInspection | undefined>;
+  [RendererClientMessageName.ListReviewBatches]: Handler<void, ReviewBatch[]>;
+  [RendererClientMessageName.CancelReviewBatch]: Handler<{ id: string }, ReviewBatch | undefined>;
   [RendererClientMessageName.WatchReviewPov]: Handler<ReviewClipRequest, ReviewPovState>;
   [RendererClientMessageName.GenerateReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
   [RendererClientMessageName.CancelReviewClip]: Handler<{ id: string }, ReviewClip | undefined>;
   [RendererClientMessageName.GetImportProgress]: Handler<void, ImportProgress>;
+  [RendererClientMessageName.ControlImportQueue]: Handler<ControlImportQueuePayload, ImportProgress>;
   [RendererClientMessageName.RetryFailedImports]: Handler;
   [RendererClientMessageName.FindHabitsIdentity]: Handler<FindHabitsIdentityPayload, HabitsIdentityCandidate[]>;
   [RendererClientMessageName.FetchHabitsSummary]: Handler<FetchHabitsPayload, HabitsSummary>;
@@ -270,6 +281,7 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.IsCs2ConnectedToServer]: Handler<void, boolean>;
   [RendererClientMessageName.AbortCurrentTask]: Handler;
   [RendererClientMessageName.GetDatabaseSize]: Handler<void, string>;
+  [RendererClientMessageName.GetDatabaseStorage]: Handler<void, DatabaseStorage>;
   [RendererClientMessageName.ResetDatabase]: Handler;
   [RendererClientMessageName.DeleteEmbeddedDatabaseData]: Handler;
   [RendererClientMessageName.OptimizeDatabase]: Handler<OptimizeDatabasePayload>;
@@ -289,7 +301,7 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.FetchPlayersTable]: Handler<PlayersTableFilter, PlayerTable[]>;
   [RendererClientMessageName.FetchTeamsTable]: Handler<TeamsTableFilter, TeamTable[]>;
   [RendererClientMessageName.FetchTeam]: Handler<TeamFilters, TeamProfile>;
-  [RendererClientMessageName.AddDemosToAnalyses]: Handler<Demo[]>;
+  [RendererClientMessageName.AddDemosToAnalyses]: Handler<AddDemosToAnalysesPayload>;
   [RendererClientMessageName.RemoveDemosFromAnalyses]: Handler<string[]>;
   [RendererClientMessageName.GenerateMatchPositions]: Handler<GenerateMatchPositionsPayload>;
   [RendererClientMessageName.RenameDemo]: Handler<RenameDemoPayload>;
@@ -394,10 +406,15 @@ export interface RendererMessageHandlers {
 export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.FetchReviewDuels]: fetchReviewDuelsHandler,
   [RendererClientMessageName.GetReviewClip]: getReviewClipHandler,
+  [RendererClientMessageName.GenerateReviewBatch]: generateReviewBatchHandler,
+  [RendererClientMessageName.GetReviewBatch]: getReviewBatchHandler,
+  [RendererClientMessageName.ListReviewBatches]: listReviewBatchesHandler,
+  [RendererClientMessageName.CancelReviewBatch]: cancelReviewBatchHandler,
   [RendererClientMessageName.WatchReviewPov]: watchReviewPovHandler,
   [RendererClientMessageName.GenerateReviewClip]: generateReviewClipHandler,
   [RendererClientMessageName.CancelReviewClip]: cancelReviewClipHandler,
   [RendererClientMessageName.GetImportProgress]: getImportProgressHandler,
+  [RendererClientMessageName.ControlImportQueue]: controlImportQueueHandler,
   [RendererClientMessageName.RetryFailedImports]: retryFailedImportsHandler,
   [RendererClientMessageName.FindHabitsIdentity]: findHabitsIdentityHandler,
   [RendererClientMessageName.FetchHabitsSummary]: fetchHabitsSummaryHandler,
@@ -407,6 +424,7 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.IsCs2ConnectedToServer]: isCs2ConnectedToServerHandler,
   [RendererClientMessageName.AbortCurrentTask]: abortCurrentTaskHandler,
   [RendererClientMessageName.GetDatabaseSize]: getDatabaseSizeHandler,
+  [RendererClientMessageName.GetDatabaseStorage]: getDatabaseStorageHandler,
   [RendererClientMessageName.ResetDatabase]: resetDatabaseHandler,
   [RendererClientMessageName.DeleteEmbeddedDatabaseData]: deleteEmbeddedDatabaseDataHandler,
   [RendererClientMessageName.OptimizeDatabase]: optimizeDatabaseHandler,
@@ -511,3 +529,10 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.WatchVideoSequences]: watchVideoSequencesHandler,
   [RendererClientMessageName.CapturePlayerView]: capturePlayerViewHandler,
 };
+import type { ReviewBatch, ReviewBatchInspection, ReviewBatchRequest } from 'csdm/common/types/review-batch';
+import {
+  generateReviewBatchHandler,
+  getReviewBatchHandler,
+  listReviewBatchesHandler,
+  cancelReviewBatchHandler,
+} from './renderer-process/video/review-batches-handlers';

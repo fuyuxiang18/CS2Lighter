@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { DemoSource, TeamNumber } from 'csdm/common/types/counter-strike';
@@ -30,6 +30,7 @@ import { ReviewDuels } from './review-duels';
 import { AiReviewPanel } from './ai-review-panel';
 import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
 import { SettingsCategory } from 'csdm/ui/settings/settings-category';
+import { useImportProgress } from 'csdm/ui/imports/import-progress-provider';
 
 type ReviewData = { key: string; summary: HabitsSummary; stats: PersonalStatsSummary; insights: ReviewInsightsSummary };
 
@@ -82,6 +83,9 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
   const [availableSources, setAvailableSources] = useState<DemoSource[]>([]);
   const [failedKey, setFailedKey] = useState<string | null>(null);
   const [revision, setRevision] = useState(0);
+  const { progress } = useImportProgress();
+  const pendingRefresh = useRef(false);
+  const importBusy = useRef(false);
   const { mapName, side, source, tab } = preferences;
   const trainingKey = JSON.stringify(preferences.focus?.scope ?? null);
   const requestKey = JSON.stringify([steamId, mapName, side, source, revision, trainingKey]);
@@ -99,10 +103,30 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
     }
   };
   useEffect(() => {
-    const inserted = () => setRevision((value) => value + 1);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const inserted = () => {
+      pendingRefresh.current = true;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (pendingRefresh.current && !importBusy.current) {
+          pendingRefresh.current = false;
+          setRevision((value) => value + 1);
+        }
+      }, 1000);
+    };
     client.on(ServerPushMessageName.MatchInserted, inserted);
-    return () => client.off(ServerPushMessageName.MatchInserted, inserted);
+    return () => {
+      clearTimeout(timer);
+      client.off(ServerPushMessageName.MatchInserted, inserted);
+    };
   }, [client]);
+  useEffect(() => {
+    importBusy.current = Boolean(progress?.isBlocking);
+    if (!progress?.isBlocking && pendingRefresh.current) {
+      pendingRefresh.current = false;
+      setRevision((value) => value + 1);
+    }
+  }, [progress?.isBlocking]);
   useEffect(() => {
     let cancelled = false;
     const payload = {
@@ -242,7 +266,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
         </HabitsPanel>
       )}
       {data && (
-        <div className={loading || failed ? 'hidden' : 'flex min-w-0 flex-col gap-20'}>
+        <div className="flex min-w-0 flex-col gap-20">
           {page === 'review' && tab === 'progress' ? (
             <ReviewProgress insights={data.insights} preferences={preferences} update={update} />
           ) : matches === 0 ? (

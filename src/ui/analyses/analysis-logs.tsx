@@ -43,6 +43,9 @@ function useGenerateLogs() {
       case AnalysisStatus.Analyzing:
         logs.push(analyzingMessage);
         break;
+      case AnalysisStatus.Cancelled:
+        logs.push(t`Parsing was cancelled. The original demo was not changed.`);
+        break;
       case AnalysisStatus.AnalyzeError:
         logs.push(analyzingMessage, analyzeErrorMessage);
         break;

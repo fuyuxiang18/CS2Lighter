@@ -7,7 +7,6 @@ import { Button, ButtonVariant } from 'csdm/ui/components/buttons/button';
 import { Checkbox } from 'csdm/ui/components/inputs/checkbox';
 import type { OptimizeDatabasePayload } from 'csdm/server/handlers/renderer-process/database/optimize-database-handler';
 import { useDialog } from 'csdm/ui/components/dialogs/use-dialog';
-import { ExclamationTriangleIcon } from 'csdm/ui/icons/exclamation-triangle-icon';
 import { ErrorMessage } from 'csdm/ui/components/error-message';
 
 type State = {
@@ -23,7 +22,6 @@ function OptimizeDatabaseDialog() {
     error: undefined,
     isBusy: false,
     payload: {
-      clearPositions: false,
       clearOrphanDemos: false,
       clearDemos: false,
     },
@@ -54,35 +52,21 @@ function OptimizeDatabaseDialog() {
 
   return (
     <ConfirmDialog
-      title={<Trans>Optimize database</Trans>}
+      title={<Trans>Clean library references</Trans>}
       onConfirm={onConfirmClick}
       closeOnConfirm={false}
       isBusy={state.isBusy}
       isConfirmButtonDisabled={isConfirmButtonDisabled}
       confirmButtonVariant={ButtonVariant.Danger}
     >
+      <p className="mb-8 text-caption">
+        <Trans>
+          This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved;
+          it does not compact database files.
+        </Trans>
+      </p>
       <Checkbox
-        label={<Trans>Delete positions</Trans>}
-        isChecked={state.payload.clearPositions}
-        isDisabled={state.isBusy}
-        onChange={(event) => {
-          setState({
-            ...state,
-            payload: {
-              ...state.payload,
-              clearPositions: event.target.checked,
-            },
-          });
-        }}
-      />
-      <div className="mb-8 flex items-center gap-x-4">
-        <ExclamationTriangleIcon className="size-12 text-orange-700" />
-        <p className="text-caption">
-          <Trans>It will delete all data required for the 2D viewer!</Trans>
-        </p>
-      </div>
-      <Checkbox
-        label={<Trans>Delete demos that are not on the filesystem anymore</Trans>}
+        label={<Trans>Remove unavailable file references</Trans>}
         isChecked={state.payload.clearOrphanDemos}
         isDisabled={state.isBusy}
         onChange={(event) => {
@@ -96,7 +80,7 @@ function OptimizeDatabaseDialog() {
         }}
       />
       <Checkbox
-        label={<Trans>Clear demos cache</Trans>}
+        label={<Trans>Clear unimported demo metadata</Trans>}
         isChecked={state.payload.clearDemos}
         isDisabled={state.isBusy}
         onChange={(event) => {
@@ -127,7 +111,7 @@ export function OptimizeDatabaseButton() {
 
   return (
     <Button onClick={onClick}>
-      <Trans context="Button">Optimize database</Trans>
+      <Trans>Clean library references</Trans>
     </Button>
   );
 }

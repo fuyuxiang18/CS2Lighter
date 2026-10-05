@@ -1,5 +1,6 @@
 import type { Settings } from 'csdm/node/settings/settings';
 import type { ReviewClip, ReviewPovState } from 'csdm/common/types/review-clip';
+import type { ReviewBatch } from 'csdm/common/types/review-batch';
 import type { ImportProgress } from 'csdm/common/types/import-progress';
 import type { Analysis } from 'csdm/common/types/analysis';
 import type { MatchTable } from 'csdm/common/types/match-table';
@@ -20,6 +21,7 @@ import type { CounterStrikeErrorPayload } from 'csdm/server/counter-strike';
 // Message names pushed from the WebSocket server to the renderer Electron process and the connected CLI processes.
 export const ServerPushMessageName = {
   ReviewClipUpdated: 'review-clip-updated',
+  ReviewBatchUpdated: 'review-batch-updated',
   ReviewPovUpdated: 'review-pov-updated',
   ImportProgressUpdated: 'import-progress-updated',
   SettingsUpdated: 'settings-updated',
@@ -67,6 +69,7 @@ export type ServerPushMessageName =
 
 export interface ServerPushMessagePayload extends SharedServerMessagePayload {
   [ServerPushMessageName.ReviewClipUpdated]: ReviewClip;
+  [ServerPushMessageName.ReviewBatchUpdated]: ReviewBatch;
   [ServerPushMessageName.ReviewPovUpdated]: ReviewPovState;
   [ServerPushMessageName.ImportProgressUpdated]: ImportProgress;
   [ServerPushMessageName.SettingsUpdated]: Settings;

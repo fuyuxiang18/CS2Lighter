@@ -14,6 +14,7 @@ import { isWindows } from 'csdm/node/os/is-windows';
 import { getFfmpegExecutablePath } from 'csdm/node/video/ffmpeg/ffmpeg-location';
 import { isFfmpegInstalled } from 'csdm/node/video/ffmpeg/is-ffmpeg-installed';
 import { isHlaeInstalled } from 'csdm/node/video/hlae/is-hlae-installed';
+import { getHlaeFolderPath } from 'csdm/node/video/hlae/hlae-location';
 import { getDemoChecksumFromDemoPath } from 'csdm/node/demo/get-demo-checksum-from-demo-path';
 import { videoQueue } from 'csdm/server/video-queue';
 import { server } from 'csdm/server/server';
@@ -25,23 +26,33 @@ import { resolveReviewClip } from './resolve-review-clip';
 import { assertReviewGameFiles } from './assert-review-game-files';
 import { getCsgoFolderPathOrThrow } from 'csdm/node/counter-strike/get-csgo-folder-path';
 import { isReviewPovBusy } from './watch-review-pov';
+import { isReviewBatchBusy } from './review-batches';
 
 const execute = promisify(execFile);
 function directory() {
   return path.join(getAppFolderPath(), 'review-clips');
 }
 
-export async function inspectReviewClipRequirements(): Promise<ReviewClipRequirements> {
+export async function inspectReviewClipRequirements(includeBatchBusy = true): Promise<ReviewClipRequirements> {
   const [cs2Installed, hlaeInstalled, ffmpegInstalled, steamRunning, gameRunning] = await Promise.all([
     getCounterStrikeExecutablePath(Game.CS2)
       .then(() => true)
       .catch(() => false),
-    isHlaeInstalled(),
+    isHlaeInstalled().then(
+      async (installed) =>
+        installed &&
+        fs
+          .stat(
+            path.join(await getHlaeFolderPath(), 'resources', 'AfxHookSource2', 'snippets', 'mirv_script_spec_lock.js'),
+          )
+          .then((stat) => stat.isFile())
+          .catch(() => false),
+    ),
     isFfmpegInstalled(),
     isSteamRunning(),
     isCounterStrikeRunning(),
   ]);
-  const queueBusy = videoQueue.isBusy() || isReviewPovBusy();
+  const queueBusy = videoQueue.isBusy() || isReviewPovBusy() || (includeBatchBusy && isReviewBatchBusy());
   const missingReasons: ReviewClipIssue[] = [];
   if (!isWindows) missingReasons.push('unsupported-platform');
   if (!cs2Installed) missingReasons.push('cs2-missing');
@@ -69,7 +80,7 @@ export async function inspectReviewClipRequirements(): Promise<ReviewClipRequire
   };
 }
 
-function buildReviewClipVideo(
+export function buildReviewClipVideo(
   input: ResolvedReviewClip,
   id: string,
   outputFolderPath: string,

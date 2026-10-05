@@ -153,13 +153,14 @@ export function AiSettings() {
             <div className="rounded-12 border border-gray-300 bg-gray-100 p-20 text-gray-700">
               {configuration.provider === 'ollama' ? (
                 <Trans>
-                  Start Ollama and install a text model before generating. The local option only accepts localhost
-                  addresses; no cloud account is required.
+                  Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model
+                  supporting image inputs and JSON responses. Local mode accepts only loopback addresses.
                 </Trans>
               ) : (
                 <Trans>
-                  Your chosen API provider may charge for generation. Only aggregate numbers and sampled round events
-                  are sent; demos, videos, names and account IDs stay on this device.
+                  Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send
+                  the exact preview images and round facts after you click Send; images may contain visible nicknames,
+                  avatars or chat. Full demos and videos stay on this device.
                 </Trans>
               )}
             </div>

@@ -10,8 +10,29 @@ const mocks = vi.hoisted(() => ({
   cache: vi.fn(),
   push: vi.fn(),
   maintenance: vi.fn(() => false),
+  known: vi.fn(() => Promise.resolve<string[]>([])),
+  suppress: vi.fn(),
+  paused: false,
+  incomplete: new Map<string, object>(),
 }));
-vi.mock('csdm/node/demo-cache/demo-cache-service', () => ({ ensureDemoCache: mocks.cache }));
+vi.mock('node:fs/promises', () => ({ rm: vi.fn().mockResolvedValue(undefined) }));
+vi.mock('csdm/node/database/matches/match-import-state', () => ({
+  getIncompleteMatchImports: () => Promise.resolve(mocks.incomplete),
+}));
+vi.mock('csdm/node/demo-cache/demo-cache-service', () => ({
+  ensureDemoCache: mocks.cache,
+  cancelDemoCacheBuilds: vi.fn(),
+}));
+vi.mock('csdm/node/database/matches/fetch-match-checksums', () => ({ fetchMatchChecksums: mocks.known }));
+vi.mock('./import-queue-control', () => ({
+  allowDemoImport: vi.fn(),
+  suppressDemoImport: mocks.suppress,
+  getImportQueueControl: () => Promise.resolve({ paused: mocks.paused, suppressed: {}, suppressedChecksums: {} }),
+  setImportQueuePaused: (paused: boolean) => {
+    mocks.paused = paused;
+    return Promise.resolve();
+  },
+}));
 vi.mock('csdm/server/update-maintenance', () => ({ isUpdateMaintenance: mocks.maintenance }));
 vi.mock('csdm/server/server', () => ({ server: { sendPushMessage: mocks.push } }));
 vi.mock('csdm/node/demo/analyze-demo', () => ({ analyzeDemo: mocks.analyze }));
@@ -33,9 +54,104 @@ const demo = {
 beforeEach(() => {
   analysesListener.clear();
   vi.clearAllMocks();
+  mocks.paused = false;
+  mocks.incomplete.clear();
+  mocks.known.mockResolvedValue([]);
 });
 
 describe('analysesListener automatic imports', () => {
+  it('refreshes saved checksums after waiting for another cache so a concurrently completed match is not reparsed', async () => {
+    const other = { ...demo, checksum: 'another-match', filePath: '/demos/other.dem' };
+    mocks.known.mockResolvedValueOnce([demo.checksum]).mockResolvedValueOnce([demo.checksum, other.checksum]);
+    await analysesListener.addDemosToAnalyses([demo, other]);
+    expect(mocks.analyze).not.toHaveBeenCalled();
+    expect(mocks.known).toHaveBeenCalledTimes(2);
+  });
+  it('requires explicit retry for an interrupted import even if its incomplete match header exists', async () => {
+    mocks.known.mockResolvedValue([demo.checksum]);
+    mocks.incomplete.set(demo.checksum, { demoPath: demo.filePath });
+    await analysesListener.addDemosToAnalyses([demo], { automatic: true });
+    expect(mocks.analyze).not.toHaveBeenCalled();
+    expect(mocks.cache).not.toHaveBeenCalled();
+    mocks.analyze.mockResolvedValue(undefined);
+    await analysesListener.addDemosToAnalyses([demo]);
+    expect(mocks.analyze).toHaveBeenCalledTimes(1);
+  });
+  it('skips the raw parser for already saved matches and only repairs their compact cache', async () => {
+    mocks.known.mockResolvedValue([demo.checksum]);
+    await analysesListener.addDemosToAnalyses([demo]);
+    expect(mocks.analyze).not.toHaveBeenCalled();
+    expect(mocks.insert).not.toHaveBeenCalled();
+    expect(mocks.cache).toHaveBeenCalledWith(demo.checksum, demo.filePath, { retry: true });
+  });
+  it('requires an explicit force option to reparse a saved match', async () => {
+    mocks.known.mockResolvedValue([demo.checksum]);
+    mocks.analyze.mockResolvedValue(undefined);
+    await analysesListener.addDemosToAnalyses([demo], { force: true });
+    expect(mocks.analyze).toHaveBeenCalledTimes(1);
+  });
+  it('pauses new work and persists removal suppression before resuming', async () => {
+    await analysesListener.control({ action: 'pause' });
+    await analysesListener.addDemosToAnalyses([demo]);
+    expect(mocks.analyze).not.toHaveBeenCalled();
+    expect(importProgress.snapshot().queuePaused).toBe(true);
+    await analysesListener.control({ action: 'remove-pending' });
+    expect(mocks.suppress).toHaveBeenCalledWith(demo.filePath, demo.checksum);
+    await analysesListener.control({ action: 'resume' });
+    expect(analysesListener.getAnalyses()).toHaveLength(0);
+    expect(mocks.analyze).not.toHaveBeenCalled();
+  });
+  it('cancels only its active parser and never inserts its partial output', async () => {
+    mocks.analyze.mockImplementationOnce(
+      ({ signal }: { signal: AbortSignal }) =>
+        new Promise<void>((_, reject) => {
+          signal.addEventListener('abort', () => reject(signal.reason), { once: true });
+        }),
+    );
+    const run = analysesListener.addDemosToAnalyses([demo]);
+    await vi.waitFor(() => expect(mocks.analyze).toHaveBeenCalledTimes(1));
+    await analysesListener.control({ action: 'cancel-active' });
+    await run;
+    expect(mocks.insert).not.toHaveBeenCalled();
+    expect(mocks.suppress).toHaveBeenCalledWith(demo.filePath, demo.checksum);
+    expect(importProgress.snapshot()).toMatchObject({ skipped: 1, failed: 0 });
+  });
+  it('removes pending work before asynchronous suppression can race with a resume', async () => {
+    await analysesListener.control({ action: 'pause' });
+    await analysesListener.addDemosToAnalyses([demo]);
+    let finish: () => void = () => {};
+    mocks.suppress.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const removal = analysesListener.control({ action: 'remove-pending' });
+    await analysesListener.control({ action: 'resume' });
+    expect(mocks.analyze).not.toHaveBeenCalled();
+    expect(analysesListener.getAnalyses()).toHaveLength(0);
+    finish();
+    await removal;
+  });
+  it('never interrupts a database insert and reports it as active until safe completion', async () => {
+    let finish: () => void = () => {};
+    mocks.analyze.mockResolvedValueOnce(undefined);
+    mocks.insert.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const run = analysesListener.addDemosToAnalyses([demo]);
+    await vi.waitFor(() => expect(mocks.insert).toHaveBeenCalledTimes(1));
+    await analysesListener.control({ action: 'cancel-active' });
+    await analysesListener.control({ action: 'pause' });
+    expect(mocks.suppress).not.toHaveBeenCalled();
+    expect(importProgress.snapshot()).toMatchObject({ inserting: 1, queuePaused: true, skipped: 0 });
+    finish();
+    await run;
+    expect(importProgress.snapshot()).toMatchObject({ completed: 1, queuePaused: true });
+  });
   it('keeps progress below 100 until the database insert promise resolves', async () => {
     let finishInsert: () => void = () => {};
     mocks.analyze.mockResolvedValueOnce(undefined);

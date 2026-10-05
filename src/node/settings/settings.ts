@@ -48,6 +48,7 @@ type UISettings = {
 };
 
 type AnalyzeSettings = {
+  automaticConcurrency?: boolean;
   maxConcurrentAnalyses?: number;
   analyzePositions: boolean;
   autoAnalyzeFolders: boolean;

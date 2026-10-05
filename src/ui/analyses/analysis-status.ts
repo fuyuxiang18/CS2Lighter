@@ -12,8 +12,9 @@ export function isAnalysisInProgressStatus(status: AnalysisStatus) {
 
 export function isAnalysisDoneStatus(status: AnalysisStatus) {
   return (
-    status !== AnalysisStatus.AnalyzeError &&
-    status !== AnalysisStatus.InsertSuccess &&
-    status !== AnalysisStatus.InsertError
+    status === AnalysisStatus.AnalyzeError ||
+    status === AnalysisStatus.InsertSuccess ||
+    status === AnalysisStatus.InsertError ||
+    status === AnalysisStatus.Cancelled
   );
 }

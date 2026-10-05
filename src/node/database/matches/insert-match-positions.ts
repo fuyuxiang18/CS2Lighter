@@ -2,7 +2,6 @@ import type { PlayerPositionTable } from '../player-position/player-position-tab
 import type { GrenadePositionTable } from '../grenade-position/grenade-position-table';
 import type { InfernoPositionTable } from '../inferno-position/inferno-position-table';
 import type { HostagePositionTable } from '../hostage-position/hostage-position-table';
-import type { ChickenPositionTable } from '../chicken-position/chicken-position-table';
 import { getCsvFilePath, type InsertOptions } from './match-insertion';
 import { copyCsvIntoTable } from 'csdm/node/database/copy-csv-into-table';
 
@@ -111,23 +110,13 @@ async function insertHostagePositions({ outputFolderPath, demoName }: InsertOpti
   });
 }
 
-async function insertChickenPositions({ outputFolderPath, demoName }: InsertOptions) {
-  const csvFilePath = getCsvFilePath(outputFolderPath, demoName, '_chicken_positions.csv');
-
-  await copyCsvIntoTable<ChickenPositionTable>({
-    tableName: 'chicken_positions',
-    csvFilePath,
-    columns: ['frame', 'tick', 'round_number', 'x', 'y', 'z', 'match_checksum'],
-  });
-}
-
 type InsertMatchPositionsParameters = {
   demoName: string;
   outputFolderPath: string;
 };
 
 export async function insertMatchPositions({ demoName, outputFolderPath }: InsertMatchPositionsParameters) {
-  await Promise.all([
+  const outcomes = await Promise.allSettled([
     insertPlayersPositions({
       outputFolderPath,
       demoName,
@@ -144,9 +133,7 @@ export async function insertMatchPositions({ demoName, outputFolderPath }: Inser
       outputFolderPath,
       demoName,
     }),
-    insertChickenPositions({
-      outputFolderPath,
-      demoName,
-    }),
   ]);
+  const failure = outcomes.find((outcome) => outcome.status === 'rejected');
+  if (failure?.status === 'rejected') throw failure.reason;
 }

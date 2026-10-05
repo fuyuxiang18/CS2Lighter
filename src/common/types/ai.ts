@@ -1,5 +1,6 @@
 import type { DemoSource } from './counter-strike';
 import type { PersonalStatsSide } from './personal-stats';
+import type { ReviewClipRequest } from './review-clip';
 
 type AiProvider = 'openai-compatible' | 'ollama';
 
@@ -100,6 +101,10 @@ export type AiErrorCode =
   | 'request-timeout'
   | 'invalid-response'
   | 'storage-failed'
+  | 'video-not-ready'
+  | 'frame-extraction-failed'
+  | 'preview-expired'
+  | 'vision-unsupported'
   | 'busy';
 
 /** IPC failures are allowlisted codes, never raw provider responses/keys/URLs. */
@@ -146,4 +151,113 @@ export type PreparedAiContext = {
       clutchWon: boolean;
     }[];
   };
+};
+
+/** One selected encounter, never an arbitrary renderer-supplied video path. itemIndex equals ReviewBatchItem.index. */
+export type AiVideoSource =
+  | { kind: 'clip'; request: ReviewClipRequest }
+  | { kind: 'batch'; id: string; itemIndex: number };
+
+/** Internal server media lookup. These filesystem paths and account identifiers never go to the AI provider. */
+export type ResolvedVideoAiMedia = {
+  revision: string;
+  eventTick?: number;
+  checksum: string;
+  roundNumber: number;
+  steamId: string;
+  mapName: string;
+  tickrate: number;
+  segments: {
+    perspective: 'player' | 'opponent';
+    filePath: string;
+    startTick: number;
+    endTick: number;
+    offsetSeconds: number;
+    durationSeconds: number;
+  }[];
+};
+
+export type VideoAiFrame = {
+  id: string;
+  perspective: 'player' | 'opponent';
+  /** Position in the selected clip/item video, not in a batch compilation. */
+  videoSeconds: number;
+  demoTick: number;
+  width: number;
+  height: number;
+  /** The exact resized JPEG submitted to the provider, also used for the consent preview. */
+  dataUrl: string;
+};
+
+export type VideoAiFacts = {
+  map: string;
+  round: number;
+  tickrate: number;
+  side: PersonalStatsSide;
+  won: boolean;
+  kills: number;
+  deaths: number;
+  damage: number;
+  openingKill: boolean;
+  openingDeath: boolean;
+  tradeKills: number;
+  tradedDeaths: number;
+  utilityThrown: number;
+  utilityDamage: number;
+};
+
+type VideoAiPayload = {
+  locale: 'zh-CN' | 'en';
+  eventTick: number | null;
+  facts: VideoAiFacts;
+  frames: Omit<VideoAiFrame, 'dataUrl'>[];
+  coverage: { perspective: 'player' | 'opponent'; startTick: number; endTick: number; frameCount: number }[];
+  input: 'sampled-pov-frames-and-round-facts';
+  audioIncluded: false;
+};
+
+export type PreparedVideoAiContext = {
+  contextHash: string;
+  source: AiVideoSource;
+  frames: VideoAiFrame[];
+  payload: VideoAiPayload;
+};
+
+export type VideoAiPoint = {
+  frameIds: string[];
+  observation: string;
+  inference: string;
+  /** Opponent information is hindsight; it must never be presented as player knowledge. */
+  information: 'player-visible' | 'opponent-hindsight' | 'uncertain';
+  alternative: string;
+  uncertainty: string;
+};
+
+export type VideoAiContent = {
+  visualInput: 'visible';
+  summary: { text: string; frameIds: string[] };
+  style: { text: string; frameIds: string[] };
+  timeline: VideoAiPoint[];
+  practice: { action: string; check: string; frameIds: string[] }[];
+  limitations: string[];
+};
+
+export type VideoAiReport = {
+  id: string;
+  contextHash: string;
+  generatedAt: string;
+  provider: AiProvider;
+  model: string;
+  promptVersion: number;
+  content: VideoAiContent;
+  input: 'sampled-pov-frames-and-round-facts';
+};
+
+export type VideoAiReviewState = {
+  /** Short-lived local preparation, bound to the exact frames and current provider/model configuration. */
+  preparationId: string;
+  expiresAt: string;
+  frames: VideoAiFrame[];
+  payload: VideoAiPayload;
+  report: VideoAiReport | null;
 };

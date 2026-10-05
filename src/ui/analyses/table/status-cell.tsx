@@ -11,6 +11,8 @@ export function StatusCell({ data }: Props) {
   const { status } = data;
 
   switch (status) {
+    case AnalysisStatus.Cancelled:
+      return <Trans context="Analysis status">Cancelled</Trans>;
     case AnalysisStatus.Analyzing:
       return <Trans context="Analysis status">Analyzing</Trans>;
     case AnalysisStatus.AnalyzeError:

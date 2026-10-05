@@ -5,6 +5,7 @@ import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { useLocale } from 'csdm/ui/settings/ui/use-locale';
 import { AiReportContent } from './ai-report-content';
 import { ReviewButton } from './review-button';
+import { useAiErrorMessage } from './use-ai-error-message';
 
 type Props = {
   scope: Omit<AiReportScope, 'locale'>;
@@ -23,6 +24,7 @@ export function AiReviewPanel({ scope, onConfigure }: Props) {
 
 function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure: () => void }) {
   const { t } = useLingui();
+  const errorMessage = useAiErrorMessage();
   const formatDate = useFormatDate();
   const [state, setState] = useState<AiReportState | null>(null);
   const [configuration, setConfiguration] = useState<AiConfiguration | null>(null);
@@ -99,18 +101,6 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
     }
   };
 
-  const errorMessages: Record<AiErrorCode, string> = {
-    'invalid-configuration': t`Set an AI provider, server address and model before generating a review.`,
-    'secure-storage-unavailable': t`Encrypted key storage is unavailable on this device. Check the AI settings.`,
-    'key-unavailable': t`The API key is missing or could not be read. Save it in the AI settings.`,
-    'invalid-scope': t`This player or match is not available for an AI review.`,
-    'no-data': t`No usable rounds match this selection. Import demos or change the filters first.`,
-    'request-failed': t`The AI request failed. Check the server address, model and credentials, then try again.`,
-    'request-timeout': t`The model did not respond in time. Try again or choose a faster model.`,
-    'invalid-response': t`The model returned a report that could not be verified. It was not saved. Try another model or retry.`,
-    'storage-failed': t`The report could not be saved locally. Check available disk space and try again.`,
-    busy: t`Another AI review is being generated. Wait for it to finish, then refresh this panel.`,
-  };
   const report = state?.report;
   const preview = state?.preview;
   const configured = Boolean(configuration?.model.trim());
@@ -173,7 +163,7 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
 
       {error && (
         <p role="alert" className="rounded-8 border border-red-400 p-12 text-body text-red-500">
-          {errorMessages[error]}
+          {errorMessage(error)}
         </p>
       )}
 

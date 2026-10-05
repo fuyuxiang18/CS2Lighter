@@ -6,12 +6,15 @@ import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 import { getDemoFromFilePath } from 'csdm/node/demo/get-demo-from-file-path';
 import { hasCompleteSource2Demo } from 'csdm/node/demo/has-complete-source2-demo';
 import { fetchMatchChecksums } from 'csdm/node/database/matches/fetch-match-checksums';
+import { getIncompleteMatchImports, isMatchImportActive } from 'csdm/node/database/matches/match-import-state';
 import { isDatabaseConnected } from 'csdm/node/database/database';
 import { analysesListener } from 'csdm/server/analyses-listener';
 import { AnalysisStatus } from 'csdm/common/types/analysis-status';
 import { importProgress } from 'csdm/server/import-progress';
 import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
 import { getDemoCacheFailures, retryFailedDemoCaches } from 'csdm/node/demo-cache/demo-cache-service';
+import { normalizeDemoPath } from 'csdm/common/normalize-demo-path';
+import { getImportQueueControl, allowDemoImport } from 'csdm/server/import-queue-control';
 import {
   DemoFileReadiness,
   getDemoFileFingerprint,
@@ -60,7 +63,7 @@ async function loadRecords() {
         'failed' in value &&
         typeof value.failed === 'boolean'
       ) {
-        records.set(filePath, {
+        records.set(normalizeDemoPath(filePath), {
           fingerprint: value.fingerprint,
           failed: value.failed,
           checksum: 'checksum' in value && typeof value.checksum === 'string' ? value.checksum : undefined,
@@ -108,6 +111,8 @@ async function scanFolders() {
   }
   try {
     const settings = await getSettings();
+    const controls = await getImportQueueControl();
+    if (controls.paused) return;
     if (settings.analyze.autoAnalyzeFolders === false) {
       readiness.clear();
       foldersSignature = '';
@@ -137,7 +142,7 @@ async function scanFolders() {
           followSymbolicLinks: false,
         });
         for (const filePath of files) {
-          filePaths.add(path.resolve(filePath));
+          filePaths.add(normalizeDemoPath(filePath));
         }
       } catch (error) {
         logger.warn(`Unable to scan demo folder ${folder.path}`);
@@ -155,10 +160,13 @@ async function scanFolders() {
     if (filePaths.size === 0) {
       return;
     }
-    const knownChecksums = new Set(await fetchMatchChecksums());
+    const incompleteImports = await getIncompleteMatchImports();
+    const knownChecksums = new Set(
+      (await fetchMatchChecksums()).filter((checksum) => !incompleteImports.has(checksum)),
+    );
     const queuedThisScan = new Set<string>();
     for (const filePath of filePaths) {
-      if (scanGeneration !== generation || !isDatabaseConnected() || isUpdateMaintenance()) {
+      if (scanGeneration !== generation || controls.paused || !isDatabaseConnected() || isUpdateMaintenance()) {
         break;
       }
       let fingerprint: string | undefined;
@@ -168,7 +176,25 @@ async function scanFolders() {
           continue;
         }
         fingerprint = getDemoFileFingerprint(stats);
+        if (controls.suppressed[filePath] === fingerprint) {
+          importProgress.update(filePath, 'skipped', { reason: 'cancelled' });
+          continue;
+        }
         const record = records.get(filePath);
+        if (record?.fingerprint === fingerprint && record.checksum && controls.suppressedChecksums[record.checksum]) {
+          importProgress.update(filePath, 'skipped', { reason: 'cancelled' });
+          continue;
+        }
+        const interrupted = [...incompleteImports.values()].find(
+          (entry) => normalizeDemoPath(entry.demoPath) === filePath && !isMatchImportActive(entry.checksum),
+        );
+        if (interrupted) {
+          importProgress.update(filePath, 'failed', {
+            reason: 'insertion',
+            message: 'The previous save was interrupted. Retry this import explicitly to replace incomplete data.',
+          });
+          continue;
+        }
         // Cache retries never need the original recording, and a successful backfill repairs an earlier cache failure.
         if (
           record?.reason === 'cache' &&
@@ -193,7 +219,7 @@ async function scanFolders() {
           }
           continue;
         }
-        if (analysesListener.getAnalyses().some((analysis) => analysis.demoPath === filePath)) {
+        if (analysesListener.getAnalyses().some((analysis) => normalizeDemoPath(analysis.demoPath) === filePath)) {
           continue;
         }
         const now = Date.now();
@@ -235,6 +261,19 @@ async function scanFolders() {
           importProgress.update(filePath, 'skipped', { reason: 'unstable' });
           continue;
         }
+        if (controls.suppressedChecksums[demo.checksum]) {
+          records.set(filePath, { fingerprint, checksum: demo.checksum, failed: false, reason: 'cancelled' });
+          changed = true;
+          importProgress.update(filePath, 'skipped', { reason: 'cancelled' });
+          continue;
+        }
+        if (incompleteImports.has(demo.checksum) && !isMatchImportActive(demo.checksum)) {
+          importProgress.update(filePath, 'failed', {
+            reason: 'insertion',
+            message: 'The previous save was interrupted. Retry this import explicitly to replace incomplete data.',
+          });
+          continue;
+        }
         if (knownChecksums.has(demo.checksum)) {
           records.set(filePath, { fingerprint, checksum: demo.checksum, failed: false });
           changed = true;
@@ -249,9 +288,11 @@ async function scanFolders() {
           .getAnalyses()
           .find((analysis) => analysis.demoChecksum === demo.checksum);
         if (queuedThisScan.has(demo.checksum) || queuedAnalysis) {
+          records.set(filePath, { fingerprint, checksum: demo.checksum, failed: false });
+          changed = true;
           // A manual request may have queued this same file while its framing was being checked.
           // Its active progress must not be overwritten by a duplicate-copy result.
-          if (queuedAnalysis?.demoPath !== filePath) {
+          if (queuedAnalysis && normalizeDemoPath(queuedAnalysis.demoPath) !== filePath) {
             importProgress.update(filePath, 'skipped', { reason: 'duplicate' });
           }
           continue;
@@ -259,6 +300,9 @@ async function scanFolders() {
         // Honor a disabled switch even during a long scan of a large library.
         if (
           (await getSettings()).analyze.autoAnalyzeFolders === false ||
+          controls.paused ||
+          controls.suppressed[filePath] === fingerprint ||
+          controls.suppressedChecksums[demo.checksum] ||
           scanGeneration !== generation ||
           isUpdateMaintenance()
         ) {
@@ -271,7 +315,7 @@ async function scanFolders() {
         // The existing queue owns concurrency and reports progress/errors in the Analyses page.
         // Position data is required for habits, regardless of the manual-analysis preference.
         void analysesListener
-          .addDemosToAnalyses([demo], { analyzePositions: true, allowCorrupted: false })
+          .addDemosToAnalyses([demo], { analyzePositions: true, allowCorrupted: false, automatic: true })
           .catch((error: unknown) => {
             pending.delete(demo.checksum);
             importProgress.update(filePath, 'failed', {
@@ -332,7 +376,7 @@ export function startAutoImportDemoFolders() {
     const attempt = pending.get(analysis.demoChecksum);
     if (attempt === undefined) {
       // A user may retry a failed automatic import through the existing manual Analyze action.
-      const record = records.get(analysis.demoPath);
+      const record = records.get(normalizeDemoPath(analysis.demoPath));
       if (record && analysis.status === AnalysisStatus.InsertSuccess && !analysis.cacheError) {
         record.failed = false;
         record.reason = undefined;
@@ -346,8 +390,17 @@ export function startAutoImportDemoFolders() {
     records.set(attempt.filePath, {
       fingerprint: attempt.fingerprint,
       checksum: analysis.demoChecksum,
-      failed: analysis.status !== AnalysisStatus.InsertSuccess || Boolean(analysis.cacheError),
-      reason: analysis.cacheError ? 'cache' : analysis.status === AnalysisStatus.InsertError ? 'insertion' : 'analysis',
+      failed:
+        analysis.status !== AnalysisStatus.Cancelled &&
+        (analysis.status !== AnalysisStatus.InsertSuccess || Boolean(analysis.cacheError)),
+      reason:
+        analysis.status === AnalysisStatus.Cancelled
+          ? 'cancelled'
+          : analysis.cacheError
+            ? 'cache'
+            : analysis.status === AnalysisStatus.InsertError
+              ? 'insertion'
+              : 'analysis',
       message: analysis.cacheError ?? analysis.output.slice(-1000),
     });
     saveRecords();
@@ -400,7 +453,12 @@ export async function retryFailedImports() {
     for (const { filePath, reason } of failures) {
       if (reason === 'cache') continue;
       try {
-        if (analysesListener.getAnalyses().some((analysis) => analysis.demoPath === filePath)) {
+        await allowDemoImport(filePath);
+        if (
+          analysesListener
+            .getAnalyses()
+            .some((analysis) => normalizeDemoPath(analysis.demoPath) === normalizeDemoPath(filePath))
+        ) {
           continue;
         }
         importProgress.update(filePath, 'pending');
@@ -413,6 +471,7 @@ export async function retryFailedImports() {
           continue;
         }
         const demo = await getDemoFromFilePath(filePath);
+        await allowDemoImport(filePath, demo.checksum);
         if (getDemoFileFingerprint(await fs.stat(filePath)) !== fingerprint) {
           importProgress.update(filePath, 'skipped', { reason: 'unstable' });
           continue;
@@ -421,7 +480,7 @@ export async function retryFailedImports() {
           .getAnalyses()
           .find((analysis) => analysis.demoChecksum === demo.checksum);
         if (queuedAnalysis) {
-          if (queuedAnalysis.demoPath !== filePath) {
+          if (normalizeDemoPath(queuedAnalysis.demoPath) !== normalizeDemoPath(filePath)) {
             importProgress.update(filePath, 'skipped', { reason: 'duplicate' });
           }
           continue;

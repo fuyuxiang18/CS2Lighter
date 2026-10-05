@@ -12,6 +12,8 @@ import type {
   AiReportState,
   AiResult,
   SaveAiConfiguration,
+  AiVideoSource,
+  VideoAiReviewState,
 } from 'csdm/common/types/ai';
 import type { ILogger } from 'csdm/node/logger';
 import type { PreloadResult } from 'csdm/preload/preload-result';
@@ -39,6 +41,8 @@ declare global {
     saveAiConfiguration: (input: SaveAiConfiguration) => Promise<AiResult<AiConfiguration>>;
     getAiReport: (scope: AiReportScope) => Promise<AiResult<AiReportState>>;
     generateAiReport: (scope: AiReportScope, regenerate?: boolean) => Promise<AiResult<AiReportState>>;
+    prepareVideoAiReview: (source: AiVideoSource, locale: 'zh-CN' | 'en') => Promise<AiResult<VideoAiReviewState>>;
+    generateVideoAiReview: (preparationId: string, regenerate?: boolean) => Promise<AiResult<VideoAiReviewState>>;
     logger: ILogger;
     platform: NodeJS.Platform;
     isWindows: boolean;

@@ -79,6 +79,7 @@ describe('complete review encounters', () => {
     expect(page.total).toBe(1);
     expect(page.events[0]).toMatchObject({
       kind: 'kill',
+      opponentSteamId: enemy,
       eventTick: 4000,
       startTick: 2376,
       endTick: 4512,
@@ -94,6 +95,7 @@ describe('complete review encounters', () => {
     let page = buildReviewDuels(input, { steamId });
     expect(page.events.map((event) => event.damageGiven)).toEqual([60, 30]);
     expect(page.events.every((event) => event.opponent === 'Enemy')).toBe(true);
+    expect(page.events.every((event) => event.opponentSteamId === enemy)).toBe(true);
     input.kills = [kill({ tick: 2320 })];
     input.damages[2].tick = 2330;
     page = buildReviewDuels(input, { steamId });

@@ -9,7 +9,9 @@ const mocks = vi.hoisted(() => ({
   habits: vi.fn(),
   metrics: vi.fn(),
   generation: 0,
+  importActive: false,
 }));
+vi.stubGlobal('logger', { log: vi.fn(), error: vi.fn() });
 vi.mock('./cache-directory', () => ({
   getDemoCacheDirectory: () =>
     Promise.resolve({ path: '/qa/demodata', preferredPath: '/qa/demodata', isFallback: false }),
@@ -26,6 +28,10 @@ vi.mock('csdm/node/database/personal-stats/compute-personal-match-stats', () => 
   computePersonalMatchStats: mocks.metrics,
 }));
 vi.mock('./invalidate-demo-cache', () => ({ getDemoCacheGeneration: () => mocks.generation }));
+vi.mock('csdm/node/database/matches/match-import-state', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('csdm/node/database/matches/match-import-state')>()),
+  isMatchImportActive: (checksum: string) => checksum === 'aa' && mocks.importActive,
+}));
 
 let service: typeof import('./demo-cache-service');
 let progress: ImportProgressTracker;
@@ -33,6 +39,7 @@ beforeEach(async () => {
   vi.resetModules();
   vi.resetAllMocks();
   mocks.generation = 0;
+  mocks.importActive = false;
   mocks.descriptor.mockImplementation((checksum: string) =>
     Promise.resolve({ match: { checksum, demoPath: `/${checksum}.dem` }, revision: 'revision-1' }),
   );
@@ -51,6 +58,44 @@ beforeEach(async () => {
 });
 
 describe('durable per-demo cache service', () => {
+  it('keeps ready matches readable while a different match header is committed but its COPY is incomplete', async () => {
+    const { MatchImportIncompleteError } = await import('csdm/node/database/matches/match-import-state');
+    mocks.importActive = true;
+    mocks.descriptor.mockImplementation((checksum: string) =>
+      checksum === 'aa'
+        ? Promise.reject(new MatchImportIncompleteError('aa', '/aa.dem'))
+        : Promise.resolve({ match: { checksum, demoPath: `/${checksum}.dem` }, revision: 'revision-1' }),
+    );
+    mocks.read.mockResolvedValue({ revision: 'revision-1', checksum: 'bb' });
+    progress.update('/aa.dem', 'inserting');
+    const before = progress.snapshot();
+    expect(
+      (await service.loadDemoCaches(['aa', 'bb'], undefined, { allowPartial: true })).map((cache) => cache.checksum),
+    ).toEqual(['bb']);
+    expect(mocks.habits).not.toHaveBeenCalled();
+    expect(mocks.write).not.toHaveBeenCalled();
+    expect(progress.snapshot()).toEqual(before);
+  });
+  it('does not reuse or resurrect an in-flight cache from before the final COPY commits', async () => {
+    let release: (value: object) => void = () => {};
+    mocks.habits.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    );
+    const earlier = service.ensureDemoCache('aa');
+    const rejected = expect(earlier).rejects.toThrow('changed');
+    await vi.waitFor(() => expect(mocks.habits).toHaveBeenCalledTimes(1));
+    mocks.generation++;
+    const afterCommit = service.ensureDemoCache('aa');
+    expect(afterCommit).not.toBe(earlier);
+    release({});
+    await rejected;
+    await expect(afterCommit).resolves.toMatchObject({ checksum: 'aa' });
+    expect(mocks.write).toHaveBeenCalledTimes(1);
+    expect(mocks.habits).toHaveBeenCalledTimes(2);
+  });
   it('serves a valid cache without scanning positions or recomputing personal facts', async () => {
     mocks.read.mockResolvedValue({ revision: 'revision-1', checksum: 'aa' });
     const result = await service.loadDemoCaches(['aa']);
@@ -92,7 +137,7 @@ describe('durable per-demo cache service', () => {
     const first = service.ensureDemoCache('aa');
     const second = service.ensureDemoCache('bb');
     await vi.waitFor(() => expect(mocks.habits).toHaveBeenCalledTimes(1));
-    expect(mocks.habits).toHaveBeenCalledWith(expect.objectContaining({ checksum: 'aa' }));
+    expect(mocks.habits).toHaveBeenCalledWith(expect.objectContaining({ checksum: 'aa' }), expect.any(AbortSignal));
     release({});
     await Promise.all([first, second]);
     expect(mocks.habits).toHaveBeenCalledTimes(2);
@@ -248,5 +293,39 @@ describe('durable per-demo cache service', () => {
     await service.retryFailedDemoCaches();
     expect(service.getDemoCacheFailures().size).toBe(0);
     expect(progress.snapshot()).toMatchObject({ completed: 1, isBlocking: false });
+  });
+
+  it('cancels an owned rebuild without overwriting the old file and does not restart until explicit retry', async () => {
+    mocks.read.mockResolvedValue({ revision: 'old', checksum: 'aa' });
+    mocks.habits.mockImplementationOnce(
+      (_match, signal: AbortSignal) =>
+        new Promise((_, reject) => {
+          signal.addEventListener('abort', () => reject(signal.reason), { once: true });
+        }),
+    );
+    const run = service.ensureDemoCache('aa');
+    const rejected = expect(run).rejects.toThrow('cancelled');
+    await vi.waitFor(() => expect(mocks.habits).toHaveBeenCalledTimes(1));
+    service.cancelDemoCacheBuilds(['aa']);
+    await rejected;
+    expect(mocks.write).not.toHaveBeenCalled();
+    expect(mocks.remove).not.toHaveBeenCalled();
+    await expect(service.ensureDemoCache('aa')).rejects.toThrow('cancelled');
+    expect(mocks.habits).toHaveBeenCalledTimes(1);
+    await service.retryFailedDemoCaches();
+    expect(mocks.habits).toHaveBeenCalledTimes(2);
+    expect(mocks.write).toHaveBeenCalledTimes(1);
+  });
+
+  it('allows existing summaries to remain available when a different demo cache cannot rebuild', async () => {
+    mocks.read.mockImplementation((_directory: string, checksum: string) =>
+      Promise.resolve(checksum === 'aa' ? { revision: 'revision-1', checksum: 'aa' } : undefined),
+    );
+    mocks.habits.mockRejectedValueOnce(new Error('cancelled'));
+    const loaded = vi.fn();
+    const results = await service.loadDemoCaches(['aa', 'bb'], loaded, { allowPartial: true });
+    expect(results.map((cache) => cache.checksum)).toEqual(['aa']);
+    expect(loaded).toHaveBeenCalledWith(expect.objectContaining({ checksum: 'aa' }), 1, 2);
+    expect(progress.snapshot()).toMatchObject({ failed: 1, isBlocking: false });
   });
 });

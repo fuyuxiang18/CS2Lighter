@@ -17,6 +17,7 @@ import { resolveReviewClip } from './resolve-review-clip';
 import { assertReviewGameFiles } from './assert-review-game-files';
 import { buildReviewHlaeCommands } from './create-review-hlae-commands';
 import { inspectReviewClipRequirements, reviewClips } from './review-clips';
+import { isReviewBatchBusy } from './review-batches';
 
 let active = false;
 export function isReviewPovBusy() {
@@ -24,7 +25,8 @@ export function isReviewPovBusy() {
 }
 
 export async function watchReviewPov(request: ReviewClipRequest): Promise<ReviewPovState> {
-  if (active || reviewClips.isBusy() || videoQueue.isBusy()) return { status: 'failed', request, issue: 'queue-busy' };
+  if (active || reviewClips.isBusy() || videoQueue.isBusy() || isReviewBatchBusy())
+    return { status: 'failed', request, issue: 'queue-busy' };
   active = true;
   let folder: string | undefined;
   try {
@@ -60,7 +62,7 @@ export async function watchReviewPov(request: ReviewClipRequest): Promise<Review
       ]),
     );
     const state: ReviewPovState = { status: 'opening', request: input.request };
-    if (reviewClips.isBusy() || videoQueue.isBusy()) throw new ReviewClipError('queue-busy');
+    if (reviewClips.isBusy() || videoQueue.isBusy() || isReviewBatchBusy()) throw new ReviewClipError('queue-busy');
     const publish = (patch: Partial<ReviewPovState>) =>
       server.sendPushMessage({ name: ServerPushMessageName.ReviewPovUpdated, payload: { ...state, ...patch } });
     const ownedFolder = folder;

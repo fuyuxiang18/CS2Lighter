@@ -6,6 +6,8 @@ export const IPCChannel = {
   SaveAiConfiguration: 'save-ai-configuration',
   GetAiReport: 'get-ai-report',
   GenerateAiReport: 'generate-ai-report',
+  PrepareVideoAiReview: 'prepare-video-ai-review',
+  GenerateVideoAiReview: 'generate-video-ai-review',
   GetStartupArguments: 'get-startup-arguments',
   ClearStartupArguments: 'clear-startup-arguments',
   GetSystemStartupBehavior: 'get-system-startup-behavior',

@@ -4,8 +4,10 @@ import { Game } from 'csdm/common/types/counter-strike';
 import type { DemoCacheMatch } from 'csdm/common/types/demo-data-cache';
 import { getMapLowerRadarFilePath } from 'csdm/node/filesystem/maps/get-map-lower-radar-file-path';
 import { DEMO_CACHE_SCHEMA_VERSION } from './cache-storage';
+import { assertMatchImportComplete } from 'csdm/node/database/matches/match-import-state';
 
 export async function getDemoCacheDescriptor(checksum: string) {
+  await assertMatchImportComplete(checksum);
   const row = await db
     .selectFrom('matches as m')
     .innerJoin('demos as d', 'd.checksum', 'm.checksum')
@@ -47,5 +49,6 @@ export async function getDemoCacheDescriptor(checksum: string) {
   const revision = createHash('sha256')
     .update(JSON.stringify([DEMO_CACHE_SCHEMA_VERSION, match]))
     .digest('hex');
+  await assertMatchImportComplete(checksum);
   return { match, revision };
 }

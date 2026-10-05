@@ -20,6 +20,8 @@ export type ImportFileProgress = {
 };
 
 export type ImportProgress = {
+  queuePaused: boolean;
+  effectiveConcurrency: number;
   batchId: string;
   phase: 'idle' | 'discovering' | 'waiting' | 'processing' | 'complete';
   isBlocking: boolean;
@@ -39,4 +41,9 @@ export type ImportProgress = {
   cacheDirectory: DemoCacheDirectory | null;
   currentFiles: ImportFileProgress[];
   failures: { filePath: string; reason: string; message: string }[];
+};
+
+export type ControlImportQueuePayload = {
+  action: 'pause' | 'resume' | 'cancel-active' | 'cancel-cache' | 'remove-pending';
+  checksums?: string[];
 };

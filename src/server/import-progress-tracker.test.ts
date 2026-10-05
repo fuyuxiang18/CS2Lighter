@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vite-plus/test';
 import { ImportProgressTracker } from './import-progress-tracker';
 
 describe('ImportProgressTracker', () => {
+  it('counts Windows drive and UNC aliases once across scanner, database and manual paths', () => {
+    const progress = new ImportProgressTracker();
+    progress.beginDiscovery();
+    progress.update('D:/cs2demo/Example.dem', 'pending');
+    progress.update('d:\\CS2DEMO\\example.dem', 'caching');
+    progress.update('\\\\Server\\Share\\Demo.dem', 'pending');
+    progress.update('//server/share/demo.dem', 'completed');
+    expect(progress.snapshot()).toMatchObject({ total: 2, caching: 1, completed: 1 });
+    progress.update('D:\\cs2demo\\EXAMPLE.dem', 'completed');
+    progress.finishDiscovery();
+    expect(progress.snapshot()).toMatchObject({ total: 2, completed: 2, percent: 100 });
+  });
   it('keeps browsing blocked after parsing until insertion has completed', () => {
     const progress = new ImportProgressTracker();
     progress.beginDiscovery();

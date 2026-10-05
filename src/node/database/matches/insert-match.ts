@@ -40,6 +40,8 @@ import { DuplicatedMatchChecksum } from './errors/duplicated-match-checksum';
 import { db } from '../database';
 import type { DemoSource, DemoType, Game } from 'csdm/common/types/counter-strike';
 import { InvalidMatchDate } from './errors/invalid-match-date';
+import { beginMatchImport, completeMatchImport, failMatchImport } from './match-import-state';
+import { invalidateDemoCaches } from 'csdm/node/demo-cache/invalidate-demo-cache';
 
 async function insertShots({ outputFolderPath, demoName }: InsertOptions) {
   const csvFilePath = getCsvFilePath(outputFolderPath, demoName, '_shots.csv');
@@ -836,8 +838,10 @@ export type InsertMatchParameters = {
  * works the same way with a local or a remote database.
  */
 export async function insertMatch({ checksum, demoPath, outputFolderPath }: InsertMatchParameters) {
+  await beginMatchImport(checksum, demoPath);
+  let imported = false;
   try {
-    await deleteMatchesByChecksums([checksum]);
+    await deleteMatchesByChecksums([checksum], { preserveImportState: true });
 
     const demoName = getDemoNameFromPath(demoPath);
     await insertDemoFromCsv({
@@ -849,7 +853,7 @@ export async function insertMatch({ checksum, demoPath, outputFolderPath }: Inse
       demoName,
     });
 
-    await Promise.all([
+    const outcomes = await Promise.allSettled([
       insertTeamsFromCsv({
         outputFolderPath,
         demoName,
@@ -959,12 +963,22 @@ export async function insertMatch({ checksum, demoPath, outputFolderPath }: Inse
         outputFolderPath,
       }),
     ]);
+    const failure = outcomes.find((outcome) => outcome.status === 'rejected');
+    if (failure?.status === 'rejected') throw failure.reason;
+    // Reject any cache read/build that began before the last COPY committed, without waiting on the cache queue.
+    await invalidateDemoCaches([checksum]);
+    imported = true;
   } catch (error) {
     // Each COPY runs on its own connection, they are not part of a single transaction.
     // Mimic a rollback in case of error by deleting the match we were trying to insert.
-    await deleteMatchesByChecksums([checksum]);
+    await deleteMatchesByChecksums([checksum], { preserveImportState: true });
     throw error;
   } finally {
-    await deleteCsvFilesInOutputFolder(outputFolderPath);
+    try {
+      await deleteCsvFilesInOutputFolder(outputFolderPath);
+    } finally {
+      if (imported) await completeMatchImport(checksum);
+      else await failMatchImport(checksum);
+    }
   }
 }

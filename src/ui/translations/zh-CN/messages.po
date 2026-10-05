@@ -8,8 +8,8 @@ msgstr ""
 "Language: zh-CN\n"
 
 #: src/ui/analyses/action-bar/remove-all-analyses-button.tsx
-msgid "Remove all"
-msgstr "移除所有"
+msgid "Remove pending and finished"
+msgstr "移除待处理和已完成项"
 
 #: src/ui/analyses/action-bar/remove-analyses-succeed-button.tsx
 msgid "Remove succeed analyses"
@@ -41,6 +41,10 @@ msgid "Inserting match…"
 msgstr "插入比赛数据…"
 
 #: src/ui/analyses/analysis-logs.tsx
+msgid "Parsing was cancelled. The original demo was not changed."
+msgstr "解析已取消，原始 demo 未被修改。"
+
+#: src/ui/analyses/analysis-logs.tsx
 msgctxt "Analysis status"
 msgid "Match inserted into the database."
 msgstr "将比赛结果输入数据库中。"
@@ -67,6 +71,11 @@ msgid "No demo analysis in progress."
 msgstr "没有正在分析中的 demo。"
 
 #: src/ui/analyses/table/context-menu/remove-demo-from-analyses-item.tsx
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Cancel current parsing"
+msgstr "取消当前解析"
+
+#: src/ui/analyses/table/context-menu/remove-demo-from-analyses-item.tsx
 #: src/ui/match/video/sequence/match-timeline/camera-item.tsx
 #: src/ui/match/video/sequence/match-timeline/custom-camera-item.tsx
 msgctxt "Context menu"
@@ -84,6 +93,11 @@ msgstr "查看 demo"
 msgctxt "Context menu"
 msgid "See match"
 msgstr "查看比赛"
+
+#: src/ui/analyses/table/status-cell.tsx
+msgctxt "Analysis status"
+msgid "Cancelled"
+msgstr "已取消"
 
 #: src/ui/analyses/table/status-cell.tsx
 msgctxt "Analysis status"
@@ -648,7 +662,6 @@ msgstr "您需要安装 <0>Rosetta</0>。"
 #: src/ui/players/players-table.tsx
 #: src/ui/search/search-results.tsx
 #: src/ui/settings/cameras/delete-camera-dialog.tsx
-#: src/ui/settings/database/database-size.tsx
 #: src/ui/settings/database/import-v2-data-button.tsx
 #: src/ui/settings/database/optimize-database-button.tsx
 #: src/ui/settings/maps/delete-map-dialog.tsx
@@ -2640,6 +2653,7 @@ msgid "Opens the event context in the 2D viewer. Verify the interpretation in th
 msgstr "在二维回放中打开事件前后，结合回合实际情况核对这条解读。"
 
 #: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Round {round}"
 msgstr "第 {round} 回合"
@@ -2709,51 +2723,13 @@ msgid "No POV images were sent. Event statistics cannot assess pre-aim, visibili
 msgstr "本次没有发送第一视角画面，事件统计无法评价预瞄、实际视野或鼠标操作。"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Set an AI provider, server address and model before generating a review."
-msgstr "请先设置 AI 服务、服务器地址和模型，再生成点评。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
-msgstr "此设备无法使用安全的密钥加密存储，请检查 AI 设置。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The API key is missing or could not be read. Save it in the AI settings."
-msgstr "API 密钥未设置或无法读取，请在 AI 设置中保存密钥。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "This player or match is not available for an AI review."
-msgstr "无法为当前玩家或比赛生成 AI 点评。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "No usable rounds match this selection. Import demos or change the filters first."
-msgstr "当前筛选没有可用回合，请先导入 demo 或更改筛选。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The AI request failed. Check the server address, model and credentials, then try again."
-msgstr "AI 请求失败，请检查服务器地址、模型和密钥后重试。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The model did not respond in time. Try again or choose a faster model."
-msgstr "模型响应超时，请重试或选择响应更快的模型。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
-msgstr "模型返回的点评未通过校验，因此没有保存。请更换模型或重试。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "The report could not be saved locally. Check available disk space and try again."
-msgstr "无法将点评保存到本机，请检查可用磁盘空间后重试。"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
-msgstr "已有 AI 点评正在生成，请等待完成后刷新此面板。"
-
-#: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "OpenAI-compatible API"
 msgstr "兼容 OpenAI 的 API"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Ollama"
 msgstr "Ollama"
 
@@ -2771,6 +2747,7 @@ msgid "Turn your recorded situations into a small set of actions to verify in th
 msgstr "从已有比赛中找出几个可执行的改变，在下一场验证。"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "AI settings"
 msgstr "AI 设置"
 
@@ -2783,6 +2760,7 @@ msgid "Generation sends aggregate numbers and sampled round events to your confi
 msgstr "生成时会向你配置的 AI 服务器发送汇总数据和抽样回合事件，不会发送 demo 文件、视频、账号 ID 或玩家昵称。模型无法据此评价预瞄或鼠标操作。"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Generation target: {target} · {serverHost} · {model}"
 msgstr "本次生成使用：{target} · {serverHost} · {model}"
 
@@ -2824,6 +2802,7 @@ msgid "Refresh local report"
 msgstr "刷新本地点评"
 
 #: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
 msgid "Choose a provider and model in AI settings to start."
 msgstr "请先在 AI 设置中选择服务和模型。"
 
@@ -3182,7 +3161,7 @@ msgid "Close the running CS2 session before opening this POV."
 msgstr "请先关闭正在运行的 CS2，再打开此第一视角。"
 
 #: src/ui/habits/habits-playback-button.tsx
-#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/use-review-clip-messages.ts
 msgid "An unfinished replay setup was found in the game folder. Finish or restore that setup before recording."
 msgstr "游戏文件夹中有尚未完成的回放设置，请先完成或还原该设置，再开始录制。"
 
@@ -3191,7 +3170,7 @@ msgid "Could not open the POV. Start Steam and check the CS2 path, HLAE installa
 msgstr "无法打开第一视角。请启动 Steam，并检查 CS2 路径、HLAE 安装和原始 demo。程序不会自动关闭你正在运行的游戏。"
 
 #: src/ui/habits/habits-playback-button.tsx
-#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/review-batch-studio.tsx
 msgid "Recording setup"
 msgstr "录制设置"
 
@@ -3654,6 +3633,113 @@ msgstr "结果"
 msgid "Show more matches"
 msgstr "显示更多比赛"
 
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Edited review videos"
+msgstr "剪辑复盘视频"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{selectedCount} selected events · {demoCount} matches"
+msgstr "已选 {selectedCount} 个事件 · {demoCount} 场比赛"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "One game start per demo. Record selected events together, then watch the saved videos instantly."
+msgstr "每份 demo 只启动一次游戏，集中录制所选事件；完成后可直接播放已保存的视频。"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Include the opponent POV after each of my encounters"
+msgstr "在每段本人交战后附上对手视角"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
+msgstr "增加视角会延长录制时间。建议先选少量关键事件；已缓存的视频无需再次启动游戏。"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Record selected events"
+msgstr "录制所选事件"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Cancel this recording batch"
+msgstr "取消本批录制"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Retry this batch"
+msgstr "重试本批录制"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Select up to 20 combat events below. Your selection stays when changing pages."
+msgstr "在下方选择最多 20 个交战事件，翻页不会清除选择。"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Recording batch progress"
+msgstr "批量录制进度"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{completedSegments} / {totalSegments} camera segments · {completedDemos} / {batchDemoCount} demos · {launchCount} game starts"
+msgstr "{completedSegments} / {totalSegments} 段视角 · {completedDemos} / {batchDemoCount} 份 demo · 已启动游戏 {launchCount} 次"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Processing demo {currentDemo} of {batchDemoCount}"
+msgstr "正在处理第 {currentDemo} / {batchDemoCount} 份 demo"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Event {currentEvent}"
+msgstr "第 {currentEvent} 个事件"
+
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Your POV"
+msgstr "本人视角"
+
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Opponent POV"
+msgstr "对手视角"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Game setup"
+msgstr "游戏设置"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Event {eventNumber}"
+msgstr "第 {eventNumber} 个事件"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Recent recording batches"
+msgstr "最近的录制批次"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "{count} events"
+msgstr "{count} 个事件"
+
+#: src/ui/habits/review-batch-studio.tsx
+msgid "Could not load or start this recording batch. Check the demo and recording setup, then retry."
+msgstr "无法读取或启动本批录制，请检查 demo 和录制设置后重试。"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Watch the compilation"
+msgstr "播放合辑"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "This saved video could not be played. Check that its local file still exists."
+msgstr "无法播放已保存的视频，请确认本地文件仍然存在。"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Each event shows your POV first, then the verified opponent when included. Each camera stops before that player dies; no unrelated spectator footage is added."
+msgstr "每个事件先播放本人视角，再播放已确认的对手视角（如已勾选）。每个镜头都在该玩家死亡前结束，不加入无关的观战画面。"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Stops at death"
+msgstr "死亡前截断"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "No verified opponent view is available for this event."
+msgstr "此事件没有可确认的对手视角。"
+
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Choose one event above to preview its key frames and request a focused AI video review."
+msgstr "先选择上方某个事件，即可预览关键帧并请求针对这一段的 AI 视频点评。"
+
 #: src/ui/habits/review-clip-viewer.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Close POV"
@@ -3665,140 +3751,12 @@ msgid "Watch real POV"
 msgstr "观看真实第一视角"
 
 #: src/ui/habits/review-clip-viewer.tsx
-msgid "Clip recording currently requires Windows."
-msgstr "目前仅支持在 Windows 上录制片段。"
+msgid "Previously saved single POV clip"
+msgstr "此前保存的单视角片段"
 
 #: src/ui/habits/review-clip-viewer.tsx
-msgid "Choose your CS2 installation in Playback settings."
-msgstr "请在回放设置中选择 CS2 的安装位置。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Install HLAE in Video settings to record the game."
-msgstr "请在视频设置中安装 HLAE，用于录制游戏画面。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Install FFmpeg in Video settings to save MP4 clips."
-msgstr "请在视频设置中安装 FFmpeg，用于保存 MP4 片段。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Start Steam, then check again."
-msgstr "请启动 Steam 后重新检查。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Close CS2 before recording. Your running game will not be stopped automatically."
-msgstr "录制前请关闭 CS2，程序不会自动关闭你正在运行的游戏。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Another video is being recorded. Wait for it to finish."
-msgstr "正在录制另一个视频，请等待完成。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "The original demo is missing. Restore it to its imported folder."
-msgstr "原始 demo 文件缺失，请将它恢复到导入时的文件夹。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "The demo changed since import. Import the new file before recording."
-msgstr "demo 文件自导入后发生了变化，请重新导入后再录制。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "This event has no valid recording range. Choose another event."
-msgstr "此事件没有有效的录制区间，请选择其他事件。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording requires a writable path without special characters. Check the app and game locations."
-msgstr "录制需要可写入且不含特殊字符的路径，请检查应用和游戏的位置。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "There is not enough free space for the recording."
-msgstr "可用磁盘空间不足，无法录制。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "CS2 recording failed. Check game compatibility and HLAE, then retry."
-msgstr "CS2 录制失败，请检查游戏兼容性和 HLAE 后重试。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "No playable video was produced. Check CS2 and recording tools, then retry."
-msgstr "没有生成可播放的视频，请检查 CS2 和录制工具后重试。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording was interrupted. You can retry this clip."
-msgstr "录制已中断，你可以重新录制此片段。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "An update is being installed. Retry after the app restarts."
-msgstr "正在安装更新，请在应用重启后重试。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "No saved clip yet"
-msgstr "尚未保存此片段"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Waiting to record"
-msgstr "等待录制"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Preparing CS2"
-msgstr "正在准备 CS2"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording real POV…"
-msgstr "正在录制真实第一视角…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Saving the video…"
-msgstr "正在保存视频…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Saved locally"
-msgstr "已保存到本机"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording failed"
-msgstr "录制失败"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Recording canceled"
-msgstr "录制已取消"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Real first-person replay"
-msgstr "真实第一视角回放"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Checking saved video…"
-msgstr "正在检查已保存的视频…"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Rendered from the CS2 demo · player POV · no X-ray · not a screen recording from the original match."
-msgstr "由 CS2 根据 demo 重新渲染 · 玩家第一视角 · 不显示透视 · 并非原比赛时的屏幕录像。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "This saved video could not be played. Open the POV directly in CS2, or check the recording tools."
-msgstr "无法播放此视频。你可以直接在 CS2 中打开第一视角，或检查录制工具。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Open this moment in CS2, or record it once for playback here. Recording opens a CS2 window and uses the game installation; keep Steam running."
-msgstr "你可以在 CS2 中打开这一时刻，也可以录制一次后在此回看。录制需要已安装的游戏，并会打开 CS2 窗口；请保持 Steam 运行。"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Cancel recording"
-msgstr "取消录制"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Record this POV clip"
-msgstr "录制此第一视角片段"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Check again"
-msgstr "重新检查"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Game setup"
-msgstr "游戏设置"
-
-#: src/ui/habits/review-clip-viewer.tsx
-msgid "Could not load or start this clip. Check the demo and recording setup, then retry."
-msgstr "无法加载或开始录制此片段，请检查 demo 和录制设置后重试。"
+msgid "Your older video is still available. Edited review videos are saved separately."
+msgstr "旧视频仍可播放，新剪辑视频会单独保存。"
 
 #: src/ui/habits/review-duels.tsx
 msgid "Your combat events"
@@ -3837,6 +3795,18 @@ msgstr "死亡"
 #: src/ui/habits/review-duels.tsx
 msgid "Damage without a kill"
 msgstr "有伤害但未击杀"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Select this page for recording"
+msgstr "选中本页用于录制"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Clear recording selection"
+msgstr "清空录制选择"
+
+#: src/ui/habits/review-duels.tsx
+msgid "{selectedCount} / 20 selected"
+msgstr "已选 {selectedCount} / 20"
 
 #: src/ui/habits/review-duels.tsx
 msgid "Loading combat events…"
@@ -3881,6 +3851,10 @@ msgstr "爆头"
 #: src/ui/habits/review-duels.tsx
 msgid "Dealt {damageGiven} / taken {damageTaken}"
 msgstr "造成 {damageGiven} / 承受 {damageTaken}"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Include in recording batch"
+msgstr "加入本批录制"
 
 #: src/ui/habits/review-duels.tsx
 msgid "2D context"
@@ -4222,6 +4196,163 @@ msgstr "这会替换当前练习重点，并开始新的跟踪周期。"
 msgid "Start this practice"
 msgstr "开始这项练习"
 
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Set an AI provider, server address and model before generating a review."
+msgstr "请先设置 AI 服务、服务器地址和模型，再生成点评。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
+msgstr "此设备无法使用安全的密钥加密存储，请检查 AI 设置。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The API key is missing or could not be read. Save it in the AI settings."
+msgstr "API 密钥未设置或无法读取，请在 AI 设置中保存密钥。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This player or match is not available for an AI review."
+msgstr "无法为当前玩家或比赛生成 AI 点评。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "No usable rounds match this selection. Import demos or change the filters first."
+msgstr "当前筛选没有可用回合，请先导入 demo 或更改筛选。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The AI request failed. Check the server address, model and credentials, then try again."
+msgstr "AI 请求失败，请检查服务器地址、模型和密钥后重试。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model did not respond in time. Try again or choose a faster model."
+msgstr "模型响应超时，请重试或选择响应更快的模型。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
+msgstr "模型返回的点评未通过校验，因此没有保存。请更换模型或重试。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report could not be saved locally. Check available disk space and try again."
+msgstr "无法将点评保存到本机，请检查可用磁盘空间后重试。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This recorded video is unavailable or incomplete. Generate the video before preparing an AI review."
+msgstr "录像不可用或尚未完成，请先生成视频，再准备 AI 点评。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The video frames could not be read. Check FFmpeg and the recorded video, then try again."
+msgstr "无法读取视频帧，请检查 FFmpeg 和已录制的视频后重试。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "This preview has expired or the AI target changed. Preview the frames again before sending."
+msgstr "预览已过期，或 AI 服务目标发生变化。请重新预览关键帧后再发送。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The server or model could not accept this visual request, or reported that it could not see the images. Choose a vision-capable model that supports image inputs and JSON responses. No text-only fallback was generated."
+msgstr "服务或模型无法接受本次视觉请求，或表示无法看到图片。请选择支持图片输入和 JSON 输出的视觉模型。程序没有改用纯文字生成点评。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
+msgstr "已有 AI 点评正在生成，请等待完成后刷新此面板。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Not recorded"
+msgstr "尚未录制"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Waiting to record"
+msgstr "等待录制"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Preparing CS2"
+msgstr "正在准备 CS2"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording the selected perspectives…"
+msgstr "正在录制所选视角…"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Editing and saving the video…"
+msgstr "正在剪辑并保存视频…"
+
+#: src/ui/habits/use-review-clip-messages.ts
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Saved locally"
+msgstr "已保存到本机"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording failed"
+msgstr "录制失败"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording canceled"
+msgstr "录制已取消"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Clip recording currently requires Windows."
+msgstr "目前仅支持在 Windows 上录制片段。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Choose your CS2 installation in Playback settings."
+msgstr "请在回放设置中选择 CS2 的安装位置。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Install HLAE in Video settings to record the game."
+msgstr "请在视频设置中安装 HLAE，用于录制游戏画面。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Install FFmpeg in Video settings to save MP4 clips."
+msgstr "请在视频设置中安装 FFmpeg，用于保存 MP4 片段。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Start Steam, then check again."
+msgstr "请启动 Steam 后重新检查。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Close CS2 before recording. Your running game will not be stopped automatically."
+msgstr "录制前请关闭 CS2，程序不会自动关闭你正在运行的游戏。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Another video is being recorded. Wait for it to finish."
+msgstr "正在录制另一个视频，请等待完成。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "The original demo is missing. Restore it to its imported folder."
+msgstr "原始 demo 文件缺失，请将它恢复到导入时的文件夹。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "The demo changed since import. Import the new file before recording."
+msgstr "demo 文件自导入后发生了变化，请重新导入后再录制。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "This event has no valid recording range. Choose another event."
+msgstr "此事件没有有效的录制区间，请选择其他事件。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording requires a writable path without special characters. Check the app and game locations."
+msgstr "录制需要可写入且不含特殊字符的路径，请检查应用和游戏的位置。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "There is not enough free space for the recording."
+msgstr "可用磁盘空间不足，无法录制。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "CS2 recording failed. Check game compatibility and HLAE, then retry."
+msgstr "CS2 录制失败，请检查游戏兼容性和 HLAE 后重试。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "No playable video was produced. Check CS2 and recording tools, then retry."
+msgstr "没有生成可播放的视频，请检查 CS2 和录制工具后重试。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording was interrupted. You can retry this clip."
+msgstr "录制已中断，你可以重新录制此片段。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "An update is being installed. Retry after the app restarts."
+msgstr "正在安装更新，请在应用重启后重试。"
+
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Recording failed. Check the recording setup and retry."
+msgstr "录制失败，请检查录制设置后重试。"
+
 #: src/ui/habits/use-review-labels.ts
 msgid "First contact, first death"
 msgstr "开局交锋中的首死"
@@ -4373,6 +4504,151 @@ msgstr "被队友补枪的死亡"
 #: src/ui/habits/use-review-labels.ts
 msgid "Utility round share"
 msgstr "道具使用回合占比"
+
+#: src/ui/habits/video-ai-report-content.tsx
+#: src/ui/search/results/result-row.tsx
+msgid "{seconds}s"
+msgstr "{seconds}秒"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
+msgstr "这是模型解读，不是错误判决。请核对引用的画面，只保留符合实战已知信息的建议。"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Choices in this encounter"
+msgstr "这段交战中的选择"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Observe → interpret → try an alternative"
+msgstr "观察 → 解读 → 尝试替代动作"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Player-visible evidence"
+msgstr "本人可见的画面证据"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Opponent view · Hindsight only"
+msgstr "对手视角 · 仅供事后分析"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Information uncertain"
+msgstr "当时掌握的信息不确定"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Observation"
+msgstr "画面观察"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Interpretation"
+msgstr "推断解读"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Alternative action"
+msgstr "可尝试的替代动作"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Uncertainty"
+msgstr "不确定之处"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "One comparable situation to practice"
+msgstr "选一个相似场景练习"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Next-match check"
+msgstr "下一场检查点"
+
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "What remains uncertain"
+msgstr "还有哪些信息无法确定"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "AI video review"
+msgstr "AI 视频点评"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
+msgstr "复看这一段交战，区分当时可见信息与事后信息，选一个动作尝试改进。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
+msgstr "先在本机准备预览。只有点击“发送画面并点评”后，才会向模型发送内容。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Preparing frame preview…"
+msgstr "正在准备关键帧预览…"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Preview frames for AI"
+msgstr "预览待点评画面"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "{frameCount, plural, one {# exact image for this request} other {# exact images for this request}}"
+msgstr "{frameCount, plural, other {本次将发送以下 # 张图片}}"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
+msgstr "画面中可能包含游戏昵称、头像或聊天。下方展示的图片及回合事实将发送到你选择的服务器；不会另外附带声音、整段视频、账号 ID 或本地文件路径。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
+msgstr "本人和对手视角分别采样。对手信息属于事后资料，不代表本人当时已知。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Only the player's recorded view is available for this review. No opponent view is inferred."
+msgstr "本次只有本人录制视角，不会推测或虚构对手画面。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
+msgstr "每个视角最多六帧，无法据此判断毫秒反应、精确鼠标控制或帧间发生的全部过程。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
+msgstr "demo 的观战 HUD 或雷达可能展示额外信息，不能证明玩家在实战中掌握了这些信息。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Selected preview frame"
+msgstr "当前预览画面"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Sampled video frame"
+msgstr "采样视频帧"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Exact round facts and frame metadata sent with the images"
+msgstr "随图片发送的完整回合事实与帧信息"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
+msgstr "回合总量覆盖整回合，并非仅此片段；没有队伍语音或玩家意图数据。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Reviewing the sampled frames…"
+msgstr "正在点评采样画面…"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Send frames and regenerate"
+msgstr "发送画面并重新点评"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Send frames and review"
+msgstr "发送画面并点评"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "One request to the configured vision model. Cloud image inputs may incur API charges."
+msgstr "仅向所配置的视觉模型发送一次请求。云端图片输入可能产生 API 费用。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
+msgstr "正在等待模型，然后校验其帧引用。程序无法验证模型对画面的解读是否真实。"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Player POV"
+msgstr "本人视角"
+
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "{seconds}s · tick {tick}"
+msgstr "{seconds} 秒 · tick {tick}"
 
 #: src/ui/hooks/chart/use-match-result-pie.tsx
 msgctxt "Match result"
@@ -4630,8 +4906,12 @@ msgid "Retry connection"
 msgstr "重新连接"
 
 #: src/ui/imports/import-progress-gate.tsx
-msgid "Some demo files need attention"
-msgstr "部分录像文件需要处理"
+msgid "Imports run in the background. Ready matches remain available."
+msgstr "导入在后台进行，已就绪的比赛仍可查看。"
+
+#: src/ui/imports/import-progress-gate.tsx
+msgid "Import progress and files"
+msgstr "导入进度与文件"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Waiting for file to finish writing"
@@ -4706,8 +4986,8 @@ msgid "Import results"
 msgstr "导入结果"
 
 #: src/ui/imports/import-progress-gate.tsx
-msgid "Browsing will unlock when this batch finishes. You can still manage folders and settings."
-msgstr "本批次处理完成后即可浏览。期间仍可管理文件夹和设置。"
+msgid "You can browse ready matches while this batch continues."
+msgstr "本批导入继续运行时，你可以浏览已就绪的比赛。"
 
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Ready matches are available. Review the files below before retrying."
@@ -4761,6 +5041,38 @@ msgstr "重试需要处理的文件"
 #: src/ui/imports/import-progress-gate.tsx
 msgid "Retry could not start. Check the folders and try again."
 msgstr "无法开始重试，请检查文件夹后再试。"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Resume queue"
+msgstr "继续队列"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Pause queue"
+msgstr "暂停队列"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Cancel cache generation"
+msgstr "取消缓存生成"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Remove queued analyses"
+msgstr "移除排队中的解析"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Pausing stops new analyses. Saving already parsed data finishes safely."
+msgstr "暂停后不再启动新的解析，已解析数据会安全保存完成。"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Paused jobs stay in the background. Finish or remove queued jobs before updating or stopping the background service."
+msgstr "暂停的任务仍保留在后台。更新程序或停止后台服务前，请先完成或移除排队任务。"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Saving match data cannot be interrupted. Pause the queue to stop after the current save."
+msgstr "比赛数据写入不能中途打断。可暂停队列，在本次保存完成后停止。"
+
+#: src/ui/imports/import-queue-controls.tsx
+msgid "Could not change the queue. Please retry."
+msgstr "无法更改队列，请重试。"
 
 #: src/ui/left-bar/analyses-link.tsx
 msgctxt "Tooltip"
@@ -7900,10 +8212,6 @@ msgstr "CT {ctAliveCount}"
 msgid "T {tAliveCount}"
 msgstr "T {tAliveCount}"
 
-#: src/ui/search/results/result-row.tsx
-msgid "{seconds}s"
-msgstr "{seconds}秒"
-
 #: src/ui/search/search-results.tsx
 msgid "You have to analyze demos first to search for events."
 msgstr "你必须先分析 demo 才能查找事件。"
@@ -8165,12 +8473,16 @@ msgid "Remove saved key"
 msgstr "删除已保存的密钥"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Start Ollama and install a text model before generating. The local option only accepts localhost addresses; no cloud account is required."
-msgstr "生成前请启动 Ollama 并安装文本模型。本地模式只接受 localhost 回环地址，无需云端账号。"
+msgid "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
+msgstr "生成前请启动 Ollama。数字点评使用文本；视频点评需要支持图片输入和 JSON 输出的视觉模型。本地模式只接受回环地址。"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Your chosen API provider may charge for generation. Only aggregate numbers and sampled round events are sent; demos, videos, names and account IDs stay on this device."
-msgstr "你选择的 API 服务可能收取生成费用。仅会发送汇总数据和抽样回合事件，demo、视频、昵称和账号 ID 均留在本机。"
+msgid "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
+msgstr "API 服务可能收取生成费用。数字点评发送数值事实；视频点评在你点击发送后，发送已预览的图片与回合事实，画面可能包含昵称、头像或聊天。完整 demo 和视频仍留在本机。"
+
+#: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
+msgid "Automatic (recommended: 2–3)"
+msgstr "自动（建议 2–3 个）"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgctxt "Settings title"
@@ -8178,8 +8490,8 @@ msgid "Maximum number of concurrent analyses"
 msgstr "最大并发分析的数量"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
-msgid "Maximum number of analyses that can run at the same time."
-msgstr "可同时进行分析的最大数量。"
+msgid "Automatic limits disk and memory contention. Manual values are preserved; saving match data runs one at a time."
+msgstr "自动模式可减少磁盘和内存争用。手动设置会保留；比赛数据始终逐场写入。"
 
 #: src/ui/settings/analyze/toggle-analyze-positions.tsx
 msgid "Analyze player/grenade positions during manual analysis. Positions are required for habit analysis and the 2D viewer. Automatic folder imports always include positions. This increases import time and disk space usage."
@@ -8347,8 +8659,60 @@ msgid "Use your own PostgreSQL server, local or remote."
 msgstr "使用你自己的本地或远程 PostgreSQL 服务器。"
 
 #: src/ui/settings/database/database-size.tsx
-msgid "Database size: <0>{size}</0>."
-msgstr "数据库大小: <0>{size}</0>."
+msgid "Player trajectories"
+msgstr "玩家轨迹"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Grenade, fire and hostage trajectories"
+msgstr "投掷物、火焰与人质轨迹"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Legacy decorative chicken trajectories"
+msgstr "旧版保存的装饰性鸡轨迹"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Other match data and database overhead"
+msgstr "其他比赛数据与数据库开销"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "{size} GiB"
+msgstr "{size} GiB"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Database storage"
+msgstr "数据库存储"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Refresh storage"
+msgstr "刷新存储信息"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Storage information could not be read. Check the database connection and retry."
+msgstr "无法读取存储信息，请检查数据库连接后重试。"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
+msgstr "包含数据表和索引空间；不含 demo 原文件、精简缓存、视频与 PostgreSQL WAL。"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Actual database directory"
+msgstr "数据库实际目录"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Managed by the external PostgreSQL server"
+msgstr "由外部 PostgreSQL 服务器管理"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "The physical directory could not be resolved"
+msgstr "无法解析实际物理目录"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
+msgstr "轨迹可能占据数据库的大部分空间。玩家轨迹用于二维回放与复盘，会予以保留；新导入不再保存装饰性鸡轨迹。"
+
+#: src/ui/settings/database/database-size.tsx
+msgid "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
+msgstr "删除旧记录不一定会归还磁盘空间。压缩数据库存储需要在导入和录制停止后单独维护。"
 
 #: src/ui/settings/database/database.tsx
 msgid "Host"
@@ -8487,29 +8851,20 @@ msgid "Import V2 data"
 msgstr "导入 V2 数据"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Optimize database"
-msgstr "优化数据库"
+msgid "Clean library references"
+msgstr "清理资料库引用"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Delete positions"
-msgstr "删除位置"
+msgid "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
+msgstr "仅清理文件引用和未导入的元数据，保留已存比赛与玩家轨迹；不会压缩数据库文件。"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "It will delete all data required for the 2D viewer!"
-msgstr "它将删除2D查看器所需的所有数据！"
+msgid "Remove unavailable file references"
+msgstr "移除不可用的文件引用"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "Delete demos that are not on the filesystem anymore"
-msgstr "删除不再存在于本地文件系统中的demo"
-
-#: src/ui/settings/database/optimize-database-button.tsx
-msgid "Clear demos cache"
-msgstr "清除Demo缓存"
-
-#: src/ui/settings/database/optimize-database-button.tsx
-msgctxt "Button"
-msgid "Optimize database"
-msgstr "优化数据库"
+msgid "Clear unimported demo metadata"
+msgstr "清除未导入 demo 的元数据"
 
 #: src/ui/settings/database/reset-database-button.tsx
 msgctxt "Dialog title"

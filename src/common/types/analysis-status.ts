@@ -1,5 +1,6 @@
 export const AnalysisStatus = {
   Pending: 'pending',
+  Cancelled: 'cancelled',
   Analyzing: 'analyzing',
   AnalyzeError: 'analyze-error',
   AnalyzeSuccess: 'analyze-success',

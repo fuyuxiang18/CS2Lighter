@@ -3,7 +3,7 @@ import { server } from 'csdm/server/server';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 
 export async function removeDemosFromAnalysesHandler(checksums: string[]) {
-  analysesListener.removeDemosByChecksums(checksums);
+  await analysesListener.removeDemosByChecksums(checksums);
 
   server.sendPushMessage({
     name: ServerPushMessageName.DemosRemovedFromAnalyses,

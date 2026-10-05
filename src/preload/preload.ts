@@ -69,6 +69,9 @@ const api: PreloadApi = {
   saveAiConfiguration: (input) => ipcRenderer.invoke(IPCChannel.SaveAiConfiguration, input),
   getAiReport: (scope) => ipcRenderer.invoke(IPCChannel.GetAiReport, scope),
   generateAiReport: (scope, regenerate) => ipcRenderer.invoke(IPCChannel.GenerateAiReport, scope, regenerate),
+  prepareVideoAiReview: (source, locale) => ipcRenderer.invoke(IPCChannel.PrepareVideoAiReview, source, locale),
+  generateVideoAiReview: (preparationId, regenerate) =>
+    ipcRenderer.invoke(IPCChannel.GenerateVideoAiReview, preparationId, regenerate),
   logger,
   ADDITIONAL_ARGUMENTS: process.argv,
   WEB_SOCKET_SERVER_PORT: getWebSocketServerPort(),

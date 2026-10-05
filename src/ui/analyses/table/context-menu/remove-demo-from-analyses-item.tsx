@@ -4,6 +4,7 @@ import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { useSelectedAnalysis } from 'csdm/ui/analyses/use-selected-analysis-demo-id';
 import { ContextMenuItem } from 'csdm/ui/components/context-menu/context-menu-item';
+import { AnalysisStatus } from 'csdm/common/types/analysis-status';
 
 export function RemoveDemoFromAnalysesItem() {
   const selectedAnalysis = useSelectedAnalysis();
@@ -14,6 +15,14 @@ export function RemoveDemoFromAnalysesItem() {
       return;
     }
 
+    if (selectedAnalysis.status === AnalysisStatus.Analyzing) {
+      await client.send({
+        name: RendererClientMessageName.ControlImportQueue,
+        payload: { action: 'cancel-active', checksums: [selectedAnalysis.demoChecksum] },
+      });
+      return;
+    }
+
     await client.send({
       name: RendererClientMessageName.RemoveDemosFromAnalyses,
       payload: [selectedAnalysis.demoChecksum],
@@ -21,8 +30,18 @@ export function RemoveDemoFromAnalysesItem() {
   };
 
   return (
-    <ContextMenuItem onClick={onClick}>
-      <Trans context="Context menu">Remove</Trans>
+    <ContextMenuItem
+      onClick={onClick}
+      isDisabled={
+        selectedAnalysis?.status === AnalysisStatus.Inserting ||
+        selectedAnalysis?.status === AnalysisStatus.AnalyzeSuccess
+      }
+    >
+      {selectedAnalysis?.status === AnalysisStatus.Analyzing ? (
+        <Trans>Cancel current parsing</Trans>
+      ) : (
+        <Trans context="Context menu">Remove</Trans>
+      )}
     </ContextMenuItem>
   );
 }

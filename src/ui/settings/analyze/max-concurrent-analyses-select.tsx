@@ -8,7 +8,7 @@ import { useAnalyzeSettings } from './use-analyze-settings';
 import { MAX_CONCURRENT_ANALYSES } from 'csdm/common/analyses';
 
 export function MaxConcurrentAnalysesSelect() {
-  const { maxConcurrentAnalyses } = useAnalyzeSettings();
+  const { maxConcurrentAnalyses, automaticConcurrency } = useAnalyzeSettings();
   const updateSettings = useUpdateSettings();
 
   const options: SelectOption<number>[] = Array.from({ length: MAX_CONCURRENT_ANALYSES }, (n, i) => ({
@@ -20,19 +20,25 @@ export function MaxConcurrentAnalysesSelect() {
     <SettingsEntry
       interactiveComponent={
         <Select
-          options={options}
-          value={maxConcurrentAnalyses}
+          options={[{ value: 0, label: <Trans>Automatic (recommended: 2–3)</Trans> }, ...options]}
+          value={automaticConcurrency !== false ? 0 : maxConcurrentAnalyses}
           onChange={async (maxConcurrentAnalyses) => {
             await updateSettings({
               analyze: {
-                maxConcurrentAnalyses: Number(maxConcurrentAnalyses),
+                automaticConcurrency: Number(maxConcurrentAnalyses) === 0,
+                ...(Number(maxConcurrentAnalyses) > 0 ? { maxConcurrentAnalyses: Number(maxConcurrentAnalyses) } : {}),
               },
             });
           }}
         />
       }
       title={<Trans context="Settings title">Maximum number of concurrent analyses</Trans>}
-      description={<Trans>Maximum number of analyses that can run at the same time.</Trans>}
+      description={
+        <Trans>
+          Automatic limits disk and memory contention. Manual values are preserved; saving match data runs one at a
+          time.
+        </Trans>
+      }
     />
   );
 }

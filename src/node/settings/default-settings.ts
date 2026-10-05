@@ -45,6 +45,7 @@ export const defaultSettings: Settings = {
     enableHardwareAcceleration: true,
   },
   analyze: {
+    automaticConcurrency: true,
     maxConcurrentAnalyses: 2,
     analyzePositions: true,
     autoAnalyzeFolders: true,

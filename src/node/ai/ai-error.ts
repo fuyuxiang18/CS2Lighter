@@ -19,6 +19,10 @@ export function getAiErrorCode(error: unknown): AiErrorCode {
     'request-timeout',
     'invalid-response',
     'storage-failed',
+    'video-not-ready',
+    'frame-extraction-failed',
+    'preview-expired',
+    'vision-unsupported',
     'busy',
   ];
   // The server transports known failures as strings, not Error instances.

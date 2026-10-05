@@ -131,6 +131,7 @@ class VideoQueue {
     payload: AddVideoPayload,
     beforeStart: () => Promise<void>,
     onUpdate: (video: Video) => void,
+    onGameStarted?: () => void,
   ): Promise<Video | undefined> {
     if (this.isBusy()) throw new Error('Video queue is busy');
     this.singleVideoRunning = true;
@@ -139,7 +140,7 @@ class VideoQueue {
     this.currentVideo = video;
     this.onSingleVideoUpdate = onUpdate;
     try {
-      await this.processVideo(video, beforeStart);
+      await this.processVideo(video, beforeStart, onGameStarted);
       return this.currentVideo;
     } finally {
       this.currentVideo = undefined;
@@ -164,7 +165,11 @@ class VideoQueue {
     }
   }
 
-  private readonly processVideo = async (video: Video, beforeStart?: () => Promise<void>) => {
+  private readonly processVideo = async (
+    video: Video,
+    beforeStart?: () => Promise<void>,
+    onGameStarted?: () => void,
+  ) => {
     try {
       const ctrl = new AbortController();
       this.abortControllers[video.id] = ctrl;
@@ -177,6 +182,7 @@ class VideoQueue {
         videoId: video.id,
         signal: ctrl.signal,
         onGameStart: () => {
+          onGameStarted?.();
           this.updateCurrentVideoAndNotifyRendererProcess({ status: VideoStatus.Recording });
         },
         onMoveFilesStart: () => {
