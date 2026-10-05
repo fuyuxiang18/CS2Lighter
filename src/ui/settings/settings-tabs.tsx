@@ -29,6 +29,9 @@ export function SettingsTabs() {
       <SettingsCategoryButton category={SettingsCategory.Video}>
         <Trans>Video</Trans>
       </SettingsCategoryButton>
+      <SettingsCategoryButton category={SettingsCategory.Ai}>
+        <Trans>AI reviews</Trans>
+      </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Cameras}>
         <Trans>Cameras</Trans>
       </SettingsCategoryButton>

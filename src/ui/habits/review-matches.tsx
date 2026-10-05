@@ -1,19 +1,53 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { Trans } from '@lingui/react/macro';
-import type { PersonalStatsSummary } from 'csdm/common/types/personal-stats';
+import type { PersonalStatsSide, PersonalStatsSummary } from 'csdm/common/types/personal-stats';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { useGetDemoSourceName } from 'csdm/ui/demos/use-demo-sources';
 import { buildMatchPath } from 'csdm/ui/routes-paths';
+import { SettingsCategory } from 'csdm/ui/settings/settings-category';
+import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
+import { AiReviewPanel } from './ai-review-panel';
 import { HabitsPanel } from './habits-layout';
 import { PersonalStatsPanels } from './personal-stats-panels';
 import { ReviewButton } from './review-button';
 
-export function ReviewMatches({ stats }: { stats: PersonalStatsSummary }) {
+export function ReviewMatches({ stats, side }: { stats: PersonalStatsSummary; side?: PersonalStatsSide }) {
   const formatDate = useFormatDate();
   const getSource = useGetDemoSourceName();
+  const { openSettings } = useSettingsOverlay();
   const [limit, setLimit] = useState(20);
   const [details, setDetails] = useState(false);
+  const [selectedChecksum, setSelectedChecksum] = useState<string | null>(null);
+  const selectedMatch = stats.matches.find((match) => match.checksum === selectedChecksum);
+
+  if (selectedMatch) {
+    return (
+      <div className="flex min-w-0 flex-col gap-20">
+        <div className="flex flex-wrap items-center justify-between gap-12">
+          <div className="flex flex-col gap-8">
+            <h2 className="text-subtitle font-semibold">{selectedMatch.mapName}</h2>
+            <p className="text-caption text-gray-700">
+              {formatDate(selectedMatch.date)} · {getSource(selectedMatch.source)}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-12">
+            <Link to={buildMatchPath(selectedMatch.checksum)} className="text-accent">
+              <Trans>Open match</Trans> →
+            </Link>
+            <ReviewButton onClick={() => setSelectedChecksum(null)}>
+              <Trans>Back to match notebook</Trans>
+            </ReviewButton>
+          </div>
+        </div>
+        <AiReviewPanel
+          scope={{ kind: 'match', steamId: stats.steamId, checksum: selectedMatch.checksum, side }}
+          onConfigure={() => openSettings(SettingsCategory.Ai)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-w-0 flex-col gap-20">
       <HabitsPanel title={<Trans>Your match notebook</Trans>}>
@@ -75,9 +109,14 @@ export function ReviewMatches({ stats }: { stats: PersonalStatsSummary }) {
                       : `${match.metrics.headshotPercentage.toFixed(1)}%`}
                   </td>
                   <td className="p-12 whitespace-nowrap">
-                    <Link to={buildMatchPath(match.checksum)} className="text-accent">
-                      <Trans>Open match</Trans> →
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-12">
+                      <Link to={buildMatchPath(match.checksum)} className="text-accent">
+                        <Trans>Open match</Trans> →
+                      </Link>
+                      <ReviewButton onClick={() => setSelectedChecksum(match.checksum)}>
+                        <Trans>AI match review</Trans>
+                      </ReviewButton>
+                    </div>
                   </td>
                 </tr>
               ))}

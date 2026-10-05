@@ -21,6 +21,8 @@ import { FfmpegNotInstalled } from 'csdm/node/video/errors/ffmpeg-not-installed'
 import { DisplayMode } from 'csdm/common/types/display-mode';
 import { enableFullscreenWindowed } from './video-config-file';
 import { getWebSocketServerPort, WEB_SOCKET_SERVER_PORT_ENV_NAME } from 'csdm/server/port';
+import { stopOwnedProcessTree } from 'csdm/node/os/stop-owned-process-tree';
+import { stopReviewGameProcesses } from 'csdm/node/video/review-clips/review-recording-processes';
 
 export type HlaeOptions = {
   game: Game;
@@ -34,6 +36,9 @@ export type HlaeOptions = {
   onGameStart?: () => void;
   uninstallPluginOnExit?: boolean;
   registerFfmpegLocation?: boolean; // Should we write the ffmpeg.ini file that indicates the location of the FFmpeg executable?
+  refuseRunningGame?: boolean;
+  configFolderPath?: string;
+  nativeCommandsPath?: string;
 };
 
 // Creates the ffmpeg.ini file that indicates the location of the FFmpeg executable.
@@ -71,12 +76,15 @@ type StartHlaeOptions = {
   command: string;
   signal?: AbortSignal;
   game: Game;
+  ownedDemoPath?: string;
+  onGameStarted?: () => void;
 };
 
-async function startHlae({ command, signal, game }: StartHlaeOptions) {
+async function startHlae({ command, signal, game, ownedDemoPath, onGameStarted }: StartHlaeOptions) {
   logger.debug('Starting HLAE with command', command);
 
   return new Promise<void>((resolve, reject) => {
+    if (signal?.aborted) return reject(abortError);
     // Forward the resolved WebSocket server port so the game server plugin can connect to the WebSocket server.
     const env = { ...process.env, [WEB_SOCKET_SERVER_PORT_ENV_NAME]: String(getWebSocketServerPort()) };
     const hlaeProcess = exec(command, { windowsHide: true, env }, (error, stdout, stderr) => {
@@ -92,41 +100,57 @@ async function startHlae({ command, signal, game }: StartHlaeOptions) {
       }
     });
 
+    const onAbort = async () => {
+      if (!ownedDemoPath) return;
+      await stopOwnedProcessTree(hlaeProcess);
+      await stopReviewGameProcesses(ownedDemoPath).catch((error) => logger.error(error));
+      reject(abortError);
+    };
+    if (ownedDemoPath) signal?.addEventListener('abort', onAbort, { once: true });
+    const finish = (error?: unknown) => {
+      signal?.removeEventListener('abort', onAbort);
+      if (error) reject(error);
+      else resolve();
+    };
+
     hlaeProcess.on('exit', async (code) => {
       logger.debug('HLAE exited with code', code);
 
       if (signal?.aborted) {
-        return reject(abortError);
+        if (!ownedDemoPath) return finish(abortError);
+        return;
       }
 
       if (code !== 0) {
-        return reject(new HlaeError());
+        return finish(new HlaeError());
       }
 
       await sleep(2_000);
       const hlaeErrorDetected = await isHlaeErrorWindowExists(game);
       if (hlaeErrorDetected) {
-        return reject(new HlaeError());
+        return finish(new HlaeError());
       }
 
       const isCsRunning = await isCounterStrikeRunning();
       if (!isCsRunning) {
-        return reject(new GameError());
+        return finish(new GameError());
       }
+      if (signal?.aborted) return;
+      onGameStarted?.();
 
       const processName = getGameProcessName(game);
 
       try {
         const exitCode = await getRunningProcessExitCode(processName);
         if (exitCode === 0) {
-          return resolve();
+          return finish();
         }
 
-        return reject(new GameError());
+        return finish(new GameError());
       } catch (error) {
         logger.error(`Failed to get ${processName} exit code`);
         logger.error(error);
-        return reject(error);
+        return finish(error);
       }
     });
   });
@@ -143,7 +167,10 @@ export async function startCounterStrikeWithHlae(options: HlaeOptions) {
   }
 
   const hlaeExecutablePath = await getHlaeExecutablePathOrThrow();
-  const hasBeenKilled = await killCounterStrikeProcesses();
+  if (options.refuseRunningGame && (await isCounterStrikeRunning())) {
+    throw new Error('Close Counter-Strike before recording a review clip');
+  }
+  const hasBeenKilled = options.refuseRunningGame ? false : await killCounterStrikeProcesses();
   const csExecutablePath = await getCounterStrikeExecutablePath(game);
   const settings = await getSettings();
   const {
@@ -154,6 +181,15 @@ export async function startCounterStrikeWithHlae(options: HlaeOptions) {
   } = settings.playback;
 
   const launchParameters = ['-insecure', '-novid'];
+  if (options.nativeCommandsPath) {
+    launchParameters.push(
+      '-perfectworld',
+      '+mirv_cvar_unhide_all',
+      '+mirv_cmd',
+      'load',
+      `\\"${options.nativeCommandsPath}\\"`,
+    );
+  }
   if (demoPath) {
     launchParameters.push('+playdemo', `\\"${demoPath}\\"`);
   }
@@ -170,7 +206,8 @@ export async function startCounterStrikeWithHlae(options: HlaeOptions) {
   }
 
   const { configFolderEnabled, configFolderPath, parameters: userHlaeParameters } = settings.video.hlae;
-  const cfgFolderPath = configFolderEnabled && configFolderPath !== '' ? configFolderPath : undefined;
+  const cfgFolderPath =
+    options.configFolderPath ?? (configFolderEnabled && configFolderPath !== '' ? configFolderPath : undefined);
   defineCfgFolderLocation(cfgFolderPath);
 
   switch (displayMode) {
@@ -218,7 +255,7 @@ export async function startCounterStrikeWithHlae(options: HlaeOptions) {
   if (shouldWait) {
     await sleep(2000);
   }
-  await installCounterStrikeServerPlugin(game);
+  if (!options.nativeCommandsPath) await installCounterStrikeServerPlugin(game);
 
   if (options.registerFfmpegLocation) {
     await registerFfmpegLocation(hlaeExecutablePath);
@@ -231,13 +268,15 @@ export async function startCounterStrikeWithHlae(options: HlaeOptions) {
 
   const command = `"${hlaeExecutablePath}" ${hlaeParameters.join(' ')}`;
 
-  options.onGameStart?.();
+  if (!options.nativeCommandsPath) options.onGameStart?.();
   await startHlae({
     command,
     signal,
     game,
+    ownedDemoPath: options.nativeCommandsPath ? demoPath : undefined,
+    onGameStarted: options.nativeCommandsPath ? options.onGameStart : undefined,
   });
-  if (options.uninstallPluginOnExit !== false) {
+  if (!options.nativeCommandsPath && options.uninstallPluginOnExit !== false) {
     await uninstallCounterStrikeServerPlugin(game);
   }
 }

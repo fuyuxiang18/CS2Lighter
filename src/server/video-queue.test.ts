@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vite-plus/test';
 import type { AddVideoPayload } from 'csdm/common/types/video';
 import { VideoStatus } from 'csdm/common/types/video-status';
+import { generateVideo } from 'csdm/node/video/generation/generate-video';
 
 vi.mock('csdm/server/server', () => {
   return {
@@ -121,6 +122,41 @@ describe('videoQueue', () => {
     videoQueue.removeVideosAddedByClient('cli-client-1');
 
     expect(videoQueue.getVideos()).toHaveLength(0);
+    expect(videoQueue.isBusy()).toBe(false);
+  });
+
+  it('runs only the requested clip without resuming unrelated paused jobs', async () => {
+    vi.mocked(generateVideo).mockResolvedValueOnce(undefined);
+    const unrelated = videoQueue.addVideo(buildPayload());
+    const onUpdate = vi.fn();
+    const result = await videoQueue.runSingleVideo(
+      { ...buildPayload(), id: 'requested-clip' },
+      async () => {},
+      onUpdate,
+    );
+    expect(result?.status).toBe(VideoStatus.Success);
+    expect(videoQueue.getIsPaused()).toBe(true);
+    expect(videoQueue.getVideos().map((video) => video.id)).toEqual([unrelated.id]);
+    expect(onUpdate.mock.calls.map(([video]) => video.status)).toEqual([VideoStatus.Recording, VideoStatus.Success]);
+    expect(videoQueue.isBusy()).toBe(false);
+  });
+
+  it('holds the single-recording lock during preparation and cancellation cleanup', async () => {
+    let finishPreparation!: () => void;
+    const job = videoQueue.runSingleVideo(
+      { ...buildPayload(), id: 'single-pending' },
+      () =>
+        new Promise<void>((resolve) => {
+          finishPreparation = resolve;
+        }),
+      vi.fn(),
+    );
+    expect(videoQueue.isBusy()).toBe(true);
+    await expect(videoQueue.runSingleVideo(buildPayload(), async () => {}, vi.fn())).rejects.toThrow('busy');
+    videoQueue.removeVideos(['single-pending']);
+    expect(videoQueue.isBusy()).toBe(true);
+    finishPreparation();
+    await job;
     expect(videoQueue.isBusy()).toBe(false);
   });
 });

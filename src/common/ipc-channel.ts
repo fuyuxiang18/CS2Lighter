@@ -2,6 +2,10 @@
 // As node integration in the renderer process is disabled, listeners or callers methods used in the renderer process
 // to interact with the main process must be injected to the window object through the preload script (see preload.ts).
 export const IPCChannel = {
+  GetAiConfiguration: 'get-ai-configuration',
+  SaveAiConfiguration: 'save-ai-configuration',
+  GetAiReport: 'get-ai-report',
+  GenerateAiReport: 'generate-ai-report',
   GetStartupArguments: 'get-startup-arguments',
   ClearStartupArguments: 'clear-startup-arguments',
   GetSystemStartupBehavior: 'get-system-startup-behavior',

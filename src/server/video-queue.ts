@@ -17,6 +17,8 @@ class VideoQueue {
   // Tracks which client connection queued a video so its videos can be canceled when it disconnects.
   private clientIdPerVideoId = new Map<string, string>();
   private isPaused = true;
+  private singleVideoRunning = false;
+  private onSingleVideoUpdate?: (video: Video) => void;
 
   public resume() {
     if (!this.isPaused) {
@@ -62,14 +64,14 @@ class VideoQueue {
   }
 
   public isBusy() {
-    return this.currentVideo !== undefined || (!this.isPaused && this.videos.length > 0);
+    return this.singleVideoRunning || this.currentVideo !== undefined || (!this.isPaused && this.videos.length > 0);
   }
 
   public getIsPaused() {
     return this.isPaused;
   }
 
-  public addVideo(partialVideo: AddVideoPayload, clientId?: string) {
+  public addVideo(partialVideo: AddVideoPayload, clientId?: string, startAutomatically = true) {
     const isUpdate = partialVideo.id;
     const id = partialVideo.id ?? randomUUID();
     const date = partialVideo.date ?? new Date().toISOString();
@@ -94,7 +96,7 @@ class VideoQueue {
       payload: video,
     });
 
-    if (!this.isPaused) {
+    if (startAutomatically && !this.isPaused && !this.singleVideoRunning) {
       void this.loopUntilRecodingDone();
     }
 
@@ -124,8 +126,30 @@ class VideoQueue {
     return this.videos;
   };
 
+  /** A requested review clip must not resume unrelated pending movie jobs. */
+  public async runSingleVideo(
+    payload: AddVideoPayload,
+    beforeStart: () => Promise<void>,
+    onUpdate: (video: Video) => void,
+  ): Promise<Video | undefined> {
+    if (this.isBusy()) throw new Error('Video queue is busy');
+    this.singleVideoRunning = true;
+    const video = this.addVideo(payload, undefined, false);
+    this.videos = this.videos.filter((item) => item.id !== video.id);
+    this.currentVideo = video;
+    this.onSingleVideoUpdate = onUpdate;
+    try {
+      await this.processVideo(video, beforeStart);
+      return this.currentVideo;
+    } finally {
+      this.currentVideo = undefined;
+      this.onSingleVideoUpdate = undefined;
+      this.singleVideoRunning = false;
+    }
+  }
+
   private async loopUntilRecodingDone() {
-    if (this.currentVideo) {
+    if (this.currentVideo || this.singleVideoRunning) {
       return;
     }
 
@@ -140,11 +164,13 @@ class VideoQueue {
     }
   }
 
-  private readonly processVideo = async (video: Video) => {
+  private readonly processVideo = async (video: Video, beforeStart?: () => Promise<void>) => {
     try {
-      this.updateCurrentVideoAndNotifyRendererProcess({ status: VideoStatus.Recording });
       const ctrl = new AbortController();
       this.abortControllers[video.id] = ctrl;
+      await beforeStart?.();
+      if (ctrl.signal.aborted) throw new AbortError();
+      this.updateCurrentVideoAndNotifyRendererProcess({ status: VideoStatus.Recording });
 
       await generateVideo({
         ...video,
@@ -211,6 +237,7 @@ class VideoQueue {
       name: ServerPushMessageName.VideoUpdated,
       payload: this.currentVideo,
     });
+    this.onSingleVideoUpdate?.(this.currentVideo);
   };
 }
 

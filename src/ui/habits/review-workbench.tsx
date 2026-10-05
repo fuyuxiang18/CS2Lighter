@@ -15,6 +15,7 @@ import { useGetGameModeTranslation } from 'csdm/ui/hooks/use-get-game-mode-trans
 import { Select } from 'csdm/ui/components/inputs/select';
 import { HabitsPanel } from './habits-layout';
 import { ReviewButton } from './review-button';
+import { ReviewClipButton } from './review-clip-viewer';
 import { useReviewLabels } from './use-review-labels';
 import type { ReviewFocus, ReviewPreferences } from './review-storage';
 
@@ -202,6 +203,14 @@ export function ReviewWorkbench({
                       </button>
                     )}
                   </div>
+                  <ReviewClipButton
+                    request={{
+                      checksum: item.checksum,
+                      steamId: item.steamId,
+                      roundNumber: item.roundNumber,
+                      startTick: item.tick,
+                    }}
+                  />
                 </article>
               );
             })}

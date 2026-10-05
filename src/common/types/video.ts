@@ -30,6 +30,8 @@ export type Video = {
   output: string;
   status: VideoStatus;
   trueView: boolean;
+  /** Review clips isolate game configuration and never terminate an existing game. */
+  safeReviewRecording?: boolean;
   errorCode?: ErrorCode;
   currentSequence?: number;
   currentSequencePosition?: number;

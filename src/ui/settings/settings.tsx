@@ -1,4 +1,5 @@
 import React from 'react';
+import { AiSettings } from './ai/ai-settings';
 import { AnalyzeSettings } from './analyze/analyze-settings';
 import { DatabaseSettings } from './database/database-settings';
 import { FoldersSettings } from './folders/folders-settings';
@@ -18,6 +19,8 @@ export function Settings() {
   const { category } = useSettingsOverlay();
 
   switch (category) {
+    case SettingsCategory.Ai:
+      return <AiSettings />;
     case SettingsCategory.Folders:
       return <FoldersSettings />;
     case SettingsCategory.Database:

@@ -65,6 +65,10 @@ function handleError(error: unknown) {
 }
 
 const api: PreloadApi = {
+  getAiConfiguration: () => ipcRenderer.invoke(IPCChannel.GetAiConfiguration),
+  saveAiConfiguration: (input) => ipcRenderer.invoke(IPCChannel.SaveAiConfiguration, input),
+  getAiReport: (scope) => ipcRenderer.invoke(IPCChannel.GetAiReport, scope),
+  generateAiReport: (scope, regenerate) => ipcRenderer.invoke(IPCChannel.GenerateAiReport, scope, regenerate),
   logger,
   ADDITIONAL_ARGUMENTS: process.argv,
   WEB_SOCKET_SERVER_PORT: getWebSocketServerPort(),

@@ -31,6 +31,7 @@ import { getFfmpegExecutablePath } from '../ffmpeg/ffmpeg-location';
 import { isBlankString } from 'csdm/common/string/is-empty-string';
 import { DisplayMode } from 'csdm/common/types/display-mode';
 import { replaceFilenamePlaceholders } from './replace-filename-placeholders';
+import { createReviewHlaeCommands } from '../review-clips/create-review-hlae-commands';
 
 export type Parameters = {
   videoId: string;
@@ -48,6 +49,7 @@ export type Parameters = {
   concatenateSequences: boolean;
   outputFileName: string;
   trueView: boolean;
+  safeReviewRecording?: boolean;
   ffmpegSettings: Omit<FfmpegSettings, 'customLocationEnabled'>;
   outputFolderPath: string;
   demoPath: string;
@@ -179,6 +181,10 @@ export async function generateVideo(parameters: Parameters) {
 
   async function onAbort() {
     logger.debug(`Aborting video generation with id ${videoId}`);
+    if (parameters.safeReviewRecording) {
+      // The HLAE/FFmpeg launchers own and await cancellation of their specific child processes.
+      return;
+    }
     if (isWindows) {
       await Promise.all([killHlaeProcess(), killVirtualDubProcess()]);
     }
@@ -235,6 +241,7 @@ export async function generateVideo(parameters: Parameters) {
   throwIfAborted(signal);
 
   const shouldGenerateVideo = recordingOutput !== RecordingOutput.Images;
+  const nativeCommandsPath = parameters.safeReviewRecording ? await createReviewHlaeCommands(demoPath) : undefined;
   try {
     if (recordingSystem === RecordingSystem.HLAE) {
       await watchDemoWithHlae({
@@ -247,6 +254,9 @@ export async function generateVideo(parameters: Parameters) {
         uninstallPluginOnExit: false,
         registerFfmpegLocation: shouldGenerateVideo,
         onGameStart: parameters.onGameStart,
+        refuseRunningGame: parameters.safeReviewRecording,
+        configFolderPath: parameters.safeReviewRecording ? `${outputFolderPath}/game-config` : undefined,
+        nativeCommandsPath,
       });
     } else {
       await startCounterStrike({
@@ -299,6 +309,8 @@ export async function generateVideo(parameters: Parameters) {
     await cleanupFiles();
     throw error;
   } finally {
-    await uninstallCounterStrikeServerPlugin(game);
+    signal.removeEventListener('abort', onAbort);
+    if (parameters.safeReviewRecording) await cleanupFiles();
+    if (!parameters.safeReviewRecording) await uninstallCounterStrikeServerPlugin(game);
   }
 }

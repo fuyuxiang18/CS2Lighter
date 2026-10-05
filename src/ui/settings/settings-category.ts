@@ -1,4 +1,5 @@
 export const SettingsCategory = {
+  Ai: 'ai',
   Folders: 'folders',
   Database: 'database',
   UI: 'ui',

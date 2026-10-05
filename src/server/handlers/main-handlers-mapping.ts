@@ -5,8 +5,11 @@ import { startMinimizedModeHandler } from './main-process/start-minimized-mode-h
 import type { Game } from 'csdm/common/types/counter-strike';
 import { startCounterStrikeHandler } from './main-process/start-counter-strike-handler';
 import type { CounterStrikeErrorPayload } from '../counter-strike';
+import type { AiReportScope, PreparedAiContext } from 'csdm/common/types/ai';
+import { prepareAiReportHandler } from './main-process/prepare-ai-report-handler';
 
 export interface MainMessageHandlers {
+  [MainClientMessageName.PrepareAiReport]: Handler<AiReportScope, PreparedAiContext>;
   [MainClientMessageName.PrepareForUpdate]: Handler<{ nonce: string }, boolean>;
   [MainClientMessageName.StartMinimizedMode]: Handler;
   [MainClientMessageName.StartCounterStrike]: Handler<Game, CounterStrikeErrorPayload | undefined>;
@@ -14,6 +17,7 @@ export interface MainMessageHandlers {
 
 // Mapping between message names and server handlers sent from the Electron main process to the WebSocket server.
 export const mainHandlers: MainMessageHandlers = {
+  [MainClientMessageName.PrepareAiReport]: prepareAiReportHandler,
   [MainClientMessageName.PrepareForUpdate]: prepareForUpdateHandler,
   [MainClientMessageName.StartMinimizedMode]: startMinimizedModeHandler,
   [MainClientMessageName.StartCounterStrike]: startCounterStrikeHandler,

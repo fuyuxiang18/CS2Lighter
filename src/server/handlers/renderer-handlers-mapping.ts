@@ -1,5 +1,19 @@
 import type { Download } from 'csdm/common/download/download-types';
+import type { ReviewDuelsPage, ReviewDuelsPayload } from 'csdm/common/types/review-duels';
+import { fetchReviewDuelsHandler } from './renderer-process/habits/fetch-review-duels-handler';
 import type { ImportProgress } from 'csdm/common/types/import-progress';
+import type {
+  ReviewClip,
+  ReviewClipInspection,
+  ReviewClipRequest,
+  ReviewPovState,
+} from 'csdm/common/types/review-clip';
+import {
+  cancelReviewClipHandler,
+  generateReviewClipHandler,
+  getReviewClipHandler,
+  watchReviewPovHandler,
+} from './renderer-process/video/review-clips-handlers';
 import { getImportProgressHandler } from './renderer-process/demo/get-import-progress-handler';
 import { retryFailedImportsHandler } from './renderer-process/demo/retry-failed-imports-handler';
 import type {
@@ -241,6 +255,11 @@ import type { RenownMatch } from 'csdm/common/types/renown-match';
 import { fetchLastRenownMatchesHandler } from './renderer-process/renown/fetch-last-renown-matches-handler';
 
 export interface RendererMessageHandlers {
+  [RendererClientMessageName.FetchReviewDuels]: Handler<ReviewDuelsPayload, ReviewDuelsPage>;
+  [RendererClientMessageName.GetReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
+  [RendererClientMessageName.WatchReviewPov]: Handler<ReviewClipRequest, ReviewPovState>;
+  [RendererClientMessageName.GenerateReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
+  [RendererClientMessageName.CancelReviewClip]: Handler<{ id: string }, ReviewClip | undefined>;
   [RendererClientMessageName.GetImportProgress]: Handler<void, ImportProgress>;
   [RendererClientMessageName.RetryFailedImports]: Handler;
   [RendererClientMessageName.FindHabitsIdentity]: Handler<FindHabitsIdentityPayload, HabitsIdentityCandidate[]>;
@@ -373,6 +392,11 @@ export interface RendererMessageHandlers {
 
 // Mapping between message names and server handlers sent from the Electron renderer process to the WebSocket server.
 export const rendererHandlers: RendererMessageHandlers = {
+  [RendererClientMessageName.FetchReviewDuels]: fetchReviewDuelsHandler,
+  [RendererClientMessageName.GetReviewClip]: getReviewClipHandler,
+  [RendererClientMessageName.WatchReviewPov]: watchReviewPovHandler,
+  [RendererClientMessageName.GenerateReviewClip]: generateReviewClipHandler,
+  [RendererClientMessageName.CancelReviewClip]: cancelReviewClipHandler,
   [RendererClientMessageName.GetImportProgress]: getImportProgressHandler,
   [RendererClientMessageName.RetryFailedImports]: retryFailedImportsHandler,
   [RendererClientMessageName.FindHabitsIdentity]: findHabitsIdentityHandler,

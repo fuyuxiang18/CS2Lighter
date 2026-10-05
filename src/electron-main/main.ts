@@ -11,6 +11,7 @@ import { createTray } from './create-tray';
 import { loadI18n } from './load-i18n';
 import { createTrayMenu } from './create-tray-menu';
 import { registerMainProcessListeners } from './register-main-process-listeners';
+import { registerAiReports, hasAiReportInProgress } from './ai-reports';
 import { createApplicationMenu } from './create-application-menu';
 import { injectPathVariableIntoProcess } from './inject-path-variable-into-process';
 import { ArgumentName } from 'csdm/common/argument/argument-name';
@@ -132,9 +133,12 @@ async function start() {
 
   tray = createTray();
   const client = createWebSocketClient();
-  initialize(settings.autoDownloadUpdates, () => prepareUpdateInstall(client));
+  initialize(settings.autoDownloadUpdates, () =>
+    hasAiReportInProgress() ? Promise.resolve(false) : prepareUpdateInstall(client),
+  );
   createApplicationMenu(client);
   registerMainProcessListeners();
+  registerAiReports(client);
 
   let isOpenedAtLogin = false;
   let shouldStartMinimized = false;

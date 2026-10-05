@@ -1,6 +1,7 @@
 import { exec } from 'node:child_process';
 import { abortError } from 'csdm/node/errors/abort-error';
 import { FFmpegError } from 'csdm/node/video/errors/ffmpeg-error';
+import { stopOwnedProcessTree } from 'csdm/node/os/stop-owned-process-tree';
 
 export async function executeFfmpeg(ffmpegExecutablePath: string, args: string[], signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
@@ -11,6 +12,10 @@ export async function executeFfmpeg(ffmpegExecutablePath: string, args: string[]
     const command = `"${ffmpegExecutablePath}" ${args.join(' ')}`;
     logger.debug('Starting FFmpeg', command);
     const process = exec(command, { windowsHide: true });
+    const onAbort = () => {
+      void stopOwnedProcessTree(process);
+    };
+    signal.addEventListener('abort', onAbort, { once: true });
 
     const chunks: string[] = [];
     process.stdout?.on('data', (data: string) => {
@@ -22,6 +27,7 @@ export async function executeFfmpeg(ffmpegExecutablePath: string, args: string[]
     });
 
     process.on('exit', (code) => {
+      signal.removeEventListener('abort', onAbort);
       logger.debug('FFmpeg exit', code);
       if (signal.aborted) {
         return reject(abortError);

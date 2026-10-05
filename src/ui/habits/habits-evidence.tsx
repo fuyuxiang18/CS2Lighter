@@ -74,7 +74,12 @@ export function HabitsEvidenceList({ evidence, steamId }: { evidence: HabitsEvid
                     >
                       <Trans>2D evidence</Trans>
                     </Link>
-                    <HabitsPlaybackButton checksum={item.checksum} steamId={steamId} tick={item.tick} />
+                    <HabitsPlaybackButton
+                      checksum={item.checksum}
+                      steamId={steamId}
+                      tick={item.tick}
+                      roundNumber={item.roundNumber}
+                    />
                   </div>
                 </td>
               </tr>

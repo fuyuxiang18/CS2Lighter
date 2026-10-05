@@ -26,6 +26,10 @@ import { ReviewProgress } from './review-progress';
 import { ReviewMaps } from './review-maps';
 import { ReviewMatches } from './review-matches';
 import { ReviewButton } from './review-button';
+import { ReviewDuels } from './review-duels';
+import { AiReviewPanel } from './ai-review-panel';
+import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
+import { SettingsCategory } from 'csdm/ui/settings/settings-category';
 
 type ReviewData = { key: string; summary: HabitsSummary; stats: PersonalStatsSummary; insights: ReviewInsightsSummary };
 
@@ -69,6 +73,7 @@ export function HabitsDashboard() {
 
 function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'maps' | 'matches' }) {
   const { t } = useLingui();
+  const { openSettings } = useSettingsOverlay();
   const client = useWebSocketClient();
   const getSourceName = useGetDemoSourceName();
   const [preferences, setPreferences] = useState(() => readReviewPreferences(steamId));
@@ -204,6 +209,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
         <nav aria-label={t`Review sections`} className="flex flex-wrap gap-8 border-b border-gray-300 pb-12">
           {[
             { value: 'review' as const, label: t`Review priorities` },
+            { value: 'duels' as const, label: t`Combat and POV` },
             { value: 'style' as const, label: t`My playing style` },
             { value: 'progress' as const, label: t`Practice and progress` },
           ].map((item) => (
@@ -262,9 +268,40 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
               {page === 'review' && tab === 'review' && (
                 <ReviewWorkbench insights={data.insights} preferences={preferences} update={update} />
               )}
-              {page === 'review' && tab === 'style' && <ReviewStyle insights={data.insights} stats={data.stats} />}
+              {page === 'review' && tab === 'duels' && (
+                <ReviewDuels
+                  key={revision}
+                  scope={{
+                    steamId,
+                    ...(mapName === 'all' ? {} : { mapName }),
+                    ...(source === 'all' ? {} : { source }),
+                    ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
+                  }}
+                />
+              )}
+              {page === 'review' && tab === 'style' && (
+                <>
+                  <AiReviewPanel
+                    key={revision}
+                    scope={{
+                      kind: 'personal',
+                      steamId,
+                      ...(mapName === 'all' ? {} : { mapName }),
+                      ...(source === 'all' ? {} : { source }),
+                      ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
+                    }}
+                    onConfigure={() => openSettings(SettingsCategory.Ai)}
+                  />
+                  <ReviewStyle insights={data.insights} stats={data.stats} />
+                </>
+              )}
               {page === 'maps' && <ReviewMaps summary={data.summary} steamId={steamId} />}
-              {page === 'matches' && <ReviewMatches stats={data.stats} />}
+              {page === 'matches' && (
+                <ReviewMatches
+                  stats={data.stats}
+                  side={side === 'all' ? undefined : side === 'ct' ? TeamNumber.CT : TeamNumber.T}
+                />
+              )}
             </>
           )}
           <p className="text-caption text-gray-600">

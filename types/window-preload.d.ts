@@ -6,6 +6,13 @@ import type {
   IpcRendererEvent,
 } from 'electron';
 import type fs from 'fs-extra';
+import type {
+  AiConfiguration,
+  AiReportScope,
+  AiReportState,
+  AiResult,
+  SaveAiConfiguration,
+} from 'csdm/common/types/ai';
 import type { ILogger } from 'csdm/node/logger';
 import type { PreloadResult } from 'csdm/preload/preload-result';
 import type { Settings } from 'csdm/node/settings/settings';
@@ -28,6 +35,10 @@ import type { getImageInformation } from 'csdm/node/filesystem/get-image-informa
 
 declare global {
   interface PreloadApi {
+    getAiConfiguration: () => Promise<AiResult<AiConfiguration>>;
+    saveAiConfiguration: (input: SaveAiConfiguration) => Promise<AiResult<AiConfiguration>>;
+    getAiReport: (scope: AiReportScope) => Promise<AiResult<AiReportState>>;
+    generateAiReport: (scope: AiReportScope, regenerate?: boolean) => Promise<AiResult<AiReportState>>;
     logger: ILogger;
     platform: NodeJS.Platform;
     isWindows: boolean;

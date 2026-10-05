@@ -1,5 +1,10 @@
 // Message names sent from the renderer Electron process to the WebSocket server.
 export const RendererClientMessageName = {
+  FetchReviewDuels: 'fetch-review-duels',
+  GetReviewClip: 'get-review-clip',
+  WatchReviewPov: 'watch-review-pov',
+  GenerateReviewClip: 'generate-review-clip',
+  CancelReviewClip: 'cancel-review-clip',
   GetImportProgress: 'get-import-progress',
   RetryFailedImports: 'retry-failed-imports',
   FindHabitsIdentity: 'find-habits-identity',

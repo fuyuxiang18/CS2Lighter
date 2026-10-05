@@ -13,7 +13,7 @@ export type ReviewPreferences = {
   mapName: string;
   side: 'all' | 'ct' | 't';
   source: DemoSource | 'all';
-  tab: 'review' | 'style' | 'progress';
+  tab: 'review' | 'style' | 'duels' | 'progress';
   selectedCard: ReviewCardId | null;
   focus: ReviewFocus | null;
   marks: Record<string, 'reviewed' | 'context'>;
@@ -33,7 +33,7 @@ export function parseReviewPreferences(raw: string | null): ReviewPreferences {
     if (typeof data.mapName === 'string' && data.mapName.length < 100) defaults.mapName = data.mapName;
     if (['all', 'ct', 't'].includes(data.side)) defaults.side = data.side;
     if (data.source === 'all' || Object.values(DemoSource).includes(data.source)) defaults.source = data.source;
-    if (['review', 'style', 'progress'].includes(data.tab)) defaults.tab = data.tab;
+    if (['review', 'style', 'duels', 'progress'].includes(data.tab)) defaults.tab = data.tab;
     if (reviewCardIds.includes(data.selectedCard)) defaults.selectedCard = data.selectedCard;
     if (data.marks && typeof data.marks === 'object') {
       defaults.marks = Object.fromEntries(

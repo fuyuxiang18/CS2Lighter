@@ -2627,6 +2627,222 @@ msgstr "这会覆盖所有应用中由他Steam ID指定的玩家名称"
 msgid "Leave it empty to remove the override."
 msgstr "将其留空以移除覆盖。"
 
+#: src/ui/habits/ai-report-content.tsx
+msgid "Supporting rounds"
+msgstr "对应回合证据"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Opens the round start. The model did not locate an exact decision moment."
+msgstr "从回合开始处打开。模型没有定位到确切的决策时刻。"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Opens the event context in the 2D viewer. Verify the interpretation in the round."
+msgstr "在二维回放中打开事件前后，结合回合实际情况核对这条解读。"
+
+#: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/review-workbench.tsx
+msgid "Round {round}"
+msgstr "第 {round} 回合"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Round start"
+msgstr "回合开始"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Opening decisions"
+msgstr "首轮对枪决策"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Trade involvement"
+msgstr "补枪参与"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Utility use"
+msgstr "道具使用"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Survival decisions"
+msgstr "生存决策"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Aim and crosshair placement"
+msgstr "瞄准与预瞄"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "The main takeaway"
+msgstr "这次最值得记住的一点"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Your style in this sample"
+msgstr "当前样本中的打法特点"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Actions to try next"
+msgstr "接下来试试这些动作"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Choose one action for your next matches, then revisit the same situations to check what changed."
+msgstr "接下来几场只选一个动作练习，再回看相同场景，确认实际变化。"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Situations worth checking"
+msgstr "值得回看的场景"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Limited assessments and missing evidence"
+msgstr "有限评分与证据缺口"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
+msgstr "分数是模型对当前样本给出的 0–100 分主观评价，不代表段位、百分位，也不是经过校准的进步指标。评价没有控制对手水平和队内角色的差异。"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Not assessed"
+msgstr "未评价"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "{score} / 100"
+msgstr "{score} / 100"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "No POV images were sent. Event statistics cannot assess pre-aim, visibility or mouse control."
+msgstr "本次没有发送第一视角画面，事件统计无法评价预瞄、实际视野或鼠标操作。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Set an AI provider, server address and model before generating a review."
+msgstr "请先设置 AI 服务、服务器地址和模型，再生成点评。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
+msgstr "此设备无法使用安全的密钥加密存储，请检查 AI 设置。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The API key is missing or could not be read. Save it in the AI settings."
+msgstr "API 密钥未设置或无法读取，请在 AI 设置中保存密钥。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "This player or match is not available for an AI review."
+msgstr "无法为当前玩家或比赛生成 AI 点评。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "No usable rounds match this selection. Import demos or change the filters first."
+msgstr "当前筛选没有可用回合，请先导入 demo 或更改筛选。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The AI request failed. Check the server address, model and credentials, then try again."
+msgstr "AI 请求失败，请检查服务器地址、模型和密钥后重试。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The model did not respond in time. Try again or choose a faster model."
+msgstr "模型响应超时，请重试或选择响应更快的模型。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
+msgstr "模型返回的点评未通过校验，因此没有保存。请更换模型或重试。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The report could not be saved locally. Check available disk space and try again."
+msgstr "无法将点评保存到本机，请检查可用磁盘空间后重试。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
+msgstr "已有 AI 点评正在生成，请等待完成后刷新此面板。"
+
+#: src/ui/habits/ai-review-panel.tsx
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "OpenAI-compatible API"
+msgstr "兼容 OpenAI 的 API"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Ollama"
+msgstr "Ollama"
+
+#: src/ui/habits/ai-review-panel.tsx
+#: src/ui/habits/review-matches.tsx
+msgid "AI match review"
+msgstr "AI 单场点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "AI personal review"
+msgstr "AI 个人点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Turn your recorded situations into a small set of actions to verify in the next match."
+msgstr "从已有比赛中找出几个可执行的改变，在下一场验证。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "AI settings"
+msgstr "AI 设置"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Statistics and sampled rounds only · No POV images sent"
+msgstr "仅使用统计与抽样回合 · 未发送第一视角画面"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files, videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this input."
+msgstr "生成时会向你配置的 AI 服务器发送汇总数据和抽样回合事件，不会发送 demo 文件、视频、账号 ID 或玩家昵称。模型无法据此评价预瞄或鼠标操作。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Generation target: {target} · {serverHost} · {model}"
+msgstr "本次生成使用：{target} · {serverHost} · {model}"
+
+#: src/ui/habits/ai-review-panel.tsx
+#: src/ui/matches/table/match-count.tsx
+msgid "{matchCount, plural, one {# match} other {# matches}}"
+msgstr "{matchCount, plural, other {# 场比赛}}"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "{roundCount, plural, one {# round} other {# rounds}}"
+msgstr "{roundCount, plural, other {# 个回合}}"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "{evidenceCount, plural, one {# sampled evidence round} other {# sampled evidence rounds}}"
+msgstr "{evidenceCount, plural, other {# 个抽样证据回合}}"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Selected from {availableMatchCount} matching matches."
+msgstr "从 {availableMatchCount} 场符合筛选条件的比赛中选取。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Checking the local report cache…"
+msgstr "正在检查本地点评缓存…"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Generating review…"
+msgstr "正在生成点评…"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Regenerate review"
+msgstr "重新生成点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Generate review"
+msgstr "生成点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Refresh local report"
+msgstr "刷新本地点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Choose a provider and model in AI settings to start."
+msgstr "请先在 AI 设置中选择服务和模型。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "No report is cached for this sample and model. Generation starts only when you click."
+msgstr "当前样本与模型没有已保存的点评，点击后才会开始生成。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Waiting for the model, then checking its evidence references. This may take a while on a local model."
+msgstr "正在等待模型响应，随后会校验证据引用。本地模型可能需要较长时间。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Saved report"
+msgstr "已保存的点评"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "Newly generated · Saved locally"
+msgstr "刚刚生成 · 已保存到本机"
+
 #: src/ui/habits/habits-dashboard.tsx
 #: src/ui/left-bar/left-bar.tsx
 msgid "Review workspace"
@@ -2713,6 +2929,10 @@ msgid "Review priorities"
 msgstr "复盘重点"
 
 #: src/ui/habits/habits-dashboard.tsx
+msgid "Combat and POV"
+msgstr "对枪与第一视角"
+
+#: src/ui/habits/habits-dashboard.tsx
 msgid "My playing style"
 msgstr "我的风格"
 
@@ -2733,6 +2953,7 @@ msgid "Your demo files are unchanged. Retry loading the saved data."
 msgstr "demo 文件未受影响，请重试读取已保存的数据。"
 
 #: src/ui/habits/habits-dashboard.tsx
+#: src/ui/habits/review-duels.tsx
 msgid "Retry"
 msgstr "重试"
 
@@ -2757,10 +2978,12 @@ msgid "Opening position"
 msgstr "开局位置"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/review-duels.tsx
 msgid "Kill"
 msgstr "击杀"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/review-duels.tsx
 msgid "Death"
 msgstr "死亡"
 
@@ -2939,16 +3162,38 @@ msgid "Shares use this map/version group's observed time across all floors. Rada
 msgstr "占比以当前地图及版本组在全部楼层的已记录时间为分母。雷达图使用本机安装的地图资源。"
 
 #: src/ui/habits/habits-playback-button.tsx
-msgid "Could not open the demo in CS2. Check that the demo file and the game are available."
-msgstr "无法在 CS2 中打开录像，请检查录像文件和游戏是否可用。"
+msgid "Opening CS2…"
+msgstr "正在打开 CS2…"
 
 #: src/ui/habits/habits-playback-button.tsx
-msgid "Could not check the CS2 connection. Please try again."
-msgstr "无法检查 CS2 连接，请重试。"
+msgid "CS2 is open"
+msgstr "CS2 已打开"
 
 #: src/ui/habits/habits-playback-button.tsx
 msgid "Watch POV in CS2"
 msgstr "在 CS2 中观看第一视角"
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Close CS2 when finished to record another clip."
+msgstr "观看结束后请关闭 CS2，再录制其他片段。"
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Close the running CS2 session before opening this POV."
+msgstr "请先关闭正在运行的 CS2，再打开此第一视角。"
+
+#: src/ui/habits/habits-playback-button.tsx
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "An unfinished replay setup was found in the game folder. Finish or restore that setup before recording."
+msgstr "游戏文件夹中有尚未完成的回放设置，请先完成或还原该设置，再开始录制。"
+
+#: src/ui/habits/habits-playback-button.tsx
+msgid "Could not open the POV. Start Steam and check the CS2 path, HLAE installation and original demo. Your existing game will not be closed automatically."
+msgstr "无法打开第一视角。请启动 Steam，并检查 CS2 路径、HLAE 安装和原始 demo。程序不会自动关闭你正在运行的游戏。"
+
+#: src/ui/habits/habits-playback-button.tsx
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording setup"
+msgstr "录制设置"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "No data for this selection."
@@ -3097,6 +3342,7 @@ msgid "First enemy elimination of each round"
 msgstr "每回合首次敌我之间的击杀"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-duels.tsx
 msgid "Opening duel success"
 msgstr "首杀对决成功率"
 
@@ -3349,6 +3595,7 @@ msgid "Weapon performance"
 msgstr "武器表现"
 
 #: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-duels.tsx
 #: src/ui/match/players/match-players.tsx
 #: src/ui/match/rounds/round/players-information.tsx
 #: src/ui/match/weapons/weapons-accuracy.tsx
@@ -3407,6 +3654,250 @@ msgstr "结果"
 msgid "Show more matches"
 msgstr "显示更多比赛"
 
+#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Close POV"
+msgstr "收起第一视角"
+
+#: src/ui/habits/review-clip-viewer.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Watch real POV"
+msgstr "观看真实第一视角"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Clip recording currently requires Windows."
+msgstr "目前仅支持在 Windows 上录制片段。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Choose your CS2 installation in Playback settings."
+msgstr "请在回放设置中选择 CS2 的安装位置。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Install HLAE in Video settings to record the game."
+msgstr "请在视频设置中安装 HLAE，用于录制游戏画面。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Install FFmpeg in Video settings to save MP4 clips."
+msgstr "请在视频设置中安装 FFmpeg，用于保存 MP4 片段。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Start Steam, then check again."
+msgstr "请启动 Steam 后重新检查。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Close CS2 before recording. Your running game will not be stopped automatically."
+msgstr "录制前请关闭 CS2，程序不会自动关闭你正在运行的游戏。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Another video is being recorded. Wait for it to finish."
+msgstr "正在录制另一个视频，请等待完成。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "The original demo is missing. Restore it to its imported folder."
+msgstr "原始 demo 文件缺失，请将它恢复到导入时的文件夹。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "The demo changed since import. Import the new file before recording."
+msgstr "demo 文件自导入后发生了变化，请重新导入后再录制。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "This event has no valid recording range. Choose another event."
+msgstr "此事件没有有效的录制区间，请选择其他事件。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording requires a writable path without special characters. Check the app and game locations."
+msgstr "录制需要可写入且不含特殊字符的路径，请检查应用和游戏的位置。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "There is not enough free space for the recording."
+msgstr "可用磁盘空间不足，无法录制。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "CS2 recording failed. Check game compatibility and HLAE, then retry."
+msgstr "CS2 录制失败，请检查游戏兼容性和 HLAE 后重试。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "No playable video was produced. Check CS2 and recording tools, then retry."
+msgstr "没有生成可播放的视频，请检查 CS2 和录制工具后重试。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording was interrupted. You can retry this clip."
+msgstr "录制已中断，你可以重新录制此片段。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "An update is being installed. Retry after the app restarts."
+msgstr "正在安装更新，请在应用重启后重试。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "No saved clip yet"
+msgstr "尚未保存此片段"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Waiting to record"
+msgstr "等待录制"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Preparing CS2"
+msgstr "正在准备 CS2"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording real POV…"
+msgstr "正在录制真实第一视角…"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Saving the video…"
+msgstr "正在保存视频…"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Saved locally"
+msgstr "已保存到本机"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording failed"
+msgstr "录制失败"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Recording canceled"
+msgstr "录制已取消"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Real first-person replay"
+msgstr "真实第一视角回放"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Checking saved video…"
+msgstr "正在检查已保存的视频…"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Rendered from the CS2 demo · player POV · no X-ray · not a screen recording from the original match."
+msgstr "由 CS2 根据 demo 重新渲染 · 玩家第一视角 · 不显示透视 · 并非原比赛时的屏幕录像。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "This saved video could not be played. Open the POV directly in CS2, or check the recording tools."
+msgstr "无法播放此视频。你可以直接在 CS2 中打开第一视角，或检查录制工具。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Open this moment in CS2, or record it once for playback here. Recording opens a CS2 window and uses the game installation; keep Steam running."
+msgstr "你可以在 CS2 中打开这一时刻，也可以录制一次后在此回看。录制需要已安装的游戏，并会打开 CS2 窗口；请保持 Steam 运行。"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Cancel recording"
+msgstr "取消录制"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Record this POV clip"
+msgstr "录制此第一视角片段"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Check again"
+msgstr "重新检查"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Game setup"
+msgstr "游戏设置"
+
+#: src/ui/habits/review-clip-viewer.tsx
+msgid "Could not load or start this clip. Check the demo and recording setup, then retry."
+msgstr "无法加载或开始录制此片段，请检查 demo 和录制设置后重试。"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Your combat events"
+msgstr "你的交战事件"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Choose an event to watch the seconds before and after it from your own POV."
+msgstr "选择一次事件，从自己的第一视角回看前后几秒。"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Includes enemy kills, deaths to enemies and damage encounters. Miss-only fights are not detected. Damage to the same opponent is grouped with a 5-second gap."
+msgstr "包含击杀敌人、被敌人击杀和造成伤害的交战，未命中任何人的交火不会被识别。与同一对手间隔不超过 5 秒的伤害事件会合并。"
+
+#: src/ui/habits/review-duels.tsx
+msgid "View every opening"
+msgstr "查看全部首轮对枪"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Combat event filters"
+msgstr "交战事件筛选"
+
+#: src/ui/habits/review-duels.tsx
+msgid "All combat"
+msgstr "全部交战"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Opening duels"
+msgstr "首轮对枪"
+
+#: src/ui/habits/review-duels.tsx
+#: src/ui/match/players/match-players.tsx
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Deaths"
+msgstr "死亡"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Damage without a kill"
+msgstr "有伤害但未击杀"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Loading combat events…"
+msgstr "正在加载交战事件…"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Combat events could not be loaded."
+msgstr "无法加载交战事件。"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Round {selectedRound}"
+msgstr "第 {selectedRound} 回合"
+
+#: src/ui/habits/review-duels.tsx
+msgid "{total} matching events · page {pageNumber} of {pages}"
+msgstr "{total} 个符合条件的事件 · 第 {pageNumber} / {pages} 页"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Damage exchange"
+msgstr "伤害交战"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Opponent"
+msgstr "对手"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Opening duel"
+msgstr "首轮对枪"
+
+#: src/ui/habits/review-duels.tsx
+#: src/ui/match/players/kills-panel.tsx
+#: src/ui/match/rounds/overview/round-entry.tsx
+#: src/ui/search/results/result-row.tsx
+msgid "Round {roundNumber}"
+msgstr "回合 {roundNumber}"
+
+#: src/ui/habits/review-duels.tsx
+#: src/ui/search/filters/kills-filter.tsx
+msgid "Headshot"
+msgstr "爆头"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Dealt {damageGiven} / taken {damageTaken}"
+msgstr "造成 {damageGiven} / 承受 {damageTaken}"
+
+#: src/ui/habits/review-duels.tsx
+msgid "2D context"
+msgstr "二维回放"
+
+#: src/ui/habits/review-duels.tsx
+msgid "No combat events match this selection."
+msgstr "当前筛选没有匹配的交战事件。"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Previous"
+msgstr "上一页"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Next"
+msgstr "下一页"
+
 #: src/ui/habits/review-maps.tsx
 msgid "Your space on the map"
 msgstr "你的地图活动范围"
@@ -3438,16 +3929,20 @@ msgid "More position and combat examples"
 msgstr "更多位置与交战片段"
 
 #: src/ui/habits/review-matches.tsx
+msgid "Open match"
+msgstr "打开比赛"
+
+#: src/ui/habits/review-matches.tsx
+msgid "Back to match notebook"
+msgstr "返回比赛记录"
+
+#: src/ui/habits/review-matches.tsx
 msgid "Your match notebook"
 msgstr "你的比赛记录"
 
 #: src/ui/habits/review-matches.tsx
 msgid "Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal numbers."
 msgstr "打开比赛可查看回合、对枪、道具和完整回放。上方筛选同样适用于这些个人数据。"
-
-#: src/ui/habits/review-matches.tsx
-msgid "Open match"
-msgstr "打开比赛"
 
 #: src/ui/habits/review-matches.tsx
 msgid "Load more matches"
@@ -3661,10 +4156,6 @@ msgstr "可以换一个地图或阵营，也可以看看打法倾向。没有发
 #: src/ui/habits/review-workbench.tsx
 msgid "{affectedMatches} affected matches · {evidenceShown} recent examples of {evidenceTotal} matching rounds"
 msgstr "涉及 {affectedMatches} 场比赛 · 从 {evidenceTotal} 个匹配回合中展示最近 {evidenceShown} 个片段"
-
-#: src/ui/habits/review-workbench.tsx
-msgid "Round {round}"
-msgstr "第 {round} 回合"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "Round won"
@@ -5454,12 +5945,6 @@ msgid "Watch clutch"
 msgstr "观看残局"
 
 #: src/ui/match/players/kills-panel.tsx
-#: src/ui/match/rounds/overview/round-entry.tsx
-#: src/ui/search/results/result-row.tsx
-msgid "Round {roundNumber}"
-msgstr "回合 {roundNumber}"
-
-#: src/ui/match/players/kills-panel.tsx
 #: src/ui/match/rounds/round/kill-feed.tsx
 msgctxt "Tooltip"
 msgid "Watch kill"
@@ -5472,11 +5957,6 @@ msgstr "未找到玩家."
 #: src/ui/match/players/match-players.tsx
 msgid "Player not found."
 msgstr "未找到该玩家"
-
-#: src/ui/match/players/match-players.tsx
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Deaths"
-msgstr "死亡"
 
 #: src/ui/match/players/player-action-bar.tsx
 msgctxt "Button"
@@ -7016,10 +7496,6 @@ msgctxt "Context menu"
 msgid "Update team names"
 msgstr "更新队伍名称"
 
-#: src/ui/matches/table/match-count.tsx
-msgid "{matchCount, plural, one {# match} other {# matches}}"
-msgstr "{matchCount, plural, other {# 场比赛}}"
-
 #: src/ui/matches/table/matches-table.tsx
 msgid "Loading matches…"
 msgstr "加载比赛中…"
@@ -7326,10 +7802,6 @@ msgid "Last match date"
 msgstr "最后对战的日期"
 
 #: src/ui/search/filters/kills-filter.tsx
-msgid "Headshot"
-msgstr "爆头"
-
-#: src/ui/search/filters/kills-filter.tsx
 msgid "No scope"
 msgstr "盲狙"
 
@@ -7606,6 +8078,99 @@ msgstr "重置设置"
 #: src/ui/settings/about/reveal-counter-strike-log-file-button.tsx
 msgid "Reveal {gameName} log file"
 msgstr "打开 {gameName} 日志文件"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "AI settings could not be read. Check local storage permissions."
+msgstr "无法读取 AI 设置，请检查本地存储权限。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Saved. Generate a review from My playing style or a match in the Match notebook."
+msgstr "已保存。你可以在“我的风格”或“比赛记录”中生成点评。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Encrypted storage is unavailable. The key was not saved."
+msgstr "安全加密存储不可用，密钥未保存。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Could not save AI settings. Use an HTTPS API address, or a local loopback address, and enter a model name."
+msgstr "无法保存 AI 设置。请使用 HTTPS API 地址或本机回环地址，并填写模型名称。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "AI settings could not be saved. Please try again."
+msgstr "无法保存 AI 设置，请重试。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+#: src/ui/settings/settings-tabs.tsx
+msgid "AI reviews"
+msgstr "AI 点评"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Choose a cloud API or a local Ollama model. Reviews are generated only when you click, and saved on this device."
+msgstr "选择云端 API 或本地 Ollama 模型。只有点击生成时才会请求点评，结果保存在此设备上。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "AI provider"
+msgstr "AI 服务"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Local Ollama"
+msgstr "本地 Ollama"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "API base URL"
+msgstr "API 基础地址"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Model name"
+msgstr "模型名称"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Exact name of an installed Ollama model"
+msgstr "已安装的 Ollama 模型的准确名称"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Model available from your API provider"
+msgstr "你的 API 服务支持的模型"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "API key · already saved (leave blank to keep)"
+msgstr "API 密钥 · 已保存，留空保留"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "API key · optional for local models"
+msgstr "API 密钥 · 本地模型可不填"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "API key"
+msgstr "API 密钥"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Keys use operating-system encryption. Changing the API address removes the previous key; enter the key for the new server. Keys are never included in reports."
+msgstr "密钥使用操作系统加密保存。更换 API 地址会移除旧密钥，请填写新服务器的密钥。点评内容不会包含密钥。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Saving…"
+msgstr "正在保存…"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Save AI settings"
+msgstr "保存 AI 设置"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "The saved key will be removed when you save these settings."
+msgstr "保存设置时将删除已存储的密钥。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Remove saved key"
+msgstr "删除已保存的密钥"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Start Ollama and install a text model before generating. The local option only accepts localhost addresses; no cloud account is required."
+msgstr "生成前请启动 Ollama 并安装文本模型。本地模式只接受 localhost 回环地址，无需云端账号。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Your chosen API provider may charge for generation. Only aggregate numbers and sampled round events are sent; demos, videos, names and account IDs stay on this device."
+msgstr "你选择的 API 服务可能收取生成费用。仅会发送汇总数据和抽样回合事件，demo、视频、昵称和账号 ID 均留在本机。"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgctxt "Settings title"
