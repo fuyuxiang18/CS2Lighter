@@ -1,13 +1,16 @@
-import type { AiConfiguration, PreparedVideoAiContext } from 'csdm/common/types/ai';
+import type { AiProviderConfiguration, PreparedVideoAiContext } from 'csdm/common/types/ai';
 import { normalizeAiConfiguration } from './ai-configuration';
 import { AiServiceError } from './ai-error';
 import { VIDEO_AI_SYSTEM_PROMPT } from './video-ai-prompt';
 import { validateVideoAiReport } from './validate-video-ai-report';
+import { getAiRequestLimits } from './ai-request-limits';
+import { createAiRequestDispatcher, fetchAiRequest } from './ai-request-dispatcher';
+import { readAiProviderResponse, type AiResponseDiagnostics } from './ai-provider-response';
 
 /** Exactly one multimodal generation request. Never retries or silently drops images. */
 export async function requestVideoAiReport(
   context: PreparedVideoAiContext,
-  configuration: Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'>,
+  configuration: AiProviderConfiguration,
   apiKey?: string,
 ) {
   const config = normalizeAiConfiguration(configuration);
@@ -20,8 +23,11 @@ export async function requestVideoAiReport(
     )
   )
     throw new AiServiceError('invalid-scope');
+  const limits = getAiRequestLimits(config.maxOutputTokens);
+  const network = createAiRequestDispatcher(limits.timeoutMs);
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 180_000);
+  const timer = setTimeout(() => controller.abort(), limits.timeoutMs);
+  const diagnostics: AiResponseDiagnostics = { stage: 'request', finishReason: 'missing' };
   try {
     const content: (
       | { type: 'text'; text: string }
@@ -34,54 +40,43 @@ export async function requestVideoAiReport(
         { type: 'image_url', image_url: { url: dataUrl, detail: 'high' } },
       );
     }
-    const response = await fetch(`${config.baseUrl}/chat/completions`, {
+    const options = {
+      dispatcher: network.dispatcher,
       method: 'POST',
-      redirect: 'error',
+      redirect: 'error' as const,
       signal: controller.signal,
       headers: { 'Content-Type': 'application/json', ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}) },
       body: JSON.stringify({
         model: config.model,
         stream: false,
         ...(new URL(config.baseUrl).hostname === 'api.openai.com'
-          ? { max_completion_tokens: 6000 }
-          : { max_tokens: 4000 }),
+          ? { max_completion_tokens: config.maxOutputTokens }
+          : { max_tokens: config.maxOutputTokens }),
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: VIDEO_AI_SYSTEM_PROMPT },
           { role: 'user', content },
         ],
       }),
-    });
-    if ([400, 415, 422].includes(response.status)) throw new AiServiceError('vision-unsupported');
+    };
+    const response = await fetchAiRequest(`${config.baseUrl}/chat/completions`, options);
+    // 400/422 can also mean an unsupported token budget or context length, not missing image support.
+    if (response.status === 415) throw new AiServiceError('vision-unsupported');
     if (!response.ok || !response.body) throw new AiServiceError('request-failed');
-    const reader = response.body.getReader();
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      size += value.byteLength;
-      if (size > 256 * 1024) {
-        await reader.cancel();
-        throw new AiServiceError('invalid-response');
-      }
-      chunks.push(value);
-    }
-    const wire = JSON.parse(Buffer.concat(chunks).toString('utf8'));
-    const choice = wire?.choices?.[0];
-    if (
-      choice?.finish_reason !== 'stop' ||
-      typeof choice.message?.content !== 'string' ||
-      choice.message.content.length > 32000
-    )
-      throw new AiServiceError('invalid-response');
-    return validateVideoAiReport(JSON.parse(choice.message.content), context);
+    return validateVideoAiReport(
+      await readAiProviderResponse(response.body, controller.signal, limits.maximumResponseBytes, diagnostics),
+      context,
+    );
   } catch (error) {
-    if (error instanceof AiServiceError) throw error;
-    if (controller.signal.aborted) throw new AiServiceError('request-timeout');
-    if (error instanceof SyntaxError) throw new AiServiceError('invalid-response');
-    throw new AiServiceError('request-failed');
+    const failure = controller.signal.aborted
+      ? new AiServiceError('request-timeout')
+      : error instanceof AiServiceError
+        ? error
+        : new AiServiceError('request-failed');
+    logger.warn('AI video request failed', { ...diagnostics, code: failure.code });
+    throw failure;
   } finally {
     clearTimeout(timer);
+    await network.dispose();
   }
 }

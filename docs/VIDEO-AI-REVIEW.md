@@ -29,7 +29,7 @@
 - OpenAI 官方文档说明，Chat Completions 可以用 `image_url` 内容接收 Base64 图片，一次请求可包含多张图片，图片会计入用量。视觉理解可能误读细小文字和复杂空间关系。因此本功能发送带明确时间标注的图片，保留手动证据复核，不宣传逐帧动作测量。[OpenAI Images and vision](https://developers.openai.com/api/docs/guides/images-vision)
 - Ollama 的视觉模型接收图片和文本，官方兼容接口也提供 `/v1/chat/completions` 的 `image_url` 示例。兼容接口只实现部分 OpenAI API，不代表每个模型都能看图。用户需要选择支持视觉与 JSON 输出的模型；应用不会仅凭模型名称猜测能力。[Ollama Vision](https://docs.ollama.com/capabilities/vision)、[Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)
 - 不支持图片的服务器、拒绝该视觉请求的服务器，或明确表示看不到图片的模型，会得到可见失败提示。不会降级成统计点评。第三方服务若在内部无声丢弃图片，应用无法证明其真正使用了图片；有效 JSON 和真实引用 ID 也不是视觉事实正确性的保证。
-- 视觉请求最多等待 180 秒，响应体上限 256 KiB。兼容服务使用 `max_tokens=4000`；官方 `api.openai.com` 使用 `max_completion_tokens=6000`。拒绝图片、JSON 模式或参数格式都可能导致失败，不能仅凭接口拒绝就断言模型没有视觉能力。地址限制与密钥保护沿用统计点评，不跟随 HTTP 重定向。
+- 0.6.2 起，视觉请求使用“设置 → AI 点评”保存的输出 token 上限，默认 240,000，可改为 1–1,000,000 的整数；兼容服务传 `max_tokens`，官方 `api.openai.com` 传 `max_completion_tokens`。等待时间和响应容量随上限调整，与[统计点评](AI-REPORTS.md)一致，最长三十分钟。最终报告仍限制 32,000 字符。拒绝图片、JSON 模式、过高 token 上限或参数格式都可能导致失败，不能仅凭接口拒绝就断言模型没有视觉能力。地址限制与密钥保护沿用统计点评，不跟随 HTTP 重定向。只修改上限保留已存视频点评，主动重新生成才使用新值。
 - 已有自动化测试使用合成模型响应验证一次请求、精确图片载荷、缓存、预览过期、目标变更、错误引用与边界拒绝；这些测试不代表真实云端或本地模型的建议质量。实际模型质量需要用户选择模型后，用有人工标注的录像进行另外评估。
 
 资料核对日期：2026-10-05。

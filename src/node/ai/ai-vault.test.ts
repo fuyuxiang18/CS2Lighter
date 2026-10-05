@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { AiVault } from './ai-vault';
+import { DEFAULT_AI_MAX_OUTPUT_TOKENS, MAX_AI_MAX_OUTPUT_TOKENS } from 'csdm/common/ai-token-limit';
 
 const config = { provider: 'openai-compatible' as const, baseUrl: 'https://example.com/v1', model: 'fixture-model' };
 const directories: string[] = [];
@@ -46,6 +47,7 @@ describe('AI credentials vault', () => {
       provider: 'openai-compatible',
       baseUrl: 'https://api.openai.com/v1',
       model: '',
+      maxOutputTokens: DEFAULT_AI_MAX_OUTPUT_TOKENS,
       hasApiKey: false,
       secureStorageAvailable: true,
     });
@@ -69,6 +71,52 @@ describe('AI credentials vault', () => {
     await vault.save({ ...config, baseUrl: `${config.baseUrl}/chat/completions`, model: 'another-model' });
     expect((await vault.getCredentials()).apiKey).toBe('fixture-secret-key');
     expect(storage.encryptString).toHaveBeenCalledTimes(1);
+  });
+
+  it('reads legacy configurations with the default limit without rewriting or re-encrypting them', async () => {
+    const { vault, file, storage } = await setup();
+    const encryptedKey = storage.encryptString('fixture-legacy-key').toString('base64');
+    await fs.writeJson(file, { ...config, encryptedKey });
+    const previousBytes = await fs.readFile(file, 'utf8');
+    expect(await vault.getConfiguration()).toMatchObject({ ...config, maxOutputTokens: 240000, hasApiKey: true });
+    expect(storage.decryptString).not.toHaveBeenCalled();
+    expect((await vault.getCredentials()).config.maxOutputTokens).toBe(240000);
+    expect((await vault.getCredentials()).apiKey).toBe('fixture-legacy-key');
+    expect(await fs.readFile(file, 'utf8')).toBe(previousBytes);
+    expect(storage.encryptString).toHaveBeenCalledTimes(1);
+    await vault.save({ ...config, maxOutputTokens: 8000 });
+    expect((await fs.readJson(file)).encryptedKey).toBe(encryptedKey);
+    expect((await fs.readJson(file)).maxOutputTokens).toBe(8000);
+    expect(storage.encryptString).toHaveBeenCalledTimes(1);
+  });
+
+  it('persists an explicit output limit across vault instances while retaining the key', async () => {
+    const { vault, file, storage } = await setup();
+    await vault.save({ ...config, apiKey: 'fixture-secret-key', maxOutputTokens: 1 });
+    const ciphertext = (await fs.readJson(file)).encryptedKey;
+    await vault.save({ ...config, maxOutputTokens: MAX_AI_MAX_OUTPUT_TOKENS });
+    const fresh = new AiVault(file, storage);
+    expect((await fresh.getConfiguration()).maxOutputTokens).toBe(MAX_AI_MAX_OUTPUT_TOKENS);
+    expect((await fresh.getCredentials()).apiKey).toBe('fixture-secret-key');
+    expect((await fs.readJson(file)).encryptedKey).toBe(ciphertext);
+    expect(await fs.readFile(file, 'utf8')).not.toContain('fixture-secret-key');
+    expect(storage.encryptString).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects invalid output limits before writing or replacing an existing key', async () => {
+    const { vault, file, storage, directory } = await setup();
+    await vault.save({ ...config, apiKey: 'fixture-old-key', maxOutputTokens: 12000 });
+    const previousBytes = await fs.readFile(file, 'utf8');
+    for (const invalid of [0, -1, 1.5, MAX_AI_MAX_OUTPUT_TOKENS + 1, NaN, Infinity, '240000', null]) {
+      await expect(
+        vault.save({ ...config, apiKey: 'fixture-new-key', maxOutputTokens: invalid as number }),
+      ).rejects.toThrow('invalid-configuration');
+      expect(await fs.readFile(file, 'utf8')).toBe(previousBytes);
+    }
+    expect(storage.encryptString).toHaveBeenCalledTimes(1);
+    expect((await vault.getCredentials()).apiKey).toBe('fixture-old-key');
+    expect((await vault.getConfiguration()).maxOutputTokens).toBe(12000);
+    expect(await fs.readdir(directory)).toEqual(['ai-config.json']);
   });
 
   it('drops the previous key when changing the endpoint or provider, and accepts an explicit new key', async () => {
@@ -118,7 +166,9 @@ describe('AI credentials vault', () => {
     await vault.save({ ...config, apiKey: 'fixture-old-key' });
     const before = await fs.readFile(file, 'utf8');
     vi.spyOn(fs, 'rename').mockRejectedValueOnce(new Error('Synthetic private filesystem message'));
-    await expect(vault.save({ ...config, model: 'replacement-model' })).rejects.toThrow('storage-failed');
+    await expect(vault.save({ ...config, model: 'replacement-model', maxOutputTokens: 500000 })).rejects.toThrow(
+      'storage-failed',
+    );
     expect(await fs.readFile(file, 'utf8')).toBe(before);
     expect(await fs.readdir(directory)).toEqual(['ai-config.json']);
     expect((await vault.getCredentials()).apiKey).toBe('fixture-old-key');

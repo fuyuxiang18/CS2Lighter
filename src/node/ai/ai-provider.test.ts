@@ -1,12 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
-import type { AiConfiguration, AiReportContent, PreparedAiContext } from 'csdm/common/types/ai';
+import type { AiProviderConfiguration, AiReportContent, PreparedAiContext } from 'csdm/common/types/ai';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { TeamNumber } from 'csdm/common/types/counter-strike';
 import { requestAiReport } from './ai-provider';
+import { generateAiReport, getAiReportState } from './ai-report-service';
+
+vi.mock('./ai-request-dispatcher', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./ai-request-dispatcher')>()),
+  fetchAiRequest: (url: string, options: RequestInit) => globalThis.fetch(url, options),
+}));
 
 const configuration = {
   provider: 'openai-compatible' as const,
   baseUrl: 'https://provider.example/v1',
   model: 'synthetic-test-model',
+  maxOutputTokens: 24000,
 };
 const preview: PreparedAiContext['preview'] = {
   kind: 'personal',
@@ -81,6 +91,10 @@ function mockResponse(body = wire()) {
   vi.stubGlobal('fetch', fetchMock);
   return fetchMock;
 }
+async function removeTemporaryReportDirectory(directory: string) {
+  if (path.dirname(path.resolve(directory)) !== path.resolve(os.tmpdir())) throw new Error('Invalid test cleanup path');
+  await rm(directory, { recursive: true, force: true });
+}
 const warning = vi.fn();
 beforeEach(() => {
   warning.mockClear();
@@ -98,10 +112,10 @@ describe('statistics AI provider budget and response boundaries', () => {
     ['https://provider.example/v1', 'openai-compatible', 'max_tokens'],
     ['http://127.0.0.1:11434/v1', 'ollama', 'max_tokens'],
   ] as const)(
-    'sets 24000 tokens for %s without changing the provider thinking default',
+    'defaults legacy configuration to 240000 tokens for %s without changing thinking',
     async (baseUrl, provider, key) => {
       const fetchMock = mockResponse();
-      const config: Pick<AiConfiguration, 'baseUrl' | 'provider' | 'model'> = { ...configuration, baseUrl, provider };
+      const config: AiProviderConfiguration = { baseUrl, provider, model: configuration.model };
       expect(await requestAiReport(context, config, provider === 'ollama' ? undefined : 'test-secret')).toEqual(
         report(),
       );
@@ -109,11 +123,23 @@ describe('statistics AI provider budget and response boundaries', () => {
       const [, options] = fetchMock.mock.calls[0];
       expect(typeof options?.body).toBe('string');
       const body = JSON.parse(options?.body as string);
-      expect(body[key]).toBe(24000);
+      expect(body[key]).toBe(240000);
       expect(body[key === 'max_tokens' ? 'max_completion_tokens' : 'max_tokens']).toBeUndefined();
       expect(Object.keys(body).sort()).toEqual(['messages', key, 'model', 'response_format', 'stream'].sort());
       expect(body.messages[1].content).toBe(JSON.stringify(context.payload));
       expect(options?.redirect).toBe('error');
+    },
+  );
+
+  it.each([1, 50000, 1000000])(
+    'sends the selected %i token limit with either provider parameter',
+    async (maxOutputTokens) => {
+      for (const baseUrl of ['https://api.openai.com/v1', 'https://provider.example/v1']) {
+        const fetchMock = mockResponse();
+        await requestAiReport(context, { ...configuration, baseUrl, maxOutputTokens }, 'test-secret');
+        const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string);
+        expect(body[baseUrl.includes('api.openai.com') ? 'max_completion_tokens' : 'max_tokens']).toBe(maxOutputTokens);
+      }
     },
   );
 
@@ -182,6 +208,16 @@ describe('statistics AI provider budget and response boundaries', () => {
     await expect(requestAiReport(context, configuration, 'test-secret')).rejects.toThrow('invalid-response');
     expect(cancel).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('increases the reasoning wire allowance for a selected budget without increasing final report size', async () => {
+    const largeWire = wire(JSON.stringify(report()), 'stop', 'x'.repeat(2500000));
+    mockResponse(largeWire);
+    await expect(requestAiReport(context, configuration, 'test-secret')).rejects.toThrow('invalid-response');
+    mockResponse(largeWire);
+    expect(await requestAiReport(context, { ...configuration, maxOutputTokens: 50000 }, 'test-secret')).toEqual(
+      report(),
+    );
   });
 
   it('preserves precise schema, evidence and score validation failures', async () => {
@@ -272,5 +308,54 @@ describe('statistics AI provider budget and response boundaries', () => {
     await assertion;
     expect(cancel).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('uses the capped 30-minute deadline for the legacy default budget', async () => {
+    vi.useFakeTimers();
+    let signal: AbortSignal | undefined;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>().mockImplementation(
+        (_url, options) =>
+          new Promise((_resolve, reject) => {
+            signal = options?.signal ?? undefined;
+            signal?.addEventListener('abort', () => reject(new Error('aborted')));
+          }),
+      ),
+    );
+    const assertion = expect(
+      requestAiReport(context, { ...configuration, maxOutputTokens: undefined }, 'test-secret'),
+    ).rejects.toThrow('request-timeout');
+    await vi.advanceTimersByTimeAsync(1799999);
+    expect(signal?.aborted).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    await assertion;
+  });
+
+  it('passes a selected budget through generation but reuses existing reports when only the budget changes', async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), 'cs2lighter-ai-budget-'));
+    try {
+      const fetchMock = vi.fn<typeof fetch>().mockImplementation(() => Promise.resolve(new Response(wire())));
+      vi.stubGlobal('fetch', fetchMock);
+      const first = await generateAiReport(
+        context,
+        { ...configuration, maxOutputTokens: 32000 },
+        'test-secret',
+        false,
+        directory,
+      );
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string).max_tokens).toBe(32000);
+      const changed = { ...configuration, maxOutputTokens: 240000 };
+      expect((await getAiReportState(context, changed, directory)).report?.id).toBe(first.report?.id);
+      expect((await generateAiReport(context, changed, 'test-secret', false, directory)).report?.id).toBe(
+        first.report?.id,
+      );
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      await generateAiReport(context, changed, 'test-secret', true, directory);
+      expect(JSON.parse(fetchMock.mock.calls[1][1]?.body as string).max_tokens).toBe(240000);
+      expect(await readdir(directory)).toHaveLength(1);
+    } finally {
+      await removeTemporaryReportDirectory(directory);
+    }
   });
 });

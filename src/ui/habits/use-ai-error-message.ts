@@ -4,15 +4,15 @@ import type { AiErrorCode } from 'csdm/common/types/ai';
 export function useAiErrorMessage() {
   const { t } = useLingui();
   const messages: Record<AiErrorCode, string> = {
-    'invalid-configuration': t`Set an AI provider, server address and model before generating a review.`,
+    'invalid-configuration': t`Check the AI provider, server address, model and output token limit in AI settings.`,
     'secure-storage-unavailable': t`Encrypted key storage is unavailable on this device. Check the AI settings.`,
     'key-unavailable': t`The API key is missing or could not be read. Save it in the AI settings.`,
     'invalid-scope': t`This player or match is not available for an AI review.`,
     'no-data': t`No usable rounds match this selection. Import demos or change the filters first.`,
-    'request-failed': t`The AI request failed. Check the server address, model and credentials, then try again.`,
+    'request-failed': t`The AI request failed. Check the server address, model, credentials and whether the model supports your output token limit.`,
     'request-timeout': t`The model did not respond in time. Try again or choose a faster model.`,
     'invalid-response': t`The AI service returned an incomplete or unsupported response. No report was saved.`,
-    'response-truncated': t`The model reached its output limit before completing the report. No report was saved. The request allows up to 24,000 tokens; check whether your service applies a lower limit.`,
+    'response-truncated': t`The model reached its output limit before completing the report. No report was saved. Adjust the output token limit in AI settings and check your model's supported limit.`,
     'response-empty': t`The model returned no final report. It may have returned only reasoning text. No report was saved.`,
     'response-json-invalid': t`The model's report could not be read as JSON. No report was saved.`,
     'response-schema-invalid': t`The report is missing required fields or has an invalid style label, length or structure. No report was saved.`,

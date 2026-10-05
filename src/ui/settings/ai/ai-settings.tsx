@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import type { AiConfiguration } from 'csdm/common/types/ai';
+import {
+  DEFAULT_AI_MAX_OUTPUT_TOKENS,
+  MAX_AI_MAX_OUTPUT_TOKENS,
+  isAiMaxOutputTokens,
+} from 'csdm/common/ai-token-limit';
 import { Select } from 'csdm/ui/components/inputs/select';
 import { TextInput } from 'csdm/ui/components/inputs/text-input';
 import { ReviewButton } from 'csdm/ui/habits/review-button';
 import { SettingsView } from '../settings-view';
 
 export function AiSettings() {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [configuration, setConfiguration] = useState<AiConfiguration | null>(null);
   const [savedBaseUrl, setSavedBaseUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [clearApiKey, setClearApiKey] = useState(false);
+  const [tokenLimitDraft, setTokenLimitDraft] = useState(String(DEFAULT_AI_MAX_OUTPUT_TOKENS));
+  const [tokenLimitError, setTokenLimitError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const maximumTokenLimit = new Intl.NumberFormat(i18n.locale).format(MAX_AI_MAX_OUTPUT_TOKENS);
+  const defaultTokenLimit = new Intl.NumberFormat(i18n.locale).format(DEFAULT_AI_MAX_OUTPUT_TOKENS);
   useEffect(() => {
     let canceled = false;
     void window.csdm
@@ -23,6 +32,7 @@ export function AiSettings() {
         if (result.ok) {
           setConfiguration(result.value);
           setSavedBaseUrl(result.value.baseUrl);
+          setTokenLimitDraft(String(result.value.maxOutputTokens));
         } else setMessage(t`AI settings could not be read. Check local storage permissions.`);
       })
       .catch(() => {
@@ -34,17 +44,27 @@ export function AiSettings() {
   }, [t]);
   const save = async () => {
     if (!configuration || busy) return;
+    const tokenText = tokenLimitDraft.trim();
+    const maxOutputTokens = Number(tokenText);
+    if (!/^\d+$/.test(tokenText) || !isAiMaxOutputTokens(maxOutputTokens)) {
+      setTokenLimitError(true);
+      setMessage('');
+      return;
+    }
+    setTokenLimitError(false);
     setBusy(true);
     setMessage('');
     try {
       const result = await window.csdm.saveAiConfiguration({
         ...configuration,
+        maxOutputTokens,
         ...(apiKey ? { apiKey } : {}),
         clearApiKey,
       });
       if (result.ok) {
         setConfiguration(result.value);
         setSavedBaseUrl(result.value.baseUrl);
+        setTokenLimitDraft(String(result.value.maxOutputTokens));
         setApiKey('');
         setClearApiKey(false);
         setMessage(t`Saved. Generate a review from My playing style or a match in the Match notebook.`);
@@ -114,6 +134,49 @@ export function AiSettings() {
               }
               onChange={(event) => setConfiguration({ ...configuration, model: event.target.value })}
             />
+            <TextInput
+              label={t`Output token limit`}
+              value={tokenLimitDraft}
+              isDisabled={busy}
+              onChange={(event) => {
+                setTokenLimitDraft(event.target.value);
+                setTokenLimitError(false);
+                setMessage('');
+              }}
+            />
+            {tokenLimitError && (
+              <p role="alert" className="text-caption text-red-500">
+                <Trans>
+                  Enter a whole number from 1 to {maximumTokenLimit} tokens. Your settings have not been saved.
+                </Trans>
+              </p>
+            )}
+            <div className="flex flex-col gap-10">
+              <p className="text-caption text-gray-700">
+                <Trans>
+                  Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI
+                  reviews.
+                </Trans>
+              </p>
+              <p className="text-caption text-gray-700">
+                <Trans>
+                  This is a maximum output budget, not a required response length. Higher limits can take longer; your
+                  provider or model may enforce a lower limit.
+                </Trans>
+              </p>
+              <div className="self-start">
+                <ReviewButton
+                  disabled={busy}
+                  onClick={() => {
+                    setTokenLimitDraft(String(DEFAULT_AI_MAX_OUTPUT_TOKENS));
+                    setTokenLimitError(false);
+                    setMessage('');
+                  }}
+                >
+                  <Trans>Reset token limit to default</Trans>
+                </ReviewButton>
+              </div>
+            </div>
             <TextInput
               label={
                 configuration.hasApiKey && !clearApiKey && configuration.baseUrl === savedBaseUrl

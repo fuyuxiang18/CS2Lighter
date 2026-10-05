@@ -10,6 +10,10 @@ import { buildAiContext } from './build-ai-context';
 import { normalizeAiConfiguration } from './ai-configuration';
 import { getAiErrorCode } from './ai-error';
 import { requestAiReport } from './ai-provider';
+vi.mock('./ai-request-dispatcher', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./ai-request-dispatcher')>()),
+  fetchAiRequest: (url: string, options: RequestInit) => globalThis.fetch(url, options),
+}));
 import { getAiReportState, generateAiReport } from './ai-report-service';
 import { validateAiReport } from './validate-ai-report';
 import { AI_PROMPT_VERSION } from './ai-prompt';
@@ -337,7 +341,7 @@ describe('compatible provider protocol (mocked, no external calls)', () => {
     expect(normalizeAiConfiguration({ ...config, baseUrl: 'https://example.com/v1/chat/completions' }).baseUrl).toBe(
       config.baseUrl,
     );
-    expect(normalizeAiConfiguration(local)).toEqual(local);
+    expect(normalizeAiConfiguration(local)).toEqual({ ...local, maxOutputTokens: 240000 });
     expect(normalizeAiConfiguration({ ...config, baseUrl: 'https://example.com/v1/chat/completions/' }).baseUrl).toBe(
       config.baseUrl,
     );
@@ -390,7 +394,7 @@ describe('compatible provider protocol (mocked, no external calls)', () => {
       'mock-secret',
     );
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(body.max_completion_tokens).toBe(24000);
+    expect(body.max_completion_tokens).toBe(240000);
     expect(body.max_tokens).toBeUndefined();
   });
 
@@ -404,7 +408,9 @@ describe('compatible provider protocol (mocked, no external calls)', () => {
     vi.stubGlobal('fetch', fetchMock);
     await expect(requestAiReport(context, config, 'mock-secret')).rejects.toThrow('request-failed');
     await expect(requestAiReport(context, config, 'mock-secret')).rejects.toThrow('response-truncated');
-    await expect(requestAiReport(context, config, 'mock-secret')).rejects.toThrow('invalid-response');
+    await expect(requestAiReport(context, { ...config, maxOutputTokens: 24000 }, 'mock-secret')).rejects.toThrow(
+      'invalid-response',
+    );
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(getAiErrorCode(new Error('private provider body'))).toBe('request-failed');
   });
@@ -420,7 +426,11 @@ describe('compatible provider protocol (mocked, no external calls)', () => {
           }),
       ),
     );
-    const request = requestAiReport(buildAiContext(fixture(), scope), config, 'mock-secret');
+    const request = requestAiReport(
+      buildAiContext(fixture(), scope),
+      { ...config, maxOutputTokens: 24000 },
+      'mock-secret',
+    );
     const assertion = expect(request).rejects.toThrow('request-timeout');
     await vi.advanceTimersByTimeAsync(240_000);
     await assertion;

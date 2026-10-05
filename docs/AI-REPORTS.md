@@ -40,10 +40,16 @@
 
 Electron main 持有密钥；配置通过 OS safeStorage 加密后另存 `ai-config.json`，普通 settings 和 daemon 不接收密钥。renderer 只得到是否已配置密钥，不可读取明文。加密不可用（含 Linux `basic_text`）时拒绝保存密钥；无密钥的本机 Ollama 仍可使用。Windows DPAPI 保护不等于能防御已在同一 Windows 用户下运行的恶意程序。
 
-服务端地址必须 HTTPS；仅回环地址可用 HTTP。Ollama 选项限定回环地址。拒绝 URL 内嵌用户名/密码、查询串和片段，禁止 HTTP 重定向。统计点评的返回体最多 2 MiB，请求最多 240 秒；兼容服务使用 `max_tokens=24000`，官方 `api.openai.com` 使用 `max_completion_tokens=24000`。这是生成上限，不是要求输出长度，也不是固定消费量。思考模式仍遵从所选服务的默认行为，最终点评要求简练；不把推理文本当作最终报告。失败不自动重试。视频点评有独立的请求上限，详见其文档。模型/代理是否支持 JSON 模式和这些参数取决于其实现；本版不承诺所有兼容服务都可用。
+服务端地址必须 HTTPS；仅回环地址可用 HTTP。Ollama 选项限定回环地址。拒绝 URL 内嵌用户名/密码、查询串和片段，禁止 HTTP 重定向。
+
+0.6.2 可在“设置 → AI 点评”保存输出 token 上限，默认 240,000，支持 1–1,000,000 的整数；个人、单场和视频点评共用。旧配置缺少此字段时读取默认值，不改写加密密钥。调整上限不使已有点评失效，需要采用新上限时主动重新生成。
+
+兼容服务将此数值传为 `max_tokens`，官方 `api.openai.com` 传为 `max_completion_tokens`。它是请求上限，不是要求输出长度，也不是固定消费量。模型或代理可能拒绝超出自身限制的值，此时需要调低设置；软件不静默降低上限或自动重试。思考模式仍遵从所选服务的默认行为；不把推理文本当作最终报告。
+
+两类请求的响应体容量按 `max(2 MiB, token 上限 × 64 字节)` 限制；总等待时间按每 24,000 tokens 四分钟向上取整，最少四分钟、最多三十分钟。默认 240,000 对应 15,360,000 字节和三十分钟。最终报告 JSON 仍限制 32,000 字符，并继续校验字段长度、引用和评分；扩大生成预算不意味着要求长篇点评。模型/代理是否支持 JSON 模式和这些参数取决于其实现；本版不承诺所有兼容服务都可用。
 
 依据：[Electron safeStorage](https://www.electronjs.org/docs/latest/api/safe-storage)、[Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)、[OpenAI Chat Completions](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create)。
 
 ## 验证范围
 
-AI 单元测试使用合成事实与模拟 HTTP 响应验证：去身份化、场次数量限制、证据引用、五维评分与缺数据处理、短风格标签、24,000 token 参数、思考文本与最终结果分离、超时、响应大小、错误分类、无自动重试、缓存隔离、并发去重和不落盘密钥。模拟用例成功不代表真实模型输出成功，也不代表接入了用户的付费服务。开发验证不得外发用户数据或消费真实 API。
+AI 单元测试使用合成事实与模拟 HTTP 响应验证：去身份化、场次数量限制、证据引用、五维评分与缺数据处理、短风格标签、默认及自定义 token 参数、旧配置兼容、设置持久化与非法输入拒绝、思考文本与最终结果分离、超时、响应大小、错误分类、无自动重试、缓存隔离、并发去重和不落盘密钥。模拟用例成功不代表真实模型输出成功，也不代表接入了用户的付费服务。开发验证不得外发用户数据或消费真实 API。

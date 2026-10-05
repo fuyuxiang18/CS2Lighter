@@ -1,14 +1,19 @@
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile, rename, rm } from 'node:fs/promises';
-import type { AiConfiguration, PreparedVideoAiContext, VideoAiReport, VideoAiReviewState } from 'csdm/common/types/ai';
+import type {
+  AiProviderConfiguration,
+  PreparedVideoAiContext,
+  VideoAiReport,
+  VideoAiReviewState,
+} from 'csdm/common/types/ai';
 import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 import { VIDEO_AI_PROMPT_VERSION } from './video-ai-prompt';
 import { validateVideoAiReport } from './validate-video-ai-report';
 import { requestVideoAiReport } from './video-ai-provider';
 import { AiServiceError } from './ai-error';
 
-type Configuration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'>;
+type Configuration = AiProviderConfiguration;
 function configurationKey(config: Configuration) {
   return JSON.stringify([config.provider, config.baseUrl, config.model]);
 }

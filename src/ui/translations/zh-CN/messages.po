@@ -2770,6 +2770,10 @@ msgid "Generation target: {target} · {serverHost} · {model}"
 msgstr "本次生成使用：{target} · {serverHost} · {model}"
 
 #: src/ui/habits/ai-review-panel.tsx
+msgid "Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length."
+msgstr "输出上限：{maxOutputTokens} tokens，不要求模型写满。"
+
+#: src/ui/habits/ai-review-panel.tsx
 #: src/ui/matches/table/match-count.tsx
 msgid "{matchCount, plural, one {# match} other {# matches}}"
 msgstr "{matchCount, plural, other {# 场比赛}}"
@@ -2816,12 +2820,12 @@ msgid "No report is cached for this sample and model. Generation starts only whe
 msgstr "当前样本与模型没有已保存的点评，点击后才会开始生成。"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes."
-msgstr "正在生成风格标签与五维点评，并核对回合引用，最多等待 4 分钟。"
+msgid "Generating your style and five-dimension review, then checking the evidence. Higher output limits and slower models may take longer."
+msgstr "正在生成风格标签与五维点评，并核对回合引用。较高输出上限或较慢的模型可能需要更长时间。"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "The 24,000-token budget is a maximum, not a required response length."
-msgstr "24,000 tokens 是生成上限，不要求模型写满。"
+msgid "Current output limit: {maxOutputTokens} tokens."
+msgstr "本次输出上限：{maxOutputTokens} tokens。"
 
 #: src/ui/habits/ai-review-panel.tsx
 msgid "Saved report"
@@ -4206,8 +4210,8 @@ msgid "Start this practice"
 msgstr "开始这项练习"
 
 #: src/ui/habits/use-ai-error-message.ts
-msgid "Set an AI provider, server address and model before generating a review."
-msgstr "请先设置 AI 服务、服务器地址和模型，再生成点评。"
+msgid "Check the AI provider, server address, model and output token limit in AI settings."
+msgstr "请在 AI 设置中检查服务类型、服务器地址、模型和输出 token 上限。"
 
 #: src/ui/habits/use-ai-error-message.ts
 msgid "Encrypted key storage is unavailable on this device. Check the AI settings."
@@ -4226,8 +4230,8 @@ msgid "No usable rounds match this selection. Import demos or change the filters
 msgstr "当前筛选没有可用回合，请先导入 demo 或更改筛选。"
 
 #: src/ui/habits/use-ai-error-message.ts
-msgid "The AI request failed. Check the server address, model and credentials, then try again."
-msgstr "AI 请求失败，请检查服务器地址、模型和密钥后重试。"
+msgid "The AI request failed. Check the server address, model, credentials and whether the model supports your output token limit."
+msgstr "AI 请求失败，请检查服务器地址、模型、密钥，以及模型是否支持设置的输出 token 上限。"
 
 #: src/ui/habits/use-ai-error-message.ts
 msgid "The model did not respond in time. Try again or choose a faster model."
@@ -4238,8 +4242,8 @@ msgid "The AI service returned an incomplete or unsupported response. No report 
 msgstr "AI 服务返回了未完成或暂不支持的响应，本次点评未保存。"
 
 #: src/ui/habits/use-ai-error-message.ts
-msgid "The model reached its output limit before completing the report. No report was saved. The request allows up to 24,000 tokens; check whether your service applies a lower limit."
-msgstr "模型达到输出上限，点评尚未完成，因此没有保存。解析器已允许最多 24,000 tokens，请检查 AI 服务是否另有限制。"
+msgid "The model reached its output limit before completing the report. No report was saved. Adjust the output token limit in AI settings and check your model's supported limit."
+msgstr "模型达到输出上限，点评尚未完成，因此没有保存。请在 AI 设置中调整输出 token 上限，并确认模型支持的范围。"
 
 #: src/ui/habits/use-ai-error-message.ts
 msgid "The model returned no final report. It may have returned only reasoning text. No report was saved."
@@ -8472,6 +8476,26 @@ msgstr "已安装的 Ollama 模型的准确名称"
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "Model available from your API provider"
 msgstr "你的 API 服务支持的模型"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Output token limit"
+msgstr "输出 token 上限"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Enter a whole number from 1 to {maximumTokenLimit} tokens. Your settings have not been saved."
+msgstr "请输入 1–{maximumTokenLimit} 之间的整数。当前设置尚未保存。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI reviews."
+msgstr "默认 {defaultTokenLimit} tokens，个人、单场比赛和视频 AI 点评共用此上限。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "This is a maximum output budget, not a required response length. Higher limits can take longer; your provider or model may enforce a lower limit."
+msgstr "这是生成上限，不要求模型写满。较高上限可能需要更长时间；模型或服务也可能限制更低的上限。"
+
+#: src/ui/settings/ai/ai-settings.tsx
+msgid "Reset token limit to default"
+msgstr "恢复默认上限"
 
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "API key · already saved (leave blank to keep)"

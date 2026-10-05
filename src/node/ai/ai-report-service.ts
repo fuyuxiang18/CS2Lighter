@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile, rename, rm } from 'node:fs/promises';
-import type { AiConfiguration, AiReport, AiReportState, PreparedAiContext } from 'csdm/common/types/ai';
+import type { AiProviderConfiguration, AiReport, AiReportState, PreparedAiContext } from 'csdm/common/types/ai';
 import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 import { AI_PROMPT_VERSION } from './ai-prompt';
 import { normalizeAiConfiguration } from './ai-configuration';
@@ -9,7 +9,7 @@ import { AiServiceError } from './ai-error';
 import { requestAiReport } from './ai-provider';
 import { validateAiReport } from './validate-ai-report';
 
-type Configuration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'>;
+type Configuration = AiProviderConfiguration;
 const inFlight = new Map<string, Promise<AiReportState>>();
 
 function reportKey(context: PreparedAiContext, config: Configuration) {

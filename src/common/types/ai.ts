@@ -8,11 +8,17 @@ export type AiConfiguration = {
   provider: AiProvider;
   baseUrl: string;
   model: string;
+  maxOutputTokens: number;
   hasApiKey: boolean;
   secureStorageAvailable: boolean;
 };
 
-export type SaveAiConfiguration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'> & {
+/** Missing limits in older callers/configuration files use the application default. */
+export type AiProviderConfiguration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'> & {
+  maxOutputTokens?: number;
+};
+
+export type SaveAiConfiguration = AiProviderConfiguration & {
   /** Input only. Omitted keeps the existing key; clearApiKey explicitly removes it. */
   apiKey?: string;
   clearApiKey?: boolean;

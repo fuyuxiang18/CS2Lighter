@@ -23,7 +23,7 @@ export function AiReviewPanel({ scope, onConfigure }: Props) {
 }
 
 function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure: () => void }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const errorMessage = useAiErrorMessage();
   const formatDate = useFormatDate();
   const [state, setState] = useState<AiReportState | null>(null);
@@ -107,6 +107,7 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
   const target = configuration?.provider === 'ollama' ? t`Ollama` : t`OpenAI-compatible API`;
   const serverHost = configuration ? new URL(configuration.baseUrl).hostname : '';
   const model = configuration?.model ?? '';
+  const maxOutputTokens = configuration ? new Intl.NumberFormat(i18n.locale).format(configuration.maxOutputTokens) : '';
   const matchCount = preview?.matchCount ?? 0;
   const roundCount = preview?.roundCount ?? 0;
   const evidenceCount = preview?.evidenceCount ?? 0;
@@ -141,11 +142,16 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
           </Trans>
         </p>
         {configured && (
-          <p className="text-caption wrap-break-word text-gray-800">
-            <Trans>
-              Generation target: {target} · {serverHost} · {model}
-            </Trans>
-          </p>
+          <>
+            <p className="text-caption wrap-break-word text-gray-800">
+              <Trans>
+                Generation target: {target} · {serverHost} · {model}
+              </Trans>
+            </p>
+            <p className="text-caption text-gray-700">
+              <Trans>Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length.</Trans>
+            </p>
+          </>
         )}
         {preview && (
           <p className="text-caption text-gray-800">
@@ -202,11 +208,12 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
         <div role="status" className="flex flex-col gap-4 text-caption text-gray-700">
           <p>
             <Trans>
-              Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes.
+              Generating your style and five-dimension review, then checking the evidence. Higher output limits and
+              slower models may take longer.
             </Trans>
           </p>
           <p>
-            <Trans>The 24,000-token budget is a maximum, not a required response length.</Trans>
+            <Trans>Current output limit: {maxOutputTokens} tokens.</Trans>
           </p>
         </div>
       )}

@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { AiConfiguration, SaveAiConfiguration } from 'csdm/common/types/ai';
+import { DEFAULT_AI_MAX_OUTPUT_TOKENS } from 'csdm/common/ai-token-limit';
 import { normalizeAiConfiguration } from './ai-configuration';
 import { AiServiceError } from './ai-error';
 
@@ -11,11 +12,14 @@ type SecretStorage = {
   encryptString: (value: string) => Buffer;
   decryptString: (value: Buffer) => string;
 };
-type StoredConfiguration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model'> & { encryptedKey?: string };
+type StoredConfiguration = Pick<AiConfiguration, 'provider' | 'baseUrl' | 'model' | 'maxOutputTokens'> & {
+  encryptedKey?: string;
+};
 const defaults: StoredConfiguration = {
   provider: 'openai-compatible',
   baseUrl: 'https://api.openai.com/v1',
   model: '',
+  maxOutputTokens: DEFAULT_AI_MAX_OUTPUT_TOKENS,
 };
 
 /** Main-process only. A credential belongs to the exact endpoint and provider that saved it. */
