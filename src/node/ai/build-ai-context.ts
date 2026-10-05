@@ -1,11 +1,74 @@
 import { createHash } from 'node:crypto';
-import { TeamNumber, DemoSource, GameMode } from 'csdm/common/types/counter-strike';
+import { TeamNumber, DemoSource, GameMode, WeaponName } from 'csdm/common/types/counter-strike';
 import type { AiReportScope, PreparedAiContext, AiEvidence, AiScoreDimension } from 'csdm/common/types/ai';
-import type { PersonalMatchStats, PersonalRoundStats } from 'csdm/common/types/personal-stats';
+import type {
+  PersonalMatchStats,
+  PersonalMetrics,
+  PersonalRoundStats,
+  PersonalStatsSummary,
+} from 'csdm/common/types/personal-stats';
 import { aggregatePersonalStats } from 'csdm/node/database/personal-stats/aggregate-personal-stats';
 import { AiServiceError } from './ai-error';
 
 export const AI_MAX_MATCHES = 10;
+
+function numericMetrics(source: PersonalMetrics): Record<string, number | null> {
+  const metrics: Record<string, number | null> = {};
+  for (const [key, value] of Object.entries(source)) {
+    if (value === null || typeof value === 'number')
+      metrics[key] = value === null || Number.isFinite(value) ? value : null;
+  }
+  const nonUtilityDamage = Math.max(0, source.damage - source.utilityDamage);
+  metrics.nonUtilityDamage = Number.isFinite(nonUtilityDamage) ? nonUtilityDamage : null;
+  metrics.nonUtilityAdr =
+    source.roundCount > 0 && metrics.nonUtilityDamage !== null ? metrics.nonUtilityDamage / source.roundCount : null;
+  return metrics;
+}
+
+function boundedWeapons(source: PersonalStatsSummary['weapons']): PreparedAiContext['payload']['weapons'] {
+  const knownNames = new Set<string>(Object.values(WeaponName));
+  const weapons = new Map<string, PreparedAiContext['payload']['weapons'][number]>();
+  for (const item of source) {
+    const weapon = knownNames.has(item.weapon) ? item.weapon : 'unknown';
+    const total = weapons.get(weapon) ?? { weapon, kills: 0, headshotKills: 0, damage: 0, shots: 0 };
+    for (const key of ['kills', 'headshotKills', 'damage', 'shots'] as const)
+      total[key] += Number.isFinite(item[key]) ? Math.max(0, item[key]) : 0;
+    weapons.set(weapon, total);
+  }
+  const sorted = [...weapons.values()].sort((a, b) => b.kills - a.kills || a.weapon.localeCompare(b.weapon));
+  if (sorted.length <= 40) return sorted;
+  const rest = sorted.slice(39).reduce(
+    (total, item) => ({
+      weapon: 'other',
+      kills: total.kills + item.kills,
+      headshotKills: total.headshotKills + item.headshotKills,
+      damage: total.damage + item.damage,
+      shots: total.shots + item.shots,
+    }),
+    { weapon: 'other', kills: 0, headshotKills: 0, damage: 0, shots: 0 },
+  );
+  return [...sorted.slice(0, 39), rest];
+}
+
+function boundedClutches(source: PersonalStatsSummary['byClutchSize']): PreparedAiContext['payload']['byClutchSize'] {
+  const groups = new Map<number, PreparedAiContext['payload']['byClutchSize'][number]>();
+  for (const item of source) {
+    if (!Number.isInteger(item.opponents) || item.opponents < 1) continue;
+    const opponents = Math.min(5, item.opponents);
+    const total = groups.get(opponents) ?? {
+      opponents,
+      atLeast: opponents === 5,
+      attempts: 0,
+      wins: 0,
+      winPercentage: null,
+    };
+    total.attempts += item.attempts;
+    total.wins += item.wins;
+    total.winPercentage = total.attempts > 0 ? (100 * total.wins) / total.attempts : null;
+    groups.set(opponents, total);
+  }
+  return [...groups.values()].sort((a, b) => a.opponents - b.opponents);
+}
 
 export function validateAiScope(scope: AiReportScope) {
   if (
@@ -27,6 +90,32 @@ function interesting(round: PersonalRoundStats) {
     Number(round.teammatesFlashed > 0) * 2 +
     Number(round.deaths > round.tradedDeaths)
   );
+}
+
+function sampledRounds(rounds: PersonalRoundStats[], limit: number) {
+  const ranked = rounds
+    .filter((round) => Number.isFinite(round.startTick) && round.startTick >= 0 && round.roundNumber > 0)
+    .toSorted((a, b) => interesting(b) - interesting(a) || a.roundNumber - b.roundNumber);
+  const chosen = new Set<PersonalRoundStats>();
+  // Reserve examples for dimensions before filling by salience; opening events must not crowd out every clutch.
+  const select = (predicate: (round: PersonalRoundStats) => boolean) => {
+    if ([...chosen].some(predicate)) return;
+    const item = ranked.find(predicate);
+    if (item && chosen.size < limit) chosen.add(item);
+  };
+  select((round) => round.clutchOpponents !== null);
+  select((round) => round.openingKill || round.openingDeath);
+  select((round) => round.tradeKills > 0 || round.tradedDeaths > 0);
+  if (![...chosen].some((round) => round.tradeKills > 0 || round.tradedDeaths > 0)) select((round) => round.deaths > 0);
+  select(
+    (round) =>
+      round.utilityDamage > 0 || round.flashAssists > 0 || round.enemiesFlashed > 0 || round.teammatesFlashed > 0,
+  );
+  for (const round of ranked) {
+    if (chosen.size >= limit) break;
+    chosen.add(round);
+  }
+  return [...chosen].sort((a, b) => a.roundNumber - b.roundNumber);
 }
 
 export function buildAiContext(
@@ -55,19 +144,11 @@ export function buildAiContext(
     .slice(0, scope.kind === 'match' ? 1 : AI_MAX_MATCHES);
   if (selected.length === 0) throw new AiServiceError('no-data');
   const summary = aggregatePersonalStats(selected, scope);
-  const metrics: Record<string, number | null> = {};
-  for (const [key, value] of Object.entries(summary.metrics)) {
-    if (value === null || typeof value === 'number')
-      metrics[key] = value === null || Number.isFinite(value) ? value : null;
-  }
+  const metrics = numericMetrics(summary.metrics);
   const evidence: AiEvidence[] = [];
   const rounds: PreparedAiContext['payload']['rounds'] = [];
   for (const [matchIndex, match] of selected.entries()) {
-    const chosen = match.rounds
-      .filter((round) => Number.isFinite(round.startTick) && round.startTick >= 0 && round.roundNumber > 0)
-      .toSorted((a, b) => interesting(b) - interesting(a) || a.roundNumber - b.roundNumber)
-      .slice(0, scope.kind === 'match' ? 24 : 4)
-      .sort((a, b) => a.roundNumber - b.roundNumber);
+    const chosen = sampledRounds(match.rounds, scope.kind === 'match' ? 24 : 4);
     for (const round of chosen) {
       const id = `r${String(evidence.length + 1).padStart(3, '0')}`;
       const candidate =
@@ -94,8 +175,10 @@ export function buildAiContext(
         side: round.side,
         won: round.won,
         kills: round.kills,
+        headshotKills: round.headshotKills,
         deaths: round.deaths,
         damage: round.damage,
+        nonUtilityDamage: Math.max(0, round.damage - round.utilityDamage),
         openingKill: round.openingKill,
         openingDeath: round.openingDeath,
         tradeKills: round.tradeKills,
@@ -103,6 +186,13 @@ export function buildAiContext(
         utilityThrown:
           round.flashesThrown + round.smokesThrown + round.heThrown + round.fireThrown + round.decoysThrown,
         utilityDamage: round.utilityDamage,
+        flashesThrown: round.flashesThrown,
+        smokesThrown: round.smokesThrown,
+        heThrown: round.heThrown,
+        fireThrown: round.fireThrown,
+        flashAssists: round.flashAssists,
+        enemiesFlashed: round.enemiesFlashed,
+        enemyBlindSeconds: round.enemyBlindSeconds,
         teammatesFlashed: round.teammatesFlashed,
         clutchOpponents: round.clutchOpponents,
         clutchWon: round.clutchWon,
@@ -111,23 +201,13 @@ export function buildAiContext(
   }
   const allowedScoreDimensions: AiScoreDimension[] = [];
   if (evidence.length === 0) throw new AiServiceError('no-data');
-  const enough =
-    scope.kind === 'match'
-      ? summary.metrics.roundCount >= 12
-      : selected.length >= 3 && summary.metrics.roundCount >= 30;
-  if (enough && evidence.length > 0) {
-    if (summary.metrics.openingAttempts >= 5) allowedScoreDimensions.push('opening');
-    if (summary.metrics.deaths >= 10) allowedScoreDimensions.push('trading');
-    if (
-      summary.metrics.flashesThrown +
-        summary.metrics.smokesThrown +
-        summary.metrics.heThrown +
-        summary.metrics.fireThrown >=
-      10
-    )
-      allowedScoreDimensions.push('utility');
-    allowedScoreDimensions.push('survival');
-  }
+  // Scores describe observed statistical performance, not calibrated mechanical ability.
+  // Small samples need explicit uncertainty rather than blanket suppression. Zero utility usage is observable.
+  if (summary.metrics.roundCount > 0) allowedScoreDimensions.push('aim');
+  if (summary.metrics.openingAttempts > 0) allowedScoreDimensions.push('opening');
+  if (summary.metrics.deaths > 0 || summary.metrics.tradeKills > 0) allowedScoreDimensions.push('trading');
+  if (summary.metrics.roundCount > 0) allowedScoreDimensions.push('utility');
+  if (summary.metrics.clutchAttempts > 0) allowedScoreDimensions.push('clutch');
   const preview = {
     kind: scope.kind,
     matchCount: selected.length,
@@ -144,6 +224,12 @@ export function buildAiContext(
     metrics,
     methodology: summary.methodology,
     allowedScoreDimensions,
+    bySide: summary.bySide.map((group) => ({
+      side: group.key === 't' ? TeamNumber.T : TeamNumber.CT,
+      metrics: numericMetrics(group.metrics),
+    })),
+    weapons: boundedWeapons(summary.weapons),
+    byClutchSize: boundedClutches(summary.byClutchSize),
     cohorts: selected.flatMap((match) =>
       [TeamNumber.T, TeamNumber.CT].flatMap((side) => {
         const count = match.rounds.filter((round) => round.side === side).length;

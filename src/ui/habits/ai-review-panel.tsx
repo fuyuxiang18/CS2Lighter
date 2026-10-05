@@ -121,7 +121,7 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
             {scope.kind === 'match' ? <Trans>AI match review</Trans> : <Trans>AI personal review</Trans>}
           </h2>
           <p className="text-body text-gray-700">
-            <Trans>Turn your recorded situations into a small set of actions to verify in the next match.</Trans>
+            <Trans>A short style label, five dimensions and actions grounded in your recorded rounds.</Trans>
           </p>
         </div>
         <ReviewButton onClick={onConfigure}>
@@ -199,11 +199,16 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
       )}
 
       {generating && (
-        <p role="status" className="text-caption text-gray-700">
-          <Trans>
-            Waiting for the model, then checking its evidence references. This may take a while on a local model.
-          </Trans>
-        </p>
+        <div role="status" className="flex flex-col gap-4 text-caption text-gray-700">
+          <p>
+            <Trans>
+              Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes.
+            </Trans>
+          </p>
+          <p>
+            <Trans>The 24,000-token budget is a maximum, not a required response length.</Trans>
+          </p>
+        </div>
       )}
 
       {report && (

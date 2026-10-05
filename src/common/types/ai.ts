@@ -43,7 +43,7 @@ export type AiEvidence = {
 
 type AiStatement = { text: string; evidenceIds: string[] };
 type AiRecommendation = { title: string; action: string; uncertainty: string; evidenceIds: string[] };
-export type AiScoreDimension = 'opening' | 'trading' | 'utility' | 'survival' | 'aim';
+export type AiScoreDimension = 'aim' | 'opening' | 'trading' | 'utility' | 'clutch';
 type AiScore = {
   dimension: AiScoreDimension;
   /** Integer 0–100 subjective model assessment, never a rank/percentile. Missing data must stay null. */
@@ -54,7 +54,7 @@ type AiScore = {
 
 export type AiReportContent = {
   summary: AiStatement;
-  style: AiStatement;
+  style: AiStatement & { label: string };
   observations: AiStatement[];
   recommendations: AiRecommendation[];
   scores: AiScore[];
@@ -100,6 +100,12 @@ export type AiErrorCode =
   | 'request-failed'
   | 'request-timeout'
   | 'invalid-response'
+  | 'response-truncated'
+  | 'response-empty'
+  | 'response-json-invalid'
+  | 'response-schema-invalid'
+  | 'response-evidence-invalid'
+  | 'response-score-invalid'
   | 'storage-failed'
   | 'video-not-ready'
   | 'frame-extraction-failed'
@@ -123,6 +129,17 @@ export type PreparedAiContext = {
     metrics: Record<string, number | null>;
     methodology: { rating: 'hltv-1.0-public'; rws: 'faceit-2025-public-local-v1'; tradeWindowSeconds: 5 };
     allowedScoreDimensions: AiScoreDimension[];
+    bySide: { side: PersonalStatsSide; metrics: Record<string, number | null> }[];
+    /** Bounded canonical weapon names; unknown names and overflow never expose arbitrary source text. */
+    weapons: { weapon: string; kills: number; headshotKills: number; damage: number; shots: number }[];
+    byClutchSize: {
+      opponents: number;
+      /** The last bucket groups 1v5 and larger situations. */
+      atLeast: boolean;
+      attempts: number;
+      wins: number;
+      winPercentage: number | null;
+    }[];
     cohorts: {
       map: string;
       side: PersonalStatsSide;
@@ -138,14 +155,23 @@ export type PreparedAiContext = {
       side: PersonalStatsSide;
       won: boolean;
       kills: number;
+      headshotKills: number;
       deaths: number;
       damage: number;
+      nonUtilityDamage: number;
       openingKill: boolean;
       openingDeath: boolean;
       tradeKills: number;
       tradedDeaths: number;
       utilityThrown: number;
       utilityDamage: number;
+      flashesThrown: number;
+      smokesThrown: number;
+      heThrown: number;
+      fireThrown: number;
+      flashAssists: number;
+      enemiesFlashed: number;
+      enemyBlindSeconds: number;
       teammatesFlashed: number;
       clutchOpponents: number | null;
       clutchWon: boolean;

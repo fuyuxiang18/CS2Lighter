@@ -1948,6 +1948,7 @@ msgid "Save rate"
 msgstr "保枪率"
 
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/ai-report-content.tsx
 msgid "Clutches"
 msgstr "残局"
 
@@ -2641,6 +2642,10 @@ msgid "Leave it empty to remove the override."
 msgstr "将其留空以移除覆盖。"
 
 #: src/ui/habits/ai-report-content.tsx
+msgid "View evidence ({count})"
+msgstr "查看依据（{count} 个回合）"
+
+#: src/ui/habits/ai-report-content.tsx
 msgid "Supporting rounds"
 msgstr "对应回合证据"
 
@@ -2663,32 +2668,44 @@ msgid "Round start"
 msgstr "回合开始"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opening decisions"
-msgstr "首轮对枪决策"
+msgid "Aim"
+msgstr "枪法"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Trade involvement"
-msgstr "补枪参与"
+msgid "Entry"
+msgstr "突破"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Utility use"
-msgstr "道具使用"
+msgid "Trading"
+msgstr "补枪"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Survival decisions"
-msgstr "生存决策"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Aim and crosshair placement"
-msgstr "瞄准与预瞄"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "The main takeaway"
-msgstr "这次最值得记住的一点"
+msgid "Utility"
+msgstr "道具"
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "Your style in this sample"
 msgstr "当前样本中的打法特点"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Five-dimension assessment"
+msgstr "五维评分"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
+msgstr "AI 根据本次样本进行 0–100 分的主观评估，不代表段位或玩家排名。"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Insufficient data"
+msgstr "数据不足"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
+msgstr "枪法分根据统计表现估算，不测量预瞄、压枪或鼠标操作。"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "The main takeaway"
+msgstr "这次最值得记住的一点"
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "Actions to try next"
@@ -2709,18 +2726,6 @@ msgstr "有限评分与证据缺口"
 #: src/ui/habits/ai-report-content.tsx
 msgid "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
 msgstr "分数是模型对当前样本给出的 0–100 分主观评价，不代表段位、百分位，也不是经过校准的进步指标。评价没有控制对手水平和队内角色的差异。"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Not assessed"
-msgstr "未评价"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "{score} / 100"
-msgstr "{score} / 100"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "No POV images were sent. Event statistics cannot assess pre-aim, visibility or mouse control."
-msgstr "本次没有发送第一视角画面，事件统计无法评价预瞄、实际视野或鼠标操作。"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2743,8 +2748,8 @@ msgid "AI personal review"
 msgstr "AI 个人点评"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Turn your recorded situations into a small set of actions to verify in the next match."
-msgstr "从已有比赛中找出几个可执行的改变，在下一场验证。"
+msgid "A short style label, five dimensions and actions grounded in your recorded rounds."
+msgstr "用一个短词概括玩法风格，结合五维评分和回合依据给出改进建议。"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2811,8 +2816,12 @@ msgid "No report is cached for this sample and model. Generation starts only whe
 msgstr "当前样本与模型没有已保存的点评，点击后才会开始生成。"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Waiting for the model, then checking its evidence references. This may take a while on a local model."
-msgstr "正在等待模型响应，随后会校验证据引用。本地模型可能需要较长时间。"
+msgid "Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes."
+msgstr "正在生成风格标签与五维点评，并核对回合引用，最多等待 4 分钟。"
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The 24,000-token budget is a maximum, not a required response length."
+msgstr "24,000 tokens 是生成上限，不要求模型写满。"
 
 #: src/ui/habits/ai-review-panel.tsx
 msgid "Saved report"
@@ -4225,8 +4234,32 @@ msgid "The model did not respond in time. Try again or choose a faster model."
 msgstr "模型响应超时，请重试或选择响应更快的模型。"
 
 #: src/ui/habits/use-ai-error-message.ts
-msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
-msgstr "模型返回的点评未通过校验，因此没有保存。请更换模型或重试。"
+msgid "The AI service returned an incomplete or unsupported response. No report was saved."
+msgstr "AI 服务返回了未完成或暂不支持的响应，本次点评未保存。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model reached its output limit before completing the report. No report was saved. The request allows up to 24,000 tokens; check whether your service applies a lower limit."
+msgstr "模型达到输出上限，点评尚未完成，因此没有保存。解析器已允许最多 24,000 tokens，请检查 AI 服务是否另有限制。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model returned no final report. It may have returned only reasoning text. No report was saved."
+msgstr "模型没有返回最终点评，可能只返回了思考内容。本次点评未保存。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model's report could not be read as JSON. No report was saved."
+msgstr "模型返回的点评无法读取为 JSON 格式，本次点评未保存。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report is missing required fields or has an invalid style label, length or structure. No report was saved."
+msgstr "点评缺少必要字段，或风格标签、文字长度、结构不符合要求。本次点评未保存。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report cites unknown rounds or omits required supporting rounds. No report was saved."
+msgstr "点评引用了未提供的回合，或缺少必要的回合依据。本次点评未保存。"
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The five scores do not match the required dimensions, available data or 0–100 integer range. No report was saved."
+msgstr "五维评分的项目、数据依据或分数不符合要求；分数应为 0–100 的整数。本次点评未保存。"
 
 #: src/ui/habits/use-ai-error-message.ts
 msgid "The report could not be saved locally. Check available disk space and try again."

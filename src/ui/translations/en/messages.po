@@ -1954,6 +1954,7 @@ msgid "Save rate"
 msgstr "Save rate"
 
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/ai-report-content.tsx
 msgid "Clutches"
 msgstr "Clutches"
 
@@ -2647,6 +2648,10 @@ msgid "Leave it empty to remove the override."
 msgstr "Leave it empty to remove the override."
 
 #: src/ui/habits/ai-report-content.tsx
+msgid "View evidence ({count})"
+msgstr "View evidence ({count})"
+
+#: src/ui/habits/ai-report-content.tsx
 msgid "Supporting rounds"
 msgstr "Supporting rounds"
 
@@ -2669,32 +2674,44 @@ msgid "Round start"
 msgstr "Round start"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opening decisions"
-msgstr "Opening decisions"
+msgid "Aim"
+msgstr "Aim"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Trade involvement"
-msgstr "Trade involvement"
+msgid "Entry"
+msgstr "Entry"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Utility use"
-msgstr "Utility use"
+msgid "Trading"
+msgstr "Trading"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Survival decisions"
-msgstr "Survival decisions"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Aim and crosshair placement"
-msgstr "Aim and crosshair placement"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "The main takeaway"
-msgstr "The main takeaway"
+msgid "Utility"
+msgstr "Utility"
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "Your style in this sample"
 msgstr "Your style in this sample"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Five-dimension assessment"
+msgstr "Five-dimension assessment"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
+msgstr "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Insufficient data"
+msgstr "Insufficient data"
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
+msgstr "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
+
+#: src/ui/habits/ai-report-content.tsx
+msgid "The main takeaway"
+msgstr "The main takeaway"
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "Actions to try next"
@@ -2715,18 +2732,6 @@ msgstr "Limited assessments and missing evidence"
 #: src/ui/habits/ai-report-content.tsx
 msgid "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
 msgstr "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Not assessed"
-msgstr "Not assessed"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "{score} / 100"
-msgstr "{score} / 100"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "No POV images were sent. Event statistics cannot assess pre-aim, visibility or mouse control."
-msgstr "No POV images were sent. Event statistics cannot assess pre-aim, visibility or mouse control."
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2749,8 +2754,8 @@ msgid "AI personal review"
 msgstr "AI personal review"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Turn your recorded situations into a small set of actions to verify in the next match."
-msgstr "Turn your recorded situations into a small set of actions to verify in the next match."
+msgid "A short style label, five dimensions and actions grounded in your recorded rounds."
+msgstr "A short style label, five dimensions and actions grounded in your recorded rounds."
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2817,8 +2822,12 @@ msgid "No report is cached for this sample and model. Generation starts only whe
 msgstr "No report is cached for this sample and model. Generation starts only when you click."
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Waiting for the model, then checking its evidence references. This may take a while on a local model."
-msgstr "Waiting for the model, then checking its evidence references. This may take a while on a local model."
+msgid "Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes."
+msgstr "Generating your style and five-dimension review, then checking the evidence. Allow up to 4 minutes."
+
+#: src/ui/habits/ai-review-panel.tsx
+msgid "The 24,000-token budget is a maximum, not a required response length."
+msgstr "The 24,000-token budget is a maximum, not a required response length."
 
 #: src/ui/habits/ai-review-panel.tsx
 msgid "Saved report"
@@ -4231,8 +4240,32 @@ msgid "The model did not respond in time. Try again or choose a faster model."
 msgstr "The model did not respond in time. Try again or choose a faster model."
 
 #: src/ui/habits/use-ai-error-message.ts
-msgid "The model returned a report that could not be verified. It was not saved. Try another model or retry."
-msgstr "The model returned a report that could not be verified. It was not saved. Try another model or retry."
+msgid "The AI service returned an incomplete or unsupported response. No report was saved."
+msgstr "The AI service returned an incomplete or unsupported response. No report was saved."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model reached its output limit before completing the report. No report was saved. The request allows up to 24,000 tokens; check whether your service applies a lower limit."
+msgstr "The model reached its output limit before completing the report. No report was saved. The request allows up to 24,000 tokens; check whether your service applies a lower limit."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model returned no final report. It may have returned only reasoning text. No report was saved."
+msgstr "The model returned no final report. It may have returned only reasoning text. No report was saved."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The model's report could not be read as JSON. No report was saved."
+msgstr "The model's report could not be read as JSON. No report was saved."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report is missing required fields or has an invalid style label, length or structure. No report was saved."
+msgstr "The report is missing required fields or has an invalid style label, length or structure. No report was saved."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The report cites unknown rounds or omits required supporting rounds. No report was saved."
+msgstr "The report cites unknown rounds or omits required supporting rounds. No report was saved."
+
+#: src/ui/habits/use-ai-error-message.ts
+msgid "The five scores do not match the required dimensions, available data or 0–100 integer range. No report was saved."
+msgstr "The five scores do not match the required dimensions, available data or 0–100 integer range. No report was saved."
 
 #: src/ui/habits/use-ai-error-message.ts
 msgid "The report could not be saved locally. Check available disk space and try again."
