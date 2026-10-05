@@ -17,6 +17,7 @@ export class ImportProgressTracker {
     if (this.queuePaused === paused && this.effectiveConcurrency === concurrency) return;
     this.queuePaused = paused;
     this.effectiveConcurrency = concurrency;
+    if (paused) this.settleWaiting('paused');
     this.onChange();
   }
 
@@ -45,6 +46,11 @@ export class ImportProgressTracker {
   }
 
   update(filePath: string, status: ImportFileStatus, details?: { reason?: string; message?: string }) {
+    // A filesystem read started before Pause may finish afterward. Observing file stability is not queued work.
+    if (this.queuePaused && status === 'waiting') {
+      status = 'skipped';
+      details = { reason: 'paused' };
+    }
     const key = normalizeDemoPath(filePath);
     const previous = this.files.get(key);
     if (previous?.status === status && previous.reason === details?.reason && previous.message === details?.message)

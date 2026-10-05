@@ -2,6 +2,34 @@ import { describe, expect, it } from 'vite-plus/test';
 import { ImportProgressTracker } from './import-progress-tracker';
 
 describe('ImportProgressTracker', () => {
+  it('releases paused file observations and ignores late observations until resumed', () => {
+    const progress = new ImportProgressTracker();
+    progress.update('/observed.dem', 'waiting');
+    expect(progress.snapshot().isBlocking).toBe(true);
+    progress.setQueueState(true, 3);
+    expect(progress.snapshot()).toMatchObject({ queuePaused: true, waiting: 0, skipped: 1, isBlocking: false });
+    progress.update('/late-stat.dem', 'waiting');
+    expect(progress.snapshot()).toMatchObject({ waiting: 0, skipped: 2, isBlocking: false });
+    progress.setQueueState(false, 3);
+    progress.update('/observed.dem', 'waiting');
+    expect(progress.snapshot()).toMatchObject({ queuePaused: false, waiting: 1, isBlocking: true });
+  });
+
+  it('preserves real pending work and active insertion when paused observations are released', () => {
+    const progress = new ImportProgressTracker();
+    progress.update('/observed.dem', 'waiting');
+    progress.update('/queued.dem', 'pending');
+    progress.update('/saving.dem', 'inserting');
+    progress.setQueueState(true, 3);
+    expect(progress.snapshot()).toMatchObject({
+      waiting: 0,
+      skipped: 1,
+      pending: 1,
+      inserting: 1,
+      isBlocking: true,
+    });
+  });
+
   it('counts Windows drive and UNC aliases once across scanner, database and manual paths', () => {
     const progress = new ImportProgressTracker();
     progress.beginDiscovery();
