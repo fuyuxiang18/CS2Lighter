@@ -60,10 +60,7 @@ function OptimizeDatabaseDialog() {
       confirmButtonVariant={ButtonVariant.Danger}
     >
       <p className="mb-8 text-caption">
-        <Trans>
-          This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved;
-          it does not compact database files.
-        </Trans>
+        <Trans>Clean unavailable file references and unimported metadata.</Trans>
       </p>
       <Checkbox
         label={<Trans>Remove unavailable file references</Trans>}

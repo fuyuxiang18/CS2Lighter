@@ -51,12 +51,6 @@ export function ReviewMatches({ stats, side }: { stats: PersonalStatsSummary; si
   return (
     <div className="flex min-w-0 flex-col gap-20">
       <HabitsPanel title={<Trans>Your match notebook</Trans>}>
-        <p className="text-gray-700">
-          <Trans>
-            Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal
-            numbers.
-          </Trans>
-        </p>
         <div className="overflow-x-auto">
           <table className="w-full text-left tabular-nums">
             <thead className="text-caption whitespace-nowrap text-gray-700">
@@ -132,9 +126,6 @@ export function ReviewMatches({ stats, side }: { stats: PersonalStatsSummary; si
         )}
       </HabitsPanel>
       <div className="flex flex-wrap items-center justify-between gap-12">
-        <p className="text-gray-700">
-          <Trans>Need the full numbers? Combat, utility, economy, weapons and trends are still here.</Trans>
-        </p>
         <ReviewButton onClick={() => setDetails(!details)}>
           {details ? <Trans>Hide detailed statistics</Trans> : <Trans>Show detailed statistics</Trans>}
         </ReviewButton>

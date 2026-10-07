@@ -1,7 +1,7 @@
 import type { Game } from 'csdm/common/types/counter-strike';
 import { useMaps } from './use-maps';
 
-export function useGetGameMaps() {
+function useGetGameMaps() {
   const maps = useMaps();
 
   return (game: Game) => {

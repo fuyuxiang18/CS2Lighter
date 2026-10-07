@@ -31,11 +31,7 @@ function EvidenceLinks({ ids, evidence }: { ids: string[]; evidence: AiEvidence[
               <Link
                 to={`${buildMatch2dViewerRoundPath(item.checksum, round)}?${query}`}
                 className="min-w-0 rounded-8 px-10 py-8 text-caption wrap-break-word text-accent hover:bg-accent-soft"
-                title={
-                  item.precision === 'round-start'
-                    ? t`Opens the round start. The model did not locate an exact decision moment.`
-                    : t`Opens the event context in the 2D viewer. Verify the interpretation in the round.`
-                }
+                title={item.precision === 'round-start' ? t`Open the round start` : t`Open the event in 2D`}
               >
                 {item.mapName} · <Trans>Round {round}</Trans> · {side}
                 {item.precision === 'round-start' && (
@@ -83,11 +79,6 @@ export function AiReportContent({ report }: { report: AiReport }) {
         <h3 className="font-semibold">
           <Trans>Five-dimension assessment</Trans>
         </h3>
-        <p className="text-caption text-gray-700">
-          <Trans>
-            AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles.
-          </Trans>
-        </p>
         <div className="grid grid-cols-1 items-start gap-12 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {scoreOrder.map((dimension) => {
             const item = content.scores.find((score) => score.dimension === dimension);
@@ -118,12 +109,6 @@ export function AiReportContent({ report }: { report: AiReport }) {
             );
           })}
         </div>
-        <p className="text-caption text-gray-700">
-          <Trans>
-            Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse
-            movement.
-          </Trans>
-        </p>
       </section>
 
       <div className="flex flex-col gap-10">
@@ -139,11 +124,6 @@ export function AiReportContent({ report }: { report: AiReport }) {
           <h3 className="font-semibold">
             <Trans>Actions to try next</Trans>
           </h3>
-          <p className="text-caption text-gray-700">
-            <Trans>
-              Choose one action for your next matches, then revisit the same situations to check what changed.
-            </Trans>
-          </p>
           <ol className="grid gap-12 lg:grid-cols-2">
             {content.recommendations.map((item, index) => (
               <li key={index} className="flex min-w-0 flex-col gap-10 rounded-8 border border-gray-300 p-16">
@@ -152,7 +132,6 @@ export function AiReportContent({ report }: { report: AiReport }) {
                   {item.title}
                 </h4>
                 <p className="wrap-break-word whitespace-pre-wrap">{item.action}</p>
-                <p className="text-caption wrap-break-word whitespace-pre-wrap text-gray-700">{item.uncertainty}</p>
                 <EvidenceLinks ids={item.evidenceIds} evidence={evidence} />
               </li>
             ))}
@@ -176,14 +155,19 @@ export function AiReportContent({ report }: { report: AiReport }) {
 
       <details className="rounded-8 border border-gray-300 p-16">
         <summary className="cursor-pointer font-semibold">
-          <Trans>Limited assessments and missing evidence</Trans>
+          <Trans>Assessment details</Trans>
         </summary>
         <p className="mt-12 text-caption text-gray-700">
           <Trans>
-            Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a
-            percentile or a calibrated measure of improvement. Opponents and roles are not controlled.
+            Five AI assessments on a 0–100 scale, based on the statistics and sampled rounds in this selection.
           </Trans>
         </p>
+        {content.recommendations.map((item, index) => (
+          <p key={index} className="mt-12 text-caption wrap-break-word text-gray-700">
+            <strong>{item.title}: </strong>
+            {item.uncertainty}
+          </p>
+        ))}
         {content.limitations.length > 0 && (
           <ul className="mt-16 flex list-disc flex-col gap-8 pl-20 text-caption text-gray-700">
             {content.limitations.map((item, index) => (

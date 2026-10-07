@@ -70,7 +70,6 @@ export function validateAiReport(value: unknown, context: PreparedAiContext): Ai
   if (new Set(scores.map((item) => item.dimension)).size !== scores.length || scores.length !== dimensions.length)
     return fail('response-score-invalid');
   const limitations = array(report.limitations, 8).map((item) => text(item, 600));
-  if (limitations.length === 0) return fail();
   return {
     summary: statement(report.summary),
     style: { label, ...statement(styleRecord) },
@@ -80,7 +79,7 @@ export function validateAiReport(value: unknown, context: PreparedAiContext): Ai
       return {
         title: text(record.title, 120),
         action: text(record.action, 900),
-        uncertainty: text(record.uncertainty, 600),
+        uncertainty: record.uncertainty === '' ? '' : text(record.uncertainty, 600),
         evidenceIds: ids(record.evidenceIds),
       };
     }),

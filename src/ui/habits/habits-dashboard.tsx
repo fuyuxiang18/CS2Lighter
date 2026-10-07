@@ -31,6 +31,7 @@ import { AiReviewPanel } from './ai-review-panel';
 import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
 import { SettingsCategory } from 'csdm/ui/settings/settings-category';
 import { useImportProgress } from 'csdm/ui/imports/import-progress-provider';
+import { PersonalStatsPanels } from './personal-stats-panels';
 
 type ReviewData = { key: string; summary: HabitsSummary; stats: PersonalStatsSummary; insights: ReviewInsightsSummary };
 
@@ -58,7 +59,7 @@ export function HabitsDashboard() {
           ? t`Where you go, where you fight, and the rounds that explain it.`
           : page === 'matches'
             ? t`Your local matches, ready when you want the details.`
-            : t`Find a recurring situation. Review the evidence. Try one change.`
+            : t`Your performance, playing habits and rounds worth another look.`
       }
     >
       <HabitsIdentitySetup identity={identity} onSave={saveIdentity} />
@@ -232,6 +233,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
       {page === 'review' && (
         <nav aria-label={t`Review sections`} className="flex flex-wrap gap-8 border-b border-gray-300 pb-12">
           {[
+            { value: 'overview' as const, label: t`Performance dashboard` },
             { value: 'review' as const, label: t`Review priorities` },
             { value: 'duels' as const, label: t`Combat and POV` },
             { value: 'style' as const, label: t`My playing style` },
@@ -289,6 +291,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
             </HabitsPanel>
           ) : (
             <>
+              {page === 'review' && tab === 'overview' && <PersonalStatsPanels summary={data.stats} />}
               {page === 'review' && tab === 'review' && (
                 <ReviewWorkbench insights={data.insights} preferences={preferences} update={update} />
               )}
@@ -305,6 +308,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
               )}
               {page === 'review' && tab === 'style' && (
                 <>
+                  <ReviewStyle insights={data.insights} />
                   <AiReviewPanel
                     key={revision}
                     scope={{
@@ -316,7 +320,6 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
                     }}
                     onConfigure={() => openSettings(SettingsCategory.Ai)}
                   />
-                  <ReviewStyle insights={data.insights} stats={data.stats} />
                 </>
               )}
               {page === 'maps' && <ReviewMaps summary={data.summary} steamId={steamId} />}
@@ -328,11 +331,6 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
               )}
             </>
           )}
-          <p className="text-caption text-gray-600">
-            <Trans>
-              Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts.
-            </Trans>
-          </p>
         </div>
       )}
     </>

@@ -225,7 +225,6 @@ msgstr "与数据库的连接失败，错误如下："
 
 #: src/ui/bootstrap/connect-database/connect-database.tsx
 #: src/ui/settings/database/database.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Database"
 msgstr "数据库"
 
@@ -287,11 +286,8 @@ msgstr "连接到远程服务器时出错。"
 #: src/ui/search/filters/search-players-input.tsx
 #: src/ui/settings/about/clear-logs-button.tsx
 #: src/ui/settings/about/reveal-counter-strike-log-file-button.tsx
-#: src/ui/settings/cameras/add-camera-dialog.tsx
-#: src/ui/settings/cameras/edit-camera-dialog.tsx
 #: src/ui/settings/maps/add-map-dialog.tsx
 #: src/ui/settings/maps/edit-map-dialog.tsx
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
 #: src/ui/settings/ui/reset-tables-state.tsx
 #: src/ui/settings/video/ffmpeg/ffmpeg-location.tsx
 #: src/ui/settings/video/hlae/hlae-location.tsx
@@ -305,11 +301,6 @@ msgstr "出现错误"
 msgctxt "Button"
 msgid "Analyze"
 msgstr "分析"
-
-#: src/ui/components/buttons/apply-button.tsx
-msgctxt "Button"
-msgid "Apply"
-msgstr "应用"
 
 #: src/ui/components/buttons/cancel-button.tsx
 msgctxt "Button"
@@ -661,8 +652,6 @@ msgstr "您需要安装 <0>Rosetta</0>。"
 #: src/ui/player/load-player-error.tsx
 #: src/ui/players/players-table.tsx
 #: src/ui/search/search-results.tsx
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-#: src/ui/settings/database/import-v2-data-button.tsx
 #: src/ui/settings/database/optimize-database-button.tsx
 #: src/ui/settings/maps/delete-map-dialog.tsx
 #: src/ui/settings/maps/reset-default-maps-button.tsx
@@ -1237,7 +1226,6 @@ msgstr "评论 (支持 Markdown 格式)"
 
 #: src/ui/components/inputs/database-name-input.tsx
 #: src/ui/dialogs/update-player-name-dialog.tsx
-#: src/ui/settings/cameras/form/name-input.tsx
 #: src/ui/settings/maps/map-dialog/name-input.tsx
 msgctxt "Input label"
 msgid "Name"
@@ -1247,11 +1235,6 @@ msgstr "名称"
 msgctxt "Input placeholder"
 msgid "Name"
 msgstr "名称"
-
-#: src/ui/components/inputs/file-or-directory-input.tsx
-msgctxt "Button"
-msgid "Select"
-msgstr "选择"
 
 #: src/ui/components/inputs/hostname-input.tsx
 msgctxt "Button"
@@ -1468,6 +1451,7 @@ msgstr "赢"
 
 #: src/ui/components/maps-stats.tsx
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Lost"
 msgstr "输"
@@ -1495,17 +1479,20 @@ msgid "Impact"
 msgstr "Impact(影响)"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "K/D"
 msgstr "K/D"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/use-review-labels.ts
 msgid "ADR"
 msgstr "ADR"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "KAST"
 msgstr "KAST"
@@ -1935,6 +1922,7 @@ msgid "Average kills/round"
 msgstr "平均杀敌/一回合"
 
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Won"
 msgstr "赢"
@@ -2443,7 +2431,6 @@ msgid "{0, plural, one {# demo} other {# demos}}"
 msgstr "{0, plural, other {#个 demo}}"
 
 #: src/ui/demos/table/demos-table.tsx
-#: src/ui/settings/database/import-v2-data-button.tsx
 msgid "No folders found."
 msgstr "未找到文件夹。"
 
@@ -2595,7 +2582,6 @@ msgstr "未知"
 
 #: src/ui/dialogs/tags-dialog.tsx
 #: src/ui/match/rounds/overview/rounds-history.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Tags"
 msgstr "标签"
 
@@ -2624,7 +2610,6 @@ msgid "Update demo location"
 msgstr "更新 Demo 文件位置"
 
 #: src/ui/dialogs/update-player-name-dialog.tsx
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
 msgid "The name is too long"
 msgstr "此名称超出长度限制"
 
@@ -2650,14 +2635,16 @@ msgid "Supporting rounds"
 msgstr "对应回合证据"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opens the round start. The model did not locate an exact decision moment."
-msgstr "从回合开始处打开。模型没有定位到确切的决策时刻。"
+msgid "Open the round start"
+msgstr "从回合开始处查看"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opens the event context in the 2D viewer. Verify the interpretation in the round."
-msgstr "在二维回放中打开事件前后，结合回合实际情况核对这条解读。"
+msgid "Open the event in 2D"
+msgstr "在 2D 回放中查看事件"
 
 #: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Round {round}"
@@ -2692,16 +2679,8 @@ msgid "Five-dimension assessment"
 msgstr "五维评分"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
-msgstr "AI 根据本次样本进行 0–100 分的主观评估，不代表段位或玩家排名。"
-
-#: src/ui/habits/ai-report-content.tsx
 msgid "Insufficient data"
 msgstr "数据不足"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
-msgstr "枪法分根据统计表现估算，不测量预瞄、压枪或鼠标操作。"
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "The main takeaway"
@@ -2712,20 +2691,17 @@ msgid "Actions to try next"
 msgstr "接下来试试这些动作"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Choose one action for your next matches, then revisit the same situations to check what changed."
-msgstr "接下来几场只选一个动作练习，再回看相同场景，确认实际变化。"
-
-#: src/ui/habits/ai-report-content.tsx
 msgid "Situations worth checking"
 msgstr "值得回看的场景"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Limited assessments and missing evidence"
-msgstr "有限评分与证据缺口"
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Assessment details"
+msgstr "点评依据"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
-msgstr "分数是模型对当前样本给出的 0–100 分主观评价，不代表段位、百分位，也不是经过校准的进步指标。评价没有控制对手水平和队内角色的差异。"
+msgid "Five AI assessments on a 0–100 scale, based on the statistics and sampled rounds in this selection."
+msgstr "AI 根据当前样本的统计与抽样回合，对五个维度给出 0–100 分的点评。"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2748,8 +2724,8 @@ msgid "AI personal review"
 msgstr "AI 个人点评"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "A short style label, five dimensions and actions grounded in your recorded rounds."
-msgstr "用一个短词概括玩法风格，结合五维评分和回合依据给出改进建议。"
+msgid "Playing style, five scores and the next things to work on."
+msgstr "风格标签、五维评分与下一步改进方向。"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2757,21 +2733,12 @@ msgid "AI settings"
 msgstr "AI 设置"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Statistics and sampled rounds only · No POV images sent"
-msgstr "仅使用统计与抽样回合 · 未发送第一视角画面"
+msgid "Send statistics and sampled rounds to {target} · {serverHost} · {model}"
+msgstr "将统计与抽样回合发送至 {target} · {serverHost} · {model}"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files, videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this input."
-msgstr "生成时会向你配置的 AI 服务器发送汇总数据和抽样回合事件，不会发送 demo 文件、视频、账号 ID 或玩家昵称。模型无法据此评价预瞄或鼠标操作。"
-
-#: src/ui/habits/ai-review-panel.tsx
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "Generation target: {target} · {serverHost} · {model}"
-msgstr "本次生成使用：{target} · {serverHost} · {model}"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length."
-msgstr "输出上限：{maxOutputTokens} tokens，不要求模型写满。"
+msgid "Output limit: {maxOutputTokens} tokens"
+msgstr "输出上限：{maxOutputTokens} tokens"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/matches/table/match-count.tsx
@@ -2816,10 +2783,6 @@ msgid "Choose a provider and model in AI settings to start."
 msgstr "请先在 AI 设置中选择服务和模型。"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "No report is cached for this sample and model. Generation starts only when you click."
-msgstr "当前样本与模型没有已保存的点评，点击后才会开始生成。"
-
-#: src/ui/habits/ai-review-panel.tsx
 msgid "Generating your style and five-dimension review, then checking the evidence. Higher output limits and slower models may take longer."
 msgstr "正在生成风格标签与五维点评，并核对回合引用。较高输出上限或较慢的模型可能需要更长时间。"
 
@@ -2858,8 +2821,8 @@ msgid "Your local matches, ready when you want the details."
 msgstr "已保存的本地比赛，随时查看细节。"
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Find a recurring situation. Review the evidence. Try one change."
-msgstr "找出重复场景，核对回合证据，尝试一个改变。"
+msgid "Your performance, playing habits and rounds worth another look."
+msgstr "查看个人表现、打法习惯与值得重看的回合。"
 
 #: src/ui/habits/habits-dashboard.tsx
 msgid "Could not save your account locally. Check that app storage is writable and try again."
@@ -2917,6 +2880,10 @@ msgid "Review sections"
 msgstr "复盘栏目"
 
 #: src/ui/habits/habits-dashboard.tsx
+msgid "Performance dashboard"
+msgstr "数据总览"
+
+#: src/ui/habits/habits-dashboard.tsx
 msgid "Review priorities"
 msgstr "复盘重点"
 
@@ -2957,10 +2924,6 @@ msgstr "当前筛选没有匹配的比赛"
 msgid "Reset the filters, or add a folder containing demos for this account. Imported files are analyzed once and reused."
 msgstr "请重置筛选，或添加包含此账号录像的文件夹。导入的文件只需解析一次，之后会复用结果。"
 
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts."
-msgstr "基于本地 demo，无需上传。以下比例是观察记录，不是对打法的自动判决。"
-
 #: src/ui/habits/habits-evidence.tsx
 msgid "Position"
 msgstr "位置"
@@ -2970,11 +2933,13 @@ msgid "Opening position"
 msgstr "开局位置"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Kill"
 msgstr "击杀"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Death"
 msgstr "死亡"
@@ -3183,49 +3148,517 @@ msgid "Could not open the POV. Start Steam and check the CS2 path, HLAE installa
 msgstr "无法打开第一视角。请启动 Steam，并检查 CS2 路径、HLAE 安装和原始 demo。程序不会自动关闭你正在运行的游戏。"
 
 #: src/ui/habits/habits-playback-button.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Recording setup"
 msgstr "录制设置"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Example rounds"
+msgstr "查看实例回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "{count} of your {total} opening-kill rounds ended in a loss."
+msgstr "你拿到首杀的 {total} 个回合中，有 {count} 个最终丢局。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check the next engagement between your first kill and the loss of the player advantage. Plan that fight around keeping the advantage."
+msgstr "回看首杀到失去人数优势之间的下一次接战，安排能保住优势的接战位置与时机。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No teammate traded your death within five seconds in {count} of {total} death rounds."
+msgstr "你的 {total} 个死亡回合中，有 {count} 个在 5 秒内没有队友完成补枪。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check whether a teammate could reach the same firing angle. Before the next entry, agree on a position and timing that allow a trade."
+msgstr "查看当时队友能否跟到同一条枪线；下次突破前，约好能相互补枪的站位与时间。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Your flashes blinded a teammate for more than one second in {count} of {total} rounds."
+msgstr "在 {total} 个回合中，你的闪光有 {count} 个回合让队友致盲超过 1 秒。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Compare the throw timing with your teammate's view. Call the next flash before throwing and leave time to turn away."
+msgstr "对照投掷时间和队友视角；下次提前报闪，给队友留出背闪时间。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No grenade throw was recorded in {count} of {total} rounds."
+msgstr "{total} 个回合中，有 {count} 个没有投出道具。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check your available grenades before first contact. Pick one useful throw for your route and a safe moment to use it."
+msgstr "检查首次接敌前手里有哪些道具，为常走路线选一个有用的投掷点和安全时机。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You made at least two kills in {count} of {total} rounds."
+msgstr "你在 {total} 个回合中有 {count} 个至少完成双杀。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Replay the gap between the first and second kills. Note the repositioning, cover and teammate support you can repeat."
+msgstr "回看第一杀到第二杀之间的过程，找出能复用的换位、掩体和队友支援。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You won {count} of {total} recorded clutches."
+msgstr "已记录的 {total} 次残局中，你赢下了 {count} 次。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Compare the clock, opponent count and first isolated fight in these wins. Keep one repeatable decision for a similar clutch."
+msgstr "比较这些胜局的剩余时间、敌人数和第一次单独对枪，提炼一个可用于相似残局的决策。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You recorded a flash assist in {count} of {total} rounds."
+msgstr "{total} 个回合中，你在 {count} 个回合拿到了闪光助攻。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Revisit the successful throw and your teammate's entry timing. Agree on the same cue for the next attempt."
+msgstr "回看成功闪光与队友出身位的时间，下次配合时约好相同的行动信号。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Next step"
+msgstr "下一步怎么做"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Lost rounds after an opening kill"
+msgstr "拿到首杀后丢局"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Death rounds without a trade"
+msgstr "死亡后未被补枪"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with friendly flashes"
+msgstr "闪到队友的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds without a grenade thrown"
+msgstr "未投出道具的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with multiple kills"
+msgstr "多杀回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Clutches won"
+msgstr "残局获胜"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a flash assist"
+msgstr "有闪光助攻的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Ace rounds"
+msgstr "五杀时刻"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Four-kill rounds"
+msgstr "四杀时刻"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Triple-kill rounds"
+msgstr "三杀时刻"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Last player standing"
+msgstr "残局收割"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Multiple utility kills"
+msgstr "道具多杀"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a knife kill"
+msgstr "刀人回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "300 damage club"
+msgstr "三百伤害俱乐部"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Damage without the finish"
+msgstr "百伤无头"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Double trade"
+msgstr "双重补枪"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Flash assist double"
+msgstr "一回合双闪助"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "AWP triple"
+msgstr "大狙三杀"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Budget multi-kill"
+msgstr "低配多杀"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Bomb planted"
+msgstr "成功下包"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Defuse secured"
+msgstr "拆弹成功"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Against the odds: 1v3+"
+msgstr "以一敌三"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly five enemy kills in a round."
+msgstr "单回合恰好击杀 5 名敌人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly four enemy kills in a round."
+msgstr "单回合恰好击杀 4 名敌人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly three enemy kills in a round."
+msgstr "单回合恰好击杀 3 名敌人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Won a recorded 1vX situation."
+msgstr "赢下已记录的 1vX 残局。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two HE or fire kills in a round."
+msgstr "单回合用手雷或燃烧弹击杀至少 2 人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least one knife kill in a round."
+msgstr "单回合至少完成 1 次刀杀。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least 300 enemy health damage in a round."
+msgstr "单回合对敌人造成至少 300 点生命伤害。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least 100 enemy health damage and no kills in a round."
+msgstr "单回合造成至少 100 点敌方生命伤害，但没有击杀。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two trade kills in a round."
+msgstr "单回合至少完成 2 次补枪击杀。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two flash assists in a round."
+msgstr "单回合至少完成 2 次闪光助攻。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least three AWP kills in a round."
+msgstr "单回合使用 AWP 击杀至少 3 人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two kills with recorded starting equipment worth 2000 or less."
+msgstr "已知回合开始装备价值不超过 2000，且该回合至少击杀 2 人。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Planted the bomb in the round."
+msgstr "该回合完成下包。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Defused the bomb in the round."
+msgstr "该回合成功拆包。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Won a clutch that started against three or more opponents."
+msgstr "残局开始时面对至少 3 名敌人，并最终赢下回合。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No standard 5v5 rounds in this selection."
+msgstr "当前筛选中没有标准 5v5 回合。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "5v5 analysis"
+msgstr "5v5 深度分析"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/review-progress.tsx
+msgid "matches"
+msgstr "场比赛"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/review-progress.tsx
+msgid "rounds"
+msgstr "个回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "nonstandard matches excluded"
+msgstr "场非标准比赛未计入"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Recorded highlights"
+msgstr "实战亮点"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Where to look next"
+msgstr "值得复盘的环节"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No matching review patterns in this selection."
+msgstr "当前样本中没有触发这类复盘线索。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Output across rounds"
+msgstr "逐回合输出分布"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Non-utility damage per round"
+msgstr "非道具场均回合伤害"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a kill"
+msgstr "有击杀的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a kill or assist"
+msgstr "有击杀或助攻的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "100+ damage rounds"
+msgstr "百伤回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Zero-damage rounds"
+msgstr "零伤害回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Multi-kill round rate"
+msgstr "多杀回合占比"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "After the opening duel"
+msgstr "首对枪之后"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived after an opening kill"
+msgstr "首杀后存活到回合结束"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Team wins after your opening death"
+msgstr "首死后团队获胜率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Wins without a personal opening event"
+msgstr "未参与首对枪时的胜率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Utility use and efficiency"
+msgstr "道具使用与效率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with utility thrown"
+msgstr "使用过道具的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Damage per HE or fire grenade"
+msgstr "每颗手雷／燃烧弹伤害"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Enemy blind seconds per flash"
+msgstr "每颗闪光的敌方致盲秒数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Enemies blinded per flash"
+msgstr "每颗闪光致盲敌人数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Teammates blinded per flash"
+msgstr "每颗闪光致盲队友数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survival and round outcome"
+msgstr "存活与回合结果"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived winning rounds"
+msgstr "胜局存活率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived losing rounds"
+msgstr "败局存活率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Deaths without damage, kills or assists"
+msgstr "零伤害、零击杀、零助攻的死亡回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Winning versus losing rounds"
+msgstr "胜局与败局对比"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Performance through a match"
+msgstr "比赛阶段表现"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Your two latest match windows"
+msgstr "最近两组比赛对比"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Across the same map, source, mode and build, your recent ADR changed by {adrChange} compared with the previous window."
+msgstr "在地图、来源、模式和版本相同的这两组比赛中，近期 ADR 较前一组变化 {adrChange}。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Previous matches"
+msgstr "前一组比赛"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Recent matches"
+msgstr "最近一组比赛"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Round win rate"
+msgstr "回合胜率"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Same map, source, mode and build"
+msgstr "地图、来源、模式和版本相同"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Mixed scenarios · use Practice and progress for matched comparisons"
+msgstr "包含不同场景 · 同条件对比可到“练习与进步”查看"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Median match ADR"
+msgstr "单场 ADR 中位数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Middle 50% of match ADR"
+msgstr "单场 ADR 中间 50% 区间"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Current match streak"
+msgstr "当前连胜／连败"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Wins"
+msgstr "获胜次数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Losses"
+msgstr "负"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Monthly performance"
+msgstr "月度表现"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Winning versus losing matches"
+msgstr "赢下与输掉的比赛"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest match win streak"
+msgstr "最长连胜场次"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest round win streak"
+msgstr "单场最长连胜回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest match loss streak"
+msgstr "最长连败场次"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest round loss streak"
+msgstr "单场最长连败回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Memorable rounds"
+msgstr "值得收藏的回合"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No recorded milestone rounds in this selection yet."
+msgstr "当前样本中还没有这些高光回合。"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Record definitions"
+msgstr "记录达成条件"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Tied"
+msgstr "平局"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/end-reason.tsx
+msgid "Unknown"
+msgstr "未知"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "First half"
+msgstr "上半场"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Second half"
+msgstr "下半场"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Overtime"
+msgstr "加时"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Unclassified"
+msgstr "未分类"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Group"
+msgstr "分组"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Matches"
+msgstr "场数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds"
+msgstr "回合数"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
+msgid "K / D / A"
+msgstr "击杀 / 死亡 / 助攻"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "No data for this selection."
 msgstr "当前筛选条件下没有数据。"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Personal overview"
-msgstr "个人概览"
+#: src/ui/match/rounds/rounds-navigation-bar.tsx
+msgid "Overview"
+msgstr "概览"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Duels and clutches"
-msgstr "对枪与残局"
+msgid "Output and entry"
+msgstr "输出与突破"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Utility and objectives"
-msgstr "道具与目标"
+msgid "Teamplay and utility"
+msgstr "团队与道具"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Maps, sides and economy"
-msgstr "地图、阵营与经济"
+msgid "Clutches and economy"
+msgstr "残局与经济"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Match history and trends"
-msgstr "比赛历史与趋势"
+msgid "Trends"
+msgstr "表现趋势"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Personal records"
+msgstr "趣味档案"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Personal analysis sections"
 msgstr "个人分析分类"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Matches / rounds"
-msgstr "比赛数 / 回合数"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
-msgstr "{matchWins} 胜 · {matchLosses} 负 · {matchTies} 平"
-
-#: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-matches.tsx
-#: src/ui/habits/review-style.tsx
 #: src/ui/habits/use-review-labels.ts
 msgid "Headshot rate"
 msgstr "爆头率"
@@ -3239,7 +3672,6 @@ msgid "Rating 1.0 · historical formula"
 msgstr "Rating 1.0 · 历史公式"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-style.tsx
 msgid "{ratingRoundCount} eligible rounds"
 msgstr "{ratingRoundCount} 个符合条件的回合"
 
@@ -3248,17 +3680,8 @@ msgid "RWS · local calculation"
 msgstr "RWS · 本地计算"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-style.tsx
 msgid "{rwsRoundCount} valid rounds · {rwsMissingRoundCount} unavailable"
 msgstr "{rwsRoundCount} 个有效回合 · {rwsMissingRoundCount} 个无法计算"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Kills / deaths / assists"
-msgstr "击杀 / 死亡 / 助攻"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "K/D {kd} · (K+A)/D {kda}"
-msgstr "K/D {kd} · (K+A)/D {kda}"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "ADR · damage per round"
@@ -3269,16 +3692,32 @@ msgid "{damage} enemy health damage"
 msgstr "对敌方造成 {damage} 点生命伤害"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds with a kill, assist, survival or traded death"
-msgstr "完成击杀、助攻、存活或死亡后被补枪的回合"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Match win rate"
 msgstr "比赛胜率"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Round win rate {roundWinRate}"
-msgstr "回合胜率 {roundWinRate}"
+msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
+msgstr "{matchWins} 胜 · {matchLosses} 负 · {matchTies} 平"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Map and side breakdown"
+msgstr "按地图与阵营展开"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by map"
+msgstr "按地图统计"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by side"
+msgstr "按阵营统计"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Kills / deaths / assists"
+msgstr "击杀 / 死亡 / 助攻"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "K/D {kd} · (K+A)/D {kda}"
+msgstr "K/D {kd} · (K+A)/D {kda}"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Kills per round"
@@ -3289,49 +3728,8 @@ msgid "Deaths per round"
 msgstr "回合均死亡"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/use-review-labels.ts
-msgid "Survival rate"
-msgstr "存活率"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "{survivedRoundCount} rounds survived"
-msgstr "存活 {survivedRoundCount} 个回合"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Flash assists"
-msgstr "闪光助攻"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "How to read these numbers"
-msgstr "指标说明"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rates use total events and rounds across the selected demos. A dash means unavailable, not zero. Map and side filters apply to every panel."
-msgstr "各项比率按所选 demo 的事件总数和回合总数计算。“—”表示数据不可用，不代表零。地图和阵营筛选应用于全部面板。"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rating uses the public historical HLTV 1.0 formula. RWS uses the published FACEIT 2025 damage and bomb-objective rules, calculated locally. Neither is a platform-certified score or HLTV 2.x / 3.0."
-msgstr "Rating 使用公开的历史 HLTV 1.0 公式。RWS 按 FACEIT 于 2025 年公布的伤害和 C4 目标规则在本地计算。两者均非平台认证分数，也不是 HLTV 2.x / 3.0。"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Some community servers label 5v5 matches as casual. Rating eligibility also checks observed teams and round structure; the original demo mode is preserved."
-msgstr "部分社区服务器会将 5v5 比赛标记为休闲模式。Rating 还会根据实际队伍人数和回合结构判断是否适用；录像原有的模式标签予以保留。"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "RWS only rewards won rounds: 100 points by damage, or 70 by damage plus 30 for the winning plant/defuse. Undefined rounds are excluded and reported above. Trades use a five-second window."
-msgstr "RWS 仅在获胜回合分配得分：按伤害分配 100 分；通过安放或拆除 C4 获胜时，按伤害分配 70 分，并将 30 分分配给安放者或拆除者。无法计算的回合已排除并在上方列出。补枪使用 5 秒判定窗口。"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "These demos describe your own sample. Aim scores, rank percentiles and visibility-based reaction time need additional models and are not inferred here."
-msgstr "这些数据仅描述你导入的比赛样本。瞄准评分、段位百分位和基于可见性的反应时间需要额外模型，此处不作推断。"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Opening kills / deaths"
 msgstr "首杀 / 首死"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "First enemy elimination of each round"
-msgstr "每回合首次敌我之间的击杀"
 
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-duels.tsx
@@ -3348,10 +3746,6 @@ msgid "Opening participation"
 msgstr "首杀对决参与率"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds where you took the first duel"
-msgstr "你参与回合首次击杀对决的回合占比"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Win rate after an opening kill"
 msgstr "取得首杀后的回合胜率"
 
@@ -3365,24 +3759,16 @@ msgid "Trade kills"
 msgstr "补枪击杀"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Enemy killed within five seconds of killing a teammate"
-msgstr "在敌人击杀队友后的 5 秒内将其击杀"
+msgid "Within five seconds"
+msgstr "5 秒窗口"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Deaths traded by teammates"
 msgstr "死亡后获队友补枪"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Clutches won / attempted"
-msgstr "残局获胜 / 尝试"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Multi-kill rounds"
 msgstr "多杀回合"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds with at least two enemy kills"
-msgstr "击杀至少 2 名敌人的回合"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Kills per round distribution"
@@ -3395,22 +3781,6 @@ msgstr "5 杀及以上"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "{kills} kills"
 msgstr "{kills} 杀"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Clutches by difficulty"
-msgstr "各类残局表现"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Situation"
-msgstr "局面"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Attempts"
-msgstr "尝试次数"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Wins"
-msgstr "获胜次数"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Utility damage"
@@ -3439,6 +3809,10 @@ msgstr "{enemyBlindSeconds} 秒"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Total recorded enemy flash duration"
 msgstr "记录到的敌方致盲总时长"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Flash assists"
+msgstr "闪光助攻"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Teammates flashed (>1 s)"
@@ -3496,12 +3870,25 @@ msgid "Decoy"
 msgstr "诱饵弹"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Performance by map"
-msgstr "按地图统计"
+msgid "Clutches won / attempted"
+msgstr "残局获胜 / 尝试"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Performance by side"
-msgstr "按阵营统计"
+#: src/ui/habits/use-review-labels.ts
+msgid "Survival rate"
+msgstr "存活率"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Clutches by difficulty"
+msgstr "各类残局表现"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Situation"
+msgstr "局面"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Attempts"
+msgstr "尝试次数"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Performance by economy"
@@ -3512,16 +3899,48 @@ msgid "Average equipment value"
 msgstr "平均装备价值"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "{economyRoundCount} rounds with economy data"
-msgstr "{economyRoundCount} 个回合有经济数据"
+msgid "{equipmentRoundCount} rounds with equipment data"
+msgstr "{equipmentRoundCount} 个回合有装备数据"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Average money spent"
 msgstr "平均消费金额"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Economy groups use the parser's round-start equipment classification. Results from different maps, game modes, builds and sources are descriptive and may not be directly comparable."
-msgstr "经济分组采用解析器对回合开始时装备的分类。不同地图、游戏模式、游戏版本和来源的数据仅供描述，未必可以直接比较。"
+msgid "{moneySpentRoundCount} rounds with spending data"
+msgstr "{moneySpentRoundCount} 个回合有花费数据"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-maps.tsx
+#: src/ui/habits/review-progress.tsx
+#: src/ui/habits/review-style.tsx
+#: src/ui/habits/review-workbench.tsx
+msgid "Calculation details"
+msgstr "计算口径"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Core totals include every match in the current filters. The 5v5 sections exclude nonstandard matches. Rates use summed counts; a dash means the denominator or required data is missing."
+msgstr "基础数据涵盖当前筛选中的全部比赛；5v5 分析排除非标准比赛。比例按累计次数计算；“—”表示没有可用分母或所需数据缺失。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Headshot rate divides headshot kills by enemy kills. KAST counts rounds with a kill, assist, survival or traded death. Trades use five seconds. Opening events use the first enemy elimination of a round."
+msgstr "爆头率 = 爆头击杀 ÷ 敌方击杀。KAST 统计有击杀、助攻、存活或死亡后被补枪的回合。补枪窗口为 5 秒；首杀／首死取回合内第一次有效敌我击杀。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rating is the historical public HLTV 1.0 formula. RWS uses the public FACEIT 2025 damage and bomb-objective rules: 100 damage points in a won round, or 70 damage points plus 30 objective points. Undefined rounds are excluded."
+msgstr "Rating 使用公开的历史 HLTV 1.0 公式。RWS 按 FACEIT 2025 公开的伤害与炸弹目标规则计算：获胜回合按伤害分配 100 分，或按伤害分配 70 分、目标分配 30 分；无法计算的回合不计入。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Utility efficiency divides enemy HE and fire damage by grenades thrown. Flash counts require more than one second of recorded blindness. Economy uses equipment at round start."
+msgstr "道具效率按敌方受到的手雷与燃烧伤害除以相应投掷次数计算。闪光人数计入致盲超过 1 秒的记录；经济分类使用回合开始时的装备。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Half labels require a verified 12- or 15-round side change; other rounds remain unclassified. Monthly groups use UTC. Recent windows show equal-sized groups of up to five matches. Round streaks stay within each match."
+msgstr "只有确认在第 12 或第 15 回合后换边才区分上下半场，其余标为未分类。月份按 UTC 归组；近期对比两组场数相同，每组最多 5 场；连续回合胜负不跨比赛累计。"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Match streaks follow the selected local matches. Ties, unknown results and nonstandard matches break the streak. Match win rates exclude unknown results."
+msgstr "连胜／连败按当前筛选的本地比赛顺序计算，平局、未知结果和非标准比赛会中断记录。场次胜率不计未知结果。"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "{skippedMatches} matches lack complete personal statistics and are excluded from these metrics."
@@ -3546,33 +3965,6 @@ msgstr "强起局"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Full buy"
 msgstr "全装局"
-
-#: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/match/rounds/round/end-reason.tsx
-msgid "Unknown"
-msgstr "未知"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Group"
-msgstr "分组"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Matches"
-msgstr "场数"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds"
-msgstr "回合数"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Round win rate"
-msgstr "回合胜率"
-
-#: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-matches.tsx
-#: src/ui/habits/review-style.tsx
-msgid "K / D / A"
-msgstr "击杀 / 死亡 / 助攻"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Rating 1.0"
@@ -3609,10 +4001,6 @@ msgid "Shots fired"
 msgstr "开火次数"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Shots include suppressive fire and penetration attempts. Shot accuracy is not inferred from damage-event counts."
-msgstr "开火次数包含压制射击和穿透尝试。命中率不会根据伤害事件数推算。"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Recent performance trend"
 msgstr "近期表现趋势"
 
@@ -3625,8 +4013,8 @@ msgid "Recent match trend: {label}"
 msgstr "近期比赛趋势：{label}"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Up to 50 recent matches, oldest to newest. Each point is one match; missing values stay empty. Exact values and match links are listed below."
-msgstr "最多显示最近 50 场比赛，按时间从早到晚排列。每个点代表一场比赛，缺失值留空。具体数值和比赛入口列在下方。"
+msgid "Latest 50 matches · one point per match · oldest to newest"
+msgstr "最近 50 场 · 每个点代表一场 · 从早到晚排列"
 
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-matches.tsx
@@ -3646,6 +4034,132 @@ msgstr "结果"
 msgid "Show more matches"
 msgstr "显示更多比赛"
 
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Damage exchange"
+msgstr "伤害交战"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Evidence clip"
+msgstr "复盘证据片段"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Waiting to record"
+msgstr "等待录制"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "In this session"
+msgstr "本次录制中"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/left-bar/left-bar.tsx
+msgid "Recording queue"
+msgstr "录像队列"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Select encounters, then start one recording session. Waiting items stay here after restarting the app."
+msgstr "先选择交战片段，再统一开始录制。重启软件后，待录项目仍会保留。"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Select up to 20 waiting events"
+msgstr "勾选前 20 个待录片段"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Clear selection"
+msgstr "取消选择"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Start selected recordings"
+msgstr "开始录制所选片段"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Remove selected items"
+msgstr "移出所选项目"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Return failed items to waiting"
+msgstr "重新加入待录队列"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "{selectedCount} selected events · {demoCount} matches · one game session"
+msgstr "已选 {selectedCount} 个片段 · {demoCount} 场比赛 · 一次启动游戏"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Pause after this encounter"
+msgstr "录完本次交战后暂停"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Cancel current recording"
+msgstr "取消当前录制"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Stopping this session; remaining events stay in the queue."
+msgstr "正在结束本次录制，剩余片段会保留在待录队列。"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "{completed} / {total} camera segments · {launchCount} game starts"
+msgstr "已完成 {completed} / {total} 个视角 · 启动游戏 {launchCount} 次"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Recording progress"
+msgstr "录像进度"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Round {activeRound}"
+msgstr "第 {activeRound} 回合"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Opponent POV"
+msgstr "对手视角"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Your POV"
+msgstr "本人视角"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Could not update the recording queue. Check the demo and recording setup, then retry."
+msgstr "录像队列更新失败，请检查 demo 与录制设置后重试。"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Add encounters from personal review, map evidence, or the combat list. Adding an item does not launch CS2."
+msgstr "可从个人复盘、地图证据或交战列表添加片段。加入队列不会启动 CS2。"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Source details"
+msgstr "来源详情"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Tick {eventTick}"
+msgstr "时间帧 {eventTick}"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Your POV → opponent POV · same encounter"
+msgstr "本人视角 → 对手视角 · 同一次交战"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Your POV · opponent unavailable or not selected"
+msgstr "本人视角 · 无可用对手视角或未选择"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Opening duel"
+msgstr "首轮对枪"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Watch saved video"
+msgstr "观看已保存录像"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Previously saved recording batches"
+msgstr "历史录像批次"
+
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Edited review videos"
 msgstr "剪辑复盘视频"
@@ -3655,28 +4169,27 @@ msgid "{selectedCount} selected events · {demoCount} matches"
 msgstr "已选 {selectedCount} 个事件 · {demoCount} 场比赛"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "One game start per demo. Record selected events together, then watch the saved videos instantly."
-msgstr "每份 demo 只启动一次游戏，集中录制所选事件；完成后可直接播放已保存的视频。"
+msgid "Add selected encounters to the recording queue. CS2 starts only from the queue when you press Start."
+msgstr "将选中的交战片段加入录像队列。在队列中点击“开始录制”才会启动 CS2。"
 
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Include the opponent POV after each of my encounters"
 msgstr "在每段本人交战后附上对手视角"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
-msgstr "增加视角会延长录制时间。建议先选少量关键事件；已缓存的视频无需再次启动游戏。"
+msgid "Add selected events to recording queue"
+msgstr "将所选片段加入录像队列"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Record selected events"
-msgstr "录制所选事件"
+#: src/ui/habits/review-duels.tsx
+#: src/ui/match/video/add-video-to-queue-button.tsx
+#: src/ui/videos/resume-or-pause-video-queue-button.tsx
+msgid "Open recording queue"
+msgstr "打开录像队列"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Cancel this recording batch"
-msgstr "取消本批录制"
-
-#: src/ui/habits/review-batch-studio.tsx
-msgid "Retry this batch"
-msgstr "重试本批录制"
+msgid "Added to the queue. No game has been started."
+msgstr "已加入录像队列，尚未启动游戏。"
 
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Select up to 20 combat events below. Your selection stays when changing pages."
@@ -3699,17 +4212,6 @@ msgid "Event {currentEvent}"
 msgstr "第 {currentEvent} 个事件"
 
 #: src/ui/habits/review-batch-studio.tsx
-#: src/ui/habits/review-batch-viewer.tsx
-msgid "Your POV"
-msgstr "本人视角"
-
-#: src/ui/habits/review-batch-studio.tsx
-#: src/ui/habits/review-batch-viewer.tsx
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "Opponent POV"
-msgstr "对手视角"
-
-#: src/ui/habits/review-batch-studio.tsx
 msgid "Game setup"
 msgstr "游戏设置"
 
@@ -3726,8 +4228,8 @@ msgid "{count} events"
 msgstr "{count} 个事件"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Could not load or start this recording batch. Check the demo and recording setup, then retry."
-msgstr "无法读取或启动本批录制，请检查 demo 和录制设置后重试。"
+msgid "Could not load saved videos or add these events to the queue. Check the demo, then retry."
+msgstr "无法读取已保存录像或添加片段，请检查 demo 后重试。"
 
 #: src/ui/habits/review-batch-viewer.tsx
 msgid "Watch the compilation"
@@ -3780,10 +4282,6 @@ msgid "Choose an event to watch the seconds before and after it from your own PO
 msgstr "选择一次事件，从自己的第一视角回看前后几秒。"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Includes enemy kills, deaths to enemies and damage encounters. Miss-only fights are not detected. Damage to the same opponent is grouped with a 5-second gap."
-msgstr "包含击杀敌人、被敌人击杀和造成伤害的交战，未命中任何人的交火不会被识别。与同一对手间隔不超过 5 秒的伤害事件会合并。"
-
-#: src/ui/habits/review-duels.tsx
 msgid "View every opening"
 msgstr "查看全部首轮对枪"
 
@@ -3810,16 +4308,12 @@ msgid "Damage without a kill"
 msgstr "有伤害但未击杀"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Select this page for recording"
-msgstr "选中本页用于录制"
+msgid "Add this page to recording queue"
+msgstr "将本页片段加入录像队列"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Clear recording selection"
-msgstr "清空录制选择"
-
-#: src/ui/habits/review-duels.tsx
-msgid "{selectedCount} / 20 selected"
-msgstr "已选 {selectedCount} / 20"
+msgid "Could not update the recording queue."
+msgstr "录像队列更新失败。"
 
 #: src/ui/habits/review-duels.tsx
 msgid "Loading combat events…"
@@ -3838,16 +4332,8 @@ msgid "{total} matching events · page {pageNumber} of {pages}"
 msgstr "{total} 个符合条件的事件 · 第 {pageNumber} / {pages} 页"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Damage exchange"
-msgstr "伤害交战"
-
-#: src/ui/habits/review-duels.tsx
 msgid "Opponent"
 msgstr "对手"
-
-#: src/ui/habits/review-duels.tsx
-msgid "Opening duel"
-msgstr "首轮对枪"
 
 #: src/ui/habits/review-duels.tsx
 #: src/ui/match/players/kills-panel.tsx
@@ -3866,8 +4352,12 @@ msgid "Dealt {damageGiven} / taken {damageTaken}"
 msgstr "造成 {damageGiven} / 承受 {damageTaken}"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Include in recording batch"
-msgstr "加入本批录制"
+msgid "Video saved"
+msgstr "录像已保存"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Add to recording queue"
+msgstr "加入录像队列"
 
 #: src/ui/habits/review-duels.tsx
 msgid "2D context"
@@ -3908,8 +4398,8 @@ msgid "This heatmap only: {matches} matches · {rounds} rounds · position cover
 msgstr "当前热力图：{matches} 场比赛 · {rounds} 个回合 · 位置数据覆盖 {coverage}%"
 
 #: src/ui/habits/review-maps.tsx
-msgid "Time is counted while alive until the round is decided. Radar artwork may differ from older map versions. These positions describe where you play, not whether your crosshair placement is good."
-msgstr "仅统计存活期间、回合胜负确定前的时间。雷达图可能与旧版地图不同。这些位置记录描述你的活动范围，不能评价预瞄水平。"
+msgid "Time is counted while alive until the round is decided. Map builds and vertical levels are kept separate. Radar artwork may differ from older map versions."
+msgstr "统计存活至回合结果确定前的位置停留时间，按地图版本与楼层区分。雷达图可能与旧版本地图不同。"
 
 #: src/ui/habits/review-maps.tsx
 msgid "More position and combat examples"
@@ -3928,16 +4418,8 @@ msgid "Your match notebook"
 msgstr "你的比赛记录"
 
 #: src/ui/habits/review-matches.tsx
-msgid "Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal numbers."
-msgstr "打开比赛可查看回合、对枪、道具和完整回放。上方筛选同样适用于这些个人数据。"
-
-#: src/ui/habits/review-matches.tsx
 msgid "Load more matches"
 msgstr "加载更多比赛"
-
-#: src/ui/habits/review-matches.tsx
-msgid "Need the full numbers? Combat, utility, economy, weapons and trends are still here."
-msgstr "需要完整数据？这里仍可查看交战、道具、经济、武器和趋势统计。"
 
 #: src/ui/habits/review-matches.tsx
 msgid "Hide detailed statistics"
@@ -3964,16 +4446,8 @@ msgid "Matches played after starting"
 msgstr "开始练习后进行的比赛"
 
 #: src/ui/habits/review-progress.tsx
-msgid "You now have comparable samples. Revisit the rounds and judge whether your chosen action helped; a percentage change alone does not prove improvement."
-msgstr "现在已有可比较的样本。请回看具体回合，判断所选动作是否有帮助；比例变化本身不能证明进步。"
-
-#: src/ui/habits/review-progress.tsx
-msgid "Keep the same focus. A comparison needs at least two matches and twenty rounds on each side, plus enough relevant situations."
-msgstr "继续专注当前动作。比较需要前后各至少 2 场比赛、20 个回合，以及足够的相关场景。"
-
-#: src/ui/habits/review-progress.tsx
-msgid "Only matches played after the start time count as practice results. Importing an old demo does not create progress. Each period uses up to five matches in this exact scenario."
-msgstr "只统计开始时间之后实际进行的比赛；新导入旧 demo 不会算作练习成果。每个时期最多使用此相同场景下的 5 场比赛。"
+msgid "Waiting for more matches in this scenario."
+msgstr "等待这个场景积累更多比赛。"
 
 #: src/ui/habits/review-progress.tsx
 msgid "Review more evidence"
@@ -3984,8 +4458,8 @@ msgid "End this focus"
 msgstr "结束当前练习"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Watch a candidate round first, then choose one concrete action. We will compare later matches with the same map, side, source, mode and game build."
-msgstr "先看一段待复核回合，再选一个具体动作。应用会在地图、阵营、来源、模式和游戏版本相同的条件下，比较后续比赛。"
+msgid "Select a review situation and set your next-match focus."
+msgstr "选择一个复盘场景，设为下一场的练习重点。"
 
 #: src/ui/habits/review-progress.tsx
 msgid "Choose from review candidates"
@@ -3996,10 +4470,6 @@ msgid "Recent play versus your earlier play"
 msgstr "最近表现与之前相比"
 
 #: src/ui/habits/review-progress.tsx
-msgid "This is a self comparison, not a rank or a training score. Maps, sides, sources, modes and game builds are kept separate."
-msgstr "这是与你过去表现的比较，不是段位或训练评分。地图、阵营、来源、模式和游戏版本分别统计。"
-
-#: src/ui/habits/review-progress.tsx
 msgid "Comparable scenario"
 msgstr "可比较的场景"
 
@@ -4008,20 +4478,12 @@ msgid "Earlier sample"
 msgstr "之前的样本"
 
 #: src/ui/habits/review-progress.tsx
-msgid "matches"
-msgstr "场比赛"
-
-#: src/ui/habits/review-progress.tsx
-msgid "rounds"
-msgstr "个回合"
-
-#: src/ui/habits/review-progress.tsx
 msgid "Recent sample"
 msgstr "最近的样本"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Not enough comparable matches yet. Values remain visible as observations; changes are withheld until the sample is large enough."
-msgstr "可比较的比赛还不够。现有数值仅作观察，样本达到要求后才显示变化。"
+msgid "Not enough comparable matches yet."
+msgstr "同条件比赛样本还不足。"
 
 #: src/ui/habits/review-progress.tsx
 msgid "Behavior / result"
@@ -4044,61 +4506,49 @@ msgid "pp"
 msgstr "个百分点"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Up to five recent matches versus the previous five. Each period needs at least two matches and twenty rounds; rare events need additional samples. A dash means insufficient evidence."
-msgstr "最多取最近 5 场与此前 5 场比较。每个时期至少需要 2 场、20 个回合；少见事件还需更多样本。横线表示证据不足。"
-
-#: src/ui/habits/review-progress.tsx
 msgid "No comparable scenario in this selection."
 msgstr "当前筛选没有可比较的场景。"
 
-#: src/ui/habits/review-style.tsx
-msgid "How you tend to play"
-msgstr "你的打法倾向"
+#: src/ui/habits/review-progress.tsx
+msgid "Comparisons keep map, side, source, mode and game build together. Each period uses up to five matches and needs at least two matches and twenty rounds. Individual metrics also require enough relevant events."
+msgstr "对比按相同地图、阵营、来源、模式和游戏版本分组。前后每期最多取 5 场，至少需要 2 场、20 个回合；各项指标还需要足够的相关事件。"
+
+#: src/ui/habits/review-progress.tsx
+msgid "Practice results include only matches played after the start time. Importing older demos does not add new practice results."
+msgstr "练习结果只计入开始时间之后实际进行的比赛，补导入旧 demo 不会增加练习结果。"
 
 #: src/ui/habits/review-style.tsx
-msgid "These are proportions, not skill scores. Compare maps and sides before assigning yourself a role."
-msgstr "这些是行为比例，不是技术评分。先比较不同地图和阵营，再判断自己的角色。"
+msgid "You were involved in the first elimination in {numerator} of {denominator} rounds."
+msgstr "{denominator} 个回合中，你在 {numerator} 个参与了首杀／首死交锋。"
 
 #: src/ui/habits/review-style.tsx
-msgid "{numerator} / {denominator} observed"
-msgstr "已记录 {numerator} / {denominator}"
+msgid "{numerator} of your {denominator} enemy kills were five-second trades."
+msgstr "你的 {denominator} 次敌方击杀中，有 {numerator} 次是 5 秒内完成的补枪。"
+
+#: src/ui/habits/review-style.tsx
+msgid "You threw utility in {numerator} of {denominator} rounds."
+msgstr "{denominator} 个回合中，你在 {numerator} 个投出过道具。"
+
+#: src/ui/habits/review-style.tsx
+msgid "You stayed alive through {numerator} of {denominator} rounds."
+msgstr "{denominator} 个回合中，你有 {numerator} 个存活到回合结束。"
+
+#: src/ui/habits/review-style.tsx
+msgid "You reached a 1vX situation in {numerator} of {denominator} rounds."
+msgstr "{denominator} 个回合中，你在 {numerator} 个进入了 1vX 残局。"
+
+#: src/ui/habits/review-style.tsx
+msgid "Playing habits"
+msgstr "打法习惯"
+
+#: src/ui/habits/review-style.tsx
+msgid "Explore map habits"
+msgstr "查看地图习惯"
 
 #: src/ui/habits/review-style.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Small sample"
 msgstr "样本较少"
-
-#: src/ui/habits/review-style.tsx
-msgid "Your results, in context"
-msgstr "结合样本看表现"
-
-#: src/ui/habits/review-style.tsx
-msgid "Use these numbers to describe the sample, then return to rounds to understand your decisions."
-msgstr "这些数值描述当前样本；要理解具体决策，请回到原始回合。"
-
-#: src/ui/habits/review-style.tsx
-msgid "Rating 1.0 · historical"
-msgstr "Rating 1.0 · 历史公式"
-
-#: src/ui/habits/review-style.tsx
-msgid "RWS · public formula"
-msgstr "RWS · 公开公式"
-
-#: src/ui/habits/review-style.tsx
-msgid "Rating uses the historical public 1.0 model. RWS uses the public damage/objective model; neither is an official platform score."
-msgstr "Rating 使用公开的历史 1.0 模型；RWS 使用公开的伤害与目标贡献模型。两者都不是平台官方评分。"
-
-#: src/ui/habits/review-style.tsx
-msgid "Where does this style happen?"
-msgstr "这些打法常出现在哪里？"
-
-#: src/ui/habits/review-style.tsx
-msgid "Explore opening positions and alive-time heatmaps. Select any occupied area to revisit example rounds."
-msgstr "查看开局位置与存活时间热力图。选择任意着色区域，可回看对应回合。"
-
-#: src/ui/habits/review-style.tsx
-msgid "Explore map habits"
-msgstr "查看地图习惯"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "YOUR NEXT MATCH FOCUS"
@@ -4109,12 +4559,8 @@ msgid "Track this practice"
 msgstr "跟踪这项练习"
 
 #: src/ui/habits/review-workbench.tsx
-msgid "One useful review, one change to try."
-msgstr "认真复盘一次，尝试一个改变。"
-
-#: src/ui/habits/review-workbench.tsx
-msgid "Choose a recurring situation. Watch the context before deciding whether to change it."
-msgstr "选择反复出现的场景，先看上下文，再决定是否调整。"
+msgid "Recurring situations"
+msgstr "反复出现的局面"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "Show top situations"
@@ -4137,8 +4583,8 @@ msgid "No review candidates in this selection"
 msgstr "当前筛选没有复盘候选"
 
 #: src/ui/habits/review-workbench.tsx
-msgid "Try another map or side, or explore your playing style. No detected candidate does not mean flawless play."
-msgstr "可以换一个地图或阵营，也可以看看打法倾向。没有发现候选，不代表每次决策都没有问题。"
+msgid "Try another map or side, or explore your playing style."
+msgstr "可切换地图、阵营，或查看打法风格。"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "{affectedMatches} affected matches · {evidenceShown} recent examples of {evidenceTotal} matching rounds"
@@ -4294,10 +4740,6 @@ msgid "Not recorded"
 msgstr "尚未录制"
 
 #: src/ui/habits/use-review-clip-messages.ts
-msgid "Waiting to record"
-msgstr "等待录制"
-
-#: src/ui/habits/use-review-clip-messages.ts
 msgid "Preparing CS2"
 msgstr "正在准备 CS2"
 
@@ -4403,8 +4845,8 @@ msgid "Before taking first contact, agree on the timing and who can trade."
 msgstr "首次接敌前，约定出手时机和负责补枪的队友。"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds where you were the first enemy kill of the round. Timing and role matter; taking an opening risk can be correct."
-msgstr "你成为本回合首个被敌方击杀的玩家。时机和角色很重要；承担开局风险也可能是正确选择。"
+msgid "Rounds where the first enemy elimination was your death, divided by your opening duels."
+msgstr "你成为回合首死的次数 ÷ 你参与的首对枪次数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Opening advantage lost"
@@ -4419,8 +4861,8 @@ msgid "After an opening kill, call the advantage and plan the next move together
 msgstr "拿到首杀后，报出人数优势，一起确定下一步行动。"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds lost after your opening kill. This describes the outcome, not who caused the loss."
-msgstr "你拿到首杀后仍输掉的回合。这只描述结果，不判定谁导致失利。"
+msgid "Rounds lost after your opening kill, divided by your opening-kill rounds."
+msgstr "拿到首杀后丢局的回合数 ÷ 拿到首杀的回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Deaths without a trade"
@@ -4435,8 +4877,8 @@ msgid "Before committing to a fight, check one teammate can follow the same timi
 msgstr "决定交战前，确认至少一名队友能够同步跟进。"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Death rounds without a recorded trade within five seconds. Includes deaths where trading was impossible; review before changing your play."
-msgstr "你死亡后 5 秒内没有记录到补枪的回合，也包括本来就无法补枪的情况。请先复核，再决定是否调整打法。"
+msgid "Death rounds without a recorded trade within five seconds, divided by all death rounds."
+msgstr "死亡后 5 秒内未被补枪的回合数 ÷ 全部死亡回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Friendly flash rounds"
@@ -4451,8 +4893,8 @@ msgid "Call the flash before throwing and confirm teammates are ready."
 msgstr "投闪前先报时机，并确认队友已做好准备。"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds with recorded friendly blindness. A brief blind or an agreed team flash is not automatically a mistake."
-msgstr "记录到队友被致盲的回合。短暂致盲或事先约定的配合闪，不会被直接判作失误。"
+msgid "Rounds with teammates blinded for more than one second, divided by rounds with a thrown flash or recorded friendly blindness."
+msgstr "队友被致盲超过 1 秒的回合数 ÷ 投出闪光或有队友致盲记录的回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Clutches to revisit"
@@ -4467,8 +4909,8 @@ msgid "In a clutch, check the clock and last known positions before committing."
 msgstr "残局中决定交战前，先看剩余时间和敌人最后出现的位置。"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Recorded 1vX attempts that were lost. Opponent count and the starting situation strongly affect the outcome."
-msgstr "记录到的未获胜 1vX 残局。对手人数和进入残局时的局面会明显影响结果。"
+msgid "Lost 1vX attempts, divided by all recorded clutch attempts."
+msgstr "未获胜的 1vX 残局次数 ÷ 全部已记录的残局次数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "your opening duels"
@@ -4495,40 +4937,40 @@ msgid "Taking first contact"
 msgstr "参与开局交锋"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Opening kills + opening deaths / played rounds. Describes how often you enter the first decisive duel."
-msgstr "（首杀次数 + 首死次数）/ 参赛回合数，描述你参与首个决定性交锋的频率。"
+msgid "Opening kills + opening deaths / played rounds."
+msgstr "（首杀次数 + 首死次数）÷ 参与回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Joining trade kills"
 msgstr "参与补枪"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Trade kills / enemy kills. Describes recorded five-second trades, not your distance from teammates."
-msgstr "补枪击杀数 / 对敌击杀数，按 5 秒窗口统计补枪，不表示你与队友的距离。"
+msgid "Trade kills within five seconds / enemy kills."
+msgstr "5 秒内完成的补枪击杀 ÷ 敌方击杀。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Using utility"
 msgstr "使用道具"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds with a grenade thrown / played rounds. Frequency does not measure grenade quality."
-msgstr "投掷过道具的回合数 / 参赛回合数。频率不能衡量道具质量。"
+msgid "Rounds with a grenade thrown / played rounds."
+msgstr "投出过道具的回合数 ÷ 参与回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Staying alive"
 msgstr "回合存活"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Survived rounds / played rounds. Saving, role and round outcome all affect this proportion."
-msgstr "存活回合数 / 参赛回合数。保枪、角色和回合结果都会影响这个比例。"
+msgid "Survived rounds / played rounds."
+msgstr "存活回合数 ÷ 参与回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Playing the last player"
 msgstr "成为最后一人"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Recorded 1vX attempts / played rounds. This is the situation you reach, not a passive-play label."
-msgstr "记录到的 1vX 残局数 / 参赛回合数。这描述你遇到的局面，不是被动打法的标签。"
+msgid "Recorded 1vX attempts / played rounds."
+msgstr "已记录的 1vX 残局次数 ÷ 参与回合数。"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Opening conversion"
@@ -4548,16 +4990,12 @@ msgid "{seconds}s"
 msgstr "{seconds}秒"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
-msgstr "这是模型解读，不是错误判决。请核对引用的画面，只保留符合实战已知信息的建议。"
-
-#: src/ui/habits/video-ai-report-content.tsx
 msgid "Choices in this encounter"
 msgstr "这段交战中的选择"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Observe → interpret → try an alternative"
-msgstr "观察 → 解读 → 尝试替代动作"
+msgid "Key moments"
+msgstr "关键时刻"
 
 #: src/ui/habits/video-ai-report-content.tsx
 msgid "Player-visible evidence"
@@ -4584,10 +5022,6 @@ msgid "Alternative action"
 msgstr "可尝试的替代动作"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Uncertainty"
-msgstr "不确定之处"
-
-#: src/ui/habits/video-ai-report-content.tsx
 msgid "One comparable situation to practice"
 msgstr "选一个相似场景练习"
 
@@ -4595,21 +5029,17 @@ msgstr "选一个相似场景练习"
 msgid "Next-match check"
 msgstr "下一场检查点"
 
-#: src/ui/habits/video-ai-report-content.tsx
-msgid "What remains uncertain"
-msgstr "还有哪些信息无法确定"
-
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "AI video review"
 msgstr "AI 视频点评"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
-msgstr "复看这一段交战，区分当时可见信息与事后信息，选一个动作尝试改进。"
+msgid "Key moments, choices and alternative plays."
+msgstr "关键时刻、交战选择与可尝试的打法。"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
-msgstr "先在本机准备预览。只有点击“发送画面并点评”后，才会向模型发送内容。"
+msgid "Generation target: {target} · {serverHost} · {model}"
+msgstr "本次生成使用：{target} · {serverHost} · {model}"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Preparing frame preview…"
@@ -4624,24 +5054,16 @@ msgid "{frameCount, plural, one {# exact image for this request} other {# exact 
 msgstr "{frameCount, plural, other {本次将发送以下 # 张图片}}"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
-msgstr "画面中可能包含游戏昵称、头像或聊天。下方展示的图片及回合事实将发送到你选择的服务器；不会另外附带声音、整段视频、账号 ID 或本地文件路径。"
+msgid "Send these preview images and round facts to the selected server. Images may contain nicknames, avatars or chat."
+msgstr "将下方预览图片与回合数据发送到所选服务。图片中可能包含昵称、头像或聊天内容。"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
-msgstr "本人和对手视角分别采样。对手信息属于事后资料，不代表本人当时已知。"
+msgid "Player and opponent perspectives"
+msgstr "本人视角与对手视角"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Only the player's recorded view is available for this review. No opponent view is inferred."
-msgstr "本次只有本人录制视角，不会推测或虚构对手画面。"
-
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
-msgstr "每个视角最多六帧，无法据此判断毫秒反应、精确鼠标控制或帧间发生的全部过程。"
-
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
-msgstr "demo 的观战 HUD 或雷达可能展示额外信息，不能证明玩家在实战中掌握了这些信息。"
+msgid "Player perspective"
+msgstr "本人视角"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Selected preview frame"
@@ -4656,8 +5078,8 @@ msgid "Exact round facts and frame metadata sent with the images"
 msgstr "随图片发送的完整回合事实与帧信息"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
-msgstr "回合总量覆盖整回合，并非仅此片段；没有队伍语音或玩家意图数据。"
+msgid "Up to six frames per view. Event totals cover the entire round."
+msgstr "每个视角最多选取 6 帧，事件统计涵盖整个回合。"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Reviewing the sampled frames…"
@@ -4676,8 +5098,8 @@ msgid "One request to the configured vision model. Cloud image inputs may incur 
 msgstr "仅向所配置的视觉模型发送一次请求。云端图片输入可能产生 API 费用。"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
-msgstr "正在等待模型，然后校验其帧引用。程序无法验证模型对画面的解读是否真实。"
+msgid "Analyzing the sampled frames…"
+msgstr "正在分析选取的画面…"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Player POV"
@@ -5168,20 +5590,6 @@ msgstr "比赛记录"
 #: src/ui/left-bar/left-bar.tsx
 msgid "Advanced tools"
 msgstr "高级工具"
-
-#: src/ui/left-bar/matches-link.tsx
-msgid "Detailed matches"
-msgstr "完整比赛库"
-
-#: src/ui/left-bar/players-link.tsx
-msgctxt "Tooltip"
-msgid "Players"
-msgstr "玩家"
-
-#: src/ui/left-bar/search-link.tsx
-msgctxt "Tooltip"
-msgid "Search"
-msgstr "搜索"
 
 #: src/ui/left-bar/settings-button.tsx
 msgid "Settings"
@@ -5716,8 +6124,8 @@ msgstr "2D 查看器"
 
 #: src/ui/match/match-tabs.tsx
 msgctxt "Tab link"
-msgid "Video"
-msgstr "视频"
+msgid "Sequence playback"
+msgstr "片段播放"
 
 #: src/ui/match/match-tabs.tsx
 msgctxt "Tab link"
@@ -6486,7 +6894,6 @@ msgid "Tags"
 msgstr "标签"
 
 #: src/ui/match/rounds/round/round-tags.tsx
-#: src/ui/settings/cameras/camera-entry.tsx
 #: src/ui/settings/maps/map-entry.tsx
 msgctxt "Button"
 msgid "Edit"
@@ -6496,31 +6903,6 @@ msgstr "编辑"
 #: src/ui/match/viewer-2d/viewer-2d-loader.tsx
 msgid "Round number {roundNumber} not found."
 msgstr "回合{roundNumber} 未找到"
-
-#: src/ui/match/rounds/rounds-navigation-bar.tsx
-msgid "Overview"
-msgstr "概览"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "Disk space warning"
-msgstr "磁盘空间警告"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space to generate the videos."
-msgstr "您至少需要<0>{requiredGigaBytes}GB</0>的可用磁盘空间来生成视频。"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space on the disk where CS2 is installed to generate the videos."
-msgstr "在安装 CS2 的磁盘，您至少需要<0>{requiredGigaBytes}GB</0>的可用磁盘空间来生成视频。"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "Are you sure you want to continue?"
-msgstr "您确定要继续吗？"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgctxt "Button"
-msgid "Add to queue"
-msgstr "加入到队列"
 
 #: src/ui/match/video/add-video-to-queue-error-dialog.tsx
 #: src/ui/match/video/sequence/save-sequence-button.tsx
@@ -6539,63 +6921,9 @@ msgctxt "Input placeholder"
 msgid "video-cfg-placeholder"
 msgstr "video-cfg-placeholder"
 
-#: src/ui/match/video/close-game-after-recording-checkbox.tsx
-msgctxt "Checkbox label"
-msgid "Close the game when recording is done"
-msgstr "录制完成后关闭游戏"
-
-#: src/ui/match/video/concatenate-sequences-checkbox.tsx
-msgctxt "Checkbox label"
-msgid "Concatenate sequences into 1 video"
-msgstr "整合到 1 个视频"
-
 #: src/ui/match/video/death-notices-duration-input.tsx
 msgid "Death notices duration (seconds)"
 msgstr "死亡通知持续时间(秒)"
-
-#: src/ui/match/video/encoder-software-select.tsx
-msgctxt "Select label of video encoder"
-msgid "Encoder software"
-msgstr "编码器"
-
-#: src/ui/match/video/ffmpeg/audio-codec-input.tsx
-msgctxt "Input label"
-msgid "Audio codec"
-msgstr "音频编解码器"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "This option is not available when using custom FFmpeg output parameters."
-msgstr "当使用自定义 FFmpeg 输出参数时，此选项不可用。"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "You can still set the <0>-crf</0> parameter in your FFmpeg output parameters."
-msgstr "您仍然可以在您的 FFmpeg 输出参数中设置<0>-crf</0> 参数。"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "Impact the video quality, from 0 to 51 with 0 for the best quality resulting in a larger file"
-msgstr "调整视频质量，范围从 0 到 51，其中 0 代表最佳质量，但会导致文件更大"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Input label"
-msgid "Quality"
-msgstr "品质"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgid "Quality 0 with libx264 creates a lossless video that some players can't decode."
-msgstr "libx264 编码器的质量设为 0 时会生成无损视频，部分播放器无法解码。"
-
-#: src/ui/match/video/ffmpeg/ffmpeg-audio-bitrate-select.tsx
-msgctxt "Input label"
-msgid "Audio bitrate"
-msgstr "音频码率"
-
-#: src/ui/match/video/ffmpeg/ffmpeg-input-parameters-input.tsx
-msgctxt "Input label"
-msgid "Input parameters"
-msgstr "输入参数"
 
 #: src/ui/match/video/ffmpeg/ffmpeg-install-button.tsx
 msgid "Installing FFmpeg…"
@@ -6609,11 +6937,6 @@ msgstr "FFmpeg 已安装"
 msgid "An error occurred while installing FFmpeg"
 msgstr "在安装FFmpeg时出现错误"
 
-#: src/ui/match/video/ffmpeg/ffmpeg-output-parameters-input.tsx
-msgctxt "Input label"
-msgid "Output parameters"
-msgstr "输出参数"
-
 #: src/ui/match/video/ffmpeg/ffmpeg-update-button.tsx
 msgid "Updating FFmpeg…"
 msgstr "更新FFmpeg…"
@@ -6626,30 +6949,10 @@ msgstr "FFmpeg已更新"
 msgid "An error occurred while updating FFmpeg"
 msgstr "在更新FFmpeg时出现错误"
 
-#: src/ui/match/video/ffmpeg/video-codec-input.tsx
-msgctxt "Input label"
-msgid "Video codec"
-msgstr "视频编解码器"
-
-#: src/ui/match/video/ffmpeg/video-container-select.tsx
-msgctxt "Input label"
-msgid "Video container"
-msgstr "视频格式"
-
 #: src/ui/match/video/focus-camera-player-select.tsx
 msgctxt "Checkbox label"
 msgid "Focus camera on player"
 msgstr "对焦摄像头在玩家身上"
-
-#: src/ui/match/video/framerate-input.tsx
-msgctxt "Input label"
-msgid "Framerate"
-msgstr "帧速率"
-
-#: src/ui/match/video/framerate-input.tsx
-msgctxt "Input placeholder"
-msgid "Framerate"
-msgstr "帧速率"
 
 #: src/ui/match/video/generate-player-sequences-button.tsx
 msgctxt "Select option"
@@ -6709,35 +7012,6 @@ msgctxt "Button"
 msgid "Generate player's sequences"
 msgstr "创建玩家序列"
 
-#: src/ui/match/video/height-resolution-input.tsx
-msgctxt "Input label"
-msgid "Height"
-msgstr "高度"
-
-#: src/ui/match/video/height-resolution-input.tsx
-#: src/ui/settings/shared/game-height-input.tsx
-msgctxt "Input placeholder"
-msgid "Height"
-msgstr "高度"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgctxt "Checkbox label"
-msgid "Enable config folder"
-msgstr "使用配置目录"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgctxt "Input label"
-msgid "Config folder"
-msgstr "配置文件夹"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgid "Config folder"
-msgstr "配置文件夹"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgid "Select config folder"
-msgstr "选择配置文件夹"
-
 #: src/ui/match/video/hlae/hlae-install-button.tsx
 msgid "Installing HLAE…"
 msgstr "正在安装HLAE..."
@@ -6767,63 +7041,6 @@ msgstr "HLAE 已更新"
 msgid "An error occurred while updating HLAE"
 msgstr "在更新 HLAE 时发生了错误"
 
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Map name (e.g., de_dust2)"
-msgstr "地图名称（例如 de_dust2）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Match checksum/ID"
-msgstr "比赛校验和 / ID"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Game (CS2 or CSGO)"
-msgstr "游戏（CS2 或 CSGO）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Current date (YYYY-MM-DD)"
-msgstr "当前日期（YYYY-MM-DD）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Current time (HH-MM-SS)"
-msgstr "当前时间（HH-MM-SS）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-#: src/ui/videos/video-entry.tsx
-msgid "Encoder software"
-msgstr "编码器"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Resolution (e.g., 1920x1080)"
-msgstr "分辨率（例如 1920x1080）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Framerate (e.g., 30)"
-msgstr "帧率（例如 30）"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgctxt "Input label"
-msgid "Output filename"
-msgstr "输出文件名"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Available placeholders"
-msgstr "可用占位符"
-
-#. Input placeholder
-#: src/ui/match/video/output-folder-path.tsx
-msgid "Output folder"
-msgstr "输出文件夹"
-
-#: src/ui/match/video/output-folder-path.tsx
-msgctxt "Input label"
-msgid "Output folder"
-msgstr "输出文件夹"
-
-#: src/ui/match/video/output-folder-path.tsx
-msgctxt "Dialog title"
-msgid "Select output folder"
-msgstr "选择输出目录"
-
 #: src/ui/match/video/player-voices-checkbox.tsx
 msgctxt "Checkbox label"
 msgid "Player voices"
@@ -6834,13 +7051,7 @@ msgctxt "Checkbox label"
 msgid "Record Audio"
 msgstr "录制音频"
 
-#: src/ui/match/video/recording-output-select.tsx
-msgctxt "Select label"
-msgid "Output"
-msgstr "输出"
-
 #: src/ui/match/video/recording-output.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Video"
 msgstr "视频"
 
@@ -6851,11 +7062,6 @@ msgstr "图片"
 #: src/ui/match/video/recording-output.tsx
 msgid "Images + video"
 msgstr "图片 + 视频"
-
-#: src/ui/match/video/recording-system-select.tsx
-msgctxt "Select label"
-msgid "Recording system"
-msgstr "录制系统"
 
 #: src/ui/match/video/sequence/cameras/focus-camera-kill-pov-input.tsx
 msgctxt "Select option"
@@ -7380,24 +7586,10 @@ msgctxt "Input label"
 msgid "Show only death notices"
 msgstr "只显示死亡通知"
 
-#: src/ui/match/video/software-browse-button.tsx
-msgctxt "Button"
-msgid "Browse"
-msgstr "浏览文件"
-
 #: src/ui/match/video/software.tsx
 msgctxt "Software installation status"
 msgid "Not installed"
 msgstr "未安装"
-
-#: src/ui/match/video/toggle-true-view.tsx
-msgctxt "Checkbox label"
-msgid "Enable TrueView mode"
-msgstr "启用 TrueView 模式"
-
-#: src/ui/match/video/toggle-true-view.tsx
-msgid "Enabling TrueView may lead to lags in recordings!"
-msgstr "启用 TrueView 可能会导致录制过程中出现延迟！"
 
 #: src/ui/match/video/video-actions-menu.tsx
 msgctxt "Toast"
@@ -7454,33 +7646,10 @@ msgstr "发生了错误(错误代码 {errorCode})"
 msgid "Loading video generator…"
 msgstr "正在加载视频生成器…"
 
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "Installing VirtualDub…"
-msgstr "正在安装VirtualDub…"
-
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "VirtualDub has been installed"
-msgstr "VirtualDub已被安装"
-
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "An error occurred while installing VirtualDub"
-msgstr "安装VirtualDub时发生错误"
-
 #: src/ui/match/video/watch-sequences-button.tsx
 msgctxt "Button"
 msgid "Watch sequences"
 msgstr "观看序列"
-
-#: src/ui/match/video/width-resolution-input.tsx
-msgctxt "Input label"
-msgid "Width"
-msgstr "高度"
-
-#: src/ui/match/video/width-resolution-input.tsx
-#: src/ui/settings/shared/game-width-input.tsx
-msgctxt "Input placeholder"
-msgid "Width"
-msgstr "高度"
 
 #: src/ui/match/video/x-ray-checkbox.tsx
 msgctxt "Checkbox label"
@@ -8450,10 +8619,6 @@ msgid "AI reviews"
 msgstr "AI 点评"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Choose a cloud API or a local Ollama model. Reviews are generated only when you click, and saved on this device."
-msgstr "选择云端 API 或本地 Ollama 模型。只有点击生成时才会请求点评，结果保存在此设备上。"
-
-#: src/ui/settings/ai/ai-settings.tsx
 msgid "AI provider"
 msgstr "AI 服务"
 
@@ -8486,16 +8651,8 @@ msgid "Enter a whole number from 1 to {maximumTokenLimit} tokens. Your settings 
 msgstr "请输入 1–{maximumTokenLimit} 之间的整数。当前设置尚未保存。"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI reviews."
-msgstr "默认 {defaultTokenLimit} tokens，个人、单场比赛和视频 AI 点评共用此上限。"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "This is a maximum output budget, not a required response length. Higher limits can take longer; your provider or model may enforce a lower limit."
-msgstr "这是生成上限，不要求模型写满。较高上限可能需要更长时间；模型或服务也可能限制更低的上限。"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Reset token limit to default"
-msgstr "恢复默认上限"
+msgid "Reset to {defaultTokenLimit}"
+msgstr "恢复为 {defaultTokenLimit}"
 
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "API key · already saved (leave blank to keep)"
@@ -8508,10 +8665,6 @@ msgstr "API 密钥 · 本地模型可不填"
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "API key"
 msgstr "API 密钥"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Keys use operating-system encryption. Changing the API address removes the previous key; enter the key for the new server. Keys are never included in reports."
-msgstr "密钥使用操作系统加密保存。更换 API 地址会移除旧密钥，请填写新服务器的密钥。点评内容不会包含密钥。"
 
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "Saving…"
@@ -8528,14 +8681,6 @@ msgstr "保存设置时将删除已存储的密钥。"
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "Remove saved key"
 msgstr "删除已保存的密钥"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
-msgstr "生成前请启动 Ollama。数字点评使用文本；视频点评需要支持图片输入和 JSON 输出的视觉模型。本地模式只接受回环地址。"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
-msgstr "API 服务可能收取生成费用。数字点评发送数值事实；视频点评在你点击发送后，发送已预览的图片与回合事实，画面可能包含昵称、头像或聊天。完整 demo 和视频仍留在本机。"
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgid "Automatic (recommended: 2–3)"
@@ -8558,143 +8703,6 @@ msgstr "手动解析时记录玩家和投掷物位置。习惯分析和 2D 回�
 msgid "Analyze player/grenade positions"
 msgstr "分析玩家/手榴弹位置"
 
-#: src/ui/settings/cameras/add-camera-button.tsx
-msgctxt "Button"
-msgid "Add a camera"
-msgstr "添加一个摄像机位"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "Camera actions"
-msgstr "摄像机操作"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "spec_goto command copied to clipboard"
-msgstr "spec_goto命令已复制到剪贴板"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "Copy spec_goto command"
-msgstr "复制spec_goto命令"
-
-#: src/ui/settings/cameras/cameras-game-input.tsx
-#: src/ui/settings/maps/maps-settings.tsx
-msgctxt "Select label"
-msgid "Game"
-msgstr "游戏"
-
-#: src/ui/settings/cameras/cameras-map-input.tsx
-msgctxt "Select label"
-msgid "Map"
-msgstr "地图"
-
-#: src/ui/settings/cameras/cameras-settings.tsx
-msgid "No maps found for the selected game."
-msgstr "未找到选中的游戏地图。"
-
-#: src/ui/settings/cameras/cameras-settings.tsx
-msgid "Map not found"
-msgstr "未找到地图。"
-
-#: src/ui/settings/cameras/cameras.tsx
-msgid "No cameras found for {mapName}."
-msgstr "未找到{mapName}的摄像头。"
-
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-msgid "Delete camera"
-msgstr "删除摄像机"
-
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-msgid "Do you want to delete this camera?"
-msgstr "你想要删除这个摄像机吗？"
-
-#: src/ui/settings/cameras/form/camera-color-input.tsx
-msgctxt "Input label"
-msgid "Color"
-msgstr "颜色"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Name is required."
-msgstr "名称必须填写"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Color is required."
-msgstr "颜色是必需的。"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Coordinate X is required."
-msgstr "需要X坐标。"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Coordinate Y is required."
-msgstr "需要Y坐标。"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Coordinate Z is required."
-msgstr "需要Z轴。"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Pitch is required."
-msgstr "参数是必须的。"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Yaw is required."
-msgstr "鼠标水平灵敏度调整必须填写。"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Start {gameName} on {mapName}"
-msgstr "在{mapName}上开始{gameName}"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgctxt "Dialog title"
-msgid "Camera"
-msgstr "摄像头"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Unable to generate the screenshot, make sure the game is fully loaded and you are in‑game."
-msgstr "无法生成截图，请确保游戏已完全加载且您处于游戏中。"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Generate camera from in‑game view"
-msgstr "从游戏视角生成摄像机"
-
-#: src/ui/settings/cameras/form/camera-preview-input.tsx
-msgid "Image Files"
-msgstr "图像文件"
-
-#: src/ui/settings/cameras/form/camera-preview-input.tsx
-msgctxt "Input label"
-msgid "Preview"
-msgstr "预览"
-
-#: src/ui/settings/cameras/form/coordinate-x-input.tsx
-#: src/ui/settings/maps/map-dialog/coordinate-x-input.tsx
-msgctxt "Input label"
-msgid "Coordinate X"
-msgstr "X 坐标"
-
-#: src/ui/settings/cameras/form/coordinate-y-input.tsx
-#: src/ui/settings/maps/map-dialog/coordinate-y-input.tsx
-msgctxt "Input label"
-msgid "Coordinate Y"
-msgstr "Y 坐标"
-
-#: src/ui/settings/cameras/form/coordinate-z-input.tsx
-msgctxt "Input label"
-msgid "Coordinate Z"
-msgstr "Z 坐标"
-
-#: src/ui/settings/cameras/form/pitch-input.tsx
-msgctxt "Input label"
-msgid "Pitch"
-msgstr "配置"
-
-#: src/ui/settings/cameras/form/yaw-input.tsx
-msgctxt "Input label"
-msgid "Yaw"
-msgstr "鼠标水平灵敏度"
-
 #: src/ui/settings/close-settings-button.tsx
 msgid "Close settings"
 msgstr "关闭设置"
@@ -8714,6 +8722,10 @@ msgstr "外部服务器"
 #: src/ui/settings/database/database-mode-option-cards.tsx
 msgid "Use your own PostgreSQL server, local or remote."
 msgstr "使用你自己的本地或远程 PostgreSQL 服务器。"
+
+#: src/ui/settings/database/database-settings.tsx
+msgid "Database connection"
+msgstr "数据库连接"
 
 #: src/ui/settings/database/database-size.tsx
 msgid "Player trajectories"
@@ -8748,10 +8760,6 @@ msgid "Storage information could not be read. Check the database connection and 
 msgstr "无法读取存储信息，请检查数据库连接后重试。"
 
 #: src/ui/settings/database/database-size.tsx
-msgid "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
-msgstr "包含数据表和索引空间；不含 demo 原文件、精简缓存、视频与 PostgreSQL WAL。"
-
-#: src/ui/settings/database/database-size.tsx
 msgid "Actual database directory"
 msgstr "数据库实际目录"
 
@@ -8762,14 +8770,6 @@ msgstr "由外部 PostgreSQL 服务器管理"
 #: src/ui/settings/database/database-size.tsx
 msgid "The physical directory could not be resolved"
 msgstr "无法解析实际物理目录"
-
-#: src/ui/settings/database/database-size.tsx
-msgid "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
-msgstr "轨迹可能占据数据库的大部分空间。玩家轨迹用于二维回放与复盘，会予以保留；新导入不再保存装饰性鸡轨迹。"
-
-#: src/ui/settings/database/database-size.tsx
-msgid "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
-msgstr "删除旧记录不一定会归还磁盘空间。压缩数据库存储需要在导入和录制停止后单独维护。"
 
 #: src/ui/settings/database/database.tsx
 msgid "Host"
@@ -8835,85 +8835,13 @@ msgctxt "Button"
 msgid "Disconnect"
 msgstr "断开连接"
 
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "JSON file"
-msgstr "JSON文件"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You must select at least one data to import."
-msgstr "您必须选择至少一项数据进行导入。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You must select a CS:DM V2 backup file."
-msgstr "你必须选择一个CS:DM V2的备份文件。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You need at least one folder."
-msgstr "您至少需要选择一个文件夹。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "The backup file is invalid."
-msgstr "备份文件无效。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "A required tag has not been found."
-msgstr "未找到所需的标签。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Select the JSON backup file generated from the CS:DM V2."
-msgstr "选择从CS:DM V2生成的JSON备份文件。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Select backup file"
-msgstr "选择备份文件"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Import comments"
-msgstr "导入备注"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Import statuses"
-msgstr "导入状态数据"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "The comment and status of the demos inside the following folders will be updated:"
-msgstr "以下文件夹中的Demo评论和状态将被更新："
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>#</0> demo to import found in the backup file.} other {<1>#</1> demos to import found in the backup file.}}"
-msgstr "{demoToImportCount, plural, one {在备份文件中找到 <0>#</0> 个待导入录像。} other {在备份文件中找到 <1>#</1> 个待导入录像。}}"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>{demoFoundCount}</0> demo found in folders.} other {<1>{demoFoundCount}</1> demos found in folders.}}"
-msgstr "在文件夹中查找到了{demoToImportCount, plural, one {<0>{demoFoundCount}</0>} other {<1>{demoFoundCount}</1>}}个 Demo。"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>{updatedDemoCount}</0> demo updated:} other {<1>{updatedDemoCount}</1> demos updated:}}"
-msgstr "{demoToImportCount, plural, one {已更新 <0>{updatedDemoCount}</0> 个录像：} other {已更新 <1>{updatedDemoCount}</1> 个录像：}}"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Dialog title"
-msgid "Import CS:DM V2"
-msgstr "导入 CS:DM V2"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Import"
-msgstr "导入..."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Import V2 data"
-msgstr "导入 V2 数据"
-
 #: src/ui/settings/database/optimize-database-button.tsx
 msgid "Clean library references"
 msgstr "清理资料库引用"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
-msgstr "仅清理文件引用和未导入的元数据，保留已存比赛与玩家轨迹；不会压缩数据库文件。"
+msgid "Clean unavailable file references and unimported metadata."
+msgstr "清理失效文件引用和未导入的元数据。"
 
 #: src/ui/settings/database/optimize-database-button.tsx
 msgid "Remove unavailable file references"
@@ -8962,12 +8890,7 @@ msgstr "扫描录像时，自动提取文件夹中压缩包内的录像。提取
 msgid "Enabling automatic extraction has an impact on demo loading speed!"
 msgstr "启用自动解压会影响录像加载速度！"
 
-#: src/ui/settings/folders/folder-row.tsx
-msgid "This folder contains characters that will prevent demo playback when starting CS:GO! (not CS2)"
-msgstr "此文件夹包含在启动CS:GO时阻止demo播放的字符！(不是CS2)"
-
 #: src/ui/settings/folders/folders-settings.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Folders"
 msgstr "文件夹"
 
@@ -8978,31 +8901,6 @@ msgstr "包含子文件夹"
 #: src/ui/settings/folders/use-add-folder.tsx
 msgid "The selected folders are already in your settings"
 msgstr "所选文件夹已经添加"
-
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "Steam API key"
-msgstr "Steam API 密钥"
-
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "Custom Steam API key used to retrieve information from Steam"
-msgstr "用于从 Steam 获取信息的自定义 Steam API 密钥"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "API key applied"
-msgstr "API 密钥已应用"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Invalid API key"
-msgstr "无效的 API 密钥"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Network error"
-msgstr "网络错误"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgctxt "Input placeholder"
-msgid "API key"
-msgstr "API 密钥"
 
 #: src/ui/settings/maps/add-map-button.tsx
 msgctxt "Button"
@@ -9020,6 +8918,16 @@ msgstr "删除地图"
 #: src/ui/settings/maps/delete-map-dialog.tsx
 msgid "Do you want to delete this map?"
 msgstr "你想要删除这张地图吗？"
+
+#: src/ui/settings/maps/map-dialog/coordinate-x-input.tsx
+msgctxt "Input label"
+msgid "Coordinate X"
+msgstr "X 坐标"
+
+#: src/ui/settings/maps/map-dialog/coordinate-y-input.tsx
+msgctxt "Input label"
+msgid "Coordinate Y"
+msgstr "Y 坐标"
 
 #: src/ui/settings/maps/map-dialog/lower-radar-input.tsx
 #: src/ui/settings/maps/map-dialog/radar-input.tsx
@@ -9047,6 +8955,18 @@ msgstr "底层雷达图"
 msgctxt "Dialog title"
 msgid "Map"
 msgstr "地图"
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Name is required."
+msgstr "名称必须填写"
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Coordinate X is required."
+msgstr "需要X坐标。"
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Coordinate Y is required."
+msgstr "需要Y坐标。"
 
 #: src/ui/settings/maps/map-dialog/map-form-provider.tsx
 msgid "Threshold Z is required."
@@ -9093,10 +9013,6 @@ msgstr "这将重置默认地图"
 msgctxt "Button"
 msgid "Reset default maps"
 msgstr "重置默认地图"
-
-#: src/ui/settings/playback/cs2-highlights-warning.tsx
-msgid "CS2 doesn't have a built-in highlights/lowlights algorithm yet. The custom algorithm is always used for CS2 demos."
-msgstr "CS2 还没有内置的高光/低光算法。因此 CS2 的 demo 将始终使用自定义的算法。"
 
 #: src/ui/settings/playback/cs2-location.tsx
 msgid "Path to the <0>cs2.exe</0> file located in the <1>game\\bin\\win64</1> folder of your CS2 installation."
@@ -9166,36 +9082,6 @@ msgstr "如果你想要使用HLAE，你必须安装一个与 CS2 测试版兼容
 msgctxt "Settings title"
 msgid "CS2 plugin"
 msgstr "CS2 插件"
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "Path to the <0>csgo.exe</0> file located in the root folder of your CS:GO installation."
-msgstr "位于您的 CS:GO 安装目录下的 <0>csgo.exe</0> 文件路径。"
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "Path to the <0>csgo.sh</0> script located in the root folder of your CS:GO installation."
-msgstr "位于您的 CS:GO 安装目录下的 <0>csgo.sh</0> 文件路径。"
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "CS:GO location"
-msgstr "CS:GO 安装位置"
-
-#: src/ui/settings/playback/custom-highlights.tsx
-msgid "Use a custom highlights algorithm to generate players highlights"
-msgstr "使用自定义高光算法生成玩家的高光时刻"
-
-#: src/ui/settings/playback/custom-highlights.tsx
-msgctxt "Settings title"
-msgid "Custom highlights"
-msgstr "自定义高光时刻"
-
-#: src/ui/settings/playback/custom-lowlights.tsx
-msgid "Use a custom lowlights algorithm to generate players lowlights"
-msgstr "使用自定义低光算法生成玩家的低光时刻"
-
-#: src/ui/settings/playback/custom-lowlights.tsx
-msgctxt "Settings title"
-msgid "Lowlights"
-msgstr "低光时刻"
 
 #: src/ui/settings/playback/executable-location.tsx
 #: src/ui/settings/video/ffmpeg/ffmpeg-location.tsx
@@ -9305,16 +9191,11 @@ msgstr "击杀前延迟 (低谷时刻)"
 msgid "How many seconds to start before a kill when watching lowlights"
 msgstr "观看低谷时，在击杀镜头前多少秒开始播放"
 
-#: src/ui/settings/playback/player-voices.tsx
-msgid "Listen player voices during playback"
-msgstr "观看 Demo 时聆听赛中玩家的语音"
+#: src/ui/settings/playback/playback-settings.tsx
+msgid "Advanced playback"
+msgstr "高级播放设置"
 
 #: src/ui/settings/playback/player-voices.tsx
-msgid "Doesn't work with Valve Matchmaking demos as voice data are not available!"
-msgstr "Valve 官方匹配服务器的 Demo 无法播放播放语音！"
-
-#: src/ui/settings/playback/player-voices.tsx
-#: src/ui/settings/video/recording/recording-player-voices.tsx
 msgctxt "Settings title"
 msgid "Player voices"
 msgstr "玩家语音"
@@ -9377,8 +9258,12 @@ msgid "Wait for round end"
 msgstr "等待回合结束"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "UI"
-msgstr "UI设置"
+msgid "Appearance"
+msgstr "外观"
+
+#: src/ui/settings/settings-tabs.tsx
+msgid "Demo import"
+msgstr "Demo 导入"
 
 #: src/ui/settings/settings-tabs.tsx
 msgid "Maps"
@@ -9389,21 +9274,21 @@ msgid "Playback"
 msgstr "播放"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "Analyze"
-msgstr "分析"
+msgid "Recording"
+msgstr "录像"
 
 #: src/ui/settings/settings-tabs.tsx
-#: src/ui/videos/video-entry.tsx
-msgid "Cameras"
-msgstr "相机"
-
-#: src/ui/settings/settings-tabs.tsx
-msgid "Integrations"
-msgstr "集成"
+msgid "Storage"
+msgstr "存储"
 
 #: src/ui/settings/settings-tabs.tsx
 msgid "About"
 msgstr "关于"
+
+#: src/ui/settings/shared/game-height-input.tsx
+msgctxt "Input placeholder"
+msgid "Height"
+msgstr "高度"
 
 #: src/ui/settings/shared/game-height-input.tsx
 msgid "Set the game height resolution."
@@ -9415,6 +9300,11 @@ msgid "Height"
 msgstr "高度"
 
 #: src/ui/settings/shared/game-width-input.tsx
+msgctxt "Input placeholder"
+msgid "Width"
+msgstr "高度"
+
+#: src/ui/settings/shared/game-width-input.tsx
 msgid "Set the game width resolution."
 msgstr "设置游戏分辨率宽度。"
 
@@ -9422,23 +9312,6 @@ msgstr "设置游戏分辨率宽度。"
 msgctxt "Settings title"
 msgid "Width"
 msgstr "宽度"
-
-#: src/ui/settings/tags/add-tag.tsx
-msgctxt "Button"
-msgid "Add"
-msgstr "添加"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "The name is already taken"
-msgstr "此名称已被使用"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "The name is too short"
-msgstr "此名称过短"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "Invalid color"
-msgstr "颜色无效"
 
 #: src/ui/settings/ui/date-format-input.tsx
 msgid "Invalid date format."
@@ -9487,39 +9360,6 @@ msgctxt "Settings title"
 msgid "Hardware Acceleration"
 msgstr "硬件加速"
 
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "My habits"
-msgstr "我的习惯"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Matches"
-msgstr "比赛"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Demos"
-msgstr "录像"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Players"
-msgstr "玩家"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Teams"
-msgstr "队伍"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "Initial page displayed on app startup"
-msgstr "应用程序启动时显示的初始页面"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Settings title"
-msgid "Initial page"
-msgstr "初始页面"
-
 #: src/ui/settings/ui/language-select.tsx
 msgid "Application language"
 msgstr "应用程序语言"
@@ -9528,15 +9368,6 @@ msgstr "应用程序语言"
 msgctxt "Settings title"
 msgid "Language"
 msgstr "语言"
-
-#: src/ui/settings/ui/redirect-demo-to-match.tsx
-msgid "Navigate to the demo's match page when going to a analyzed demo page."
-msgstr "已分析的Demo将默认展示比赛页面。"
-
-#: src/ui/settings/ui/redirect-demo-to-match.tsx
-msgctxt "Settings title"
-msgid "Redirect demo to match"
-msgstr "默认展示比赛页面"
 
 #. Reset tables (columns order, visibility…)
 #: src/ui/settings/ui/reset-tables-state.tsx
@@ -9580,75 +9411,9 @@ msgstr "主题"
 msgid "Invalid FFmpeg executable"
 msgstr "无效的 FFmpeg 可执行文件"
 
-#: src/ui/settings/video/hlae/hlae-config-folder-path.tsx
-msgid "Enable config folder"
-msgstr "使用配置文件夹"
-
 #: src/ui/settings/video/hlae/hlae-location.tsx
 msgid "Invalid HLAE executable"
 msgstr "无效的 HLAE 可执行文件"
-
-#: src/ui/settings/video/recording/default-video-recording-settings.tsx
-msgid "Default recording settings"
-msgstr "默认录制设置"
-
-#: src/ui/settings/video/recording/recording-assists.tsx
-msgid "Show assists in kill feed."
-msgstr "在击杀镜头当中加入助攻镜头。"
-
-#: src/ui/settings/video/recording/recording-assists.tsx
-msgctxt "Settings title"
-msgid "Show Assists"
-msgstr "显示助攻"
-
-#: src/ui/settings/video/recording/recording-audio.tsx
-msgid "Record audio during video recording."
-msgstr "视频录制期间录制音频。"
-
-#: src/ui/settings/video/recording/recording-audio.tsx
-msgctxt "Settings title"
-msgid "Record Audio"
-msgstr "录制音频"
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgctxt "Input placeholder"
-msgid "Duration"
-msgstr "持续时间"
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgid "How long death notices are displayed during recording in seconds."
-msgstr "死亡通知以秒为单位在录制时显示多长。"
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgctxt "Settings title"
-msgid "Death notices duration"
-msgstr "击杀提示持续时间"
-
-#: src/ui/settings/video/recording/recording-player-voices.tsx
-msgid "Listen to player voices during recording."
-msgstr "录制时聆听玩家语音。"
-
-#: src/ui/settings/video/recording/recording-player-voices.tsx
-msgid "Player voices are not available in Valve Matchmaking demos!"
-msgstr "注意 Valve 官方匹配服务器的 Demo 中没有玩家语音！"
-
-#: src/ui/settings/video/recording/recording-show-only-death-notices.tsx
-msgid "Show only death notices during recording."
-msgstr "在录制期间只显示死亡通知。"
-
-#: src/ui/settings/video/recording/recording-show-only-death-notices.tsx
-msgctxt "Settings title"
-msgid "Show only death notices"
-msgstr "只显示击杀提示"
-
-#: src/ui/settings/video/recording/recording-x-ray.tsx
-msgid "See players through walls during recording."
-msgstr "录制过程中透过墙壁显示玩家。"
-
-#: src/ui/settings/video/recording/recording-x-ray.tsx
-msgctxt "Settings title"
-msgid "Show X-Ray"
-msgstr "开启 X 光"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "Please make sure that <0>CS:GO</0> is installed from Steam."
@@ -9961,20 +9726,6 @@ msgctxt "Button"
 msgid "Remove completed"
 msgstr "移除已完成的任务"
 
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgctxt "Button"
-msgid "Resume"
-msgstr "继续"
-
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgctxt "Button"
-msgid "Pause"
-msgstr "暂停"
-
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgid "The video queue is paused!"
-msgstr "视频队列已暂停！"
-
 #: src/ui/videos/video-entry.tsx
 msgid "Waiting…"
 msgstr "请等待..."
@@ -10014,6 +9765,10 @@ msgstr "视频序列"
 #: src/ui/videos/video-entry.tsx
 msgid "Disk space"
 msgstr "磁盘空间"
+
+#: src/ui/videos/video-entry.tsx
+msgid "Encoder software"
+msgstr "编码器"
 
 #: src/ui/videos/video-entry.tsx
 msgid "Resolution"
@@ -10066,6 +9821,10 @@ msgstr "音频"
 #: src/ui/videos/video-entry.tsx
 msgid "Player voices"
 msgstr "玩家语音"
+
+#: src/ui/videos/video-entry.tsx
+msgid "Cameras"
+msgstr "相机"
 
 #: src/ui/videos/video-entry.tsx
 msgid "First camera on"

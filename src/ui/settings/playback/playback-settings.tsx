@@ -1,7 +1,7 @@
 import React from 'react';
+import { Trans } from '@lingui/react/macro';
 import { SettingsView } from 'csdm/ui/settings/settings-view';
 import { LaunchParameters } from './launch-parameters';
-import { CustomHighlights } from './custom-highlights';
 import { GameDisplayMode } from './game-display-mode';
 import { GameHeight } from './game-height';
 import { GameWidth } from './game-width';
@@ -9,7 +9,6 @@ import { HighlightsWatchBeforeKillDelay } from './highlights-watch-before-kill-d
 import { HighlightsWatchAfterKillDelay } from './highlights-watch-after-kill-delay';
 import { LowlightsWatchBeforeKillDelay } from './lowlights-watch-before-kill-delay';
 import { LowlightsWatchAfterKillDelay } from './lowlights-watch-after-kill-delay';
-import { CustomLowlights } from './custom-lowlights';
 import { WatchRoundBeforeDelay } from './watch-round-before-delay';
 import { WatchRoundAfterDelay } from './watch-round-after-delay';
 import { UseHlae } from './use-hlae';
@@ -18,7 +17,6 @@ import { HighlightsIncludeDamages } from './highlights-include-damages';
 import { LowlightsIncludeDamages } from './lowlights-include-damages';
 import { Cs2PluginSelect } from './cs2-plugin-select';
 import { Cs2Location } from './cs2-location';
-import { CsgoLocation } from './csgo-location';
 import { FollowSymbolicLinks } from './follow-symbolic-links';
 import { SteamRuntimeScriptLocation } from './steam-runtime-script-location';
 import { WatchRoundWaitRoundEnd } from './watch-round-wait-round-end';
@@ -29,33 +27,37 @@ export function PlaybackSettings() {
       <GameWidth />
       <GameHeight />
       <GameDisplayMode />
-      <LaunchParameters />
       <PlayerVoices />
-      <CustomHighlights />
-      <HighlightsWatchBeforeKillDelay />
-      <HighlightsWatchAfterKillDelay />
-      <HighlightsIncludeDamages />
-      <CustomLowlights />
-      <LowlightsWatchBeforeKillDelay />
-      <LowlightsWatchAfterKillDelay />
-      <LowlightsIncludeDamages />
-      <WatchRoundBeforeDelay />
-      <WatchRoundAfterDelay />
-      <WatchRoundWaitRoundEnd />
-      {window.csdm.isWindows && <UseHlae />}
-      {!window.csdm.isMac && (
-        <>
-          <Cs2PluginSelect />
-          {window.csdm.isLinux && (
+      {!window.csdm.isMac && <Cs2Location />}
+      <details className="mt-12">
+        <summary className="cursor-pointer text-body-strong">
+          <Trans>Advanced playback</Trans>
+        </summary>
+        <div className="mt-12 flex flex-col gap-12">
+          <LaunchParameters />
+          <HighlightsWatchBeforeKillDelay />
+          <HighlightsWatchAfterKillDelay />
+          <HighlightsIncludeDamages />
+          <LowlightsWatchBeforeKillDelay />
+          <LowlightsWatchAfterKillDelay />
+          <LowlightsIncludeDamages />
+          <WatchRoundBeforeDelay />
+          <WatchRoundAfterDelay />
+          <WatchRoundWaitRoundEnd />
+          {window.csdm.isWindows && <UseHlae />}
+          {!window.csdm.isMac && (
             <>
-              <FollowSymbolicLinks />
-              <SteamRuntimeScriptLocation />
+              <Cs2PluginSelect />
+              {window.csdm.isLinux && (
+                <>
+                  <FollowSymbolicLinks />
+                  <SteamRuntimeScriptLocation />
+                </>
+              )}
             </>
           )}
-          <Cs2Location />
-          <CsgoLocation />
-        </>
-      )}
+        </div>
+      </details>
     </SettingsView>
   );
 }

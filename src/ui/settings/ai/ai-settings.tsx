@@ -88,12 +88,6 @@ export function AiSettings() {
         <h1 className="text-heading font-semibold">
           <Trans>AI reviews</Trans>
         </h1>
-        <p className="text-gray-700">
-          <Trans>
-            Choose a cloud API or a local Ollama model. Reviews are generated only when you click, and saved on this
-            device.
-          </Trans>
-        </p>
         {configuration && (
           <>
             <Select
@@ -151,19 +145,7 @@ export function AiSettings() {
                 </Trans>
               </p>
             )}
-            <div className="flex flex-col gap-10">
-              <p className="text-caption text-gray-700">
-                <Trans>
-                  Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI
-                  reviews.
-                </Trans>
-              </p>
-              <p className="text-caption text-gray-700">
-                <Trans>
-                  This is a maximum output budget, not a required response length. Higher limits can take longer; your
-                  provider or model may enforce a lower limit.
-                </Trans>
-              </p>
+            <div className="flex flex-wrap items-center gap-10">
               <div className="self-start">
                 <ReviewButton
                   disabled={busy}
@@ -173,7 +155,7 @@ export function AiSettings() {
                     setMessage('');
                   }}
                 >
-                  <Trans>Reset token limit to default</Trans>
+                  <Trans>Reset to {defaultTokenLimit}</Trans>
                 </ReviewButton>
               </div>
             </div>
@@ -190,12 +172,6 @@ export function AiSettings() {
               isDisabled={busy}
               onChange={(event) => setApiKey(event.target.value)}
             />
-            <p className="text-caption text-gray-600">
-              <Trans>
-                Keys use operating-system encryption. Changing the API address removes the previous key; enter the key
-                for the new server. Keys are never included in reports.
-              </Trans>
-            </p>
             <div className="flex flex-wrap gap-12">
               <ReviewButton primary={true} disabled={busy || !configuration.model.trim()} onClick={() => void save()}>
                 {busy ? <Trans>Saving…</Trans> : <Trans>Save AI settings</Trans>}
@@ -211,20 +187,6 @@ export function AiSettings() {
                 >
                   <Trans>Remove saved key</Trans>
                 </ReviewButton>
-              )}
-            </div>
-            <div className="rounded-12 border border-gray-300 bg-gray-100 p-20 text-gray-700">
-              {configuration.provider === 'ollama' ? (
-                <Trans>
-                  Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model
-                  supporting image inputs and JSON responses. Local mode accepts only loopback addresses.
-                </Trans>
-              ) : (
-                <Trans>
-                  Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send
-                  the exact preview images and round facts after you click Send; images may contain visible nicknames,
-                  avatars or chat. Full demos and videos stay on this device.
-                </Trans>
               )}
             </div>
           </>

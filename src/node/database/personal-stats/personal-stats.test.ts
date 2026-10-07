@@ -297,6 +297,50 @@ describe('per-demo round facts', () => {
     expect(facts.find((player) => player.steamId === self)!.demoRoundCount).toBe(2);
   });
 
+  it('does not count an assist or invent a denominator round without a participation snapshot', () => {
+    const data = fixture();
+    data.economies = data.economies.filter((entry) => !(entry.player_steam_id === self && entry.round_number === 2));
+    data.kills = [
+      kill({
+        round_number: 2,
+        tick: 2200,
+        killer_steam_id: mate,
+        assister_steam_id: self,
+        assister_side: TeamNumber.T,
+      }),
+    ];
+    const summary = aggregatePersonalStats(buildPersonalMatchStats(data), { steamId: self });
+    expect(summary.metrics).toMatchObject({ roundCount: 1, kills: 0, assists: 0, deaths: 0, kda: null });
+    expect(summary.analysis.output.killOrAssistRounds).toEqual({ count: 0, total: 1, percentage: 0 });
+  });
+
+  it('keeps firearm shots distinct from damage events, grenade throws and controlled-bot fire', () => {
+    const data = fixture();
+    data.shots = [
+      { weapon_name: WeaponName.AK47, is_player_controlling_bot: false },
+      { weapon_name: WeaponName.AK47, is_player_controlling_bot: true },
+      { weapon_name: WeaponName.HEGrenade, is_player_controlling_bot: false },
+    ].map(
+      (entry) =>
+        ({ ...entry, tick: 1200, round_number: 1, player_steam_id: self }) as PersonalMatchInput['shots'][number],
+    );
+    data.damages = [
+      damage({ health_damage: 100 }),
+      damage({ victim_steam_id: enemy2, health_damage: 10 }),
+      damage({ weapon_name: WeaponName.HEGrenade, health_damage: 20 }),
+    ];
+    const summary = aggregatePersonalStats(buildPersonalMatchStats(data), { steamId: self });
+    expect(summary.weapons.find((weapon) => weapon.weapon === WeaponName.AK47)).toMatchObject({
+      shots: 1,
+      damage: 110,
+    });
+    expect(summary.weapons.find((weapon) => weapon.weapon === WeaponName.HEGrenade)).toMatchObject({
+      shots: 0,
+      damage: 20,
+    });
+    expect(summary.metrics.heThrown).toBe(1);
+  });
+
   it('keeps controlled-bot damage in team RWS but does not credit it to the controller', () => {
     const data = fixture();
     data.damages = [

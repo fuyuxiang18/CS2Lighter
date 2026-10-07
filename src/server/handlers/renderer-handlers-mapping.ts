@@ -264,6 +264,9 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.FetchReviewDuels]: Handler<ReviewDuelsPayload, ReviewDuelsPage>;
   [RendererClientMessageName.GetReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
   [RendererClientMessageName.GenerateReviewBatch]: Handler<ReviewBatchRequest, ReviewBatchInspection>;
+  [RendererClientMessageName.GetRecordingQueue]: Handler<void, RecordingQueue>;
+  [RendererClientMessageName.AddToRecordingQueue]: Handler<AddToRecordingQueue, RecordingQueue>;
+  [RendererClientMessageName.ControlRecordingQueue]: Handler<ControlRecordingQueue, RecordingQueue>;
   [RendererClientMessageName.GetReviewBatch]: Handler<{ id: string }, ReviewBatchInspection | undefined>;
   [RendererClientMessageName.ListReviewBatches]: Handler<void, ReviewBatch[]>;
   [RendererClientMessageName.CancelReviewBatch]: Handler<{ id: string }, ReviewBatch | undefined>;
@@ -407,6 +410,9 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.FetchReviewDuels]: fetchReviewDuelsHandler,
   [RendererClientMessageName.GetReviewClip]: getReviewClipHandler,
   [RendererClientMessageName.GenerateReviewBatch]: generateReviewBatchHandler,
+  [RendererClientMessageName.GetRecordingQueue]: getRecordingQueueHandler,
+  [RendererClientMessageName.AddToRecordingQueue]: addToRecordingQueueHandler,
+  [RendererClientMessageName.ControlRecordingQueue]: controlRecordingQueueHandler,
   [RendererClientMessageName.GetReviewBatch]: getReviewBatchHandler,
   [RendererClientMessageName.ListReviewBatches]: listReviewBatchesHandler,
   [RendererClientMessageName.CancelReviewBatch]: cancelReviewBatchHandler,
@@ -530,6 +536,12 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.CapturePlayerView]: capturePlayerViewHandler,
 };
 import type { ReviewBatch, ReviewBatchInspection, ReviewBatchRequest } from 'csdm/common/types/review-batch';
+import type { RecordingQueue, AddToRecordingQueue, ControlRecordingQueue } from 'csdm/common/types/recording-queue';
+import {
+  getRecordingQueueHandler,
+  addToRecordingQueueHandler,
+  controlRecordingQueueHandler,
+} from './renderer-process/video/recording-queue-handlers';
 import {
   generateReviewBatchHandler,
   getReviewBatchHandler,

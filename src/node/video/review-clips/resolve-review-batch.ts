@@ -51,7 +51,13 @@ export function aliveEndTick(startTick: number, requestedEndTick: number, deathT
   return end > startTick ? end : undefined;
 }
 
-export type ResolvedBatchItem = { item: ReviewBatchItem; input: ResolvedReviewClip; slots: Record<string, number> };
+export type ResolvedBatchItem = {
+  item: ReviewBatchItem;
+  input: ResolvedReviewClip;
+  slots: Record<string, number>;
+  eventKind?: 'kill' | 'death' | 'damage' | 'range';
+  opening?: boolean;
+};
 export type ResolvedReviewBatch = {
   id: string;
   request: ReviewBatchRequest;
@@ -73,7 +79,15 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
   let segmentIndex = 0;
   for (const candidate of request.clips) {
     const input = await resolveReviewClip(candidate);
-    const clip = { ...input.request, eventTick: candidate.eventTick, opponentSteamId: candidate.opponentSteamId };
+    const clip = {
+      ...input.request,
+      eventTick: candidate.eventTick,
+      opponentSteamId: candidate.opponentSteamId,
+      ...(candidate.includeOpponent === undefined ? {} : { includeOpponent: candidate.includeOpponent }),
+    };
+    if (candidate.includeOpponent !== undefined && typeof candidate.includeOpponent !== 'boolean')
+      throw new ReviewClipError('invalid-request');
+    const includeOpponent = candidate.includeOpponent ?? request.includeOpponent;
     if (
       candidate.eventTick !== undefined &&
       (!Number.isSafeInteger(candidate.eventTick) ||
@@ -131,7 +145,7 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
     const segments: ReviewBatchSegment[] = [];
     for (const [perspective, steamId] of [
       ['player', clip.steamId],
-      ...(request.includeOpponent && opponentId ? [['opponent', opponentId]] : []),
+      ...(includeOpponent && opponentId ? [['opponent', opponentId]] : []),
     ] as ['player' | 'opponent', string][]) {
       const player = players.find((row) => row.steam_id === steamId && row.index > 0);
       const deathTick = kills
@@ -158,6 +172,24 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
     }
     items.push({
       input,
+      eventKind: kills.some((kill) => kill.tick === clip.eventTick && kill.killer_steam_id === clip.steamId)
+        ? 'kill'
+        : kills.some((kill) => kill.tick === clip.eventTick && kill.victim_steam_id === clip.steamId)
+          ? 'death'
+          : damages.some((damage) => damage.tick === clip.eventTick)
+            ? 'damage'
+            : 'range',
+      opening:
+        clip.eventTick !== undefined &&
+        clip.eventTick ===
+          kills
+            .filter(
+              (kill) =>
+                kill.killer_side !== kill.victim_side &&
+                [2, 3].includes(kill.killer_side) &&
+                [2, 3].includes(kill.victim_side),
+            )
+            .sort((a, b) => a.tick - b.tick)[0]?.tick,
       slots: Object.fromEntries(players.map((p) => [p.steam_id, p.index])),
       item: {
         index: items.length + 1,
@@ -167,7 +199,7 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
         tickrate: input.tickrate,
         opponentSteamId: opponentId,
         opponentName: players.find((p) => p.steam_id === opponentId)?.name,
-        opponentUnavailable: request.includeOpponent && !segments.some((s) => s.perspective === 'opponent'),
+        opponentUnavailable: includeOpponent && !segments.some((s) => s.perspective === 'opponent'),
         segments,
         status: 'queued',
       },

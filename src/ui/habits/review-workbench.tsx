@@ -72,11 +72,8 @@ export function ReviewWorkbench({
       <div className="flex flex-wrap items-end justify-between gap-12">
         <div>
           <h2 className="text-subtitle">
-            <Trans>One useful review, one change to try.</Trans>
+            <Trans>Recurring situations</Trans>
           </h2>
-          <p className="mt-8 text-gray-700">
-            <Trans>Choose a recurring situation. Watch the context before deciding whether to change it.</Trans>
-          </p>
         </div>
         {cards.length > 3 && (
           <button
@@ -120,7 +117,6 @@ export function ReviewWorkbench({
                   </Trans>
                 </span>
               </span>
-              <span className="text-caption text-gray-700">{labels.cards[card.id].question}</span>
             </button>
           );
         })}
@@ -128,9 +124,7 @@ export function ReviewWorkbench({
       {!selected && (
         <HabitsPanel title={<Trans>No review candidates in this selection</Trans>}>
           <p className="text-gray-700">
-            <Trans>
-              Try another map or side, or explore your playing style. No detected candidate does not mean flawless play.
-            </Trans>
+            <Trans>Try another map or side, or explore your playing style.</Trans>
           </p>
         </HabitsPanel>
       )}
@@ -138,13 +132,18 @@ export function ReviewWorkbench({
         <HabitsPanel title={selectedLabel.title}>
           <div className="flex flex-col gap-8">
             <p>{selectedLabel.question}</p>
-            <p className="text-caption text-gray-700">{selectedLabel.context}</p>
             <p className="text-caption text-gray-600">
               <Trans>
                 {affectedMatches} affected matches · {evidenceShown} recent examples of {evidenceTotal} matching rounds
               </Trans>
             </p>
           </div>
+          <details className="text-caption text-gray-700">
+            <summary className="cursor-pointer">
+              <Trans>Calculation details</Trans>
+            </summary>
+            <p className="mt-8">{selectedLabel.context}</p>
+          </details>
           <div className="flex flex-col gap-8">
             {selected.evidence.map((item) => {
               const key = evidenceKey(selected.id, item);

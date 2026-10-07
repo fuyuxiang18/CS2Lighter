@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { RoutePath } from 'csdm/ui/routes-paths';
 import { Trans, useLingui } from '@lingui/react/macro';
 import type { ReviewBatch, ReviewBatchInspection, ReviewBattleRequest } from 'csdm/common/types/review-batch';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
@@ -32,6 +34,8 @@ function matchesEvent(request: ReviewBattleRequest, candidate: ReviewBattleReque
 
 export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattleRequest[]; steamId: string }) {
   const { t } = useLingui();
+  const navigate = useNavigate();
+  const [added, setAdded] = useState(false);
   const client = useWebSocketClient();
   const formatDate = useFormatDate();
   const { openSettings } = useSettingsOverlay();
@@ -59,7 +63,6 @@ export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattl
   );
   const currentSegment = currentItem?.segments.find((segment) => segment.index === batch?.currentSegment);
   const currentEvent = currentItem?.index;
-  const recordingBusy = batches.some((entry) => isReviewRecordingActive(entry.status));
   useEffect(() => {
     let disposed = false;
     const update = (next: ReviewBatch) => {
@@ -117,32 +120,16 @@ export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattl
       setBusy(false);
     }
   };
-  const generate = async (clips = requests, opponent = includeOpponent) => {
-    if (!clips.length || clips.length > 20) return;
+  const addToQueue = async () => {
+    if (!requests.length || requests.length > 20) return;
     setBusy(true);
     setFailed(false);
     try {
-      const result = await client.send({
-        name: RendererClientMessageName.GenerateReviewBatch,
-        payload: { clips, includeOpponent: opponent },
+      await client.send({
+        name: RendererClientMessageName.AddToRecordingQueue,
+        payload: { clips: requests, includeOpponent },
       });
-      setInspection(result);
-      setBatches((previous) => mergeBatch(previous, result.batch));
-      setSelectedId(result.batch.id);
-      setInitialItemIndex(clips.length === 1 ? result.batch.items[0]?.index : undefined);
-    } catch {
-      setFailed(true);
-    } finally {
-      setBusy(false);
-    }
-  };
-  const cancel = async () => {
-    if (!batch) return;
-    setBusy(true);
-    setFailed(false);
-    try {
-      const next = await client.send({ name: RendererClientMessageName.CancelReviewBatch, payload: { id: batch.id } });
-      if (next) setBatches((previous) => mergeBatch(previous, next));
+      setAdded(true);
     } catch {
       setFailed(true);
     } finally {
@@ -173,7 +160,7 @@ export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattl
           </p>
           <p className="text-caption text-gray-600">
             <Trans>
-              One game start per demo. Record selected events together, then watch the saved videos instantly.
+              Add selected encounters to the recording queue. CS2 starts only from the queue when you press Start.
             </Trans>
           </p>
         </div>
@@ -183,41 +170,26 @@ export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattl
       </div>
       <Checkbox
         isChecked={includeOpponent}
-        isDisabled={busy || recordingBusy}
+        isDisabled={busy}
         onChange={(event) => setIncludeOpponent(event.target.checked)}
         label={<Trans>Include the opponent POV after each of my encounters</Trans>}
       />
-      <p className="text-caption text-gray-600">
-        <Trans>
-          More perspectives take more recording time. Start with a few important events; cached videos do not need
-          another game launch.
-        </Trans>
-      </p>
+
       <div className="flex flex-wrap gap-8">
         <ReviewButton
           primary={true}
-          disabled={busy || loading || recordingBusy || selectedCount === 0 || selectedCount > 20}
-          onClick={() => void generate()}
+          disabled={busy || loading || selectedCount === 0 || selectedCount > 20}
+          onClick={() => void addToQueue()}
         >
-          <Trans>Record selected events</Trans>
+          <Trans>Add selected events to recording queue</Trans>
         </ReviewButton>
-        {batch && isReviewRecordingActive(batch.status) && (
-          <ReviewButton disabled={busy} onClick={() => void cancel()}>
-            <Trans>Cancel this recording batch</Trans>
-          </ReviewButton>
-        )}
-        {batch && ['failed', 'canceled'].includes(batch.status) && (
-          <ReviewButton
-            disabled={busy || recordingBusy}
-            onClick={() =>
-              void generate(
-                batch.items.map((item) => item.request),
-                batch.includeOpponent,
-              )
-            }
-          >
-            <Trans>Retry this batch</Trans>
-          </ReviewButton>
+        <ReviewButton onClick={() => navigate(RoutePath.RecordingQueue)}>
+          <Trans>Open recording queue</Trans>
+        </ReviewButton>
+        {added && (
+          <p role="status" className="text-accent">
+            <Trans>Added to the queue. No game has been started.</Trans>
+          </p>
         )}
       </div>
       {selectedCount === 0 && (
@@ -313,7 +285,7 @@ export function ReviewBatchStudio({ requests, steamId }: { requests: ReviewBattl
       )}
       {failed && (
         <p role="alert" className="text-red-500">
-          <Trans>Could not load or start this recording batch. Check the demo and recording setup, then retry.</Trans>
+          <Trans>Could not load saved videos or add these events to the queue. Check the demo, then retry.</Trans>
         </p>
       )}
     </section>

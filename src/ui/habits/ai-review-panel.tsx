@@ -122,7 +122,7 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
             {scope.kind === 'match' ? <Trans>AI match review</Trans> : <Trans>AI personal review</Trans>}
           </h2>
           <p className="text-body text-gray-700">
-            <Trans>A short style label, five dimensions and actions grounded in your recorded rounds.</Trans>
+            <Trans>Playing style, five scores and the next things to work on.</Trans>
           </p>
         </div>
         <ReviewButton onClick={onConfigure}>
@@ -130,26 +130,16 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
         </ReviewButton>
       </header>
 
-      <div className="flex flex-col gap-10 rounded-8 bg-gray-200 p-16 text-body">
-        <p className="font-semibold">
-          <Trans>Statistics and sampled rounds only · No POV images sent</Trans>
-        </p>
-        <p className="text-caption text-gray-700">
-          <Trans>
-            Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files,
-            videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this
-            input.
-          </Trans>
-        </p>
+      <div className="flex flex-col gap-8 rounded-8 bg-gray-200 p-12 text-body">
         {configured && (
           <>
             <p className="text-caption wrap-break-word text-gray-800">
               <Trans>
-                Generation target: {target} · {serverHost} · {model}
+                Send statistics and sampled rounds to {target} · {serverHost} · {model}
               </Trans>
             </p>
             <p className="text-caption text-gray-700">
-              <Trans>Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length.</Trans>
+              <Trans>Output limit: {maxOutputTokens} tokens</Trans>
             </p>
           </>
         )}
@@ -194,11 +184,6 @@ function ReviewPanel({ scope, onConfigure }: { scope: AiReportScope; onConfigure
           {!configured && (
             <p className="text-caption text-gray-700">
               <Trans>Choose a provider and model in AI settings to start.</Trans>
-            </p>
-          )}
-          {configured && !report && roundCount > 0 && (
-            <p className="text-caption text-gray-700">
-              <Trans>No report is cached for this sample and model. Generation starts only when you click.</Trans>
             </p>
           )}
         </div>

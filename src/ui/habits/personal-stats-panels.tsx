@@ -9,6 +9,7 @@ import { useChartColors } from 'csdm/ui/hooks/use-charts-colors';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { buildMatchPath } from 'csdm/ui/routes-paths';
 import { HabitsPanel } from './habits-layout';
+import { PersonalAnalysisPanels } from './personal-analysis-panels';
 
 function number(value: number | null, digits = 1) {
   return value === null ? '—' : value.toFixed(digits);
@@ -29,7 +30,7 @@ function PersonalMetric({ title, value, detail }: { title: ReactNode; value: Rea
 }
 
 function MetricsGrid({ children }: { children: ReactNode }) {
-  return <div className="grid grid-cols-2 gap-12 xl:grid-cols-4">{children}</div>;
+  return <div className="grid grid-cols-2 gap-12 lg:grid-cols-3 xl:grid-cols-4">{children}</div>;
 }
 
 function StatsTable({ headers, rows }: { headers: ReactNode[]; rows: { key: string; cells: ReactNode[] }[] }) {
@@ -78,24 +79,24 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
     rwsRoundCount,
     rwsMissingRoundCount,
     damage,
-    survivedRoundCount,
     openingAttempts,
     openingKillRoundWins,
-    economyRoundCount,
+    equipmentRoundCount,
+    moneySpentRoundCount,
   } = metrics;
   const kd = number(metrics.kd, 2);
   const kda = number(metrics.kda, 2);
-  const roundWinRate = percent(metrics.roundWinPercentage);
   const utilityPerRound = number(metrics.utilityDamagePerRound);
   const enemiesPerFlash = number(metrics.enemiesPerFlash, 2);
   const enemyBlindSeconds = number(metrics.enemyBlindSeconds);
   const skippedMatches = summary.coverage.skippedMatches;
   const tabs = [
-    { value: 'overview', label: t`Personal overview` },
-    { value: 'combat', label: t`Duels and clutches` },
-    { value: 'utility', label: t`Utility and objectives` },
-    { value: 'breakdowns', label: t`Maps, sides and economy` },
-    { value: 'matches', label: t`Match history and trends` },
+    { value: 'overview', label: t`Overview` },
+    { value: 'combat', label: t`Output and entry` },
+    { value: 'utility', label: t`Teamplay and utility` },
+    { value: 'clutch', label: t`Clutches and economy` },
+    { value: 'matches', label: t`Trends` },
+    { value: 'records', label: t`Personal records` },
   ];
   return (
     <div className="flex min-w-0 flex-col gap-16">
@@ -114,11 +115,6 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
         <>
           <MetricsGrid>
             <PersonalMetric
-              title={<Trans>Matches / rounds</Trans>}
-              value={`${summary.matchCount} / ${metrics.roundCount}`}
-              detail={t`${matchWins} wins · ${matchLosses} losses · ${matchTies} ties`}
-            />
-            <PersonalMetric
               title={<Trans>Headshot rate</Trans>}
               value={percent(metrics.headshotPercentage)}
               detail={t`${headshotKills} headshot kills / ${kills} enemy kills`}
@@ -134,11 +130,6 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
               detail={t`${rwsRoundCount} valid rounds · ${rwsMissingRoundCount} unavailable`}
             />
             <PersonalMetric
-              title={<Trans>Kills / deaths / assists</Trans>}
-              value={`${kills} / ${metrics.deaths} / ${metrics.assists}`}
-              detail={t`K/D ${kd} · (K+A)/D ${kda}`}
-            />
-            <PersonalMetric
               title={<Trans>ADR · damage per round</Trans>}
               value={number(metrics.adr)}
               detail={t`${damage} enemy health damage`}
@@ -146,63 +137,48 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
             <PersonalMetric
               title={<Trans>KAST</Trans>}
               value={percent(metrics.kastPercentage)}
-              detail={<Trans>Rounds with a kill, assist, survival or traded death</Trans>}
+              detail={`${metrics.kastRoundCount} / ${metrics.roundCount}`}
             />
             <PersonalMetric
               title={<Trans>Match win rate</Trans>}
               value={percent(summary.matchWinPercentage)}
-              detail={t`Round win rate ${roundWinRate}`}
+              detail={t`${matchWins} wins · ${matchLosses} losses · ${matchTies} ties`}
             />
-            <PersonalMetric title={<Trans>Kills per round</Trans>} value={number(metrics.killsPerRound, 2)} />
-            <PersonalMetric title={<Trans>Deaths per round</Trans>} value={number(metrics.deathsPerRound, 2)} />
-            <PersonalMetric
-              title={<Trans>Survival rate</Trans>}
-              value={percent(metrics.survivalPercentage)}
-              detail={t`${survivedRoundCount} rounds survived`}
-            />
-            <PersonalMetric title={<Trans>Flash assists</Trans>} value={metrics.flashAssists} />
           </MetricsGrid>
-          <HabitsPanel title={<Trans>How to read these numbers</Trans>}>
-            <p className="text-gray-700">
-              <Trans>
-                Rates use total events and rounds across the selected demos. A dash means unavailable, not zero. Map and
-                side filters apply to every panel.
-              </Trans>
-            </p>
-            <p className="text-caption text-gray-700">
-              <Trans>
-                Rating uses the public historical HLTV 1.0 formula. RWS uses the published FACEIT 2025 damage and
-                bomb-objective rules, calculated locally. Neither is a platform-certified score or HLTV 2.x / 3.0.
-              </Trans>
-            </p>
-            <p className="text-caption text-gray-700">
-              <Trans>
-                Some community servers label 5v5 matches as casual. Rating eligibility also checks observed teams and
-                round structure; the original demo mode is preserved.
-              </Trans>
-            </p>
-            <p className="text-caption text-gray-700">
-              <Trans>
-                RWS only rewards won rounds: 100 points by damage, or 70 by damage plus 30 for the winning plant/defuse.
-                Undefined rounds are excluded and reported above. Trades use a five-second window.
-              </Trans>
-            </p>
-            <p className="text-caption text-gray-700">
-              <Trans>
-                These demos describe your own sample. Aim scores, rank percentiles and visibility-based reaction time
-                need additional models and are not inferred here.
-              </Trans>
-            </p>
-          </HabitsPanel>
+          <PersonalAnalysisPanels summary={summary} section="overview" />
+          <details className="rounded-12 border border-gray-300 bg-gray-100 p-16">
+            <summary className="cursor-pointer font-semibold">
+              <Trans>Map and side breakdown</Trans>
+            </summary>
+            <div className="mt-16 flex min-w-0 flex-col gap-16">
+              <GroupTable title={<Trans>Performance by map</Trans>} groups={summary.byMap} matchResults={true} />
+              <GroupTable title={<Trans>Performance by side</Trans>} groups={summary.bySide} />
+            </div>
+          </details>
         </>
       )}
       {tab === 'combat' && (
         <>
           <MetricsGrid>
             <PersonalMetric
+              title={<Trans>Kills / deaths / assists</Trans>}
+              value={`${kills} / ${metrics.deaths} / ${metrics.assists}`}
+              detail={t`K/D ${kd} · (K+A)/D ${kda}`}
+            />
+            <PersonalMetric
+              title={<Trans>Kills per round</Trans>}
+              value={number(metrics.killsPerRound, 2)}
+              detail={`${metrics.kills} / ${metrics.roundCount}`}
+            />
+            <PersonalMetric
+              title={<Trans>Deaths per round</Trans>}
+              value={number(metrics.deathsPerRound, 2)}
+              detail={`${metrics.deaths} / ${metrics.roundCount}`}
+            />
+            <PersonalMetric
               title={<Trans>Opening kills / deaths</Trans>}
               value={`${metrics.openingKills} / ${metrics.openingDeaths}`}
-              detail={<Trans>First enemy elimination of each round</Trans>}
+              detail={`${metrics.openingAttempts} / ${metrics.roundCount}`}
             />
             <PersonalMetric
               title={<Trans>Opening duel success</Trans>}
@@ -212,7 +188,7 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
             <PersonalMetric
               title={<Trans>Opening participation</Trans>}
               value={percent(metrics.openingAttemptPercentage)}
-              detail={<Trans>Rounds where you took the first duel</Trans>}
+              detail={`${metrics.openingAttempts} / ${metrics.roundCount}`}
             />
             <PersonalMetric
               title={<Trans>Win rate after an opening kill</Trans>}
@@ -222,7 +198,7 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
             <PersonalMetric
               title={<Trans>Trade kills</Trans>}
               value={metrics.tradeKills}
-              detail={<Trans>Enemy killed within five seconds of killing a teammate</Trans>}
+              detail={t`Within five seconds`}
             />
             <PersonalMetric
               title={<Trans>Deaths traded by teammates</Trans>}
@@ -230,16 +206,16 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
               detail={percent(metrics.tradedDeathPercentage)}
             />
             <PersonalMetric
-              title={<Trans>Clutches won / attempted</Trans>}
-              value={`${metrics.clutchWins} / ${metrics.clutchAttempts}`}
-              detail={percent(metrics.clutchWinPercentage)}
-            />
-            <PersonalMetric
               title={<Trans>Multi-kill rounds</Trans>}
               value={metrics.multiKills.slice(2).reduce((sum, count) => sum + count, 0)}
-              detail={<Trans>Rounds with at least two enemy kills</Trans>}
+              detail={percent(
+                metrics.roundCount
+                  ? (metrics.multiKills.slice(2).reduce((sum, count) => sum + count, 0) * 100) / metrics.roundCount
+                  : null,
+              )}
             />
           </MetricsGrid>
+          <PersonalAnalysisPanels summary={summary} section="combat" />
           <HabitsPanel title={<Trans>Kills per round distribution</Trans>}>
             <div className="grid grid-cols-3 gap-12 xl:grid-cols-6">
               {metrics.multiKills.map((count, kills) => (
@@ -251,15 +227,6 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
                 />
               ))}
             </div>
-          </HabitsPanel>
-          <HabitsPanel title={<Trans>Clutches by difficulty</Trans>}>
-            <StatsTable
-              headers={[t`Situation`, t`Attempts`, t`Wins`, t`Win rate`]}
-              rows={summary.byClutchSize.map((group) => ({
-                key: String(group.opponents),
-                cells: [`1v${group.opponents}`, group.attempts, group.wins, percent(group.winPercentage)],
-              }))}
-            />
           </HabitsPanel>
           <WeaponsTable summary={summary} />
         </>
@@ -288,6 +255,7 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
             <PersonalMetric title={<Trans>Bomb plants</Trans>} value={metrics.bombPlants} />
             <PersonalMetric title={<Trans>Bomb defuses</Trans>} value={metrics.bombDefuses} />
           </MetricsGrid>
+          <PersonalAnalysisPanels summary={summary} section="utility" />
           <HabitsPanel title={<Trans>Grenades used</Trans>}>
             <StatsTable
               headers={[t`Grenade`, t`Thrown`, t`Per round`]}
@@ -305,33 +273,98 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
           </HabitsPanel>
         </>
       )}
-      {tab === 'breakdowns' && (
+      {tab === 'clutch' && (
         <>
-          <GroupTable title={<Trans>Performance by map</Trans>} groups={summary.byMap} matchResults={true} />
-          <GroupTable title={<Trans>Performance by side</Trans>} groups={summary.bySide} />
+          <MetricsGrid>
+            <PersonalMetric
+              title={<Trans>Clutches won / attempted</Trans>}
+              value={`${metrics.clutchWins} / ${metrics.clutchAttempts}`}
+              detail={percent(metrics.clutchWinPercentage)}
+            />
+            <PersonalMetric
+              title={<Trans>Survival rate</Trans>}
+              value={percent(metrics.survivalPercentage)}
+              detail={`${metrics.survivedRoundCount} / ${metrics.roundCount}`}
+            />
+          </MetricsGrid>
+          <HabitsPanel title={<Trans>Clutches by difficulty</Trans>}>
+            <StatsTable
+              headers={[t`Situation`, t`Attempts`, t`Wins`, t`Win rate`]}
+              rows={summary.byClutchSize.map((group) => ({
+                key: String(group.opponents),
+                cells: [`1v${group.opponents}`, group.attempts, group.wins, percent(group.winPercentage)],
+              }))}
+            />
+          </HabitsPanel>
+          <PersonalAnalysisPanels summary={summary} section="clutch" />
           <GroupTable title={<Trans>Performance by economy</Trans>} groups={summary.byEconomy} economy={true} />
           <MetricsGrid>
             <PersonalMetric
               title={<Trans>Average equipment value</Trans>}
               value={number(metrics.averageEquipmentValue, 0)}
-              detail={t`${economyRoundCount} rounds with economy data`}
+              detail={t`${equipmentRoundCount} rounds with equipment data`}
             />
-            <PersonalMetric title={<Trans>Average money spent</Trans>} value={number(metrics.averageMoneySpent, 0)} />
+            <PersonalMetric
+              title={<Trans>Average money spent</Trans>}
+              value={number(metrics.averageMoneySpent, 0)}
+              detail={t`${moneySpentRoundCount} rounds with spending data`}
+            />
           </MetricsGrid>
-          <p className="text-caption text-gray-700">
-            <Trans>
-              Economy groups use the parser's round-start equipment classification. Results from different maps, game
-              modes, builds and sources are descriptive and may not be directly comparable.
-            </Trans>
-          </p>
         </>
       )}
       {tab === 'matches' && (
         <>
+          <PersonalAnalysisPanels summary={summary} section="matches" />
           <PerformanceTrend summary={summary} />
           <MatchHistory summary={summary} />
         </>
       )}
+      {tab === 'records' && <PersonalAnalysisPanels summary={summary} section="records" />}
+      <details className="rounded-12 border border-gray-300 bg-gray-100 p-16 text-caption text-gray-700">
+        <summary className="cursor-pointer font-semibold">
+          <Trans>Calculation details</Trans>
+        </summary>
+        <div className="mt-12 flex flex-col gap-12">
+          <p>
+            <Trans>
+              Core totals include every match in the current filters. The 5v5 sections exclude nonstandard matches.
+              Rates use summed counts; a dash means the denominator or required data is missing.
+            </Trans>
+          </p>
+          <p>
+            <Trans>
+              Headshot rate divides headshot kills by enemy kills. KAST counts rounds with a kill, assist, survival or
+              traded death. Trades use five seconds. Opening events use the first enemy elimination of a round.
+            </Trans>
+          </p>
+          <p>
+            <Trans>
+              Rating is the historical public HLTV 1.0 formula. RWS uses the public FACEIT 2025 damage and
+              bomb-objective rules: 100 damage points in a won round, or 70 damage points plus 30 objective points.
+              Undefined rounds are excluded.
+            </Trans>
+          </p>
+          <p>
+            <Trans>
+              Utility efficiency divides enemy HE and fire damage by grenades thrown. Flash counts require more than one
+              second of recorded blindness. Economy uses equipment at round start.
+            </Trans>
+          </p>
+          <p>
+            <Trans>
+              Half labels require a verified 12- or 15-round side change; other rounds remain unclassified. Monthly
+              groups use UTC. Recent windows show equal-sized groups of up to five matches. Round streaks stay within
+              each match.
+            </Trans>
+          </p>
+          <p>
+            <Trans>
+              Match streaks follow the selected local matches. Ties, unknown results and nonstandard matches break the
+              streak. Match win rates exclude unknown results.
+            </Trans>
+          </p>
+        </div>
+      </details>
       {summary.coverage.skippedMatches > 0 && (
         <p className="text-caption text-orange-500">
           <Trans>{skippedMatches} matches lack complete personal statistics and are excluded from these metrics.</Trans>
@@ -377,12 +410,21 @@ function GroupTable({
           t`Rating 1.0`,
           t`RWS`,
         ]}
-        rows={groups.map(({ key, metrics, matchCount, matchWinPercentage }) => ({
+        rows={groups.map(({ key, metrics, matchCount, matchWinPercentage, matchWins, knownResultMatchCount }) => ({
           key,
           cells: [
             economy ? (economyLabels[key] ?? key) : key === 't' ? 'T' : key === 'ct' ? 'CT' : key,
             matchCount,
-            ...(matchResults ? [percent(matchWinPercentage)] : []),
+            ...(matchResults
+              ? [
+                  <span key="win-rate" className="flex flex-col gap-4">
+                    {percent(matchWinPercentage)}
+                    <span className="text-caption text-gray-700">
+                      {matchWins} / {knownResultMatchCount}
+                    </span>
+                  </span>,
+                ]
+              : []),
             metrics.roundCount,
             percent(metrics.roundWinPercentage),
             `${metrics.kills} / ${metrics.deaths} / ${metrics.assists}`,
@@ -415,12 +457,6 @@ function WeaponsTable({ summary }: { summary: PersonalStatsSummary }) {
           ],
         }))}
       />
-      <p className="text-caption text-gray-700">
-        <Trans>
-          Shots include suppressive fire and penetration attempts. Shot accuracy is not inferred from damage-event
-          counts.
-        </Trans>
-      </p>
     </HabitsPanel>
   );
 }
@@ -485,10 +521,7 @@ function PerformanceTrend({ summary }: { summary: PersonalStatsSummary }) {
       <Select label={<Trans>Metric</Trans>} value={metric} onChange={setMetric} options={[...options]} />
       <div className="aspect-video w-full" ref={ref} role="img" aria-label={t`Recent match trend: ${label}`} />
       <p className="text-caption text-gray-700">
-        <Trans>
-          Up to 50 recent matches, oldest to newest. Each point is one match; missing values stay empty. Exact values
-          and match links are listed below.
-        </Trans>
+        <Trans>Latest 50 matches · one point per match · oldest to newest</Trans>
       </p>
     </HabitsPanel>
   );

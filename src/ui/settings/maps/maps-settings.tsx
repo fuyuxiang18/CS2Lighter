@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
-import { Trans } from '@lingui/react/macro';
+import React from 'react';
 import { Game } from 'csdm/common/types/counter-strike';
 import { SettingsView } from 'csdm/ui/settings/settings-view';
 import { Maps } from 'csdm/ui/settings/maps/maps';
 import { AddMapButton } from './add-map-button';
 import { ResetDefaultMapsButton } from './reset-default-maps-button';
-import { Select } from 'csdm/ui/components/inputs/select';
-import { useGameOptions } from 'csdm/ui/hooks/use-game-options';
 
 export function MapsSettings() {
-  const [game, setGame] = useState<Game>(Game.CS2);
-  const gameOptions = useGameOptions({ includeCs2LimitedTest: false });
+  const game = Game.CS2;
 
   return (
     <SettingsView>
       <div className="mb-12 flex items-center gap-x-8">
-        <Select
-          label={<Trans context="Select label">Game</Trans>}
-          options={gameOptions}
-          value={game}
-          onChange={(game) => {
-            setGame(game);
-          }}
-        />
         <AddMapButton game={game} />
         <ResetDefaultMapsButton game={game} />
       </div>

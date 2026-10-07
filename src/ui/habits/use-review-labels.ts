@@ -13,31 +13,31 @@ export function useReviewLabels() {
       title: t`First contact, first death`,
       question: t`Before the first duel, did you have information and a teammate ready to follow?`,
       action: t`Before taking first contact, agree on the timing and who can trade.`,
-      context: t`Rounds where you were the first enemy kill of the round. Timing and role matter; taking an opening risk can be correct.`,
+      context: t`Rounds where the first enemy elimination was your death, divided by your opening duels.`,
     },
     'opening-advantage-lost': {
       title: t`Opening advantage lost`,
       question: t`After your opening kill, did the team regroup or keep taking isolated fights?`,
       action: t`After an opening kill, call the advantage and plan the next move together.`,
-      context: t`Rounds lost after your opening kill. This describes the outcome, not who caused the loss.`,
+      context: t`Rounds lost after your opening kill, divided by your opening-kill rounds.`,
     },
     'untraded-deaths': {
       title: t`Deaths without a trade`,
       question: t`Was a trade realistic from your teammates' positions, or were you intentionally isolated?`,
       action: t`Before committing to a fight, check one teammate can follow the same timing.`,
-      context: t`Death rounds without a recorded trade within five seconds. Includes deaths where trading was impossible; review before changing your play.`,
+      context: t`Death rounds without a recorded trade within five seconds, divided by all death rounds.`,
     },
     'team-flashes': {
       title: t`Friendly flash rounds`,
       question: t`Did your teammate know the flash timing and have a way to turn away?`,
       action: t`Call the flash before throwing and confirm teammates are ready.`,
-      context: t`Rounds with recorded friendly blindness. A brief blind or an agreed team flash is not automatically a mistake.`,
+      context: t`Rounds with teammates blinded for more than one second, divided by rounds with a thrown flash or recorded friendly blindness.`,
     },
     'lost-clutches': {
       title: t`Clutches to revisit`,
       question: t`What information, time and utility did you have before choosing the next fight?`,
       action: t`In a clutch, check the clock and last known positions before committing.`,
-      context: t`Recorded 1vX attempts that were lost. Opponent count and the starting situation strongly affect the outcome.`,
+      context: t`Lost 1vX attempts, divided by all recorded clutch attempts.`,
     },
   };
   const denominators: Record<ReviewDenominator, string> = {
@@ -50,23 +50,23 @@ export function useReviewLabels() {
   const style: Record<StyleDimensionId, { title: string; detail: string }> = {
     'opening-participation': {
       title: t`Taking first contact`,
-      detail: t`Opening kills + opening deaths / played rounds. Describes how often you enter the first decisive duel.`,
+      detail: t`Opening kills + opening deaths / played rounds.`,
     },
     'trade-kill-share': {
       title: t`Joining trade kills`,
-      detail: t`Trade kills / enemy kills. Describes recorded five-second trades, not your distance from teammates.`,
+      detail: t`Trade kills within five seconds / enemy kills.`,
     },
     'utility-round-share': {
       title: t`Using utility`,
-      detail: t`Rounds with a grenade thrown / played rounds. Frequency does not measure grenade quality.`,
+      detail: t`Rounds with a grenade thrown / played rounds.`,
     },
     survival: {
       title: t`Staying alive`,
-      detail: t`Survived rounds / played rounds. Saving, role and round outcome all affect this proportion.`,
+      detail: t`Survived rounds / played rounds.`,
     },
     'clutch-exposure': {
       title: t`Playing the last player`,
-      detail: t`Recorded 1vX attempts / played rounds. This is the situation you reach, not a passive-play label.`,
+      detail: t`Recorded 1vX attempts / played rounds.`,
     },
   };
   const trends: Record<ReviewTrendMetricId, string> = {

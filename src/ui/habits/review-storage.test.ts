@@ -19,6 +19,15 @@ const focus = {
 };
 
 describe('saved review preferences', () => {
+  it('opens the dashboard by default while preserving existing tabs and practice data', () => {
+    expect(defaultReviewPreferences().tab).toBe('overview');
+    for (const tab of ['overview', 'review', 'style', 'duels', 'progress']) {
+      const restored = parseReviewPreferences(wrap({ tab, focus, marks: { 'team-flashes:a:2': 'reviewed' } }));
+      expect(restored.tab).toBe(tab);
+      expect(restored.focus).toEqual(focus);
+      expect(restored.marks).toEqual({ 'team-flashes:a:2': 'reviewed' });
+    }
+  });
   it('recovers from malformed or unsupported storage without losing the default workflow', () => {
     for (const value of [null, '{', 'null', '[]', JSON.stringify({ version: 9, data: { tab: 'style' } })])
       expect(parseReviewPreferences(value)).toEqual(defaultReviewPreferences());
@@ -60,6 +69,6 @@ describe('saved review preferences', () => {
     expect(Object.keys(result.marks)).toHaveLength(2000);
     expect(result.marks.wrong).toBeUndefined();
     expect(result.side).toBe('all');
-    expect(result.tab).toBe('review');
+    expect(result.tab).toBe('overview');
   });
 });

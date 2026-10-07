@@ -1,19 +1,15 @@
 import React from 'react';
 import { AiSettings } from './ai/ai-settings';
-import { AnalyzeSettings } from './analyze/analyze-settings';
 import { DatabaseSettings } from './database/database-settings';
 import { FoldersSettings } from './folders/folders-settings';
 import { VideoSettings } from './video/video-settings';
 import { MapsSettings } from './maps/maps-settings';
 import { SettingsCategory } from './settings-category';
-import { IntegrationsSettings } from './integrations/integrations-settings';
 import { UiSettings } from './ui/ui-settings';
 import { useSettingsOverlay } from './use-settings-overlay';
 import { PlaybackSettings } from './playback/playback-settings';
-import { TagsSettings } from './tags/tags-settings';
 import { assertNever } from 'csdm/common/assert-never';
 import { About } from './about/about';
-import { CamerasSettings } from './cameras/cameras-settings';
 
 export function Settings() {
   const { category } = useSettingsOverlay();
@@ -28,21 +24,15 @@ export function Settings() {
     case SettingsCategory.UI:
       return <UiSettings />;
     case SettingsCategory.Analyze:
-      return <AnalyzeSettings />;
+      return <FoldersSettings />;
     case SettingsCategory.Playback:
       return <PlaybackSettings />;
     case SettingsCategory.Video:
       return <VideoSettings />;
     case SettingsCategory.Maps:
       return <MapsSettings />;
-    case SettingsCategory.Tags:
-      return <TagsSettings />;
-    case SettingsCategory.Integrations:
-      return <IntegrationsSettings />;
     case SettingsCategory.About:
       return <About />;
-    case SettingsCategory.Cameras:
-      return <CamerasSettings />;
     default:
       return assertNever(category, `Unknown settings category: ${category as string}`);
   }

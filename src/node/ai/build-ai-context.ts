@@ -25,6 +25,75 @@ function numericMetrics(source: PersonalMetrics): Record<string, number | null> 
   return metrics;
 }
 
+function advancedAnalysis(summary: PersonalStatsSummary): PreparedAiContext['payload']['analysis'] {
+  const analysis = summary.analysis;
+  const metrics: Record<string, number | null> = {
+    matchCount: analysis.scope.matchCount,
+    roundCount: analysis.scope.roundCount,
+    excludedMatchCount: analysis.scope.excludedMatchCount,
+    excludedRoundCount: analysis.scope.excludedRoundCount,
+    adrMedian: analysis.stability.adrMedian,
+    adrP25: analysis.stability.adrP25,
+    adrP75: analysis.stability.adrP75,
+    stabilityMatchCount: analysis.stability.matchCount,
+    nonUtilityAdr: analysis.output.nonUtilityDamage.value,
+    nonUtilityDamageTotal: analysis.output.nonUtilityDamage.total,
+    nonUtilityDamageSamples: analysis.output.nonUtilityDamage.samples,
+  };
+  const rates = {
+    killRounds: analysis.output.killRounds,
+    killOrAssistRounds: analysis.output.killOrAssistRounds,
+    multiKillRounds: analysis.output.multiKillRounds,
+    damage100Rounds: analysis.output.damage100Rounds,
+    zeroDamageRounds: analysis.output.zeroDamageRounds,
+    survivedWinRounds: analysis.survival.survivedWinRounds,
+    survivedLossRounds: analysis.survival.survivedLossRounds,
+    untradedDeathRounds: analysis.survival.untradedDeathRounds,
+    noImpactDeathRounds: analysis.survival.noImpactDeathRounds,
+    survivedOpeningKillRounds: analysis.opening.survivedOpeningKillRounds,
+    winAfterOpeningDeath: analysis.opening.winAfterOpeningDeath,
+    winWithoutOpeningEvent: analysis.opening.winWithoutOpeningEvent,
+    usedUtilityRounds: analysis.utility.usedUtilityRounds,
+    flashAssistRounds: analysis.utility.flashAssistRounds,
+    teammateFlashRounds: analysis.utility.teammateFlashRounds,
+  };
+  for (const [key, rate] of Object.entries(rates)) {
+    metrics[`${key}Count`] = rate.count;
+    metrics[`${key}Total`] = rate.total;
+    metrics[`${key}Percentage`] = rate.percentage;
+  }
+  const averages = {
+    damagePerHeOrFire: analysis.utility.damagePerHeOrFire,
+    blindSecondsPerFlash: analysis.utility.blindSecondsPerFlash,
+    enemiesPerFlash: analysis.utility.enemiesPerFlash,
+    teammatesPerFlash: analysis.utility.teammatesPerFlash,
+  };
+  for (const [key, average] of Object.entries(averages)) {
+    metrics[`${key}Total`] = average.total;
+    metrics[`${key}Samples`] = average.samples;
+    metrics[key] = average.value;
+  }
+  for (const [key, value] of Object.entries(metrics))
+    if (value !== null && !Number.isFinite(value)) metrics[key] = null;
+  const windowMetrics = (window: typeof analysis.trend.recent) =>
+    window ? { matchCount: window.matchCount, metrics: numericMetrics(window.metrics) } : null;
+  return {
+    scope: 'standard-5v5',
+    metrics,
+    byPhase: analysis.byPhase
+      .filter((group) => ['first-half', 'second-half', 'overtime', 'unclassified'].includes(group.key))
+      .map((group) => ({ phase: group.key, metrics: numericMetrics(group.metrics) })),
+    byRoundResult: analysis.byRoundResult
+      .filter((group) => ['win', 'loss'].includes(group.key))
+      .map((group) => ({ result: group.key, metrics: numericMetrics(group.metrics) })),
+    trend: {
+      comparable: analysis.trend.comparable,
+      recent: windowMetrics(analysis.trend.recent),
+      previous: windowMetrics(analysis.trend.previous),
+    },
+  };
+}
+
 function boundedWeapons(source: PersonalStatsSummary['weapons']): PreparedAiContext['payload']['weapons'] {
   const knownNames = new Set<string>(Object.values(WeaponName));
   const weapons = new Map<string, PreparedAiContext['payload']['weapons'][number]>();
@@ -143,7 +212,12 @@ export function buildAiContext(
     .sort((a, b) => b.date.localeCompare(a.date) || a.checksum.localeCompare(b.checksum))
     .slice(0, scope.kind === 'match' ? 1 : AI_MAX_MATCHES);
   if (selected.length === 0) throw new AiServiceError('no-data');
-  const summary = aggregatePersonalStats(selected, scope);
+  const selectedChecksums = new Set(selected.map((match) => match.checksum));
+  // Keep full-match structure for phase classification; the aggregator applies the side filter itself.
+  const summary = aggregatePersonalStats(
+    input.filter((match) => selectedChecksums.has(match.checksum)),
+    scope,
+  );
   const metrics = numericMetrics(summary.metrics);
   const evidence: AiEvidence[] = [];
   const rounds: PreparedAiContext['payload']['rounds'] = [];
@@ -222,6 +296,7 @@ export function buildAiContext(
     locale: scope.locale,
     sample: preview,
     metrics,
+    analysis: advancedAnalysis(summary),
     methodology: summary.methodology,
     allowedScoreDimensions,
     bySide: summary.bySide.map((group) => ({

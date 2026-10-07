@@ -70,25 +70,11 @@ export function ReviewProgress({
                 })}
               </div>
             )}
-            <p className="text-gray-700">
-              {training?.sampleStatus === 'ready' ? (
-                <Trans>
-                  You now have comparable samples. Revisit the rounds and judge whether your chosen action helped; a
-                  percentage change alone does not prove improvement.
-                </Trans>
-              ) : (
-                <Trans>
-                  Keep the same focus. A comparison needs at least two matches and twenty rounds on each side, plus
-                  enough relevant situations.
-                </Trans>
-              )}
-            </p>
-            <p className="text-caption text-gray-600">
-              <Trans>
-                Only matches played after the start time count as practice results. Importing an old demo does not
-                create progress. Each period uses up to five matches in this exact scenario.
-              </Trans>
-            </p>
+            {training?.sampleStatus !== 'ready' && (
+              <p className="text-gray-700">
+                <Trans>Waiting for more matches in this scenario.</Trans>
+              </p>
+            )}
             <div className="flex flex-wrap gap-8">
               <ReviewButton
                 onClick={() =>
@@ -111,10 +97,7 @@ export function ReviewProgress({
         ) : (
           <>
             <p className="text-gray-700">
-              <Trans>
-                Watch a candidate round first, then choose one concrete action. We will compare later matches with the
-                same map, side, source, mode and game build.
-              </Trans>
+              <Trans>Select a review situation and set your next-match focus.</Trans>
             </p>
             <div>
               <ReviewButton primary={true} onClick={() => update({ tab: 'review' })}>
@@ -125,12 +108,6 @@ export function ReviewProgress({
         )}
       </HabitsPanel>
       <HabitsPanel title={<Trans>Recent play versus your earlier play</Trans>}>
-        <p className="text-gray-700">
-          <Trans>
-            This is a self comparison, not a rank or a training score. Maps, sides, sources, modes and game builds are
-            kept separate.
-          </Trans>
-        </p>
         {comparison ? (
           <>
             <div className="flex min-w-0 flex-col gap-4">
@@ -170,10 +147,7 @@ export function ReviewProgress({
             </div>
             {comparison.sampleStatus === 'insufficient' && (
               <p className="rounded-8 bg-gray-75 p-12 text-gray-700">
-                <Trans>
-                  Not enough comparable matches yet. Values remain visible as observations; changes are withheld until
-                  the sample is large enough.
-                </Trans>
+                <Trans>Not enough comparable matches yet.</Trans>
               </p>
             )}
             <div className="overflow-x-auto">
@@ -216,12 +190,6 @@ export function ReviewProgress({
                 </tbody>
               </table>
             </div>
-            <p className="text-caption text-gray-600">
-              <Trans>
-                Up to five recent matches versus the previous five. Each period needs at least two matches and twenty
-                rounds; rare events need additional samples. A dash means insufficient evidence.
-              </Trans>
-            </p>
           </>
         ) : (
           <p className="text-gray-700">
@@ -229,6 +197,23 @@ export function ReviewProgress({
           </p>
         )}
       </HabitsPanel>
+      <details className="rounded-12 border border-gray-300 bg-gray-100 p-16 text-caption text-gray-700">
+        <summary className="cursor-pointer">
+          <Trans>Calculation details</Trans>
+        </summary>
+        <p className="mt-12">
+          <Trans>
+            Comparisons keep map, side, source, mode and game build together. Each period uses up to five matches and
+            needs at least two matches and twenty rounds. Individual metrics also require enough relevant events.
+          </Trans>
+        </p>
+        <p className="mt-12">
+          <Trans>
+            Practice results include only matches played after the start time. Importing older demos does not add new
+            practice results.
+          </Trans>
+        </p>
+      </details>
     </div>
   );
 }

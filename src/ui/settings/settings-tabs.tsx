@@ -9,13 +9,10 @@ export function SettingsTabs() {
     <div className="flex h-full shrink-0 flex-col overflow-y-auto border-r border-r-gray-300 bg-gray-50 p-12">
       <CloseSettingsButton />
       <SettingsCategoryButton category={SettingsCategory.UI}>
-        <Trans>UI</Trans>
+        <Trans>Appearance</Trans>
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Folders}>
-        <Trans>Folders</Trans>
-      </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Tags}>
-        <Trans>Tags</Trans>
+        <Trans>Demo import</Trans>
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Maps}>
         <Trans>Maps</Trans>
@@ -23,23 +20,14 @@ export function SettingsTabs() {
       <SettingsCategoryButton category={SettingsCategory.Playback}>
         <Trans>Playback</Trans>
       </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Analyze}>
-        <Trans>Analyze</Trans>
-      </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Video}>
-        <Trans>Video</Trans>
+        <Trans>Recording</Trans>
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Ai}>
         <Trans>AI reviews</Trans>
       </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Cameras}>
-        <Trans>Cameras</Trans>
-      </SettingsCategoryButton>
-      <SettingsCategoryButton category={SettingsCategory.Integrations}>
-        <Trans>Integrations</Trans>
-      </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.Database}>
-        <Trans>Database</Trans>
+        <Trans>Storage</Trans>
       </SettingsCategoryButton>
       <SettingsCategoryButton category={SettingsCategory.About}>
         <Trans>About</Trans>

@@ -1,6 +1,7 @@
 import type { Settings } from 'csdm/node/settings/settings';
 import type { ReviewClip, ReviewPovState } from 'csdm/common/types/review-clip';
 import type { ReviewBatch } from 'csdm/common/types/review-batch';
+import type { RecordingQueue } from 'csdm/common/types/recording-queue';
 import type { ImportProgress } from 'csdm/common/types/import-progress';
 import type { Analysis } from 'csdm/common/types/analysis';
 import type { MatchTable } from 'csdm/common/types/match-table';
@@ -22,6 +23,7 @@ import type { CounterStrikeErrorPayload } from 'csdm/server/counter-strike';
 export const ServerPushMessageName = {
   ReviewClipUpdated: 'review-clip-updated',
   ReviewBatchUpdated: 'review-batch-updated',
+  RecordingQueueUpdated: 'recording-queue-updated',
   ReviewPovUpdated: 'review-pov-updated',
   ImportProgressUpdated: 'import-progress-updated',
   SettingsUpdated: 'settings-updated',
@@ -70,6 +72,7 @@ export type ServerPushMessageName =
 export interface ServerPushMessagePayload extends SharedServerMessagePayload {
   [ServerPushMessageName.ReviewClipUpdated]: ReviewClip;
   [ServerPushMessageName.ReviewBatchUpdated]: ReviewBatch;
+  [ServerPushMessageName.RecordingQueueUpdated]: RecordingQueue;
   [ServerPushMessageName.ReviewPovUpdated]: ReviewPovState;
   [ServerPushMessageName.ImportProgressUpdated]: ImportProgress;
   [ServerPushMessageName.SettingsUpdated]: Settings;

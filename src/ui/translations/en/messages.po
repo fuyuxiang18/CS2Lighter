@@ -231,7 +231,6 @@ msgstr "The connection to the database failed with the following error:"
 
 #: src/ui/bootstrap/connect-database/connect-database.tsx
 #: src/ui/settings/database/database.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Database"
 msgstr "Database"
 
@@ -293,11 +292,8 @@ msgstr "An error occurred connecting to the WebSocket server."
 #: src/ui/search/filters/search-players-input.tsx
 #: src/ui/settings/about/clear-logs-button.tsx
 #: src/ui/settings/about/reveal-counter-strike-log-file-button.tsx
-#: src/ui/settings/cameras/add-camera-dialog.tsx
-#: src/ui/settings/cameras/edit-camera-dialog.tsx
 #: src/ui/settings/maps/add-map-dialog.tsx
 #: src/ui/settings/maps/edit-map-dialog.tsx
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
 #: src/ui/settings/ui/reset-tables-state.tsx
 #: src/ui/settings/video/ffmpeg/ffmpeg-location.tsx
 #: src/ui/settings/video/hlae/hlae-location.tsx
@@ -311,11 +307,6 @@ msgstr "An error occurred"
 msgctxt "Button"
 msgid "Analyze"
 msgstr "Analyze"
-
-#: src/ui/components/buttons/apply-button.tsx
-msgctxt "Button"
-msgid "Apply"
-msgstr "Apply"
 
 #: src/ui/components/buttons/cancel-button.tsx
 msgctxt "Button"
@@ -667,8 +658,6 @@ msgstr "You need to install <0>Rosetta</0>."
 #: src/ui/player/load-player-error.tsx
 #: src/ui/players/players-table.tsx
 #: src/ui/search/search-results.tsx
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-#: src/ui/settings/database/import-v2-data-button.tsx
 #: src/ui/settings/database/optimize-database-button.tsx
 #: src/ui/settings/maps/delete-map-dialog.tsx
 #: src/ui/settings/maps/reset-default-maps-button.tsx
@@ -1243,7 +1232,6 @@ msgstr "Comment (Markdown supported)"
 
 #: src/ui/components/inputs/database-name-input.tsx
 #: src/ui/dialogs/update-player-name-dialog.tsx
-#: src/ui/settings/cameras/form/name-input.tsx
 #: src/ui/settings/maps/map-dialog/name-input.tsx
 msgctxt "Input label"
 msgid "Name"
@@ -1253,11 +1241,6 @@ msgstr "Name"
 msgctxt "Input placeholder"
 msgid "Name"
 msgstr "Name"
-
-#: src/ui/components/inputs/file-or-directory-input.tsx
-msgctxt "Button"
-msgid "Select"
-msgstr "Select"
 
 #: src/ui/components/inputs/hostname-input.tsx
 msgctxt "Button"
@@ -1474,6 +1457,7 @@ msgstr "Win"
 
 #: src/ui/components/maps-stats.tsx
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Lost"
 msgstr "Lost"
@@ -1501,17 +1485,20 @@ msgid "Impact"
 msgstr "Impact"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "K/D"
 msgstr "K/D"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/use-review-labels.ts
 msgid "ADR"
 msgstr "ADR"
 
 #: src/ui/components/maps-stats.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "KAST"
 msgstr "KAST"
@@ -1941,6 +1928,7 @@ msgid "Average kills/round"
 msgstr "Average kills/round"
 
 #: src/ui/components/panels/clutches.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Won"
 msgstr "Won"
@@ -2449,7 +2437,6 @@ msgid "{0, plural, one {# demo} other {# demos}}"
 msgstr "{0, plural, one {# demo} other {# demos}}"
 
 #: src/ui/demos/table/demos-table.tsx
-#: src/ui/settings/database/import-v2-data-button.tsx
 msgid "No folders found."
 msgstr "No folders found."
 
@@ -2601,7 +2588,6 @@ msgstr "Unknown"
 
 #: src/ui/dialogs/tags-dialog.tsx
 #: src/ui/match/rounds/overview/rounds-history.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Tags"
 msgstr "Tags"
 
@@ -2630,7 +2616,6 @@ msgid "Update demo location"
 msgstr "Update demo location"
 
 #: src/ui/dialogs/update-player-name-dialog.tsx
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
 msgid "The name is too long"
 msgstr "The name is too long"
 
@@ -2656,14 +2641,16 @@ msgid "Supporting rounds"
 msgstr "Supporting rounds"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opens the round start. The model did not locate an exact decision moment."
-msgstr "Opens the round start. The model did not locate an exact decision moment."
+msgid "Open the round start"
+msgstr "Open the round start"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Opens the event context in the 2D viewer. Verify the interpretation in the round."
-msgstr "Opens the event context in the 2D viewer. Verify the interpretation in the round."
+msgid "Open the event in 2D"
+msgstr "Open the event in 2D"
 
 #: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Round {round}"
@@ -2698,16 +2685,8 @@ msgid "Five-dimension assessment"
 msgstr "Five-dimension assessment"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
-msgstr "AI scores describe this sample on a subjective 0–100 scale. They are not calibrated ranks or percentiles."
-
-#: src/ui/habits/ai-report-content.tsx
 msgid "Insufficient data"
 msgstr "Insufficient data"
-
-#: src/ui/habits/ai-report-content.tsx
-msgid "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
-msgstr "Aim estimates shooting results from statistics. It does not measure pre-aim, recoil control or mouse movement."
 
 #: src/ui/habits/ai-report-content.tsx
 msgid "The main takeaway"
@@ -2718,20 +2697,17 @@ msgid "Actions to try next"
 msgstr "Actions to try next"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Choose one action for your next matches, then revisit the same situations to check what changed."
-msgstr "Choose one action for your next matches, then revisit the same situations to check what changed."
-
-#: src/ui/habits/ai-report-content.tsx
 msgid "Situations worth checking"
 msgstr "Situations worth checking"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Limited assessments and missing evidence"
-msgstr "Limited assessments and missing evidence"
+#: src/ui/habits/video-ai-report-content.tsx
+msgid "Assessment details"
+msgstr "Assessment details"
 
 #: src/ui/habits/ai-report-content.tsx
-msgid "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
-msgstr "Scores are the model's subjective assessment of this sample on a 0–100 scale. They are not a rank, a percentile or a calibrated measure of improvement. Opponents and roles are not controlled."
+msgid "Five AI assessments on a 0–100 scale, based on the statistics and sampled rounds in this selection."
+msgstr "Five AI assessments on a 0–100 scale, based on the statistics and sampled rounds in this selection."
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2754,8 +2730,8 @@ msgid "AI personal review"
 msgstr "AI personal review"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "A short style label, five dimensions and actions grounded in your recorded rounds."
-msgstr "A short style label, five dimensions and actions grounded in your recorded rounds."
+msgid "Playing style, five scores and the next things to work on."
+msgstr "Playing style, five scores and the next things to work on."
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/habits/video-ai-review-panel.tsx
@@ -2763,21 +2739,12 @@ msgid "AI settings"
 msgstr "AI settings"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Statistics and sampled rounds only · No POV images sent"
-msgstr "Statistics and sampled rounds only · No POV images sent"
+msgid "Send statistics and sampled rounds to {target} · {serverHost} · {model}"
+msgstr "Send statistics and sampled rounds to {target} · {serverHost} · {model}"
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files, videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this input."
-msgstr "Generation sends aggregate numbers and sampled round events to your configured AI server. Demo files, videos, account IDs and player names are not sent. The model cannot judge pre-aim or mouse control from this input."
-
-#: src/ui/habits/ai-review-panel.tsx
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "Generation target: {target} · {serverHost} · {model}"
-msgstr "Generation target: {target} · {serverHost} · {model}"
-
-#: src/ui/habits/ai-review-panel.tsx
-msgid "Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length."
-msgstr "Output limit: {maxOutputTokens} tokens. This is a maximum, not a required response length."
+msgid "Output limit: {maxOutputTokens} tokens"
+msgstr "Output limit: {maxOutputTokens} tokens"
 
 #: src/ui/habits/ai-review-panel.tsx
 #: src/ui/matches/table/match-count.tsx
@@ -2822,10 +2789,6 @@ msgid "Choose a provider and model in AI settings to start."
 msgstr "Choose a provider and model in AI settings to start."
 
 #: src/ui/habits/ai-review-panel.tsx
-msgid "No report is cached for this sample and model. Generation starts only when you click."
-msgstr "No report is cached for this sample and model. Generation starts only when you click."
-
-#: src/ui/habits/ai-review-panel.tsx
 msgid "Generating your style and five-dimension review, then checking the evidence. Higher output limits and slower models may take longer."
 msgstr "Generating your style and five-dimension review, then checking the evidence. Higher output limits and slower models may take longer."
 
@@ -2864,8 +2827,8 @@ msgid "Your local matches, ready when you want the details."
 msgstr "Your local matches, ready when you want the details."
 
 #: src/ui/habits/habits-dashboard.tsx
-msgid "Find a recurring situation. Review the evidence. Try one change."
-msgstr "Find a recurring situation. Review the evidence. Try one change."
+msgid "Your performance, playing habits and rounds worth another look."
+msgstr "Your performance, playing habits and rounds worth another look."
 
 #: src/ui/habits/habits-dashboard.tsx
 msgid "Could not save your account locally. Check that app storage is writable and try again."
@@ -2923,6 +2886,10 @@ msgid "Review sections"
 msgstr "Review sections"
 
 #: src/ui/habits/habits-dashboard.tsx
+msgid "Performance dashboard"
+msgstr "Performance dashboard"
+
+#: src/ui/habits/habits-dashboard.tsx
 msgid "Review priorities"
 msgstr "Review priorities"
 
@@ -2963,10 +2930,6 @@ msgstr "No matches in this selection"
 msgid "Reset the filters, or add a folder containing demos for this account. Imported files are analyzed once and reused."
 msgstr "Reset the filters, or add a folder containing demos for this account. Imported files are analyzed once and reused."
 
-#: src/ui/habits/habits-dashboard.tsx
-msgid "Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts."
-msgstr "Local demo evidence · no upload required · proportions are observations, not automatic coaching verdicts."
-
 #: src/ui/habits/habits-evidence.tsx
 msgid "Position"
 msgstr "Position"
@@ -2976,11 +2939,13 @@ msgid "Opening position"
 msgstr "Opening position"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Kill"
 msgstr "Kill"
 
 #: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Death"
 msgstr "Death"
@@ -3189,49 +3154,517 @@ msgid "Could not open the POV. Start Steam and check the CS2 path, HLAE installa
 msgstr "Could not open the POV. Start Steam and check the CS2 path, HLAE installation and original demo. Your existing game will not be closed automatically."
 
 #: src/ui/habits/habits-playback-button.tsx
+#: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Recording setup"
 msgstr "Recording setup"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Example rounds"
+msgstr "Example rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "{count} of your {total} opening-kill rounds ended in a loss."
+msgstr "{count} of your {total} opening-kill rounds ended in a loss."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check the next engagement between your first kill and the loss of the player advantage. Plan that fight around keeping the advantage."
+msgstr "Check the next engagement between your first kill and the loss of the player advantage. Plan that fight around keeping the advantage."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No teammate traded your death within five seconds in {count} of {total} death rounds."
+msgstr "No teammate traded your death within five seconds in {count} of {total} death rounds."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check whether a teammate could reach the same firing angle. Before the next entry, agree on a position and timing that allow a trade."
+msgstr "Check whether a teammate could reach the same firing angle. Before the next entry, agree on a position and timing that allow a trade."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Your flashes blinded a teammate for more than one second in {count} of {total} rounds."
+msgstr "Your flashes blinded a teammate for more than one second in {count} of {total} rounds."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Compare the throw timing with your teammate's view. Call the next flash before throwing and leave time to turn away."
+msgstr "Compare the throw timing with your teammate's view. Call the next flash before throwing and leave time to turn away."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No grenade throw was recorded in {count} of {total} rounds."
+msgstr "No grenade throw was recorded in {count} of {total} rounds."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Check your available grenades before first contact. Pick one useful throw for your route and a safe moment to use it."
+msgstr "Check your available grenades before first contact. Pick one useful throw for your route and a safe moment to use it."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You made at least two kills in {count} of {total} rounds."
+msgstr "You made at least two kills in {count} of {total} rounds."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Replay the gap between the first and second kills. Note the repositioning, cover and teammate support you can repeat."
+msgstr "Replay the gap between the first and second kills. Note the repositioning, cover and teammate support you can repeat."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You won {count} of {total} recorded clutches."
+msgstr "You won {count} of {total} recorded clutches."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Compare the clock, opponent count and first isolated fight in these wins. Keep one repeatable decision for a similar clutch."
+msgstr "Compare the clock, opponent count and first isolated fight in these wins. Keep one repeatable decision for a similar clutch."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "You recorded a flash assist in {count} of {total} rounds."
+msgstr "You recorded a flash assist in {count} of {total} rounds."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Revisit the successful throw and your teammate's entry timing. Agree on the same cue for the next attempt."
+msgstr "Revisit the successful throw and your teammate's entry timing. Agree on the same cue for the next attempt."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Next step"
+msgstr "Next step"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Lost rounds after an opening kill"
+msgstr "Lost rounds after an opening kill"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Death rounds without a trade"
+msgstr "Death rounds without a trade"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with friendly flashes"
+msgstr "Rounds with friendly flashes"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds without a grenade thrown"
+msgstr "Rounds without a grenade thrown"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with multiple kills"
+msgstr "Rounds with multiple kills"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Clutches won"
+msgstr "Clutches won"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a flash assist"
+msgstr "Rounds with a flash assist"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Ace rounds"
+msgstr "Ace rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Four-kill rounds"
+msgstr "Four-kill rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Triple-kill rounds"
+msgstr "Triple-kill rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Last player standing"
+msgstr "Last player standing"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Multiple utility kills"
+msgstr "Multiple utility kills"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a knife kill"
+msgstr "Rounds with a knife kill"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "300 damage club"
+msgstr "300 damage club"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Damage without the finish"
+msgstr "Damage without the finish"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Double trade"
+msgstr "Double trade"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Flash assist double"
+msgstr "Flash assist double"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "AWP triple"
+msgstr "AWP triple"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Budget multi-kill"
+msgstr "Budget multi-kill"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Bomb planted"
+msgstr "Bomb planted"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Defuse secured"
+msgstr "Defuse secured"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Against the odds: 1v3+"
+msgstr "Against the odds: 1v3+"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly five enemy kills in a round."
+msgstr "Exactly five enemy kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly four enemy kills in a round."
+msgstr "Exactly four enemy kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Exactly three enemy kills in a round."
+msgstr "Exactly three enemy kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Won a recorded 1vX situation."
+msgstr "Won a recorded 1vX situation."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two HE or fire kills in a round."
+msgstr "At least two HE or fire kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least one knife kill in a round."
+msgstr "At least one knife kill in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least 300 enemy health damage in a round."
+msgstr "At least 300 enemy health damage in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least 100 enemy health damage and no kills in a round."
+msgstr "At least 100 enemy health damage and no kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two trade kills in a round."
+msgstr "At least two trade kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two flash assists in a round."
+msgstr "At least two flash assists in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least three AWP kills in a round."
+msgstr "At least three AWP kills in a round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "At least two kills with recorded starting equipment worth 2000 or less."
+msgstr "At least two kills with recorded starting equipment worth 2000 or less."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Planted the bomb in the round."
+msgstr "Planted the bomb in the round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Defused the bomb in the round."
+msgstr "Defused the bomb in the round."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Won a clutch that started against three or more opponents."
+msgstr "Won a clutch that started against three or more opponents."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No standard 5v5 rounds in this selection."
+msgstr "No standard 5v5 rounds in this selection."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "5v5 analysis"
+msgstr "5v5 analysis"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/review-progress.tsx
+msgid "matches"
+msgstr "matches"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/review-progress.tsx
+msgid "rounds"
+msgstr "rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "nonstandard matches excluded"
+msgstr "nonstandard matches excluded"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Recorded highlights"
+msgstr "Recorded highlights"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Where to look next"
+msgstr "Where to look next"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No matching review patterns in this selection."
+msgstr "No matching review patterns in this selection."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Output across rounds"
+msgstr "Output across rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Non-utility damage per round"
+msgstr "Non-utility damage per round"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a kill"
+msgstr "Rounds with a kill"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with a kill or assist"
+msgstr "Rounds with a kill or assist"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "100+ damage rounds"
+msgstr "100+ damage rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Zero-damage rounds"
+msgstr "Zero-damage rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Multi-kill round rate"
+msgstr "Multi-kill round rate"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "After the opening duel"
+msgstr "After the opening duel"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived after an opening kill"
+msgstr "Survived after an opening kill"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Team wins after your opening death"
+msgstr "Team wins after your opening death"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Wins without a personal opening event"
+msgstr "Wins without a personal opening event"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Utility use and efficiency"
+msgstr "Utility use and efficiency"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Rounds with utility thrown"
+msgstr "Rounds with utility thrown"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Damage per HE or fire grenade"
+msgstr "Damage per HE or fire grenade"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Enemy blind seconds per flash"
+msgstr "Enemy blind seconds per flash"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Enemies blinded per flash"
+msgstr "Enemies blinded per flash"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Teammates blinded per flash"
+msgstr "Teammates blinded per flash"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survival and round outcome"
+msgstr "Survival and round outcome"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived winning rounds"
+msgstr "Survived winning rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Survived losing rounds"
+msgstr "Survived losing rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Deaths without damage, kills or assists"
+msgstr "Deaths without damage, kills or assists"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Winning versus losing rounds"
+msgstr "Winning versus losing rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Performance through a match"
+msgstr "Performance through a match"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Your two latest match windows"
+msgstr "Your two latest match windows"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Across the same map, source, mode and build, your recent ADR changed by {adrChange} compared with the previous window."
+msgstr "Across the same map, source, mode and build, your recent ADR changed by {adrChange} compared with the previous window."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Previous matches"
+msgstr "Previous matches"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Recent matches"
+msgstr "Recent matches"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Round win rate"
+msgstr "Round win rate"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Same map, source, mode and build"
+msgstr "Same map, source, mode and build"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Mixed scenarios · use Practice and progress for matched comparisons"
+msgstr "Mixed scenarios · use Practice and progress for matched comparisons"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Median match ADR"
+msgstr "Median match ADR"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Middle 50% of match ADR"
+msgstr "Middle 50% of match ADR"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Current match streak"
+msgstr "Current match streak"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Wins"
+msgstr "Wins"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Losses"
+msgstr "Losses"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Monthly performance"
+msgstr "Monthly performance"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Winning versus losing matches"
+msgstr "Winning versus losing matches"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest match win streak"
+msgstr "Longest match win streak"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest round win streak"
+msgstr "Longest round win streak"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest match loss streak"
+msgstr "Longest match loss streak"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Longest round loss streak"
+msgstr "Longest round loss streak"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Memorable rounds"
+msgstr "Memorable rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "No recorded milestone rounds in this selection yet."
+msgstr "No recorded milestone rounds in this selection yet."
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Record definitions"
+msgstr "Record definitions"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Tied"
+msgstr "Tied"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/match/rounds/round/end-reason.tsx
+msgid "Unknown"
+msgstr "Unknown"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "First half"
+msgstr "First half"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Second half"
+msgstr "Second half"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Overtime"
+msgstr "Overtime"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+msgid "Unclassified"
+msgstr "Unclassified"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Group"
+msgstr "Group"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Matches"
+msgstr "Matches"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rounds"
+msgstr "Rounds"
+
+#: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-matches.tsx
+msgid "K / D / A"
+msgstr "K / D / A"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "No data for this selection."
 msgstr "No data for this selection."
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Personal overview"
-msgstr "Personal overview"
+#: src/ui/match/rounds/rounds-navigation-bar.tsx
+msgid "Overview"
+msgstr "Overview"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Duels and clutches"
-msgstr "Duels and clutches"
+msgid "Output and entry"
+msgstr "Output and entry"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Utility and objectives"
-msgstr "Utility and objectives"
+msgid "Teamplay and utility"
+msgstr "Teamplay and utility"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Maps, sides and economy"
-msgstr "Maps, sides and economy"
+msgid "Clutches and economy"
+msgstr "Clutches and economy"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Match history and trends"
-msgstr "Match history and trends"
+msgid "Trends"
+msgstr "Trends"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Personal records"
+msgstr "Personal records"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Personal analysis sections"
 msgstr "Personal analysis sections"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Matches / rounds"
-msgstr "Matches / rounds"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
-msgstr "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
-
-#: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-matches.tsx
-#: src/ui/habits/review-style.tsx
 #: src/ui/habits/use-review-labels.ts
 msgid "Headshot rate"
 msgstr "Headshot rate"
@@ -3245,7 +3678,6 @@ msgid "Rating 1.0 · historical formula"
 msgstr "Rating 1.0 · historical formula"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-style.tsx
 msgid "{ratingRoundCount} eligible rounds"
 msgstr "{ratingRoundCount} eligible rounds"
 
@@ -3254,17 +3686,8 @@ msgid "RWS · local calculation"
 msgstr "RWS · local calculation"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-style.tsx
 msgid "{rwsRoundCount} valid rounds · {rwsMissingRoundCount} unavailable"
 msgstr "{rwsRoundCount} valid rounds · {rwsMissingRoundCount} unavailable"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Kills / deaths / assists"
-msgstr "Kills / deaths / assists"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "K/D {kd} · (K+A)/D {kda}"
-msgstr "K/D {kd} · (K+A)/D {kda}"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "ADR · damage per round"
@@ -3275,16 +3698,32 @@ msgid "{damage} enemy health damage"
 msgstr "{damage} enemy health damage"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds with a kill, assist, survival or traded death"
-msgstr "Rounds with a kill, assist, survival or traded death"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Match win rate"
 msgstr "Match win rate"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Round win rate {roundWinRate}"
-msgstr "Round win rate {roundWinRate}"
+msgid "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
+msgstr "{matchWins} wins · {matchLosses} losses · {matchTies} ties"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Map and side breakdown"
+msgstr "Map and side breakdown"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by map"
+msgstr "Performance by map"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Performance by side"
+msgstr "Performance by side"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Kills / deaths / assists"
+msgstr "Kills / deaths / assists"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "K/D {kd} · (K+A)/D {kda}"
+msgstr "K/D {kd} · (K+A)/D {kda}"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Kills per round"
@@ -3295,49 +3734,8 @@ msgid "Deaths per round"
 msgstr "Deaths per round"
 
 #: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/use-review-labels.ts
-msgid "Survival rate"
-msgstr "Survival rate"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "{survivedRoundCount} rounds survived"
-msgstr "{survivedRoundCount} rounds survived"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Flash assists"
-msgstr "Flash assists"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "How to read these numbers"
-msgstr "How to read these numbers"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rates use total events and rounds across the selected demos. A dash means unavailable, not zero. Map and side filters apply to every panel."
-msgstr "Rates use total events and rounds across the selected demos. A dash means unavailable, not zero. Map and side filters apply to every panel."
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rating uses the public historical HLTV 1.0 formula. RWS uses the published FACEIT 2025 damage and bomb-objective rules, calculated locally. Neither is a platform-certified score or HLTV 2.x / 3.0."
-msgstr "Rating uses the public historical HLTV 1.0 formula. RWS uses the published FACEIT 2025 damage and bomb-objective rules, calculated locally. Neither is a platform-certified score or HLTV 2.x / 3.0."
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Some community servers label 5v5 matches as casual. Rating eligibility also checks observed teams and round structure; the original demo mode is preserved."
-msgstr "Some community servers label 5v5 matches as casual. Rating eligibility also checks observed teams and round structure; the original demo mode is preserved."
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "RWS only rewards won rounds: 100 points by damage, or 70 by damage plus 30 for the winning plant/defuse. Undefined rounds are excluded and reported above. Trades use a five-second window."
-msgstr "RWS only rewards won rounds: 100 points by damage, or 70 by damage plus 30 for the winning plant/defuse. Undefined rounds are excluded and reported above. Trades use a five-second window."
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "These demos describe your own sample. Aim scores, rank percentiles and visibility-based reaction time need additional models and are not inferred here."
-msgstr "These demos describe your own sample. Aim scores, rank percentiles and visibility-based reaction time need additional models and are not inferred here."
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Opening kills / deaths"
 msgstr "Opening kills / deaths"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "First enemy elimination of each round"
-msgstr "First enemy elimination of each round"
 
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-duels.tsx
@@ -3354,10 +3752,6 @@ msgid "Opening participation"
 msgstr "Opening participation"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds where you took the first duel"
-msgstr "Rounds where you took the first duel"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Win rate after an opening kill"
 msgstr "Win rate after an opening kill"
 
@@ -3371,24 +3765,16 @@ msgid "Trade kills"
 msgstr "Trade kills"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Enemy killed within five seconds of killing a teammate"
-msgstr "Enemy killed within five seconds of killing a teammate"
+msgid "Within five seconds"
+msgstr "Within five seconds"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Deaths traded by teammates"
 msgstr "Deaths traded by teammates"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Clutches won / attempted"
-msgstr "Clutches won / attempted"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Multi-kill rounds"
 msgstr "Multi-kill rounds"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds with at least two enemy kills"
-msgstr "Rounds with at least two enemy kills"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Kills per round distribution"
@@ -3401,22 +3787,6 @@ msgstr "5+ kills"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "{kills} kills"
 msgstr "{kills} kills"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Clutches by difficulty"
-msgstr "Clutches by difficulty"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Situation"
-msgstr "Situation"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Attempts"
-msgstr "Attempts"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Wins"
-msgstr "Wins"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Utility damage"
@@ -3445,6 +3815,10 @@ msgstr "{enemyBlindSeconds} s"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Total recorded enemy flash duration"
 msgstr "Total recorded enemy flash duration"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Flash assists"
+msgstr "Flash assists"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Teammates flashed (>1 s)"
@@ -3502,12 +3876,25 @@ msgid "Decoy"
 msgstr "Decoy"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Performance by map"
-msgstr "Performance by map"
+msgid "Clutches won / attempted"
+msgstr "Clutches won / attempted"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Performance by side"
-msgstr "Performance by side"
+#: src/ui/habits/use-review-labels.ts
+msgid "Survival rate"
+msgstr "Survival rate"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Clutches by difficulty"
+msgstr "Clutches by difficulty"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Situation"
+msgstr "Situation"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Attempts"
+msgstr "Attempts"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Performance by economy"
@@ -3518,16 +3905,48 @@ msgid "Average equipment value"
 msgstr "Average equipment value"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "{economyRoundCount} rounds with economy data"
-msgstr "{economyRoundCount} rounds with economy data"
+msgid "{equipmentRoundCount} rounds with equipment data"
+msgstr "{equipmentRoundCount} rounds with equipment data"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Average money spent"
 msgstr "Average money spent"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Economy groups use the parser's round-start equipment classification. Results from different maps, game modes, builds and sources are descriptive and may not be directly comparable."
-msgstr "Economy groups use the parser's round-start equipment classification. Results from different maps, game modes, builds and sources are descriptive and may not be directly comparable."
+msgid "{moneySpentRoundCount} rounds with spending data"
+msgstr "{moneySpentRoundCount} rounds with spending data"
+
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/review-maps.tsx
+#: src/ui/habits/review-progress.tsx
+#: src/ui/habits/review-style.tsx
+#: src/ui/habits/review-workbench.tsx
+msgid "Calculation details"
+msgstr "Calculation details"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Core totals include every match in the current filters. The 5v5 sections exclude nonstandard matches. Rates use summed counts; a dash means the denominator or required data is missing."
+msgstr "Core totals include every match in the current filters. The 5v5 sections exclude nonstandard matches. Rates use summed counts; a dash means the denominator or required data is missing."
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Headshot rate divides headshot kills by enemy kills. KAST counts rounds with a kill, assist, survival or traded death. Trades use five seconds. Opening events use the first enemy elimination of a round."
+msgstr "Headshot rate divides headshot kills by enemy kills. KAST counts rounds with a kill, assist, survival or traded death. Trades use five seconds. Opening events use the first enemy elimination of a round."
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Rating is the historical public HLTV 1.0 formula. RWS uses the public FACEIT 2025 damage and bomb-objective rules: 100 damage points in a won round, or 70 damage points plus 30 objective points. Undefined rounds are excluded."
+msgstr "Rating is the historical public HLTV 1.0 formula. RWS uses the public FACEIT 2025 damage and bomb-objective rules: 100 damage points in a won round, or 70 damage points plus 30 objective points. Undefined rounds are excluded."
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Utility efficiency divides enemy HE and fire damage by grenades thrown. Flash counts require more than one second of recorded blindness. Economy uses equipment at round start."
+msgstr "Utility efficiency divides enemy HE and fire damage by grenades thrown. Flash counts require more than one second of recorded blindness. Economy uses equipment at round start."
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Half labels require a verified 12- or 15-round side change; other rounds remain unclassified. Monthly groups use UTC. Recent windows show equal-sized groups of up to five matches. Round streaks stay within each match."
+msgstr "Half labels require a verified 12- or 15-round side change; other rounds remain unclassified. Monthly groups use UTC. Recent windows show equal-sized groups of up to five matches. Round streaks stay within each match."
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Match streaks follow the selected local matches. Ties, unknown results and nonstandard matches break the streak. Match win rates exclude unknown results."
+msgstr "Match streaks follow the selected local matches. Ties, unknown results and nonstandard matches break the streak. Match win rates exclude unknown results."
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "{skippedMatches} matches lack complete personal statistics and are excluded from these metrics."
@@ -3552,33 +3971,6 @@ msgstr "Force-buy"
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Full buy"
 msgstr "Full buy"
-
-#: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/match/rounds/round/end-reason.tsx
-msgid "Unknown"
-msgstr "Unknown"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Group"
-msgstr "Group"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Matches"
-msgstr "Matches"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Rounds"
-msgstr "Rounds"
-
-#: src/ui/habits/personal-stats-panels.tsx
-msgid "Round win rate"
-msgstr "Round win rate"
-
-#: src/ui/habits/personal-stats-panels.tsx
-#: src/ui/habits/review-matches.tsx
-#: src/ui/habits/review-style.tsx
-msgid "K / D / A"
-msgstr "K / D / A"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Rating 1.0"
@@ -3615,10 +4007,6 @@ msgid "Shots fired"
 msgstr "Shots fired"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Shots include suppressive fire and penetration attempts. Shot accuracy is not inferred from damage-event counts."
-msgstr "Shots include suppressive fire and penetration attempts. Shot accuracy is not inferred from damage-event counts."
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Recent performance trend"
 msgstr "Recent performance trend"
 
@@ -3631,8 +4019,8 @@ msgid "Recent match trend: {label}"
 msgstr "Recent match trend: {label}"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Up to 50 recent matches, oldest to newest. Each point is one match; missing values stay empty. Exact values and match links are listed below."
-msgstr "Up to 50 recent matches, oldest to newest. Each point is one match; missing values stay empty. Exact values and match links are listed below."
+msgid "Latest 50 matches · one point per match · oldest to newest"
+msgstr "Latest 50 matches · one point per match · oldest to newest"
 
 #: src/ui/habits/personal-stats-panels.tsx
 #: src/ui/habits/review-matches.tsx
@@ -3652,6 +4040,132 @@ msgstr "Result"
 msgid "Show more matches"
 msgstr "Show more matches"
 
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Damage exchange"
+msgstr "Damage exchange"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Evidence clip"
+msgstr "Evidence clip"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/use-review-clip-messages.ts
+msgid "Waiting to record"
+msgstr "Waiting to record"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "In this session"
+msgstr "In this session"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/left-bar/left-bar.tsx
+msgid "Recording queue"
+msgstr "Recording queue"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Select encounters, then start one recording session. Waiting items stay here after restarting the app."
+msgstr "Select encounters, then start one recording session. Waiting items stay here after restarting the app."
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Select up to 20 waiting events"
+msgstr "Select up to 20 waiting events"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Clear selection"
+msgstr "Clear selection"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Start selected recordings"
+msgstr "Start selected recordings"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Remove selected items"
+msgstr "Remove selected items"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Return failed items to waiting"
+msgstr "Return failed items to waiting"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "{selectedCount} selected events · {demoCount} matches · one game session"
+msgstr "{selectedCount} selected events · {demoCount} matches · one game session"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Pause after this encounter"
+msgstr "Pause after this encounter"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Cancel current recording"
+msgstr "Cancel current recording"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Stopping this session; remaining events stay in the queue."
+msgstr "Stopping this session; remaining events stay in the queue."
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "{completed} / {total} camera segments · {launchCount} game starts"
+msgstr "{completed} / {total} camera segments · {launchCount} game starts"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Recording progress"
+msgstr "Recording progress"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Round {activeRound}"
+msgstr "Round {activeRound}"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+#: src/ui/habits/video-ai-review-panel.tsx
+msgid "Opponent POV"
+msgstr "Opponent POV"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-batch-viewer.tsx
+msgid "Your POV"
+msgstr "Your POV"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Could not update the recording queue. Check the demo and recording setup, then retry."
+msgstr "Could not update the recording queue. Check the demo and recording setup, then retry."
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Add encounters from personal review, map evidence, or the combat list. Adding an item does not launch CS2."
+msgstr "Add encounters from personal review, map evidence, or the combat list. Adding an item does not launch CS2."
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Source details"
+msgstr "Source details"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Tick {eventTick}"
+msgstr "Tick {eventTick}"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Your POV → opponent POV · same encounter"
+msgstr "Your POV → opponent POV · same encounter"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Your POV · opponent unavailable or not selected"
+msgstr "Your POV · opponent unavailable or not selected"
+
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Opening duel"
+msgstr "Opening duel"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Watch saved video"
+msgstr "Watch saved video"
+
+#: src/ui/habits/recording-queue-page.tsx
+msgid "Previously saved recording batches"
+msgstr "Previously saved recording batches"
+
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Edited review videos"
 msgstr "Edited review videos"
@@ -3661,28 +4175,27 @@ msgid "{selectedCount} selected events · {demoCount} matches"
 msgstr "{selectedCount} selected events · {demoCount} matches"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "One game start per demo. Record selected events together, then watch the saved videos instantly."
-msgstr "One game start per demo. Record selected events together, then watch the saved videos instantly."
+msgid "Add selected encounters to the recording queue. CS2 starts only from the queue when you press Start."
+msgstr "Add selected encounters to the recording queue. CS2 starts only from the queue when you press Start."
 
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Include the opponent POV after each of my encounters"
 msgstr "Include the opponent POV after each of my encounters"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
-msgstr "More perspectives take more recording time. Start with a few important events; cached videos do not need another game launch."
+msgid "Add selected events to recording queue"
+msgstr "Add selected events to recording queue"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Record selected events"
-msgstr "Record selected events"
+#: src/ui/habits/review-duels.tsx
+#: src/ui/match/video/add-video-to-queue-button.tsx
+#: src/ui/videos/resume-or-pause-video-queue-button.tsx
+msgid "Open recording queue"
+msgstr "Open recording queue"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Cancel this recording batch"
-msgstr "Cancel this recording batch"
-
-#: src/ui/habits/review-batch-studio.tsx
-msgid "Retry this batch"
-msgstr "Retry this batch"
+msgid "Added to the queue. No game has been started."
+msgstr "Added to the queue. No game has been started."
 
 #: src/ui/habits/review-batch-studio.tsx
 msgid "Select up to 20 combat events below. Your selection stays when changing pages."
@@ -3705,17 +4218,6 @@ msgid "Event {currentEvent}"
 msgstr "Event {currentEvent}"
 
 #: src/ui/habits/review-batch-studio.tsx
-#: src/ui/habits/review-batch-viewer.tsx
-msgid "Your POV"
-msgstr "Your POV"
-
-#: src/ui/habits/review-batch-studio.tsx
-#: src/ui/habits/review-batch-viewer.tsx
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "Opponent POV"
-msgstr "Opponent POV"
-
-#: src/ui/habits/review-batch-studio.tsx
 msgid "Game setup"
 msgstr "Game setup"
 
@@ -3732,8 +4234,8 @@ msgid "{count} events"
 msgstr "{count} events"
 
 #: src/ui/habits/review-batch-studio.tsx
-msgid "Could not load or start this recording batch. Check the demo and recording setup, then retry."
-msgstr "Could not load or start this recording batch. Check the demo and recording setup, then retry."
+msgid "Could not load saved videos or add these events to the queue. Check the demo, then retry."
+msgstr "Could not load saved videos or add these events to the queue. Check the demo, then retry."
 
 #: src/ui/habits/review-batch-viewer.tsx
 msgid "Watch the compilation"
@@ -3786,10 +4288,6 @@ msgid "Choose an event to watch the seconds before and after it from your own PO
 msgstr "Choose an event to watch the seconds before and after it from your own POV."
 
 #: src/ui/habits/review-duels.tsx
-msgid "Includes enemy kills, deaths to enemies and damage encounters. Miss-only fights are not detected. Damage to the same opponent is grouped with a 5-second gap."
-msgstr "Includes enemy kills, deaths to enemies and damage encounters. Miss-only fights are not detected. Damage to the same opponent is grouped with a 5-second gap."
-
-#: src/ui/habits/review-duels.tsx
 msgid "View every opening"
 msgstr "View every opening"
 
@@ -3816,16 +4314,12 @@ msgid "Damage without a kill"
 msgstr "Damage without a kill"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Select this page for recording"
-msgstr "Select this page for recording"
+msgid "Add this page to recording queue"
+msgstr "Add this page to recording queue"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Clear recording selection"
-msgstr "Clear recording selection"
-
-#: src/ui/habits/review-duels.tsx
-msgid "{selectedCount} / 20 selected"
-msgstr "{selectedCount} / 20 selected"
+msgid "Could not update the recording queue."
+msgstr "Could not update the recording queue."
 
 #: src/ui/habits/review-duels.tsx
 msgid "Loading combat events…"
@@ -3844,16 +4338,8 @@ msgid "{total} matching events · page {pageNumber} of {pages}"
 msgstr "{total} matching events · page {pageNumber} of {pages}"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Damage exchange"
-msgstr "Damage exchange"
-
-#: src/ui/habits/review-duels.tsx
 msgid "Opponent"
 msgstr "Opponent"
-
-#: src/ui/habits/review-duels.tsx
-msgid "Opening duel"
-msgstr "Opening duel"
 
 #: src/ui/habits/review-duels.tsx
 #: src/ui/match/players/kills-panel.tsx
@@ -3872,8 +4358,12 @@ msgid "Dealt {damageGiven} / taken {damageTaken}"
 msgstr "Dealt {damageGiven} / taken {damageTaken}"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Include in recording batch"
-msgstr "Include in recording batch"
+msgid "Video saved"
+msgstr "Video saved"
+
+#: src/ui/habits/review-duels.tsx
+msgid "Add to recording queue"
+msgstr "Add to recording queue"
 
 #: src/ui/habits/review-duels.tsx
 msgid "2D context"
@@ -3914,8 +4404,8 @@ msgid "This heatmap only: {matches} matches · {rounds} rounds · position cover
 msgstr "This heatmap only: {matches} matches · {rounds} rounds · position coverage {coverage}%"
 
 #: src/ui/habits/review-maps.tsx
-msgid "Time is counted while alive until the round is decided. Radar artwork may differ from older map versions. These positions describe where you play, not whether your crosshair placement is good."
-msgstr "Time is counted while alive until the round is decided. Radar artwork may differ from older map versions. These positions describe where you play, not whether your crosshair placement is good."
+msgid "Time is counted while alive until the round is decided. Map builds and vertical levels are kept separate. Radar artwork may differ from older map versions."
+msgstr "Time is counted while alive until the round is decided. Map builds and vertical levels are kept separate. Radar artwork may differ from older map versions."
 
 #: src/ui/habits/review-maps.tsx
 msgid "More position and combat examples"
@@ -3934,16 +4424,8 @@ msgid "Your match notebook"
 msgstr "Your match notebook"
 
 #: src/ui/habits/review-matches.tsx
-msgid "Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal numbers."
-msgstr "Open a match for rounds, duels, utility and the full replay. The filters above also apply to these personal numbers."
-
-#: src/ui/habits/review-matches.tsx
 msgid "Load more matches"
 msgstr "Load more matches"
-
-#: src/ui/habits/review-matches.tsx
-msgid "Need the full numbers? Combat, utility, economy, weapons and trends are still here."
-msgstr "Need the full numbers? Combat, utility, economy, weapons and trends are still here."
 
 #: src/ui/habits/review-matches.tsx
 msgid "Hide detailed statistics"
@@ -3970,16 +4452,8 @@ msgid "Matches played after starting"
 msgstr "Matches played after starting"
 
 #: src/ui/habits/review-progress.tsx
-msgid "You now have comparable samples. Revisit the rounds and judge whether your chosen action helped; a percentage change alone does not prove improvement."
-msgstr "You now have comparable samples. Revisit the rounds and judge whether your chosen action helped; a percentage change alone does not prove improvement."
-
-#: src/ui/habits/review-progress.tsx
-msgid "Keep the same focus. A comparison needs at least two matches and twenty rounds on each side, plus enough relevant situations."
-msgstr "Keep the same focus. A comparison needs at least two matches and twenty rounds on each side, plus enough relevant situations."
-
-#: src/ui/habits/review-progress.tsx
-msgid "Only matches played after the start time count as practice results. Importing an old demo does not create progress. Each period uses up to five matches in this exact scenario."
-msgstr "Only matches played after the start time count as practice results. Importing an old demo does not create progress. Each period uses up to five matches in this exact scenario."
+msgid "Waiting for more matches in this scenario."
+msgstr "Waiting for more matches in this scenario."
 
 #: src/ui/habits/review-progress.tsx
 msgid "Review more evidence"
@@ -3990,8 +4464,8 @@ msgid "End this focus"
 msgstr "End this focus"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Watch a candidate round first, then choose one concrete action. We will compare later matches with the same map, side, source, mode and game build."
-msgstr "Watch a candidate round first, then choose one concrete action. We will compare later matches with the same map, side, source, mode and game build."
+msgid "Select a review situation and set your next-match focus."
+msgstr "Select a review situation and set your next-match focus."
 
 #: src/ui/habits/review-progress.tsx
 msgid "Choose from review candidates"
@@ -4002,10 +4476,6 @@ msgid "Recent play versus your earlier play"
 msgstr "Recent play versus your earlier play"
 
 #: src/ui/habits/review-progress.tsx
-msgid "This is a self comparison, not a rank or a training score. Maps, sides, sources, modes and game builds are kept separate."
-msgstr "This is a self comparison, not a rank or a training score. Maps, sides, sources, modes and game builds are kept separate."
-
-#: src/ui/habits/review-progress.tsx
 msgid "Comparable scenario"
 msgstr "Comparable scenario"
 
@@ -4014,20 +4484,12 @@ msgid "Earlier sample"
 msgstr "Earlier sample"
 
 #: src/ui/habits/review-progress.tsx
-msgid "matches"
-msgstr "matches"
-
-#: src/ui/habits/review-progress.tsx
-msgid "rounds"
-msgstr "rounds"
-
-#: src/ui/habits/review-progress.tsx
 msgid "Recent sample"
 msgstr "Recent sample"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Not enough comparable matches yet. Values remain visible as observations; changes are withheld until the sample is large enough."
-msgstr "Not enough comparable matches yet. Values remain visible as observations; changes are withheld until the sample is large enough."
+msgid "Not enough comparable matches yet."
+msgstr "Not enough comparable matches yet."
 
 #: src/ui/habits/review-progress.tsx
 msgid "Behavior / result"
@@ -4050,61 +4512,49 @@ msgid "pp"
 msgstr "pp"
 
 #: src/ui/habits/review-progress.tsx
-msgid "Up to five recent matches versus the previous five. Each period needs at least two matches and twenty rounds; rare events need additional samples. A dash means insufficient evidence."
-msgstr "Up to five recent matches versus the previous five. Each period needs at least two matches and twenty rounds; rare events need additional samples. A dash means insufficient evidence."
-
-#: src/ui/habits/review-progress.tsx
 msgid "No comparable scenario in this selection."
 msgstr "No comparable scenario in this selection."
 
-#: src/ui/habits/review-style.tsx
-msgid "How you tend to play"
-msgstr "How you tend to play"
+#: src/ui/habits/review-progress.tsx
+msgid "Comparisons keep map, side, source, mode and game build together. Each period uses up to five matches and needs at least two matches and twenty rounds. Individual metrics also require enough relevant events."
+msgstr "Comparisons keep map, side, source, mode and game build together. Each period uses up to five matches and needs at least two matches and twenty rounds. Individual metrics also require enough relevant events."
+
+#: src/ui/habits/review-progress.tsx
+msgid "Practice results include only matches played after the start time. Importing older demos does not add new practice results."
+msgstr "Practice results include only matches played after the start time. Importing older demos does not add new practice results."
 
 #: src/ui/habits/review-style.tsx
-msgid "These are proportions, not skill scores. Compare maps and sides before assigning yourself a role."
-msgstr "These are proportions, not skill scores. Compare maps and sides before assigning yourself a role."
+msgid "You were involved in the first elimination in {numerator} of {denominator} rounds."
+msgstr "You were involved in the first elimination in {numerator} of {denominator} rounds."
 
 #: src/ui/habits/review-style.tsx
-msgid "{numerator} / {denominator} observed"
-msgstr "{numerator} / {denominator} observed"
+msgid "{numerator} of your {denominator} enemy kills were five-second trades."
+msgstr "{numerator} of your {denominator} enemy kills were five-second trades."
+
+#: src/ui/habits/review-style.tsx
+msgid "You threw utility in {numerator} of {denominator} rounds."
+msgstr "You threw utility in {numerator} of {denominator} rounds."
+
+#: src/ui/habits/review-style.tsx
+msgid "You stayed alive through {numerator} of {denominator} rounds."
+msgstr "You stayed alive through {numerator} of {denominator} rounds."
+
+#: src/ui/habits/review-style.tsx
+msgid "You reached a 1vX situation in {numerator} of {denominator} rounds."
+msgstr "You reached a 1vX situation in {numerator} of {denominator} rounds."
+
+#: src/ui/habits/review-style.tsx
+msgid "Playing habits"
+msgstr "Playing habits"
+
+#: src/ui/habits/review-style.tsx
+msgid "Explore map habits"
+msgstr "Explore map habits"
 
 #: src/ui/habits/review-style.tsx
 #: src/ui/habits/review-workbench.tsx
 msgid "Small sample"
 msgstr "Small sample"
-
-#: src/ui/habits/review-style.tsx
-msgid "Your results, in context"
-msgstr "Your results, in context"
-
-#: src/ui/habits/review-style.tsx
-msgid "Use these numbers to describe the sample, then return to rounds to understand your decisions."
-msgstr "Use these numbers to describe the sample, then return to rounds to understand your decisions."
-
-#: src/ui/habits/review-style.tsx
-msgid "Rating 1.0 · historical"
-msgstr "Rating 1.0 · historical"
-
-#: src/ui/habits/review-style.tsx
-msgid "RWS · public formula"
-msgstr "RWS · public formula"
-
-#: src/ui/habits/review-style.tsx
-msgid "Rating uses the historical public 1.0 model. RWS uses the public damage/objective model; neither is an official platform score."
-msgstr "Rating uses the historical public 1.0 model. RWS uses the public damage/objective model; neither is an official platform score."
-
-#: src/ui/habits/review-style.tsx
-msgid "Where does this style happen?"
-msgstr "Where does this style happen?"
-
-#: src/ui/habits/review-style.tsx
-msgid "Explore opening positions and alive-time heatmaps. Select any occupied area to revisit example rounds."
-msgstr "Explore opening positions and alive-time heatmaps. Select any occupied area to revisit example rounds."
-
-#: src/ui/habits/review-style.tsx
-msgid "Explore map habits"
-msgstr "Explore map habits"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "YOUR NEXT MATCH FOCUS"
@@ -4115,12 +4565,8 @@ msgid "Track this practice"
 msgstr "Track this practice"
 
 #: src/ui/habits/review-workbench.tsx
-msgid "One useful review, one change to try."
-msgstr "One useful review, one change to try."
-
-#: src/ui/habits/review-workbench.tsx
-msgid "Choose a recurring situation. Watch the context before deciding whether to change it."
-msgstr "Choose a recurring situation. Watch the context before deciding whether to change it."
+msgid "Recurring situations"
+msgstr "Recurring situations"
 
 #: src/ui/habits/review-workbench.tsx
 msgid "Show top situations"
@@ -4143,8 +4589,8 @@ msgid "No review candidates in this selection"
 msgstr "No review candidates in this selection"
 
 #: src/ui/habits/review-workbench.tsx
-msgid "Try another map or side, or explore your playing style. No detected candidate does not mean flawless play."
-msgstr "Try another map or side, or explore your playing style. No detected candidate does not mean flawless play."
+msgid "Try another map or side, or explore your playing style."
+msgstr "Try another map or side, or explore your playing style."
 
 #: src/ui/habits/review-workbench.tsx
 msgid "{affectedMatches} affected matches · {evidenceShown} recent examples of {evidenceTotal} matching rounds"
@@ -4300,10 +4746,6 @@ msgid "Not recorded"
 msgstr "Not recorded"
 
 #: src/ui/habits/use-review-clip-messages.ts
-msgid "Waiting to record"
-msgstr "Waiting to record"
-
-#: src/ui/habits/use-review-clip-messages.ts
 msgid "Preparing CS2"
 msgstr "Preparing CS2"
 
@@ -4409,8 +4851,8 @@ msgid "Before taking first contact, agree on the timing and who can trade."
 msgstr "Before taking first contact, agree on the timing and who can trade."
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds where you were the first enemy kill of the round. Timing and role matter; taking an opening risk can be correct."
-msgstr "Rounds where you were the first enemy kill of the round. Timing and role matter; taking an opening risk can be correct."
+msgid "Rounds where the first enemy elimination was your death, divided by your opening duels."
+msgstr "Rounds where the first enemy elimination was your death, divided by your opening duels."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Opening advantage lost"
@@ -4425,8 +4867,8 @@ msgid "After an opening kill, call the advantage and plan the next move together
 msgstr "After an opening kill, call the advantage and plan the next move together."
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds lost after your opening kill. This describes the outcome, not who caused the loss."
-msgstr "Rounds lost after your opening kill. This describes the outcome, not who caused the loss."
+msgid "Rounds lost after your opening kill, divided by your opening-kill rounds."
+msgstr "Rounds lost after your opening kill, divided by your opening-kill rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Deaths without a trade"
@@ -4441,8 +4883,8 @@ msgid "Before committing to a fight, check one teammate can follow the same timi
 msgstr "Before committing to a fight, check one teammate can follow the same timing."
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Death rounds without a recorded trade within five seconds. Includes deaths where trading was impossible; review before changing your play."
-msgstr "Death rounds without a recorded trade within five seconds. Includes deaths where trading was impossible; review before changing your play."
+msgid "Death rounds without a recorded trade within five seconds, divided by all death rounds."
+msgstr "Death rounds without a recorded trade within five seconds, divided by all death rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Friendly flash rounds"
@@ -4457,8 +4899,8 @@ msgid "Call the flash before throwing and confirm teammates are ready."
 msgstr "Call the flash before throwing and confirm teammates are ready."
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds with recorded friendly blindness. A brief blind or an agreed team flash is not automatically a mistake."
-msgstr "Rounds with recorded friendly blindness. A brief blind or an agreed team flash is not automatically a mistake."
+msgid "Rounds with teammates blinded for more than one second, divided by rounds with a thrown flash or recorded friendly blindness."
+msgstr "Rounds with teammates blinded for more than one second, divided by rounds with a thrown flash or recorded friendly blindness."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Clutches to revisit"
@@ -4473,8 +4915,8 @@ msgid "In a clutch, check the clock and last known positions before committing."
 msgstr "In a clutch, check the clock and last known positions before committing."
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Recorded 1vX attempts that were lost. Opponent count and the starting situation strongly affect the outcome."
-msgstr "Recorded 1vX attempts that were lost. Opponent count and the starting situation strongly affect the outcome."
+msgid "Lost 1vX attempts, divided by all recorded clutch attempts."
+msgstr "Lost 1vX attempts, divided by all recorded clutch attempts."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "your opening duels"
@@ -4501,40 +4943,40 @@ msgid "Taking first contact"
 msgstr "Taking first contact"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Opening kills + opening deaths / played rounds. Describes how often you enter the first decisive duel."
-msgstr "Opening kills + opening deaths / played rounds. Describes how often you enter the first decisive duel."
+msgid "Opening kills + opening deaths / played rounds."
+msgstr "Opening kills + opening deaths / played rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Joining trade kills"
 msgstr "Joining trade kills"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Trade kills / enemy kills. Describes recorded five-second trades, not your distance from teammates."
-msgstr "Trade kills / enemy kills. Describes recorded five-second trades, not your distance from teammates."
+msgid "Trade kills within five seconds / enemy kills."
+msgstr "Trade kills within five seconds / enemy kills."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Using utility"
 msgstr "Using utility"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Rounds with a grenade thrown / played rounds. Frequency does not measure grenade quality."
-msgstr "Rounds with a grenade thrown / played rounds. Frequency does not measure grenade quality."
+msgid "Rounds with a grenade thrown / played rounds."
+msgstr "Rounds with a grenade thrown / played rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Staying alive"
 msgstr "Staying alive"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Survived rounds / played rounds. Saving, role and round outcome all affect this proportion."
-msgstr "Survived rounds / played rounds. Saving, role and round outcome all affect this proportion."
+msgid "Survived rounds / played rounds."
+msgstr "Survived rounds / played rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Playing the last player"
 msgstr "Playing the last player"
 
 #: src/ui/habits/use-review-labels.ts
-msgid "Recorded 1vX attempts / played rounds. This is the situation you reach, not a passive-play label."
-msgstr "Recorded 1vX attempts / played rounds. This is the situation you reach, not a passive-play label."
+msgid "Recorded 1vX attempts / played rounds."
+msgstr "Recorded 1vX attempts / played rounds."
 
 #: src/ui/habits/use-review-labels.ts
 msgid "Opening conversion"
@@ -4554,16 +4996,12 @@ msgid "{seconds}s"
 msgstr "{seconds}s"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
-msgstr "Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information available in the match."
-
-#: src/ui/habits/video-ai-report-content.tsx
 msgid "Choices in this encounter"
 msgstr "Choices in this encounter"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Observe → interpret → try an alternative"
-msgstr "Observe → interpret → try an alternative"
+msgid "Key moments"
+msgstr "Key moments"
 
 #: src/ui/habits/video-ai-report-content.tsx
 msgid "Player-visible evidence"
@@ -4590,10 +5028,6 @@ msgid "Alternative action"
 msgstr "Alternative action"
 
 #: src/ui/habits/video-ai-report-content.tsx
-msgid "Uncertainty"
-msgstr "Uncertainty"
-
-#: src/ui/habits/video-ai-report-content.tsx
 msgid "One comparable situation to practice"
 msgstr "One comparable situation to practice"
 
@@ -4601,21 +5035,17 @@ msgstr "One comparable situation to practice"
 msgid "Next-match check"
 msgstr "Next-match check"
 
-#: src/ui/habits/video-ai-report-content.tsx
-msgid "What remains uncertain"
-msgstr "What remains uncertain"
-
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "AI video review"
 msgstr "AI video review"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
-msgstr "Inspect this encounter, separate what was visible from hindsight, and choose one action to try."
+msgid "Key moments, choices and alternative plays."
+msgstr "Key moments, choices and alternative plays."
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
-msgstr "First prepare a local preview. Nothing is sent to the model until you click Send frames and review."
+msgid "Generation target: {target} · {serverHost} · {model}"
+msgstr "Generation target: {target} · {serverHost} · {model}"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Preparing frame preview…"
@@ -4630,24 +5060,16 @@ msgid "{frameCount, plural, one {# exact image for this request} other {# exact 
 msgstr "{frameCount, plural, one {# exact image for this request} other {# exact images for this request}}"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
-msgstr "These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts are sent to your selected server. Audio, the full video, account IDs and local file paths are not included separately."
+msgid "Send these preview images and round facts to the selected server. Images may contain nicknames, avatars or chat."
+msgstr "Send these preview images and round facts to the selected server. Images may contain nicknames, avatars or chat."
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
-msgstr "Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the player necessarily had."
+msgid "Player and opponent perspectives"
+msgstr "Player and opponent perspectives"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Only the player's recorded view is available for this review. No opponent view is inferred."
-msgstr "Only the player's recorded view is available for this review. No opponent view is inferred."
-
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
-msgstr "At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what happened between frames."
-
-#: src/ui/habits/video-ai-review-panel.tsx
-msgid "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
-msgstr "The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew during the match."
+msgid "Player perspective"
+msgstr "Player perspective"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Selected preview frame"
@@ -4662,8 +5084,8 @@ msgid "Exact round facts and frame metadata sent with the images"
 msgstr "Exact round facts and frame metadata sent with the images"
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
-msgstr "Round totals cover the entire round, not only this video. No team voice or player intentions are available."
+msgid "Up to six frames per view. Event totals cover the entire round."
+msgstr "Up to six frames per view. Event totals cover the entire round."
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Reviewing the sampled frames…"
@@ -4682,8 +5104,8 @@ msgid "One request to the configured vision model. Cloud image inputs may incur 
 msgstr "One request to the configured vision model. Cloud image inputs may incur API charges."
 
 #: src/ui/habits/video-ai-review-panel.tsx
-msgid "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
-msgstr "Waiting for the model, then checking its frame references. The app cannot verify the truth of the model's visual interpretation."
+msgid "Analyzing the sampled frames…"
+msgstr "Analyzing the sampled frames…"
 
 #: src/ui/habits/video-ai-review-panel.tsx
 msgid "Player POV"
@@ -5174,20 +5596,6 @@ msgstr "Match history"
 #: src/ui/left-bar/left-bar.tsx
 msgid "Advanced tools"
 msgstr "Advanced tools"
-
-#: src/ui/left-bar/matches-link.tsx
-msgid "Detailed matches"
-msgstr "Detailed matches"
-
-#: src/ui/left-bar/players-link.tsx
-msgctxt "Tooltip"
-msgid "Players"
-msgstr "Players"
-
-#: src/ui/left-bar/search-link.tsx
-msgctxt "Tooltip"
-msgid "Search"
-msgstr "Search"
 
 #: src/ui/left-bar/settings-button.tsx
 msgid "Settings"
@@ -5722,8 +6130,8 @@ msgstr "2D viewer"
 
 #: src/ui/match/match-tabs.tsx
 msgctxt "Tab link"
-msgid "Video"
-msgstr "Video"
+msgid "Sequence playback"
+msgstr "Sequence playback"
 
 #: src/ui/match/match-tabs.tsx
 msgctxt "Tab link"
@@ -6492,7 +6900,6 @@ msgid "Tags"
 msgstr "Tags"
 
 #: src/ui/match/rounds/round/round-tags.tsx
-#: src/ui/settings/cameras/camera-entry.tsx
 #: src/ui/settings/maps/map-entry.tsx
 msgctxt "Button"
 msgid "Edit"
@@ -6502,31 +6909,6 @@ msgstr "Edit"
 #: src/ui/match/viewer-2d/viewer-2d-loader.tsx
 msgid "Round number {roundNumber} not found."
 msgstr "Round number {roundNumber} not found."
-
-#: src/ui/match/rounds/rounds-navigation-bar.tsx
-msgid "Overview"
-msgstr "Overview"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "Disk space warning"
-msgstr "Disk space warning"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space to generate the videos."
-msgstr "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space to generate the videos."
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space on the disk where CS2 is installed to generate the videos."
-msgstr "You will need at least <0>{requiredGigaBytes}GB</0> of free disk space on the disk where CS2 is installed to generate the videos."
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgid "Are you sure you want to continue?"
-msgstr "Are you sure you want to continue?"
-
-#: src/ui/match/video/add-video-to-queue-button.tsx
-msgctxt "Button"
-msgid "Add to queue"
-msgstr "Add to queue"
 
 #: src/ui/match/video/add-video-to-queue-error-dialog.tsx
 #: src/ui/match/video/sequence/save-sequence-button.tsx
@@ -6548,63 +6930,9 @@ msgstr "CFG executed at the beginning of the sequence.\n"
 "Example:\n"
 "cl_draw_only_deathnotices 0"
 
-#: src/ui/match/video/close-game-after-recording-checkbox.tsx
-msgctxt "Checkbox label"
-msgid "Close the game when recording is done"
-msgstr "Close the game when recording is done"
-
-#: src/ui/match/video/concatenate-sequences-checkbox.tsx
-msgctxt "Checkbox label"
-msgid "Concatenate sequences into 1 video"
-msgstr "Concatenate sequences into 1 video"
-
 #: src/ui/match/video/death-notices-duration-input.tsx
 msgid "Death notices duration (seconds)"
 msgstr "Death notices duration (seconds)"
-
-#: src/ui/match/video/encoder-software-select.tsx
-msgctxt "Select label of video encoder"
-msgid "Encoder software"
-msgstr "Encoder software"
-
-#: src/ui/match/video/ffmpeg/audio-codec-input.tsx
-msgctxt "Input label"
-msgid "Audio codec"
-msgstr "Audio codec"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "This option is not available when using custom FFmpeg output parameters."
-msgstr "This option is not available when using custom FFmpeg output parameters."
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "You can still set the <0>-crf</0> parameter in your FFmpeg output parameters."
-msgstr "You can still set the <0>-crf</0> parameter in your FFmpeg output parameters."
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Tooltip"
-msgid "Impact the video quality, from 0 to 51 with 0 for the best quality resulting in a larger file"
-msgstr "Impact the video quality, from 0 to 51 with 0 for the best quality resulting in a larger file"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgctxt "Input label"
-msgid "Quality"
-msgstr "Quality"
-
-#: src/ui/match/video/ffmpeg/constant-rate-factor-input.tsx
-msgid "Quality 0 with libx264 creates a lossless video that some players can't decode."
-msgstr "Quality 0 with libx264 creates a lossless video that some players can't decode."
-
-#: src/ui/match/video/ffmpeg/ffmpeg-audio-bitrate-select.tsx
-msgctxt "Input label"
-msgid "Audio bitrate"
-msgstr "Audio bitrate"
-
-#: src/ui/match/video/ffmpeg/ffmpeg-input-parameters-input.tsx
-msgctxt "Input label"
-msgid "Input parameters"
-msgstr "Input parameters"
 
 #: src/ui/match/video/ffmpeg/ffmpeg-install-button.tsx
 msgid "Installing FFmpeg…"
@@ -6618,11 +6946,6 @@ msgstr "FFmpeg has been installed"
 msgid "An error occurred while installing FFmpeg"
 msgstr "An error occurred while installing FFmpeg"
 
-#: src/ui/match/video/ffmpeg/ffmpeg-output-parameters-input.tsx
-msgctxt "Input label"
-msgid "Output parameters"
-msgstr "Output parameters"
-
 #: src/ui/match/video/ffmpeg/ffmpeg-update-button.tsx
 msgid "Updating FFmpeg…"
 msgstr "Updating FFmpeg…"
@@ -6635,30 +6958,10 @@ msgstr "FFmpeg has been updated"
 msgid "An error occurred while updating FFmpeg"
 msgstr "An error occurred while updating FFmpeg"
 
-#: src/ui/match/video/ffmpeg/video-codec-input.tsx
-msgctxt "Input label"
-msgid "Video codec"
-msgstr "Video codec"
-
-#: src/ui/match/video/ffmpeg/video-container-select.tsx
-msgctxt "Input label"
-msgid "Video container"
-msgstr "Video container"
-
 #: src/ui/match/video/focus-camera-player-select.tsx
 msgctxt "Checkbox label"
 msgid "Focus camera on player"
 msgstr "Focus camera on player"
-
-#: src/ui/match/video/framerate-input.tsx
-msgctxt "Input label"
-msgid "Framerate"
-msgstr "Framerate"
-
-#: src/ui/match/video/framerate-input.tsx
-msgctxt "Input placeholder"
-msgid "Framerate"
-msgstr "Framerate"
 
 #: src/ui/match/video/generate-player-sequences-button.tsx
 msgctxt "Select option"
@@ -6718,35 +7021,6 @@ msgctxt "Button"
 msgid "Generate player's sequences"
 msgstr "Generate player's sequences"
 
-#: src/ui/match/video/height-resolution-input.tsx
-msgctxt "Input label"
-msgid "Height"
-msgstr "Height"
-
-#: src/ui/match/video/height-resolution-input.tsx
-#: src/ui/settings/shared/game-height-input.tsx
-msgctxt "Input placeholder"
-msgid "Height"
-msgstr "Height"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgctxt "Checkbox label"
-msgid "Enable config folder"
-msgstr "Enable config folder"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgctxt "Input label"
-msgid "Config folder"
-msgstr "Config folder"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgid "Config folder"
-msgstr "Config folder"
-
-#: src/ui/match/video/hlae/hlae-config-folder-path.tsx
-msgid "Select config folder"
-msgstr "Select config folder"
-
 #: src/ui/match/video/hlae/hlae-install-button.tsx
 msgid "Installing HLAE…"
 msgstr "Installing HLAE…"
@@ -6776,63 +7050,6 @@ msgstr "HLAE has been updated"
 msgid "An error occurred while updating HLAE"
 msgstr "An error occurred while updating HLAE"
 
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Map name (e.g., de_dust2)"
-msgstr "Map name (e.g., de_dust2)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Match checksum/ID"
-msgstr "Match checksum/ID"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Game (CS2 or CSGO)"
-msgstr "Game (CS2 or CSGO)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Current date (YYYY-MM-DD)"
-msgstr "Current date (YYYY-MM-DD)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Current time (HH-MM-SS)"
-msgstr "Current time (HH-MM-SS)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-#: src/ui/videos/video-entry.tsx
-msgid "Encoder software"
-msgstr "Encoder software"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Resolution (e.g., 1920x1080)"
-msgstr "Resolution (e.g., 1920x1080)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Framerate (e.g., 30)"
-msgstr "Framerate (e.g., 30)"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgctxt "Input label"
-msgid "Output filename"
-msgstr "Output filename"
-
-#: src/ui/match/video/output-file-name-input.tsx
-msgid "Available placeholders"
-msgstr "Available placeholders"
-
-#. Input placeholder
-#: src/ui/match/video/output-folder-path.tsx
-msgid "Output folder"
-msgstr "Output folder"
-
-#: src/ui/match/video/output-folder-path.tsx
-msgctxt "Input label"
-msgid "Output folder"
-msgstr "Output folder"
-
-#: src/ui/match/video/output-folder-path.tsx
-msgctxt "Dialog title"
-msgid "Select output folder"
-msgstr "Select output folder"
-
 #: src/ui/match/video/player-voices-checkbox.tsx
 msgctxt "Checkbox label"
 msgid "Player voices"
@@ -6843,13 +7060,7 @@ msgctxt "Checkbox label"
 msgid "Record Audio"
 msgstr "Record Audio"
 
-#: src/ui/match/video/recording-output-select.tsx
-msgctxt "Select label"
-msgid "Output"
-msgstr "Output"
-
 #: src/ui/match/video/recording-output.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Video"
 msgstr "Video"
 
@@ -6860,11 +7071,6 @@ msgstr "Images"
 #: src/ui/match/video/recording-output.tsx
 msgid "Images + video"
 msgstr "Images + video"
-
-#: src/ui/match/video/recording-system-select.tsx
-msgctxt "Select label"
-msgid "Recording system"
-msgstr "Recording system"
 
 #: src/ui/match/video/sequence/cameras/focus-camera-kill-pov-input.tsx
 msgctxt "Select option"
@@ -7389,24 +7595,10 @@ msgctxt "Input label"
 msgid "Show only death notices"
 msgstr "Show only death notices"
 
-#: src/ui/match/video/software-browse-button.tsx
-msgctxt "Button"
-msgid "Browse"
-msgstr "Browse"
-
 #: src/ui/match/video/software.tsx
 msgctxt "Software installation status"
 msgid "Not installed"
 msgstr "Not installed"
-
-#: src/ui/match/video/toggle-true-view.tsx
-msgctxt "Checkbox label"
-msgid "Enable TrueView mode"
-msgstr "Enable TrueView mode"
-
-#: src/ui/match/video/toggle-true-view.tsx
-msgid "Enabling TrueView may lead to lags in recordings!"
-msgstr "Enabling TrueView may lead to lags in recordings!"
 
 #: src/ui/match/video/video-actions-menu.tsx
 msgctxt "Toast"
@@ -7463,33 +7655,10 @@ msgstr "An error occurred. (Code {errorCode})"
 msgid "Loading video generator…"
 msgstr "Loading video generator…"
 
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "Installing VirtualDub…"
-msgstr "Installing VirtualDub…"
-
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "VirtualDub has been installed"
-msgstr "VirtualDub has been installed"
-
-#: src/ui/match/video/virtualdub/virtual-dub-install-button.tsx
-msgid "An error occurred while installing VirtualDub"
-msgstr "An error occurred while installing VirtualDub"
-
 #: src/ui/match/video/watch-sequences-button.tsx
 msgctxt "Button"
 msgid "Watch sequences"
 msgstr "Watch sequences"
-
-#: src/ui/match/video/width-resolution-input.tsx
-msgctxt "Input label"
-msgid "Width"
-msgstr "Width"
-
-#: src/ui/match/video/width-resolution-input.tsx
-#: src/ui/settings/shared/game-width-input.tsx
-msgctxt "Input placeholder"
-msgid "Width"
-msgstr "Width"
 
 #: src/ui/match/video/x-ray-checkbox.tsx
 msgctxt "Checkbox label"
@@ -8459,10 +8628,6 @@ msgid "AI reviews"
 msgstr "AI reviews"
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Choose a cloud API or a local Ollama model. Reviews are generated only when you click, and saved on this device."
-msgstr "Choose a cloud API or a local Ollama model. Reviews are generated only when you click, and saved on this device."
-
-#: src/ui/settings/ai/ai-settings.tsx
 msgid "AI provider"
 msgstr "AI provider"
 
@@ -8495,16 +8660,8 @@ msgid "Enter a whole number from 1 to {maximumTokenLimit} tokens. Your settings 
 msgstr "Enter a whole number from 1 to {maximumTokenLimit} tokens. Your settings have not been saved."
 
 #: src/ui/settings/ai/ai-settings.tsx
-msgid "Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI reviews."
-msgstr "Default: {defaultTokenLimit} tokens. This limit applies to personal, single-match and video AI reviews."
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "This is a maximum output budget, not a required response length. Higher limits can take longer; your provider or model may enforce a lower limit."
-msgstr "This is a maximum output budget, not a required response length. Higher limits can take longer; your provider or model may enforce a lower limit."
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Reset token limit to default"
-msgstr "Reset token limit to default"
+msgid "Reset to {defaultTokenLimit}"
+msgstr "Reset to {defaultTokenLimit}"
 
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "API key · already saved (leave blank to keep)"
@@ -8517,10 +8674,6 @@ msgstr "API key · optional for local models"
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "API key"
 msgstr "API key"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Keys use operating-system encryption. Changing the API address removes the previous key; enter the key for the new server. Keys are never included in reports."
-msgstr "Keys use operating-system encryption. Changing the API address removes the previous key; enter the key for the new server. Keys are never included in reports."
 
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "Saving…"
@@ -8537,14 +8690,6 @@ msgstr "The saved key will be removed when you save these settings."
 #: src/ui/settings/ai/ai-settings.tsx
 msgid "Remove saved key"
 msgstr "Remove saved key"
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
-msgstr "Start Ollama before generating. Statistics reviews use text; video reviews need a vision-capable model supporting image inputs and JSON responses. Local mode accepts only loopback addresses."
-
-#: src/ui/settings/ai/ai-settings.tsx
-msgid "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
-msgstr "Your API service may charge for generation. Statistics reviews send numeric facts. Video reviews send the exact preview images and round facts after you click Send; images may contain visible nicknames, avatars or chat. Full demos and videos stay on this device."
 
 #: src/ui/settings/analyze/max-concurrent-analyses-select.tsx
 msgid "Automatic (recommended: 2–3)"
@@ -8567,143 +8712,6 @@ msgstr "Analyze player/grenade positions during manual analysis. Positions are r
 msgid "Analyze player/grenade positions"
 msgstr "Analyze player/grenade positions"
 
-#: src/ui/settings/cameras/add-camera-button.tsx
-msgctxt "Button"
-msgid "Add a camera"
-msgstr "Add a camera"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "Camera actions"
-msgstr "Camera actions"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "spec_goto command copied to clipboard"
-msgstr "spec_goto command copied to clipboard"
-
-#: src/ui/settings/cameras/camera-entry.tsx
-msgid "Copy spec_goto command"
-msgstr "Copy spec_goto command"
-
-#: src/ui/settings/cameras/cameras-game-input.tsx
-#: src/ui/settings/maps/maps-settings.tsx
-msgctxt "Select label"
-msgid "Game"
-msgstr "Game"
-
-#: src/ui/settings/cameras/cameras-map-input.tsx
-msgctxt "Select label"
-msgid "Map"
-msgstr "Map"
-
-#: src/ui/settings/cameras/cameras-settings.tsx
-msgid "No maps found for the selected game."
-msgstr "No maps found for the selected game."
-
-#: src/ui/settings/cameras/cameras-settings.tsx
-msgid "Map not found"
-msgstr "Map not found"
-
-#: src/ui/settings/cameras/cameras.tsx
-msgid "No cameras found for {mapName}."
-msgstr "No cameras found for {mapName}."
-
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-msgid "Delete camera"
-msgstr "Delete camera"
-
-#: src/ui/settings/cameras/delete-camera-dialog.tsx
-msgid "Do you want to delete this camera?"
-msgstr "Do you want to delete this camera?"
-
-#: src/ui/settings/cameras/form/camera-color-input.tsx
-msgctxt "Input label"
-msgid "Color"
-msgstr "Color"
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Name is required."
-msgstr "Name is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Color is required."
-msgstr "Color is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Coordinate X is required."
-msgstr "Coordinate X is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
-msgid "Coordinate Y is required."
-msgstr "Coordinate Y is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Coordinate Z is required."
-msgstr "Coordinate Z is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Pitch is required."
-msgstr "Pitch is required."
-
-#: src/ui/settings/cameras/form/camera-form-provider.tsx
-msgid "Yaw is required."
-msgstr "Yaw is required."
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Start {gameName} on {mapName}"
-msgstr "Start {gameName} on {mapName}"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgctxt "Dialog title"
-msgid "Camera"
-msgstr "Camera"
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Unable to generate the screenshot, make sure the game is fully loaded and you are in‑game."
-msgstr "Unable to generate the screenshot, make sure the game is fully loaded and you are in‑game."
-
-#: src/ui/settings/cameras/form/camera-form.tsx
-msgid "Generate camera from in‑game view"
-msgstr "Generate camera from in‑game view"
-
-#: src/ui/settings/cameras/form/camera-preview-input.tsx
-msgid "Image Files"
-msgstr "Image Files"
-
-#: src/ui/settings/cameras/form/camera-preview-input.tsx
-msgctxt "Input label"
-msgid "Preview"
-msgstr "Preview"
-
-#: src/ui/settings/cameras/form/coordinate-x-input.tsx
-#: src/ui/settings/maps/map-dialog/coordinate-x-input.tsx
-msgctxt "Input label"
-msgid "Coordinate X"
-msgstr "Coordinate X"
-
-#: src/ui/settings/cameras/form/coordinate-y-input.tsx
-#: src/ui/settings/maps/map-dialog/coordinate-y-input.tsx
-msgctxt "Input label"
-msgid "Coordinate Y"
-msgstr "Coordinate Y"
-
-#: src/ui/settings/cameras/form/coordinate-z-input.tsx
-msgctxt "Input label"
-msgid "Coordinate Z"
-msgstr "Coordinate Z"
-
-#: src/ui/settings/cameras/form/pitch-input.tsx
-msgctxt "Input label"
-msgid "Pitch"
-msgstr "Pitch"
-
-#: src/ui/settings/cameras/form/yaw-input.tsx
-msgctxt "Input label"
-msgid "Yaw"
-msgstr "Yaw"
-
 #: src/ui/settings/close-settings-button.tsx
 msgid "Close settings"
 msgstr "Close settings"
@@ -8723,6 +8731,10 @@ msgstr "External server"
 #: src/ui/settings/database/database-mode-option-cards.tsx
 msgid "Use your own PostgreSQL server, local or remote."
 msgstr "Use your own PostgreSQL server, local or remote."
+
+#: src/ui/settings/database/database-settings.tsx
+msgid "Database connection"
+msgstr "Database connection"
 
 #: src/ui/settings/database/database-size.tsx
 msgid "Player trajectories"
@@ -8757,10 +8769,6 @@ msgid "Storage information could not be read. Check the database connection and 
 msgstr "Storage information could not be read. Check the database connection and retry."
 
 #: src/ui/settings/database/database-size.tsx
-msgid "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
-msgstr "Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL."
-
-#: src/ui/settings/database/database-size.tsx
 msgid "Actual database directory"
 msgstr "Actual database directory"
 
@@ -8771,14 +8779,6 @@ msgstr "Managed by the external PostgreSQL server"
 #: src/ui/settings/database/database-size.tsx
 msgid "The physical directory could not be resolved"
 msgstr "The physical directory could not be resolved"
-
-#: src/ui/settings/database/database-size.tsx
-msgid "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
-msgstr "Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new imports no longer save decorative chicken trajectories."
-
-#: src/ui/settings/database/database-size.tsx
-msgid "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
-msgstr "Removing old records does not necessarily return disk space. Storage compaction requires separate maintenance while imports and recording are stopped."
 
 #: src/ui/settings/database/database.tsx
 msgid "Host"
@@ -8844,85 +8844,13 @@ msgctxt "Button"
 msgid "Disconnect"
 msgstr "Disconnect"
 
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "JSON file"
-msgstr "JSON file"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You must select at least one data to import."
-msgstr "You must select at least one data to import."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You must select a CS:DM V2 backup file."
-msgstr "You must select a CS:DM V2 backup file."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "You need at least one folder."
-msgstr "You need at least one folder."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "The backup file is invalid."
-msgstr "The backup file is invalid."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "A required tag has not been found."
-msgstr "A required tag has not been found."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Select the JSON backup file generated from the CS:DM V2."
-msgstr "Select the JSON backup file generated from the CS:DM V2."
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Select backup file"
-msgstr "Select backup file"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Import comments"
-msgstr "Import comments"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "Import statuses"
-msgstr "Import statuses"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "The comment and status of the demos inside the following folders will be updated:"
-msgstr "The comment and status of the demos inside the following folders will be updated:"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>#</0> demo to import found in the backup file.} other {<1>#</1> demos to import found in the backup file.}}"
-msgstr "{demoToImportCount, plural, one {<0>#</0> demo to import found in the backup file.} other {<1>#</1> demos to import found in the backup file.}}"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>{demoFoundCount}</0> demo found in folders.} other {<1>{demoFoundCount}</1> demos found in folders.}}"
-msgstr "{demoToImportCount, plural, one {<0>{demoFoundCount}</0> demo found in folders.} other {<1>{demoFoundCount}</1> demos found in folders.}}"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgid "{demoToImportCount, plural, one {<0>{updatedDemoCount}</0> demo updated:} other {<1>{updatedDemoCount}</1> demos updated:}}"
-msgstr "{demoToImportCount, plural, one {<0>{updatedDemoCount}</0> demo updated:} other {<1>{updatedDemoCount}</1> demos updated:}}"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Dialog title"
-msgid "Import CS:DM V2"
-msgstr "Import CS:DM V2"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Import"
-msgstr "Import"
-
-#: src/ui/settings/database/import-v2-data-button.tsx
-msgctxt "Button"
-msgid "Import V2 data"
-msgstr "Import V2 data"
-
 #: src/ui/settings/database/optimize-database-button.tsx
 msgid "Clean library references"
 msgstr "Clean library references"
 
 #: src/ui/settings/database/optimize-database-button.tsx
-msgid "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
-msgstr "This only cleans file references and unimported metadata. Saved matches and player trajectories are preserved; it does not compact database files."
+msgid "Clean unavailable file references and unimported metadata."
+msgstr "Clean unavailable file references and unimported metadata."
 
 #: src/ui/settings/database/optimize-database-button.tsx
 msgid "Remove unavailable file references"
@@ -8971,12 +8899,7 @@ msgstr "Automatically extract demos contained in archives found in your folders 
 msgid "Enabling automatic extraction has an impact on demo loading speed!"
 msgstr "Enabling automatic extraction has an impact on demo loading speed!"
 
-#: src/ui/settings/folders/folder-row.tsx
-msgid "This folder contains characters that will prevent demo playback when starting CS:GO! (not CS2)"
-msgstr "This folder contains characters that will prevent demo playback when starting CS:GO! (not CS2)"
-
 #: src/ui/settings/folders/folders-settings.tsx
-#: src/ui/settings/settings-tabs.tsx
 msgid "Folders"
 msgstr "Folders"
 
@@ -8987,31 +8910,6 @@ msgstr "Include subfolders"
 #: src/ui/settings/folders/use-add-folder.tsx
 msgid "The selected folders are already in your settings"
 msgstr "The selected folders are already in your settings"
-
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "Steam API key"
-msgstr "Steam API key"
-
-#: src/ui/settings/integrations/integrations-settings.tsx
-msgid "Custom Steam API key used to retrieve information from Steam"
-msgstr "Custom Steam API key used to retrieve information from Steam"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "API key applied"
-msgstr "API key applied"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Invalid API key"
-msgstr "Invalid API key"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgid "Network error"
-msgstr "Network error"
-
-#: src/ui/settings/integrations/steam-api-key.tsx
-msgctxt "Input placeholder"
-msgid "API key"
-msgstr "API key"
 
 #: src/ui/settings/maps/add-map-button.tsx
 msgctxt "Button"
@@ -9029,6 +8927,16 @@ msgstr "Delete map"
 #: src/ui/settings/maps/delete-map-dialog.tsx
 msgid "Do you want to delete this map?"
 msgstr "Do you want to delete this map?"
+
+#: src/ui/settings/maps/map-dialog/coordinate-x-input.tsx
+msgctxt "Input label"
+msgid "Coordinate X"
+msgstr "Coordinate X"
+
+#: src/ui/settings/maps/map-dialog/coordinate-y-input.tsx
+msgctxt "Input label"
+msgid "Coordinate Y"
+msgstr "Coordinate Y"
 
 #: src/ui/settings/maps/map-dialog/lower-radar-input.tsx
 #: src/ui/settings/maps/map-dialog/radar-input.tsx
@@ -9056,6 +8964,18 @@ msgstr "Lower radar"
 msgctxt "Dialog title"
 msgid "Map"
 msgstr "Map"
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Name is required."
+msgstr "Name is required."
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Coordinate X is required."
+msgstr "Coordinate X is required."
+
+#: src/ui/settings/maps/map-dialog/map-form-provider.tsx
+msgid "Coordinate Y is required."
+msgstr "Coordinate Y is required."
 
 #: src/ui/settings/maps/map-dialog/map-form-provider.tsx
 msgid "Threshold Z is required."
@@ -9102,10 +9022,6 @@ msgstr "It will reset default maps."
 msgctxt "Button"
 msgid "Reset default maps"
 msgstr "Reset default maps"
-
-#: src/ui/settings/playback/cs2-highlights-warning.tsx
-msgid "CS2 doesn't have a built-in highlights/lowlights algorithm yet. The custom algorithm is always used for CS2 demos."
-msgstr "CS2 doesn't have a built-in highlights/lowlights algorithm yet. The custom algorithm is always used for CS2 demos."
 
 #: src/ui/settings/playback/cs2-location.tsx
 msgid "Path to the <0>cs2.exe</0> file located in the <1>game\\bin\\win64</1> folder of your CS2 installation."
@@ -9175,36 +9091,6 @@ msgstr "If you plan to use HLAE, you must install a version of HLAE that is comp
 msgctxt "Settings title"
 msgid "CS2 plugin"
 msgstr "CS2 plugin"
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "Path to the <0>csgo.exe</0> file located in the root folder of your CS:GO installation."
-msgstr "Path to the <0>csgo.exe</0> file located in the root folder of your CS:GO installation."
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "Path to the <0>csgo.sh</0> script located in the root folder of your CS:GO installation."
-msgstr "Path to the <0>csgo.sh</0> script located in the root folder of your CS:GO installation."
-
-#: src/ui/settings/playback/csgo-location.tsx
-msgid "CS:GO location"
-msgstr "CS:GO location"
-
-#: src/ui/settings/playback/custom-highlights.tsx
-msgid "Use a custom highlights algorithm to generate players highlights"
-msgstr "Use a custom highlights algorithm to generate players highlights"
-
-#: src/ui/settings/playback/custom-highlights.tsx
-msgctxt "Settings title"
-msgid "Custom highlights"
-msgstr "Custom highlights"
-
-#: src/ui/settings/playback/custom-lowlights.tsx
-msgid "Use a custom lowlights algorithm to generate players lowlights"
-msgstr "Use a custom lowlights algorithm to generate players lowlights"
-
-#: src/ui/settings/playback/custom-lowlights.tsx
-msgctxt "Settings title"
-msgid "Lowlights"
-msgstr "Lowlights"
 
 #: src/ui/settings/playback/executable-location.tsx
 #: src/ui/settings/video/ffmpeg/ffmpeg-location.tsx
@@ -9314,16 +9200,11 @@ msgstr "Before kill delay (lowlights)"
 msgid "How many seconds to start before a kill when watching lowlights"
 msgstr "How many seconds to start before a kill when watching lowlights"
 
-#: src/ui/settings/playback/player-voices.tsx
-msgid "Listen player voices during playback"
-msgstr "Listen player voices during playback"
+#: src/ui/settings/playback/playback-settings.tsx
+msgid "Advanced playback"
+msgstr "Advanced playback"
 
 #: src/ui/settings/playback/player-voices.tsx
-msgid "Doesn't work with Valve Matchmaking demos as voice data are not available!"
-msgstr "Doesn't work with Valve Matchmaking demos as voice data are not available!"
-
-#: src/ui/settings/playback/player-voices.tsx
-#: src/ui/settings/video/recording/recording-player-voices.tsx
 msgctxt "Settings title"
 msgid "Player voices"
 msgstr "Player voices"
@@ -9386,8 +9267,12 @@ msgid "Wait for round end"
 msgstr "Wait for round end"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "UI"
-msgstr "UI"
+msgid "Appearance"
+msgstr "Appearance"
+
+#: src/ui/settings/settings-tabs.tsx
+msgid "Demo import"
+msgstr "Demo import"
 
 #: src/ui/settings/settings-tabs.tsx
 msgid "Maps"
@@ -9398,21 +9283,21 @@ msgid "Playback"
 msgstr "Playback"
 
 #: src/ui/settings/settings-tabs.tsx
-msgid "Analyze"
-msgstr "Analyze"
+msgid "Recording"
+msgstr "Recording"
 
 #: src/ui/settings/settings-tabs.tsx
-#: src/ui/videos/video-entry.tsx
-msgid "Cameras"
-msgstr "Cameras"
-
-#: src/ui/settings/settings-tabs.tsx
-msgid "Integrations"
-msgstr "Integrations"
+msgid "Storage"
+msgstr "Storage"
 
 #: src/ui/settings/settings-tabs.tsx
 msgid "About"
 msgstr "About"
+
+#: src/ui/settings/shared/game-height-input.tsx
+msgctxt "Input placeholder"
+msgid "Height"
+msgstr "Height"
 
 #: src/ui/settings/shared/game-height-input.tsx
 msgid "Set the game height resolution."
@@ -9424,6 +9309,11 @@ msgid "Height"
 msgstr "Height"
 
 #: src/ui/settings/shared/game-width-input.tsx
+msgctxt "Input placeholder"
+msgid "Width"
+msgstr "Width"
+
+#: src/ui/settings/shared/game-width-input.tsx
 msgid "Set the game width resolution."
 msgstr "Set the game width resolution."
 
@@ -9431,23 +9321,6 @@ msgstr "Set the game width resolution."
 msgctxt "Settings title"
 msgid "Width"
 msgstr "Width"
-
-#: src/ui/settings/tags/add-tag.tsx
-msgctxt "Button"
-msgid "Add"
-msgstr "Add"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "The name is already taken"
-msgstr "The name is already taken"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "The name is too short"
-msgstr "The name is too short"
-
-#: src/ui/settings/tags/use-get-tag-error-message-from-error.ts
-msgid "Invalid color"
-msgstr "Invalid color"
 
 #: src/ui/settings/ui/date-format-input.tsx
 msgid "Invalid date format."
@@ -9496,39 +9369,6 @@ msgctxt "Settings title"
 msgid "Hardware Acceleration"
 msgstr "Hardware Acceleration"
 
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "My habits"
-msgstr "My habits"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Matches"
-msgstr "Matches"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Demos"
-msgstr "Demos"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Players"
-msgstr "Players"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Select option initial page"
-msgid "Teams"
-msgstr "Teams"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgid "Initial page displayed on app startup"
-msgstr "Initial page displayed on app startup"
-
-#: src/ui/settings/ui/initial-page-select.tsx
-msgctxt "Settings title"
-msgid "Initial page"
-msgstr "Initial page"
-
 #: src/ui/settings/ui/language-select.tsx
 msgid "Application language"
 msgstr "Application language"
@@ -9537,15 +9377,6 @@ msgstr "Application language"
 msgctxt "Settings title"
 msgid "Language"
 msgstr "Language"
-
-#: src/ui/settings/ui/redirect-demo-to-match.tsx
-msgid "Navigate to the demo's match page when going to a analyzed demo page."
-msgstr "Navigate to the demo's match page when going to a analyzed demo page."
-
-#: src/ui/settings/ui/redirect-demo-to-match.tsx
-msgctxt "Settings title"
-msgid "Redirect demo to match"
-msgstr "Redirect demo to match"
 
 #. Reset tables (columns order, visibility…)
 #: src/ui/settings/ui/reset-tables-state.tsx
@@ -9589,75 +9420,9 @@ msgstr "Theme"
 msgid "Invalid FFmpeg executable"
 msgstr "Invalid FFmpeg executable"
 
-#: src/ui/settings/video/hlae/hlae-config-folder-path.tsx
-msgid "Enable config folder"
-msgstr "Enable config folder"
-
 #: src/ui/settings/video/hlae/hlae-location.tsx
 msgid "Invalid HLAE executable"
 msgstr "Invalid HLAE executable"
-
-#: src/ui/settings/video/recording/default-video-recording-settings.tsx
-msgid "Default recording settings"
-msgstr "Default recording settings"
-
-#: src/ui/settings/video/recording/recording-assists.tsx
-msgid "Show assists in kill feed."
-msgstr "Show assists in kill feed."
-
-#: src/ui/settings/video/recording/recording-assists.tsx
-msgctxt "Settings title"
-msgid "Show Assists"
-msgstr "Show Assists"
-
-#: src/ui/settings/video/recording/recording-audio.tsx
-msgid "Record audio during video recording."
-msgstr "Record audio during video recording."
-
-#: src/ui/settings/video/recording/recording-audio.tsx
-msgctxt "Settings title"
-msgid "Record Audio"
-msgstr "Record Audio"
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgctxt "Input placeholder"
-msgid "Duration"
-msgstr "Duration"
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgid "How long death notices are displayed during recording in seconds."
-msgstr "How long death notices are displayed during recording in seconds."
-
-#: src/ui/settings/video/recording/recording-death-notices-duration.tsx
-msgctxt "Settings title"
-msgid "Death notices duration"
-msgstr "Death notices duration"
-
-#: src/ui/settings/video/recording/recording-player-voices.tsx
-msgid "Listen to player voices during recording."
-msgstr "Listen to player voices during recording."
-
-#: src/ui/settings/video/recording/recording-player-voices.tsx
-msgid "Player voices are not available in Valve Matchmaking demos!"
-msgstr "Player voices are not available in Valve Matchmaking demos!"
-
-#: src/ui/settings/video/recording/recording-show-only-death-notices.tsx
-msgid "Show only death notices during recording."
-msgstr "Show only death notices during recording."
-
-#: src/ui/settings/video/recording/recording-show-only-death-notices.tsx
-msgctxt "Settings title"
-msgid "Show only death notices"
-msgstr "Show only death notices"
-
-#: src/ui/settings/video/recording/recording-x-ray.tsx
-msgid "See players through walls during recording."
-msgstr "See players through walls during recording."
-
-#: src/ui/settings/video/recording/recording-x-ray.tsx
-msgctxt "Settings title"
-msgid "Show X-Ray"
-msgstr "Show X-Ray"
 
 #: src/ui/shared/get-playback-error-from-error-code.tsx
 msgid "Please make sure that <0>CS:GO</0> is installed from Steam."
@@ -9970,20 +9735,6 @@ msgctxt "Button"
 msgid "Remove completed"
 msgstr "Remove completed"
 
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgctxt "Button"
-msgid "Resume"
-msgstr "Resume"
-
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgctxt "Button"
-msgid "Pause"
-msgstr "Pause"
-
-#: src/ui/videos/resume-or-pause-video-queue-button.tsx
-msgid "The video queue is paused!"
-msgstr "The video queue is paused!"
-
 #: src/ui/videos/video-entry.tsx
 msgid "Waiting…"
 msgstr "Waiting…"
@@ -10023,6 +9774,10 @@ msgstr "Sequences"
 #: src/ui/videos/video-entry.tsx
 msgid "Disk space"
 msgstr "Disk space"
+
+#: src/ui/videos/video-entry.tsx
+msgid "Encoder software"
+msgstr "Encoder software"
 
 #: src/ui/videos/video-entry.tsx
 msgid "Resolution"
@@ -10075,6 +9830,10 @@ msgstr "Audio"
 #: src/ui/videos/video-entry.tsx
 msgid "Player voices"
 msgstr "Player voices"
+
+#: src/ui/videos/video-entry.tsx
+msgid "Cameras"
+msgstr "Cameras"
 
 #: src/ui/videos/video-entry.tsx
 msgid "First camera on"

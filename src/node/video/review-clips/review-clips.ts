@@ -4,7 +4,6 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 import { Game } from 'csdm/common/types/counter-strike';
-import type { AddVideoPayload } from 'csdm/common/types/video';
 import { VideoStatus } from 'csdm/common/types/video-status';
 import type { ReviewClipIssue, ReviewClipRequirements } from 'csdm/common/types/review-clip';
 import { getCounterStrikeExecutablePath } from 'csdm/node/counter-strike/get-counter-strike-executable-path';
@@ -21,12 +20,13 @@ import { server } from 'csdm/server/server';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
 import { getSequenceOutputFilePath } from 'csdm/node/video/generation/get-sequence-output-file-path';
-import { ReviewClipError, ReviewClipService, type ResolvedReviewClip } from './review-clip-service';
+import { ReviewClipError, ReviewClipService } from './review-clip-service';
 import { resolveReviewClip } from './resolve-review-clip';
 import { assertReviewGameFiles } from './assert-review-game-files';
 import { getCsgoFolderPathOrThrow } from 'csdm/node/counter-strike/get-csgo-folder-path';
 import { isReviewPovBusy } from './watch-review-pov';
 import { isReviewBatchBusy } from './review-batches';
+import { buildReviewClipVideo } from './build-review-clip-video';
 
 const execute = promisify(execFile);
 function directory() {
@@ -77,68 +77,6 @@ export async function inspectReviewClipRequirements(includeBatchBusy = true): Pr
     gameRunning,
     queueBusy,
     missingReasons,
-  };
-}
-
-export function buildReviewClipVideo(
-  input: ResolvedReviewClip,
-  id: string,
-  outputFolderPath: string,
-  ffmpegPath: string,
-): AddVideoPayload {
-  const { request, tickrate } = input;
-  return {
-    id,
-    checksum: request.checksum,
-    demoPath: path.join(outputFolderPath, 'source.dem'),
-    game: Game.CS2,
-    mapName: input.mapName,
-    tickrate,
-    recordingSystem: 'HLAE',
-    recordingOutput: 'video',
-    encoderSoftware: 'FFmpeg',
-    framerate: 30,
-    width: 1280,
-    height: 720,
-    closeGameAfterRecording: true,
-    concatenateSequences: false,
-    outputFileName: 'clip',
-    outputFolderPath,
-    trueView: false,
-    safeReviewRecording: true,
-    ffmpegSettings: {
-      audioBitrate: 128,
-      constantRateFactor: 23,
-      customLocationEnabled: true,
-      customExecutableLocation: ffmpegPath,
-      videoContainer: 'mp4',
-      videoCodec: 'libx264',
-      audioCodec: 'aac',
-      inputParameters: '',
-      outputParameters: '',
-    },
-    sequences: [
-      {
-        number: 1,
-        startTick: request.startTick,
-        endTick: request.endTick,
-        showXRay: false,
-        showAssists: true,
-        showOnlyDeathNotices: false,
-        playersOptions: [],
-        cameras: [],
-        playerVoicesEnabled: false,
-        recordAudio: true,
-        deathNoticesDuration: 5,
-        playerCameras: [
-          {
-            tick: Math.max(1, request.startTick - Math.round(tickrate)),
-            playerSteamId: request.steamId,
-            playerName: input.playerName,
-          },
-        ],
-      },
-    ],
   };
 }
 

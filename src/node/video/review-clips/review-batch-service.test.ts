@@ -12,6 +12,7 @@ beforeEach(async () => {
   directory = await fs.mkdtemp(path.join(os.tmpdir(), 'review-batch-'));
 });
 afterEach(async () => {
+  if (path.dirname(path.resolve(directory)) !== path.resolve(os.tmpdir())) throw new Error('Unsafe test cleanup');
   await fs.rm(directory, { recursive: true, force: true });
 });
 vi.stubGlobal('logger', { error: vi.fn() });
@@ -79,18 +80,23 @@ function setup() {
     resolve: vi.fn(() => Promise.resolve(plan)),
     requirements: vi.fn(() => Promise.resolve(ready)),
     busy: () => false,
-    recordGroup: vi.fn(
-      (
-        _items: ResolvedBatchItem[],
+    recordSession: vi.fn(
+      async (
+        groups: ResolvedBatchItem[][],
         _folder: string,
         _signal: AbortSignal,
         progress: (index: number, encoding: boolean) => void,
         launched: () => void,
+        recorded: (item: ResolvedBatchItem, folder: string, signal: AbortSignal) => Promise<void>,
+        shouldPause: () => boolean,
       ) => {
         launched();
-        progress(1, false);
-        progress(2, false);
-        return Promise.resolve();
+        for (const group of groups)
+          for (const item of group) {
+            if (shouldPause()) return;
+            progress(item.item.segments[0].index, false);
+            await recorded(item, _folder, _signal);
+          }
       },
     ),
     editItem: vi.fn(async (item: ReviewBatchItem, _folder: string, output: string) => {
@@ -124,11 +130,11 @@ it('records one demo once for multiple events and only reports ready after compi
   expect(result.completedDemos).toBe(1);
   expect(result.completedSegments).toBe(2);
   expect(result.items.map((item) => item.offsetSeconds)).toEqual([0, 10]);
-  expect(dependencies.recordGroup).toHaveBeenCalledTimes(1);
+  expect(dependencies.recordSession).toHaveBeenCalledTimes(1);
   expect(changes.at(-1)?.status).toBe('ready');
   const restarted = new ReviewBatchService(dependencies);
   await restarted.generate(plan.request);
-  expect(dependencies.recordGroup).toHaveBeenCalledTimes(1);
+  expect(dependencies.recordSession).toHaveBeenCalledTimes(1);
 });
 it('keeps successfully edited events when another fails, then retries only missing events', async () => {
   const { service, dependencies, plan } = setup();
@@ -143,13 +149,13 @@ it('keeps successfully edited events when another fails, then retries only missi
   dependencies.editItem.mockImplementation(edit);
   await service.generate(plan.request);
   await vi.waitFor(() => expect(service.isBusy()).toBe(false));
-  expect(dependencies.recordGroup.mock.calls[1][0].map(({ item }) => item.index)).toEqual([2]);
+  expect(dependencies.recordSession.mock.calls[1][0].flat().map(({ item }) => item.index)).toEqual([2]);
   expect((await service.get(plan.id))?.status).toBe('ready');
 });
 it('cancels the owned batch signal, unlocks only after it settles, and persists terminal state', async () => {
   const { service, dependencies, plan } = setup();
   let ownedSignal: AbortSignal | undefined;
-  dependencies.recordGroup.mockImplementation(
+  dependencies.recordSession.mockImplementation(
     (_items, _folder, signal) =>
       new Promise((resolve) => {
         ownedSignal = signal;
@@ -195,5 +201,5 @@ it('marks a process-interrupted manifest as failed without claiming the recorder
   expect(restarted.isBusy()).toBe(false);
   expect(batch).toMatchObject({ status: 'failed', issue: 'interrupted' });
   expect(batch?.items.map((item) => item.status)).toEqual(['ready', 'failed']);
-  expect(dependencies.recordGroup).toHaveBeenCalledTimes(1);
+  expect(dependencies.recordSession).toHaveBeenCalledTimes(1);
 });

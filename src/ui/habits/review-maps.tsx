@@ -63,12 +63,17 @@ export function ReviewMaps({ summary, steamId }: { summary: HabitsSummary; steam
             />
           </>
         )}
-        <p className="text-caption text-gray-600">
-          <Trans>
-            Time is counted while alive until the round is decided. Radar artwork may differ from older map versions.
-            These positions describe where you play, not whether your crosshair placement is good.
-          </Trans>
-        </p>
+        <details className="text-caption text-gray-700">
+          <summary className="cursor-pointer">
+            <Trans>Calculation details</Trans>
+          </summary>
+          <p className="mt-8">
+            <Trans>
+              Time is counted while alive until the round is decided. Map builds and vertical levels are kept separate.
+              Radar artwork may differ from older map versions.
+            </Trans>
+          </p>
+        </details>
       </HabitsPanel>
       <details className="rounded-12 border border-gray-300 bg-gray-100 p-20">
         <summary className="cursor-pointer text-body-strong">

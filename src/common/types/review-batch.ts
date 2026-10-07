@@ -5,6 +5,8 @@ export type ReviewBattleRequest = ReviewClipRequest & {
   eventTick?: number;
   /** Only a hint: the server validates that this player fought the selected player. */
   opponentSteamId?: string;
+  /** Queue entries may independently opt out of the opponent camera. */
+  includeOpponent?: boolean;
 };
 
 export type ReviewBatchRequest = {

@@ -72,7 +72,7 @@ export function MatchTabs() {
       {isCounterStrikeStartable(match.game) && (
         <div className="relative">
           <TabLink url={RoutePath.MatchVideo}>
-            <Trans context="Tab link">Video</Trans>
+            <Trans context="Tab link">Sequence playback</Trans>
           </TabLink>
           <TabLinkNumberBadge number={sequences.length} />
         </div>

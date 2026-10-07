@@ -84,7 +84,6 @@ export function About() {
             </RevealLogFileButton>
             <ClearLogsButton />
             <RevealCounterStrikeLogFileButton game={Game.CS2} />
-            <RevealCounterStrikeLogFileButton game={Game.CSGO} />
             {isEmbeddedDatabase && (
               <RevealLogFileButton filePath={window.csdm.embeddedDatabaseLogFilePath}>
                 <Trans>Reveal PostgreSQL log file</Trans>

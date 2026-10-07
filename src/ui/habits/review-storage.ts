@@ -13,14 +13,14 @@ export type ReviewPreferences = {
   mapName: string;
   side: 'all' | 'ct' | 't';
   source: DemoSource | 'all';
-  tab: 'review' | 'style' | 'duels' | 'progress';
+  tab: 'overview' | 'review' | 'style' | 'duels' | 'progress';
   selectedCard: ReviewCardId | null;
   focus: ReviewFocus | null;
   marks: Record<string, 'reviewed' | 'context'>;
 };
 
 export function defaultReviewPreferences(): ReviewPreferences {
-  return { mapName: 'all', side: 'all', source: 'all', tab: 'review', selectedCard: null, focus: null, marks: {} };
+  return { mapName: 'all', side: 'all', source: 'all', tab: 'overview', selectedCard: null, focus: null, marks: {} };
 }
 
 export function parseReviewPreferences(raw: string | null): ReviewPreferences {
@@ -33,7 +33,7 @@ export function parseReviewPreferences(raw: string | null): ReviewPreferences {
     if (typeof data.mapName === 'string' && data.mapName.length < 100) defaults.mapName = data.mapName;
     if (['all', 'ct', 't'].includes(data.side)) defaults.side = data.side;
     if (data.source === 'all' || Object.values(DemoSource).includes(data.source)) defaults.source = data.source;
-    if (['review', 'style', 'duels', 'progress'].includes(data.tab)) defaults.tab = data.tab;
+    if (['overview', 'review', 'style', 'duels', 'progress'].includes(data.tab)) defaults.tab = data.tab;
     if (reviewCardIds.includes(data.selectedCard)) defaults.selectedCard = data.selectedCard;
     if (data.marks && typeof data.marks === 'object') {
       defaults.marks = Object.fromEntries(

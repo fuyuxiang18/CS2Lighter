@@ -161,6 +161,30 @@ describe('AI context privacy and bounded selection', () => {
     expect(() => buildAiContext(entries, { ...scope, steamId: 'not-an-id' })).toThrow('invalid-scope');
   });
 
+  it('sends bounded anonymous deep analysis with its own standard-5v5 denominator', () => {
+    const entries = fixture(4);
+    entries[0].ratingEligible = false;
+    entries[0].ratingEligibilityBasis = null;
+    const context = buildAiContext(entries, scope);
+    expect(context.payload.metrics.roundCount).toBe(48);
+    expect(context.payload.analysis?.scope).toBe('standard-5v5');
+    expect(context.payload.analysis?.metrics).toMatchObject({
+      matchCount: 3,
+      roundCount: 36,
+      excludedMatchCount: 1,
+      excludedRoundCount: 12,
+      killRoundsCount: 36,
+      killRoundsTotal: 36,
+      killRoundsPercentage: 100,
+      nonUtilityAdr: 77,
+    });
+    const outbound = JSON.stringify(context.payload.analysis);
+    for (const privateText of [steamId, 'Private nickname', '2026-01', 'checksum', 'evidence'])
+      expect(outbound).not.toContain(privateText);
+    expect(context.payload.analysis?.byPhase.length).toBeLessThanOrEqual(4);
+    expect(context.payload.analysis?.byRoundResult.length).toBeLessThanOrEqual(2);
+  });
+
   it('permits observed sparse performance with uncertainty and changes signatures with facts', () => {
     const entries = fixture(1);
     const sparse = buildAiContext(entries, scope);
@@ -252,6 +276,19 @@ describe('AI context privacy and bounded selection', () => {
 });
 
 describe('structured model output boundaries', () => {
+  it('accepts concise reports without requiring boilerplate disclaimers', () => {
+    const context = buildAiContext(fixture(), scope);
+    const content = report();
+    content.limitations = [];
+    content.recommendations[0].uncertainty = '';
+    expect(validateAiReport(content, context)).toEqual(content);
+    expect(() => validateAiReport({ ...content, limitations: [''] }, context)).toThrow('response-schema-invalid');
+    expect(() => validateAiReport({ ...content, limitations: Array(9).fill('unused') }, context)).toThrow(
+      'response-schema-invalid',
+    );
+    content.recommendations[0].evidenceIds = ['r999'];
+    expect(() => validateAiReport(content, context)).toThrow('response-evidence-invalid');
+  });
   it('accepts bounded cited content and rejects invented IDs or uncited recommendations', () => {
     const context = buildAiContext(fixture(), scope);
     expect(validateAiReport(report(), context)).toEqual(report());
@@ -441,7 +478,7 @@ describe('AI report cache and explicit cost controls (mocked)', () => {
   it('isolates v1 reports without deleting files or generating on read', async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), 'cs2lighter-ai-v2-test-'));
     try {
-      expect(AI_PROMPT_VERSION).toBe(2);
+      expect(AI_PROMPT_VERSION).toBe(3);
       const fetchMock = vi.fn();
       vi.stubGlobal('fetch', fetchMock);
       const context = buildAiContext(fixture(), scope);
@@ -476,7 +513,7 @@ describe('AI report cache and explicit cost controls (mocked)', () => {
       expect(await readdir(directory)).toEqual([`${legacyId}.json`]);
       fetchMock.mockResolvedValue(wire());
       const next = await generateAiReport(context, config, 'mock-secret', false, directory);
-      expect(next.report?.promptVersion).toBe(2);
+      expect(next.report?.promptVersion).toBe(3);
       expect(next.report?.id).not.toBe(legacyId);
       expect(await readFile(legacyPath, 'utf8')).toBe(legacyText);
       expect(await readdir(directory)).toHaveLength(2);

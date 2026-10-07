@@ -7,6 +7,8 @@ import { DemoArchiveExtractionSettings } from './demo-archive-extraction-setting
 import { AutomaticFolderAnalysis } from './automatic-folder-analysis';
 import { useImportProgress } from 'csdm/ui/imports/import-progress-provider';
 import { DemoCacheLocation } from 'csdm/ui/imports/demo-cache-location';
+import { MaxConcurrentAnalysesSelect } from '../analyze/max-concurrent-analyses-select';
+import { ToggleAnalyzePositions } from '../analyze/toggle-analyze-positions';
 
 export function FoldersSettings() {
   const { progress } = useImportProgress();
@@ -14,6 +16,8 @@ export function FoldersSettings() {
     <SettingsView>
       <div className="flex flex-col gap-y-12">
         <AutomaticFolderAnalysis />
+        <MaxConcurrentAnalysesSelect />
+        <ToggleAnalyzePositions />
         <DemoArchiveExtractionSettings />
         <DemoCacheLocation directory={progress?.cacheDirectory ?? null} />
         <div>

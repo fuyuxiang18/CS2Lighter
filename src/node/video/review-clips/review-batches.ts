@@ -5,22 +5,18 @@ import { promisify } from 'node:util';
 import type { ReviewBatchItem } from 'csdm/common/types/review-batch';
 import { getAppFolderPath } from 'csdm/node/filesystem/get-app-folder-path';
 import { getFfmpegExecutablePath } from 'csdm/node/video/ffmpeg/ffmpeg-location';
-import { getDemoChecksumFromDemoPath } from 'csdm/node/demo/get-demo-checksum-from-demo-path';
-import { getCsgoFolderPathOrThrow } from 'csdm/node/counter-strike/get-csgo-folder-path';
-import { isCounterStrikeRunning } from 'csdm/node/counter-strike/is-counter-strike-running';
-import { Game } from 'csdm/common/types/counter-strike';
-import { VideoStatus } from 'csdm/common/types/video-status';
 import { getSequenceOutputFilePath } from 'csdm/node/video/generation/get-sequence-output-file-path';
 import { videoQueue } from 'csdm/server/video-queue';
 import { server } from 'csdm/server/server';
 import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
-import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
-import { assertReviewGameFiles } from './assert-review-game-files';
-import { buildReviewClipVideo, inspectReviewClipRequirements, reviewClips } from './review-clips';
+import { inspectReviewClipRequirements, reviewClips } from './review-clips';
 import { isReviewPovBusy } from './watch-review-pov';
 import { ReviewClipError } from './review-clip-service';
 import { ReviewBatchService } from './review-batch-service';
 import { resolveReviewBatch } from './resolve-review-batch';
+
+import { recordReviewSession } from './record-review-session';
+import { recordingQueue } from './recording-queue';
 
 const execute = promisify(execFile);
 export function reviewBatchDirectory() {
@@ -171,120 +167,11 @@ export const reviewBatches = new ReviewBatchService({
   resolve: resolveReviewBatch,
   requirements: () => inspectReviewClipRequirements(false),
   busy: () => reviewClips.isBusy() || isReviewPovBusy() || videoQueue.isBusy(),
-  changed: (batch) => server.sendPushMessage({ name: ServerPushMessageName.ReviewBatchUpdated, payload: batch }),
+  changed: (batch) => {
+    server.sendPushMessage({ name: ServerPushMessageName.ReviewBatchUpdated, payload: batch });
+    void recordingQueue.updateBatch(batch).catch((error) => logger.error(error));
+  },
   concatenate,
   editItem,
-  async recordGroup(items, folder, signal, progress, launched) {
-    const ffmpeg = await getFfmpegExecutablePath();
-    const input = items[0].input;
-    const id = path.basename(path.dirname(folder)) + '-' + path.basename(folder);
-    const video = buildReviewClipVideo(input, id, folder, ffmpeg);
-    video.sequences = items.flatMap(({ input, item }) =>
-      item.segments.map((segment) => ({
-        ...buildReviewClipVideo(
-          {
-            ...input,
-            request: {
-              ...input.request,
-              steamId: segment.steamId,
-              startTick: segment.startTick,
-              endTick: segment.endTick,
-            },
-            playerName: segment.playerName,
-          },
-          id,
-          folder,
-          ffmpeg,
-        ).sequences[0],
-        number: segment.index,
-      })),
-    );
-    video.sequences.sort((a, b) => a.startTick - b.startTick);
-    const cancel = () => videoQueue.removeVideos([id]);
-    signal.addEventListener('abort', cancel, { once: true });
-    const timeout = setTimeout(
-      cancel,
-      Math.max(
-        180_000,
-        120_000 +
-          video.sequences.reduce(
-            (sum, sequence) => sum + ((sequence.endTick - sequence.startTick) / input.tickrate) * 7000,
-            0,
-          ),
-      ),
-    );
-    let prepared = false;
-    let encoding = false;
-    let lastSegment: number | undefined;
-    const timer = setInterval(() => {
-      if (!prepared || encoding || signal.aborted) return;
-      void Promise.all(
-        video.sequences.map(async (sequence) => ({
-          number: sequence.number,
-          exists: await fs
-            .stat(path.join(folder, `${sequence.number}-sequence`, 'video.mp4'))
-            .then((stat) => stat.size > 0)
-            .catch(() => false),
-        })),
-      ).then((states) => {
-        const latest = states.filter((state) => state.exists).at(-1)?.number;
-        if (latest && latest !== lastSegment && !signal.aborted && !encoding) {
-          lastSegment = latest;
-          progress(latest, false);
-        }
-      });
-    }, 500);
-    let preparationError: unknown;
-    try {
-      if (signal.aborted) throw new ReviewClipError('interrupted');
-      const result = await videoQueue.runSingleVideo(
-        video,
-        async () => {
-          try {
-            if (isUpdateMaintenance()) throw new ReviewClipError('update-maintenance');
-            if (await isCounterStrikeRunning()) throw new ReviewClipError('game-running');
-            await assertReviewGameFiles(await getCsgoFolderPathOrThrow(Game.CS2));
-            const source = await fs.stat(input.demoPath).catch(() => undefined);
-            if (!source?.isFile()) throw new ReviewClipError('demo-missing');
-            if ((await getDemoChecksumFromDemoPath(input.demoPath)) !== input.request.checksum)
-              throw new ReviewClipError('demo-changed');
-            await fs.rm(folder, { recursive: true, force: true });
-            await fs.mkdir(folder, { recursive: true });
-            const disk = await fs.statfs(folder);
-            if (disk.bavail * disk.bsize < source.size + video.sequences.length * 100 * 1024 * 1024)
-              throw new ReviewClipError('insufficient-space');
-            await fs.copyFile(input.demoPath, video.demoPath);
-            const fresh = await fs.stat(input.demoPath);
-            if (source.size !== fresh.size || source.mtimeMs !== fresh.mtimeMs)
-              throw new ReviewClipError('demo-changed');
-            prepared = true;
-          } catch (error) {
-            preparationError = error;
-            throw error;
-          }
-        },
-        (state) => {
-          if (state.status === VideoStatus.Converting) {
-            encoding = true;
-            progress(state.currentSequence ?? video.sequences[0].number, true);
-          }
-        },
-        launched,
-      );
-      if (signal.aborted) throw new ReviewClipError('interrupted');
-      if (preparationError) throw preparationError;
-      if (result?.status !== VideoStatus.Success)
-        throw new ReviewClipError('recording-failed', result?.output ?? 'Batch recording did not finish');
-    } finally {
-      clearTimeout(timeout);
-      clearInterval(timer);
-      signal.removeEventListener('abort', cancel);
-      const names = await fs.readdir(folder).catch(() => [] as string[]);
-      await Promise.all(
-        names
-          .filter((name) => /^source\.dem(?:\..*)?$/.test(name))
-          .map((name) => fs.unlink(path.join(folder, name)).catch(() => {})),
-      );
-    }
-  },
+  recordSession: recordReviewSession,
 });

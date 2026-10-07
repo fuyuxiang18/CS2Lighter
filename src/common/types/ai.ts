@@ -133,6 +133,18 @@ export type PreparedAiContext = {
     locale: AiReportScope['locale'];
     sample: AiReportPreview;
     metrics: Record<string, number | null>;
+    /** Anonymous derived facts from the selected matches; no dates, account IDs or local evidence paths. */
+    analysis?: {
+      scope: 'standard-5v5';
+      metrics: Record<string, number | null>;
+      byPhase: { phase: string; metrics: Record<string, number | null> }[];
+      byRoundResult: { result: string; metrics: Record<string, number | null> }[];
+      trend: {
+        comparable: boolean;
+        recent: { matchCount: number; metrics: Record<string, number | null> } | null;
+        previous: { matchCount: number; metrics: Record<string, number | null> } | null;
+      };
+    };
     methodology: { rating: 'hltv-1.0-public'; rws: 'faceit-2025-public-local-v1'; tradeWindowSeconds: 5 };
     allowedScoreDimensions: AiScoreDimension[];
     bySide: { side: PersonalStatsSide; metrics: Record<string, number | null> }[];

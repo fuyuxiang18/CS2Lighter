@@ -1,4 +1,5 @@
 import type { DemoSource, EconomyType, GameMode, TeamNumber } from './counter-strike';
+import type { PersonalAnalysis } from './personal-analysis';
 
 export type PersonalStatsSide = typeof TeamNumber.T | typeof TeamNumber.CT;
 type PersonalMatchResult = 'win' | 'loss' | 'tie' | 'unknown';
@@ -133,6 +134,8 @@ export type PersonalMetrics = {
   equipmentValue: number;
   moneySpent: number;
   economyRoundCount: number;
+  equipmentRoundCount: number;
+  moneySpentRoundCount: number;
   averageEquipmentValue: number | null;
   averageMoneySpent: number | null;
 };
@@ -141,6 +144,7 @@ export type PersonalStatsGroup = {
   key: string;
   matchCount: number;
   matchWins: number;
+  knownResultMatchCount: number;
   matchWinPercentage: number | null;
   metrics: PersonalMetrics;
 };
@@ -166,6 +170,7 @@ export type PersonalStatsSummary = {
   matchTies: number;
   unknownResults: number;
   matchWinPercentage: number | null;
+  knownResultMatchCount: number;
   /** Ratios use summed numerators/denominators; matches are never averaged equally. */
   metrics: PersonalMetrics;
   mapNames: string[];
@@ -178,4 +183,5 @@ export type PersonalStatsSummary = {
   cohorts: { mapName: string; buildNumber: number; gameMode: GameMode; source: DemoSource; matchCount: number }[];
   coverage: { availableMatches: number; analyzedMatches: number; skippedMatches: number };
   methodology: { rating: 'hltv-1.0-public'; rws: 'faceit-2025-public-local-v1'; tradeWindowSeconds: 5 };
+  analysis: PersonalAnalysis;
 };

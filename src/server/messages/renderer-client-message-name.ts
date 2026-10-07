@@ -1,5 +1,8 @@
 // Message names sent from the renderer Electron process to the WebSocket server.
 export const RendererClientMessageName = {
+  GetRecordingQueue: 'get-recording-queue',
+  AddToRecordingQueue: 'add-to-recording-queue',
+  ControlRecordingQueue: 'control-recording-queue',
   FetchReviewDuels: 'fetch-review-duels',
   GetReviewClip: 'get-review-clip',
   GenerateReviewBatch: 'generate-review-batch',

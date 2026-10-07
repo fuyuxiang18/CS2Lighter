@@ -18,12 +18,14 @@ type Dependencies = {
   resolve: (request: ReviewBatchRequest) => Promise<ResolvedReviewBatch>;
   requirements: () => Promise<ReviewClipRequirements>;
   busy: () => boolean;
-  recordGroup: (
-    items: ResolvedBatchItem[],
+  recordSession: (
+    groups: ResolvedBatchItem[][],
     folder: string,
     signal: AbortSignal,
     progress: (segment: number, encoding: boolean) => void,
     launched: () => void,
+    itemRecorded: (item: ResolvedBatchItem, groupFolder: string, signal: AbortSignal) => Promise<void>,
+    shouldPause: () => boolean,
   ) => Promise<void>;
   editItem: (
     item: ReviewBatchItem,
@@ -38,7 +40,7 @@ type Dependencies = {
 const activeStatuses = new Set(['queued', 'preparing', 'recording', 'encoding']);
 
 export class ReviewBatchService {
-  private active?: { id: string; controller: AbortController };
+  private active?: { id: string; controller: AbortController; pause: boolean };
   private batches = new Map<string, ReviewBatch>();
   private writes = new Map<string, Promise<void>>();
   constructor(private dependencies: Dependencies) {}
@@ -191,7 +193,7 @@ export class ReviewBatchService {
       return { batch, requirements };
     }
     const controller = new AbortController();
-    this.active = { id: batch.id, controller };
+    this.active = { id: batch.id, controller, pause: false };
     try {
       await this.save(batch);
     } catch (error) {
@@ -207,83 +209,83 @@ export class ReviewBatchService {
     if (this.active?.id === id) this.active.controller.abort();
     return this.batches.get(id);
   }
+  pause(id: string): void {
+    this.folder(id);
+    if (this.active?.id === id) this.active.pause = true;
+  }
   private async run(plan: ResolvedReviewBatch, batch: ReviewBatch, controller: AbortController) {
     const signal = controller.signal;
     const folder = this.folder(batch.id);
     try {
-      for (const [groupIndex, group] of plan.groups.entries()) {
-        if (signal.aborted) throw new ReviewClipError('interrupted');
-        batch.currentDemo = groupIndex + 1;
-        const pending = group.filter(
-          ({ item }) => batch.items.find((current) => current.index === item.index)?.status !== 'ready',
-        );
-        const groupFolder = path.join(folder, `demo-${groupIndex + 1}`);
-        if (pending.length) {
-          batch.status = 'preparing';
-          for (const { item } of pending) batch.items[item.index - 1].status = 'preparing';
-          this.publish(batch);
-          try {
-            await this.dependencies.recordGroup(
-              pending,
-              groupFolder,
-              signal,
-              (segmentIndex, encoding) => {
-                if (signal.aborted) return;
-                batch.status = encoding ? 'encoding' : 'recording';
-                batch.currentSegment = segmentIndex;
-                for (const item of batch.items)
-                  for (const segment of item.segments)
-                    if (item.status !== 'ready' && segment.index === segmentIndex) {
-                      segment.status = batch.status;
-                      item.status = batch.status;
-                    }
-                this.publish(batch);
-              },
-              () => {
-                batch.launchCount++;
-                this.publish(batch);
-              },
-            );
-            for (const { item } of pending) {
-              if (signal.aborted) throw new ReviewClipError('interrupted');
+      const groups = plan.groups.map((group) =>
+        group.filter(({ item }) => batch.items[item.index - 1].status !== 'ready'),
+      );
+      const pending = groups.flat();
+      if (pending.length) {
+        batch.status = 'preparing';
+        this.publish(batch);
+        await this.dependencies.recordSession(
+          groups,
+          folder,
+          signal,
+          (segmentIndex, encoding) => {
+            if (signal.aborted) return;
+            batch.status = encoding ? 'encoding' : 'recording';
+            batch.currentSegment = segmentIndex;
+            batch.currentDemo =
+              plan.groups.findIndex((group) =>
+                group.some(({ item }) => item.segments.some((segment) => segment.index === segmentIndex)),
+              ) + 1;
+            for (const item of batch.items)
+              for (const segment of item.segments)
+                if (item.status !== 'ready' && segment.index === segmentIndex) {
+                  segment.status = batch.status;
+                  item.status = batch.status;
+                }
+            this.publish(batch);
+          },
+          () => {
+            batch.launchCount++;
+            this.publish(batch);
+          },
+          async ({ item }, groupFolder, encodingSignal) => {
+            if (signal.aborted || encodingSignal.aborted) throw new ReviewClipError('interrupted');
+            // Commit each event before permitting the game to advance. A later failure cannot lose ready media.
+            if (item.status === 'failed') {
+              batch.items[item.index - 1] = { ...item };
+            } else {
               batch.status = 'encoding';
               this.publish(batch);
-              const output = path.join(folder, `event-${item.index}.mp4`);
-              const edited = await this.dependencies.editItem(item, groupFolder, output, signal);
-              batch.items[item.index - 1] = { ...edited, status: 'ready', videoUrl: pathToFileURL(output).href };
-              batch.completedSegments = batch.items
-                .filter((entry) => entry.status === 'ready')
-                .reduce((sum, entry) => sum + entry.segments.length, 0);
-              await this.save(batch);
-              this.publish(batch);
-            }
-          } catch (error) {
-            if (signal.aborted) throw error;
-            for (const { item } of pending)
-              if (batch.items[item.index - 1].status !== 'ready')
+              try {
+                const output = path.join(folder, `event-${item.index}.mp4`);
+                const edited = await this.dependencies.editItem(item, groupFolder, output, encodingSignal);
+                batch.items[item.index - 1] = { ...edited, status: 'ready', videoUrl: pathToFileURL(output).href };
+              } catch (error) {
+                if (signal.aborted || encodingSignal.aborted) throw error;
                 batch.items[item.index - 1] = {
-                  ...batch.items[item.index - 1],
+                  ...item,
                   status: 'failed',
-                  issue: error instanceof ReviewClipError ? error.issue : 'recording-failed',
+                  issue: 'recording-failed',
                   errorDetail: error instanceof Error ? error.message : String(error),
                 };
-          } finally {
-            // All playable results live beside this owned staging folder; retries record only unfinished items.
-            await fs
-              .rm(groupFolder, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
-              .catch((error) => logger.error(error));
-          }
-        }
-        batch.completedDemos++;
-        batch.completedSegments = batch.items
-          .filter((entry) => entry.status === 'ready')
-          .reduce((sum, entry) => sum + entry.segments.length, 0);
-        await this.save(batch);
-        this.publish(batch);
+              }
+            }
+            batch.completedSegments = batch.items
+              .filter((entry) => entry.status === 'ready')
+              .reduce((sum, entry) => sum + entry.segments.length, 0);
+            batch.completedDemos = plan.groups.filter((group) =>
+              group.every(({ item: entry }) => ['ready', 'failed'].includes(batch.items[entry.index - 1].status)),
+            ).length;
+            await this.save(batch);
+            this.publish(batch);
+          },
+          () => this.active?.pause === true,
+        );
       }
+      if (signal.aborted) throw new ReviewClipError('interrupted');
       if (batch.items.some((item) => item.status !== 'ready')) {
-        batch.status = 'failed';
-        batch.issue = 'recording-failed';
+        batch.status = this.active?.pause ? 'canceled' : 'failed';
+        batch.issue = this.active?.pause ? undefined : 'recording-failed';
       } else {
         batch.status = 'encoding';
         this.publish(batch);
@@ -305,7 +307,7 @@ export class ReviewBatchService {
       batch.issue = signal.aborted ? undefined : 'recording-failed';
       batch.errorDetail = signal.aborted ? undefined : error instanceof Error ? error.message : String(error);
       batch.items = batch.items.map((item) =>
-        item.status === 'ready'
+        item.status === 'ready' || item.status === 'failed' || (signal.aborted && item.status === 'queued')
           ? item
           : {
               ...item,
@@ -314,6 +316,13 @@ export class ReviewBatchService {
             },
       );
     } finally {
+      for (let index = 0; index < plan.groups.length; index++) {
+        const staging = path.join(folder, `demo-${index + 1}`);
+        if (path.dirname(staging) === folder)
+          await fs
+            .rm(staging, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
+            .catch((error) => logger.error(error));
+      }
       batch.currentDemo = undefined;
       batch.currentSegment = undefined;
       try {

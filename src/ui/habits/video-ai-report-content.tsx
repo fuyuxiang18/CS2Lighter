@@ -32,12 +32,6 @@ export function VideoAiReportContent({
   );
   return (
     <div className="flex min-w-0 flex-col gap-20 text-body">
-      <p className="rounded-8 bg-gray-200 p-12 text-caption text-gray-700">
-        <Trans>
-          Model interpretation, not a verdict. Check the cited frames and keep only advice that fits the information
-          available in the match.
-        </Trans>
-      </p>
       <div className="flex flex-col gap-8">
         <p className="wrap-break-word">{report.content.summary.text}</p>
         {links(report.content.summary.frameIds)}
@@ -51,7 +45,7 @@ export function VideoAiReportContent({
       </div>
       <div className="flex flex-col gap-12">
         <h4 className="font-semibold">
-          <Trans>Observe → interpret → try an alternative</Trans>
+          <Trans>Key moments</Trans>
         </h4>
         {report.content.timeline.map((point, index) => (
           <article key={index} className="flex flex-col gap-10 rounded-8 border border-gray-300 p-16">
@@ -83,9 +77,6 @@ export function VideoAiReportContent({
               </strong>
               {point.alternative}
             </p>
-            <p className="text-caption wrap-break-word text-gray-700">
-              <Trans>Uncertainty</Trans>: {point.uncertainty}
-            </p>
           </article>
         ))}
       </div>
@@ -105,9 +96,14 @@ export function VideoAiReportContent({
       </div>
       <details className="text-caption text-gray-700">
         <summary className="cursor-pointer">
-          <Trans>What remains uncertain</Trans>
+          <Trans>Assessment details</Trans>
         </summary>
         <ul className="mt-10 flex list-inside list-disc flex-col gap-8">
+          {report.content.timeline.map((point, index) => (
+            <li key={`timeline-${index}`} className="wrap-break-word">
+              {point.uncertainty}
+            </li>
+          ))}
           {report.content.limitations.map((item, index) => (
             <li key={index} className="wrap-break-word">
               {item}

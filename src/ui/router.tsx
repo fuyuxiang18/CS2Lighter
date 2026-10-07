@@ -45,6 +45,7 @@ import { Videos } from './videos/videos';
 import { TeamPerformance } from './team/performance/team-performance';
 import { PlayerHeatmap } from './player/heatmap/player-heatmap';
 import { HabitsDashboard } from 'csdm/ui/habits/habits-dashboard';
+import { RecordingQueuePage } from 'csdm/ui/habits/recording-queue-page';
 
 export const router = createHashRouter(
   createRoutesFromElements(
@@ -52,6 +53,7 @@ export const router = createHashRouter(
       <Route path={RoutePath.Habits} element={<HabitsDashboard />} />
       <Route path={RoutePath.HabitsMaps} element={<HabitsDashboard />} />
       <Route path={RoutePath.HabitsMatches} element={<HabitsDashboard />} />
+      <Route path={RoutePath.RecordingQueue} element={<RecordingQueuePage />} />
       <Route path={RoutePath.Matches} element={<Matches />} />
       <Route path={`${RoutePath.Matches}/:checksum`} element={<MatchLoader />}>
         <Route index={true} element={<MatchOverview />} />

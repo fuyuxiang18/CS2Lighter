@@ -6,11 +6,12 @@ import { TeamNumber } from 'csdm/common/types/counter-strike';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
-import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
+import { RoutePath, buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { ReviewButton } from './review-button';
 import { ReviewClipViewer } from './review-clip-viewer';
 import { Checkbox } from 'csdm/ui/components/inputs/checkbox';
-import { ReviewBatchStudio } from './review-batch-studio';
+import type { RecordingQueue, RecordingQueueItem } from 'csdm/common/types/recording-queue';
+import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-name';
 import type { ReviewBattleRequest } from 'csdm/common/types/review-batch';
 
 function battleRequest(event: ReviewDuel): ReviewBattleRequest {
@@ -37,12 +38,89 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
   const [page, setPage] = useState(0);
   const [data, setData] = useState<ReviewDuelsPage | null>(null);
   const [selected, setSelected] = useState<ReviewDuel | null>(null);
-  const [recordingSelection, setRecordingSelection] = useState<ReviewDuel[]>([]);
+  const [recordingQueue, setRecordingQueue] = useState<RecordingQueue>();
+  const [queueBusy, setQueueBusy] = useState(false);
+  const [queueFailed, setQueueFailed] = useState(false);
   const playerRef = useRef<HTMLElement>(null);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [revision, setRevision] = useState(0);
   const scopeKey = JSON.stringify(scope);
+  useEffect(() => {
+    let disposed = false;
+    const update = (next: RecordingQueue) => {
+      if (!disposed)
+        setRecordingQueue((previous) => (previous && previous.updatedAt > next.updatedAt ? previous : next));
+    };
+    client.on(ServerPushMessageName.RecordingQueueUpdated, update);
+    void client
+      .send({ name: RendererClientMessageName.GetRecordingQueue })
+      .then(update)
+      .catch(() => {
+        if (!disposed) setQueueFailed(true);
+      });
+    return () => {
+      disposed = true;
+      client.off(ServerPushMessageName.RecordingQueueUpdated, update);
+    };
+  }, [client]);
+  const queueItem = (event: ReviewDuel): RecordingQueueItem | undefined =>
+    recordingQueue?.items.find(
+      (item) =>
+        item.includeOpponent &&
+        item.request.checksum === event.checksum &&
+        item.request.steamId === event.steamId &&
+        item.request.roundNumber === event.roundNumber &&
+        item.request.startTick === event.startTick &&
+        item.request.endTick === event.endTick &&
+        (!event.opponentSteamId || item.request.opponentSteamId === event.opponentSteamId),
+    );
+  const addEvents = async (events: ReviewDuel[]) => {
+    setQueueBusy(true);
+    setQueueFailed(false);
+    try {
+      const retryIds = events
+        .map(queueItem)
+        .filter(
+          (item): item is RecordingQueueItem => item !== undefined && ['failed', 'canceled'].includes(item.status),
+        )
+        .map((item) => item.id);
+      let next = await client.send({
+        name: RendererClientMessageName.AddToRecordingQueue,
+        payload: { clips: events.map(battleRequest), includeOpponent: true },
+      });
+      if (retryIds.length)
+        next = await client.send({
+          name: RendererClientMessageName.ControlRecordingQueue,
+          payload: { action: 'retry', ids: retryIds },
+        });
+      setRecordingQueue(next);
+    } catch {
+      setQueueFailed(true);
+    } finally {
+      setQueueBusy(false);
+    }
+  };
+  const toggleQueue = async (event: ReviewDuel) => {
+    const item = queueItem(event);
+    if (!item || ['failed', 'canceled'].includes(item.status)) return addEvents([event]);
+    if (item.status !== 'pending') return;
+    setQueueBusy(true);
+    setQueueFailed(false);
+    try {
+      setRecordingQueue(
+        await client.send({
+          name: RendererClientMessageName.ControlRecordingQueue,
+          payload: { action: 'remove', ids: [item.id] },
+        }),
+      );
+    } catch {
+      setQueueFailed(true);
+    } finally {
+      setQueueBusy(false);
+    }
+  };
+
   useEffect(() => {
     if (selected) playerRef.current?.scrollIntoView({ block: 'start' });
   }, [selected]);
@@ -86,16 +164,6 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
   const total = data?.total ?? 0;
   const pageNumber = (data?.page ?? 0) + 1;
   const pages = Math.max(1, Math.ceil(total / (data?.pageSize ?? 20)));
-  const selectedCount = recordingSelection.length;
-  const toggleSelection = (event: ReviewDuel) => {
-    setRecordingSelection((previous) =>
-      previous.some((entry) => entry.id === event.id)
-        ? previous.filter((entry) => entry.id !== event.id)
-        : previous.length < 20
-          ? [...previous, event]
-          : previous,
-    );
-  };
   return (
     <div className="flex min-w-0 flex-col gap-16">
       <div className="flex flex-wrap items-start justify-between gap-16 rounded-12 border border-gray-300 bg-gray-100 p-20">
@@ -105,12 +173,6 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
           </h2>
           <p className="text-gray-700">
             <Trans>Choose an event to watch the seconds before and after it from your own POV.</Trans>
-          </p>
-          <p className="text-caption text-gray-600">
-            <Trans>
-              Includes enemy kills, deaths to enemies and damage encounters. Miss-only fights are not detected. Damage
-              to the same opponent is grouped with a 5-second gap.
-            </Trans>
           </p>
         </div>
         <button
@@ -148,26 +210,20 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
       </nav>
       <div className="flex flex-wrap items-center gap-8">
         <ReviewButton
-          disabled={loading || !data?.events.length || selectedCount >= 20}
-          onClick={() => {
-            setRecordingSelection((previous) =>
-              [
-                ...previous,
-                ...(data?.events ?? []).filter((event) => !previous.some((entry) => entry.id === event.id)),
-              ].slice(0, 20),
-            );
-          }}
+          disabled={loading || queueBusy || !recordingQueue || !data?.events.length}
+          onClick={() => void addEvents((data?.events ?? []).slice(0, 20))}
         >
-          <Trans>Select this page for recording</Trans>
+          <Trans>Add this page to recording queue</Trans>
         </ReviewButton>
-        <ReviewButton disabled={selectedCount === 0} onClick={() => setRecordingSelection([])}>
-          <Trans>Clear recording selection</Trans>
-        </ReviewButton>
-        <span className="text-caption text-gray-600">
-          <Trans>{selectedCount} / 20 selected</Trans>
-        </span>
+        <Link className="text-accent" to={RoutePath.RecordingQueue}>
+          <Trans>Open recording queue</Trans>
+        </Link>
+        {queueFailed && (
+          <p role="alert" className="text-red-500">
+            <Trans>Could not update the recording queue.</Trans>
+          </p>
+        )}
       </div>
-      <ReviewBatchStudio requests={recordingSelection.map(battleRequest)} steamId={scope.steamId} />
       {loading ? (
         <p role="status">
           <Trans>Loading combat events…</Trans>
@@ -213,6 +269,7 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
           <div className="flex flex-col gap-8">
             {data?.events.map((event) => {
               const { roundNumber, damageGiven, damageTaken } = event;
+              const queued = queueItem(event);
               return (
                 <article
                   key={event.id}
@@ -246,10 +303,18 @@ function DuelList({ scope }: { scope: Omit<ReviewDuelsPayload, 'filter' | 'page'
                   </div>
                   <div className="flex flex-wrap items-center gap-12">
                     <Checkbox
-                      label={t`Include in recording batch`}
-                      isChecked={recordingSelection.some((entry) => entry.id === event.id)}
-                      isDisabled={selectedCount >= 20 && !recordingSelection.some((entry) => entry.id === event.id)}
-                      onChange={() => toggleSelection(event)}
+                      label={
+                        queued?.status === 'ready'
+                          ? t`Video saved`
+                          : queued?.status === 'active'
+                            ? t`In this session`
+                            : t`Add to recording queue`
+                      }
+                      isChecked={Boolean(queued && ['pending', 'active', 'ready'].includes(queued.status))}
+                      isDisabled={
+                        queueBusy || !recordingQueue || queued?.status === 'active' || queued?.status === 'ready'
+                      }
+                      onChange={() => void toggleQueue(event)}
                     />
                     <ReviewButton primary={true} onClick={() => setSelected(event)}>
                       <Trans>Watch real POV</Trans>

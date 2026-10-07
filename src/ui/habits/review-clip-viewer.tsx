@@ -4,7 +4,6 @@ import type { ReviewClip } from 'csdm/common/types/review-clip';
 import type { ReviewBattleRequest } from 'csdm/common/types/review-batch';
 import { RendererClientMessageName } from 'csdm/server/messages/renderer-client-message-name';
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
-import { HabitsPlaybackButton } from './habits-playback-button';
 import { ReviewButton } from './review-button';
 import { ReviewBatchStudio } from './review-batch-studio';
 import { VideoAiReviewPanel } from './video-ai-review-panel';
@@ -70,12 +69,6 @@ export function ReviewClipViewer({ request }: { request: ReviewBattleRequest }) 
           />
         </details>
       )}
-      <HabitsPlaybackButton
-        checksum={request.checksum}
-        steamId={request.steamId}
-        tick={request.startTick}
-        roundNumber={request.roundNumber}
-      />
     </div>
   );
 }

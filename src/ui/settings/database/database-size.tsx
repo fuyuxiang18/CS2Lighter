@@ -74,11 +74,6 @@ export function DatabaseSize() {
       {storage && (
         <>
           <p className="text-body-strong">{format(storage.totalBytes)}</p>
-          <p className="text-caption text-gray-600">
-            <Trans>
-              Includes table and index space; excludes demo files, compact caches, videos and PostgreSQL WAL.
-            </Trans>
-          </p>
           <dl className="flex flex-col gap-8">
             {storage.parts.map((part) => (
               <div className="flex justify-between gap-12" key={part.id}>
@@ -98,18 +93,6 @@ export function DatabaseSize() {
           {storage.logicalDataDirectory && storage.logicalDataDirectory !== storage.physicalDataDirectory && (
             <p className="text-caption break-all text-gray-600 select-text">{storage.logicalDataDirectory}</p>
           )}
-          <p className="text-caption text-gray-600">
-            <Trans>
-              Trajectories can occupy most of the database. Player trajectories are kept for 2D replay and review; new
-              imports no longer save decorative chicken trajectories.
-            </Trans>
-          </p>
-          <p className="text-caption text-gray-600">
-            <Trans>
-              Removing old records does not necessarily return disk space. Storage compaction requires separate
-              maintenance while imports and recording are stopped.
-            </Trans>
-          </p>
         </>
       )}
     </section>

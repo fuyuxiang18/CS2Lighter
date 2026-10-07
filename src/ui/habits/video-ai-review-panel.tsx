@@ -122,20 +122,13 @@ function VideoReviewPanel({ source, onConfigure, onSeek, locale }: Props & { loc
             <Trans>AI video review</Trans>
           </h3>
           <p className="text-body text-gray-700">
-            <Trans>
-              Inspect this encounter, separate what was visible from hindsight, and choose one action to try.
-            </Trans>
+            <Trans>Key moments, choices and alternative plays.</Trans>
           </p>
         </div>
         <ReviewButton onClick={onConfigure}>
           <Trans>AI settings</Trans>
         </ReviewButton>
       </header>
-      <p className="text-caption text-gray-700">
-        <Trans>
-          First prepare a local preview. Nothing is sent to the model until you click Send frames and review.
-        </Trans>
-      </p>
       {configured && (
         <p className="text-caption wrap-break-word text-gray-800">
           <Trans>
@@ -166,35 +159,11 @@ function VideoReviewPanel({ source, onConfigure, onSeek, locale }: Props & { loc
             </p>
             <p>
               <Trans>
-                These images may contain in-game nicknames, avatars or chat. The images shown below and the round facts
-                are sent to your selected server. Audio, the full video, account IDs and local file paths are not
-                included separately.
+                Send these preview images and round facts to the selected server. Images may contain nicknames, avatars
+                or chat.
               </Trans>
             </p>
-            <p>
-              {hasOpponent ? (
-                <Trans>
-                  Player and opponent views are sampled separately. Opponent information is hindsight, not knowledge the
-                  player necessarily had.
-                </Trans>
-              ) : (
-                <Trans>
-                  Only the player's recorded view is available for this review. No opponent view is inferred.
-                </Trans>
-              )}
-            </p>
-            <p>
-              <Trans>
-                At most six frames per view. This cannot establish millisecond reactions, precise mouse control or what
-                happened between frames.
-              </Trans>
-            </p>
-            <p>
-              <Trans>
-                The demo's spectator HUD or radar may reveal extra information. It does not prove what the player knew
-                during the match.
-              </Trans>
-            </p>
+            <p>{hasOpponent ? <Trans>Player and opponent perspectives</Trans> : <Trans>Player perspective</Trans>}</p>
           </div>
           {selectedFrame && (
             <figure ref={previewRef} className="flex min-w-0 flex-col gap-8">
@@ -225,10 +194,7 @@ function VideoReviewPanel({ source, onConfigure, onSeek, locale }: Props & { loc
               <Trans>Exact round facts and frame metadata sent with the images</Trans>
             </summary>
             <p className="mt-10 text-gray-700">
-              <Trans>
-                Round totals cover the entire round, not only this video. No team voice or player intentions are
-                available.
-              </Trans>
+              <Trans>Up to six frames per view. Event totals cover the entire round.</Trans>
             </p>
             <pre className="mt-10 max-w-full overflow-auto wrap-break-word whitespace-pre-wrap text-gray-700">
               {JSON.stringify(state.payload, null, 2)}
@@ -250,10 +216,7 @@ function VideoReviewPanel({ source, onConfigure, onSeek, locale }: Props & { loc
           </div>
           {busy === 'generate' && (
             <p role="status" className="text-caption text-gray-700">
-              <Trans>
-                Waiting for the model, then checking its frame references. The app cannot verify the truth of the
-                model's visual interpretation.
-              </Trans>
+              <Trans>Analyzing the sampled frames…</Trans>
             </p>
           )}
           {report && (

@@ -1,7 +1,4 @@
-import { videoQueue } from 'csdm/server/video-queue';
-
-export async function resumeVideoQueueHandler() {
-  videoQueue.resume();
-
-  return Promise.resolve();
+/** New recordings use the persistent recording queue; retain legacy media access only. */
+export function resumeVideoQueueHandler(): Promise<void> {
+  return Promise.reject(new Error('Start recordings from the recording queue'));
 }

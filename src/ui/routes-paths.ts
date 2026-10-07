@@ -2,6 +2,7 @@ export const RoutePath = {
   Habits: '/habits',
   HabitsMaps: '/habits/maps',
   HabitsMatches: '/habits/matches',
+  RecordingQueue: '/recording-queue',
   Demos: '/demos',
   Matches: '/matches',
   MatchHeatmap: 'heatmap',
