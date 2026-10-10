@@ -1458,6 +1458,7 @@ msgstr "Win"
 #: src/ui/components/maps-stats.tsx
 #: src/ui/components/panels/clutches.tsx
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Lost"
 msgstr "Lost"
@@ -1929,6 +1930,7 @@ msgstr "Average kills/round"
 
 #: src/ui/components/panels/clutches.tsx
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Won"
 msgstr "Won"
@@ -2653,6 +2655,7 @@ msgstr "Open the event in 2D"
 #: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "Round {round}"
 msgstr "Round {round}"
 
@@ -3248,6 +3251,7 @@ msgid "Clutches won"
 msgstr "Clutches won"
 
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "Rounds with a flash assist"
 msgstr "Rounds with a flash assist"
 
@@ -3372,6 +3376,7 @@ msgid "Won a clutch that started against three or more opponents."
 msgstr "Won a clutch that started against three or more opponents."
 
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "No standard 5v5 rounds in this selection."
 msgstr "No standard 5v5 rounds in this selection."
 
@@ -3381,11 +3386,13 @@ msgstr "5v5 analysis"
 
 #: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/review-progress.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "matches"
 msgstr "matches"
 
 #: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/review-progress.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "rounds"
 msgstr "rounds"
 
@@ -3638,6 +3645,10 @@ msgstr "No data for this selection."
 #: src/ui/match/rounds/rounds-navigation-bar.tsx
 msgid "Overview"
 msgstr "Overview"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Tactical diagnosis"
+msgstr "Tactical diagnosis"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Output and entry"
@@ -4661,6 +4672,363 @@ msgstr "This replaces your current practice focus and starts a new tracking peri
 msgid "Start this practice"
 msgstr "Start this practice"
 
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Convert the advantage"
+msgstr "Convert the advantage"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After the first kill, what made the next fight worth taking?"
+msgstr "After the first kill, what made the next fight worth taking?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Review three lost opening-kill rounds. Before the next engagement, name the objective: take space, protect the bomb, delay, or disengage."
+msgstr "Review three lost opening-kill rounds. Before the next engagement, name the objective: take space, protect the bomb, delay, or disengage."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Trade together"
+msgstr "Trade together"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "When the first player met an enemy, could the second player see that same target?"
+msgstr "When the first player met an enemy, could the second player see that same target?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Rehearse one common entry with a teammate. Stop at first contact and check both sightlines, then repeat with a spacing that lets the second player trade."
+msgstr "Rehearse one common entry with a teammate. Stop at first contact and check both sightlines, then repeat with a spacing that lets the second player trade."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Coordinate utility"
+msgstr "Coordinate utility"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Did the grenade create a fight your team was ready to take?"
+msgstr "Did the grenade create a fight your team was ready to take?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Choose one common entrance and agree on a go signal. Get the entry player in position before the flash pops; check both views afterward."
+msgstr "Choose one common entrance and agree on a go signal. Get the entry player in position before the flash pops; check both views afterward."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Economy and objectives"
+msgstr "Economy and objectives"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Did your equipment and the round clock support the objective you chose?"
+msgstr "Did your equipment and the round clock support the objective you chose?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare three wins and three losses with similar equipment. Check the first contact, grenade allocation, and what you did after planting or entering a clutch."
+msgstr "Compare three wins and three losses with similar equipment. Check the first contact, grenade allocation, and what you did after planting or entering a clutch."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Decisions behind your results"
+msgstr "Decisions behind your results"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Allocate resources"
+msgstr "Allocate resources"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Contest space"
+msgstr "Contest space"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Create a favorable fight"
+msgstr "Create a favorable fight"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Coordinate the exchange"
+msgstr "Coordinate the exchange"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Secure the round"
+msgstr "Secure the round"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Tactical themes"
+msgstr "Tactical themes"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Practice one decision next match"
+msgstr "Practice one decision next match"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Four questions for your view and the opponent's view"
+msgstr "Four questions for your view and the opponent's view"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Who was closer to the shared cover, and who could see the other player first?"
+msgstr "Who was closer to the shared cover, and who could see the other player first?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "How many angles did your peek expose you to? Could a teammate see the same enemy?"
+msgstr "How many angles did your peek expose you to? Could a teammate see the same enemy?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After the smoke blocked one sightline, could your teammate still support your fight?"
+msgstr "After the smoke blocked one sightline, could your teammate still support your fight?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After shooting or throwing, what did the opponent know? Could you reposition before fighting again?"
+msgstr "After shooting or throwing, what did the opponent know? Could you reposition before fighting again?"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening kill, then survived"
+msgstr "Opening kill, then survived"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+#: src/ui/habits/use-review-labels.ts
+msgid "your opening-kill rounds"
+msgstr "your opening-kill rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You survived to the end in {count} of {total} opening-kill rounds; your team won {wins} of these."
+msgstr "You survived to the end in {count} of {total} opening-kill rounds; your team won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Find the cover, repositioning, or teammate contact that let you keep contributing after the kill. Repeat that decision when the same position comes up."
+msgstr "Find the cover, repositioning, or teammate contact that let you keep contributing after the kill. Repeat that decision when the same position comes up."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening kill, then died"
+msgstr "Opening kill, then died"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You died later in {count} of {total} opening-kill rounds; your team still won {wins} of these."
+msgstr "You died later in {count} of {total} opening-kill rounds; your team still won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Pause before your next fight. Check what the fight could gain and whether a teammate could trade you. Keep useful exchanges; replace unnecessary re-peeks with a new position."
+msgstr "Pause before your next fight. Check what the fight could gain and whether a teammate could trade you. Keep useful exchanges; replace unnecessary re-peeks with a new position."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Died within 10 seconds of an opening kill"
+msgstr "Died within 10 seconds of an opening kill"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "timed opening-kill rounds"
+msgstr "timed opening-kill rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You died within ten seconds of your opening kill in {count} of {total} timed opening-kill rounds."
+msgstr "You died within ten seconds of your opening kill in {count} of {total} timed opening-kill rounds."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Watch from the first kill to your death in both views. Check whether the opponent already knew your position and whether you had time to leave the exposed angle."
+msgstr "Watch from the first kill to your death in both views. Check whether the opponent already knew your position and whether you had time to leave the exposed angle."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening death traded within 5 seconds"
+msgstr "Opening death traded within 5 seconds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your opening-death rounds"
+msgstr "your opening-death rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "A teammate traded your opening death within five seconds in {count} of {total} rounds; your team won {wins} of these."
+msgstr "A teammate traded your opening death within five seconds in {count} of {total} rounds; your team won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check where the second player stood at first contact. Save the spacing and shared target that made the trade possible, then rehearse the entry together."
+msgstr "Check where the second player stood at first contact. Save the spacing and shared target that made the trade possible, then rehearse the entry together."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening death without a 5-second trade"
+msgstr "Opening death without a 5-second trade"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your opening death had no trade within five seconds in {count} of {total} rounds; your team won {wins} of these."
+msgstr "Your opening death had no trade within five seconds in {count} of {total} rounds; your team won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare the teammate's angle with yours at first contact. Check the distance, smoke, and timing before deciding whether to wait, change the route, or bring support closer."
+msgstr "Compare the teammate's angle with yours at first contact. Check the distance, smoke, and timing before deciding whether to wait, change the route, or bring support closer."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Rounds with a trade kill"
+msgstr "Rounds with a trade kill"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "selected 5v5 rounds"
+msgstr "selected 5v5 rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You made at least one trade kill in {count} of {total} rounds; your team won {wins} of these."
+msgstr "You made at least one trade kill in {count} of {total} rounds; your team won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check when you learned where the enemy was and how quickly you could reach the same target. Rehearse following the first player without blocking the retreat."
+msgstr "Check when you learned where the enemy was and how quickly you could reach the same target. Rehearse following the first player without blocking the retreat."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You recorded a flash assist in {count} of {total} rounds; your team won {wins} of these."
+msgstr "You recorded a flash assist in {count} of {total} rounds; your team won {wins} of these."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare the flash pop with your teammate's first exposure. Keep the throw and go signal that connected the blind with the fight."
+msgstr "Compare the flash pop with your teammate's first exposure. Keep the throw and go signal that connected the blind with the fight."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Flash rounds without an enemy blinded for over 1 second"
+msgstr "Flash rounds without an enemy blinded for over 1 second"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds where you threw a flash"
+msgstr "rounds where you threw a flash"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No enemy blindness longer than one second was recorded in {count} of {total} rounds where you threw a flash."
+msgstr "No enemy blindness longer than one second was recorded in {count} of {total} rounds where you threw a flash."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Watch whether the enemy turned, fell back, or was absent. If a fight was intended, check the pop location and teammate timing before changing the lineup."
+msgstr "Watch whether the enemy turned, fell back, or was absent. If a fight was intended, check the pop location and teammate timing before changing the lineup."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Flash rounds with a teammate blinded for over 1 second"
+msgstr "Flash rounds with a teammate blinded for over 1 second"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "A teammate was blinded for more than one second in {count} of {total} rounds where you threw a flash."
+msgstr "A teammate was blinded for more than one second in {count} of {total} rounds where you threw a flash."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Replay from the affected teammate's view. Check the call, turn-away time, and pop position; agree on a clear warning before repeating the throw."
+msgstr "Replay from the affected teammate's view. Check the call, turn-away time, and pop position; agree on a clear warning before repeating the throw."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "HE or fire rounds with enemy utility damage"
+msgstr "HE or fire rounds with enemy utility damage"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds where you threw HE or fire"
+msgstr "rounds where you threw HE or fire"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt enemy utility damage in {count} of {total} rounds where you threw an HE or fire grenade."
+msgstr "You dealt enemy utility damage in {count} of {total} rounds where you threw an HE or fire grenade."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check what happened after the damage: a teammate's push, a forced reposition, or a delayed attack. Reuse the throw with the follow-up that served your round plan."
+msgstr "Check what happened after the damage: a teammate's push, a forced reposition, or a delayed attack. Reuse the throw with the follow-up that served your round plan."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "HE or fire rounds without enemy utility damage"
+msgstr "HE or fire rounds without enemy utility damage"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No enemy utility damage was recorded in {count} of {total} rounds where you threw an HE or fire grenade."
+msgstr "No enemy utility damage was recorded in {count} of {total} rounds where you threw an HE or fire grenade."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check whether the grenade delayed a push, cleared a hiding place, or covered a retreat. When damage was the goal, compare the throw timing with the enemy's arrival."
+msgstr "Check whether the grenade delayed a push, cleared a hiding place, or covered a retreat. When damage was the goal, compare the throw timing with the enemy's arrival."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Won after your own bomb plant"
+msgstr "Won after your own bomb plant"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your T-side plant rounds"
+msgstr "your T-side plant rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your team won {count} of {total} T-side rounds in which you planted the bomb."
+msgstr "Your team won {count} of {total} T-side rounds in which you planted the bomb."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check the plant position, post-plant sightlines, and remaining time. Keep a setup where a teammate can trade and the bomb forces the opponent to act."
+msgstr "Check the plant position, post-plant sightlines, and remaining time. Keep a setup where a teammate can trade and the bomb forces the opponent to act."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Lost after your own bomb plant"
+msgstr "Lost after your own bomb plant"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your team lost {count} of {total} T-side rounds in which you planted the bomb."
+msgstr "Your team lost {count} of {total} T-side rounds in which you planted the bomb."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Pause after the plant. Check whether you could protect the bomb from cover, share a target with a teammate, or let the clock work before taking another fight."
+msgstr "Pause after the plant. Check whether you could protect the bomb from cover, share a target with a teammate, or let the clock work before taking another fight."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "1v1 clutch attempts"
+msgstr "1v1 clutch attempts"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your clutch rounds"
+msgstr "your clutch rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You entered a 1v1 in {count} of {total} recorded clutch rounds, winning {wins} of these 1v1s."
+msgstr "You entered a 1v1 in {count} of {total} recorded clutch rounds, winning {wins} of these 1v1s."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Replay the start of the clutch. List the bomb state, time left, and last known enemy position, then check which of those facts drove your move."
+msgstr "Replay the start of the clutch. List the bomb state, time left, and last known enemy position, then check which of those facts drove your move."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "1v2+ clutch attempts"
+msgstr "1v2+ clutch attempts"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You faced two or more opponents in {count} of {total} recorded clutch rounds, winning {wins} of these attempts."
+msgstr "You faced two or more opponents in {count} of {total} recorded clutch rounds, winning {wins} of these attempts."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Look for the first isolated fight and what separated it from the next. Rehearse the route or utility that stopped multiple opponents from fighting you together."
+msgstr "Look for the first isolated fight and what separated it from the next. Rehearse the route or utility that stopped multiple opponents from fighting you together."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Equipment at $2000 or less, with damage"
+msgstr "Equipment at $2000 or less, with damage"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds with personal equipment worth $0–2000"
+msgstr "rounds with personal equipment worth $0–2000"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+msgstr "You dealt enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check which distance, shared angle, or recovered weapon made your equipment useful. Pick a route that suits the weapon before leaving spawn."
+msgstr "Check which distance, shared angle, or recovered weapon made your equipment useful. Pick a route that suits the weapon before leaving spawn."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Equipment at $2000 or less, without damage"
+msgstr "Equipment at $2000 or less, without damage"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt no enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+msgstr "You dealt no enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check whether the round plan was to save, stack, or contest a weapon. If you sought a fight, compare its distance and timing with your equipment and teammate support."
+msgstr "Check whether the round plan was to save, stack, or contest a weapon. If you sought a fight, compare its distance and timing with your equipment and teammate support."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No eligible rounds for this scenario in the current selection."
+msgstr "No eligible rounds for this scenario in the current selection."
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Round win rate in this scenario"
+msgstr "Round win rate in this scenario"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "ADR in matching rounds"
+msgstr "ADR in matching rounds"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "What to check in the replay"
+msgstr "What to check in the replay"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Open an example round"
+msgstr "Open an example round"
+
 #: src/ui/habits/use-ai-error-message.ts
 msgid "Check the AI provider, server address, model and output token limit in AI settings."
 msgstr "Check the AI provider, server address, model and output token limit in AI settings."
@@ -4921,10 +5289,6 @@ msgstr "Lost 1vX attempts, divided by all recorded clutch attempts."
 #: src/ui/habits/use-review-labels.ts
 msgid "your opening duels"
 msgstr "your opening duels"
-
-#: src/ui/habits/use-review-labels.ts
-msgid "your opening-kill rounds"
-msgstr "your opening-kill rounds"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "rounds with a death"

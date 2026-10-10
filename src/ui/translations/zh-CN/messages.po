@@ -1452,6 +1452,7 @@ msgstr "赢"
 #: src/ui/components/maps-stats.tsx
 #: src/ui/components/panels/clutches.tsx
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Lost"
 msgstr "输"
@@ -1923,6 +1924,7 @@ msgstr "平均杀敌/一回合"
 
 #: src/ui/components/panels/clutches.tsx
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 #: src/ui/team/economy/teams-round-outcomes-by-economy-type-chart.tsx
 msgid "Won"
 msgstr "赢"
@@ -2647,6 +2649,7 @@ msgstr "在 2D 回放中查看事件"
 #: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-viewer.tsx
 #: src/ui/habits/review-workbench.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "Round {round}"
 msgstr "第 {round} 回合"
 
@@ -3242,6 +3245,7 @@ msgid "Clutches won"
 msgstr "残局获胜"
 
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "Rounds with a flash assist"
 msgstr "有闪光助攻的回合"
 
@@ -3366,6 +3370,7 @@ msgid "Won a clutch that started against three or more opponents."
 msgstr "残局开始时面对至少 3 名敌人，并最终赢下回合。"
 
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "No standard 5v5 rounds in this selection."
 msgstr "当前筛选中没有标准 5v5 回合。"
 
@@ -3375,11 +3380,13 @@ msgstr "5v5 深度分析"
 
 #: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/review-progress.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "matches"
 msgstr "场比赛"
 
 #: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/review-progress.tsx
+#: src/ui/habits/tactical-analysis-panels.tsx
 msgid "rounds"
 msgstr "个回合"
 
@@ -3632,6 +3639,10 @@ msgstr "当前筛选条件下没有数据。"
 #: src/ui/match/rounds/rounds-navigation-bar.tsx
 msgid "Overview"
 msgstr "概览"
+
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Tactical diagnosis"
+msgstr "战术诊断"
 
 #: src/ui/habits/personal-stats-panels.tsx
 msgid "Output and entry"
@@ -4655,6 +4666,363 @@ msgstr "这会替换当前练习重点，并开始新的跟踪周期。"
 msgid "Start this practice"
 msgstr "开始这项练习"
 
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Convert the advantage"
+msgstr "优势兑现"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After the first kill, what made the next fight worth taking?"
+msgstr "拿到首杀后，下一次接枪能换来什么？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Review three lost opening-kill rounds. Before the next engagement, name the objective: take space, protect the bomb, delay, or disengage."
+msgstr "挑 3 个拿到首杀却输掉的回合，在下一次接枪前暂停：这一步是为了抢空间、守包、拖时间，还是该先脱离？下一场先想清目标再行动。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Trade together"
+msgstr "协同交换"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "When the first player met an enemy, could the second player see that same target?"
+msgstr "第一人接敌时，第二人能不能看到同一个目标？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Rehearse one common entry with a teammate. Stop at first contact and check both sightlines, then repeat with a spacing that lets the second player trade."
+msgstr "和队友练一条常用清点路线。在第一人接敌的位置停下，检查两人的枪线，再调整间距，直到第二人能顺利补枪。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Coordinate utility"
+msgstr "道具配合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Did the grenade create a fight your team was ready to take?"
+msgstr "道具创造机会的时候，队友准备好接枪了吗？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Choose one common entrance and agree on a go signal. Get the entry player in position before the flash pops; check both views afterward."
+msgstr "选一个常打的入口，约定启动口令。突破手就位后再让闪光爆开，结束后对照投掷者和突破手视角看时机。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Economy and objectives"
+msgstr "经济与目标"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Did your equipment and the round clock support the objective you chose?"
+msgstr "手里的装备和剩余时间，适不适合你这一步的目标？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare three wins and three losses with similar equipment. Check the first contact, grenade allocation, and what you did after planting or entering a clutch."
+msgstr "找装备相近的胜局、败局各 3 个，对比首次接敌、道具分配，以及下包后或进入残局后的选择。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Decisions behind your results"
+msgstr "从战绩回到决策"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Allocate resources"
+msgstr "分配资源"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Contest space"
+msgstr "争取空间"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Create a favorable fight"
+msgstr "创造有利对枪"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Coordinate the exchange"
+msgstr "协同交换"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Secure the round"
+msgstr "赢下回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Tactical themes"
+msgstr "战术主题"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Practice one decision next match"
+msgstr "下一场，先练这一项"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Four questions for your view and the opponent's view"
+msgstr "对照本人和对手视角，问这 4 个问题"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Who was closer to the shared cover, and who could see the other player first?"
+msgstr "谁更贴近双方之间的掩体？实际是谁先看到谁？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "How many angles did your peek expose you to? Could a teammate see the same enemy?"
+msgstr "这次拉出同时暴露了几个方向？队友能看到同一个敌人吗？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After the smoke blocked one sightline, could your teammate still support your fight?"
+msgstr "烟封掉一条枪线之后，队友还帮得上你吗？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "After shooting or throwing, what did the opponent know? Could you reposition before fighting again?"
+msgstr "开枪或投掷后，对手知道了什么？下一次接枪前，能不能先换位？"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening kill, then survived"
+msgstr "首杀后活到回合结束"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+#: src/ui/habits/use-review-labels.ts
+msgid "your opening-kill rounds"
+msgstr "本人取得首杀的回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You survived to the end in {count} of {total} opening-kill rounds; your team won {wins} of these."
+msgstr "你拿到首杀的 {total} 个回合中，有 {count} 个活到结束，其中赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Find the cover, repositioning, or teammate contact that let you keep contributing after the kill. Repeat that decision when the same position comes up."
+msgstr "找出击杀后的掩体、换位或队友接应，看看哪一步让你能继续发挥作用。下次打到同一位置时复用这个选择。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening kill, then died"
+msgstr "首杀后阵亡"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You died later in {count} of {total} opening-kill rounds; your team still won {wins} of these."
+msgstr "你拿到首杀的 {total} 个回合中，有 {count} 个随后阵亡，其中队伍仍赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Pause before your next fight. Check what the fight could gain and whether a teammate could trade you. Keep useful exchanges; replace unnecessary re-peeks with a new position."
+msgstr "在下一次接枪前暂停：这次交战能换来什么，队友能不能补枪？保留有收益的交换，把没必要的重复探头换成转移位置。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Died within 10 seconds of an opening kill"
+msgstr "首杀后 10 秒内阵亡"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "timed opening-kill rounds"
+msgstr "时间记录完整的首杀回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You died within ten seconds of your opening kill in {count} of {total} timed opening-kill rounds."
+msgstr "在时间记录完整的 {total} 个首杀回合中，你有 {count} 个在首杀后 10 秒内阵亡。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Watch from the first kill to your death in both views. Check whether the opponent already knew your position and whether you had time to leave the exposed angle."
+msgstr "用双方视角看完首杀到阵亡这段，检查对手是否已经知道你的位置，以及你有没有时间离开暴露的枪位。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening death traded within 5 seconds"
+msgstr "首死后 5 秒内被补枪"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your opening-death rounds"
+msgstr "本人首死回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "A teammate traded your opening death within five seconds in {count} of {total} rounds; your team won {wins} of these."
+msgstr "你首死的 {total} 个回合中，有 {count} 个被队友在 5 秒内补枪，其中赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check where the second player stood at first contact. Save the spacing and shared target that made the trade possible, then rehearse the entry together."
+msgstr "看第一人接敌时第二人站在哪里，记住能补到同一目标的间距和枪线，再一起练这段进点。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Opening death without a 5-second trade"
+msgstr "首死后 5 秒内未被补枪"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your opening death had no trade within five seconds in {count} of {total} rounds; your team won {wins} of these."
+msgstr "你首死的 {total} 个回合中，有 {count} 个在 5 秒内没有被补枪，其中赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare the teammate's angle with yours at first contact. Check the distance, smoke, and timing before deciding whether to wait, change the route, or bring support closer."
+msgstr "对照首次接敌时你和队友的枪线，检查距离、烟雾和启动时机，再决定下次是等一下、换路线，还是让接应更近。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Rounds with a trade kill"
+msgstr "打出补枪的回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "selected 5v5 rounds"
+msgstr "当前筛选的 5v5 回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You made at least one trade kill in {count} of {total} rounds; your team won {wins} of these."
+msgstr "在 {total} 个回合中，你有 {count} 个打出至少一次补枪，其中赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check when you learned where the enemy was and how quickly you could reach the same target. Rehearse following the first player without blocking the retreat."
+msgstr "看你何时得知敌人位置，以及多久能打到同一目标。练习跟住第一人，同时给对方留出后撤空间。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You recorded a flash assist in {count} of {total} rounds; your team won {wins} of these."
+msgstr "在 {total} 个回合中，你有 {count} 个打出闪光助攻，其中赢下 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Compare the flash pop with your teammate's first exposure. Keep the throw and go signal that connected the blind with the fight."
+msgstr "对比闪光爆开与队友露身的时间，记住让致盲和接枪连上的投掷时机与启动口令。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Flash rounds without an enemy blinded for over 1 second"
+msgstr "投闪但无敌人致盲超过 1 秒"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds where you threw a flash"
+msgstr "本人投闪回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No enemy blindness longer than one second was recorded in {count} of {total} rounds where you threw a flash."
+msgstr "你投闪的 {total} 个回合中，有 {count} 个没有记录到超过 1 秒的敌方致盲。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Watch whether the enemy turned, fell back, or was absent. If a fight was intended, check the pop location and teammate timing before changing the lineup."
+msgstr "看敌人是背闪、后退，还是根本不在。如果本来要配合接枪，先核对爆点位置和队友时机，再决定是否换投法。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Flash rounds with a teammate blinded for over 1 second"
+msgstr "投闪且队友致盲超过 1 秒"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "A teammate was blinded for more than one second in {count} of {total} rounds where you threw a flash."
+msgstr "你投闪的 {total} 个回合中，有 {count} 个让队友致盲超过 1 秒。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Replay from the affected teammate's view. Check the call, turn-away time, and pop position; agree on a clear warning before repeating the throw."
+msgstr "从被闪队友的视角回看，检查报闪、背闪时间和爆点位置，下次投之前先约定清楚口令。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "HE or fire rounds with enemy utility damage"
+msgstr "投雷或火，且造成敌方道具伤害"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds where you threw HE or fire"
+msgstr "本人投雷或火的回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt enemy utility damage in {count} of {total} rounds where you threw an HE or fire grenade."
+msgstr "你投手雷或燃烧弹的 {total} 个回合中，有 {count} 个造成了敌方道具伤害。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check what happened after the damage: a teammate's push, a forced reposition, or a delayed attack. Reuse the throw with the follow-up that served your round plan."
+msgstr "看伤害之后发生了什么：队友推进、敌人被迫换位，还是进攻被拖慢？把有效的投掷和后续行动一起复用。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "HE or fire rounds without enemy utility damage"
+msgstr "投雷或火，但无敌方道具伤害"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No enemy utility damage was recorded in {count} of {total} rounds where you threw an HE or fire grenade."
+msgstr "你投手雷或燃烧弹的 {total} 个回合中，有 {count} 个没有造成敌方道具伤害。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check whether the grenade delayed a push, cleared a hiding place, or covered a retreat. When damage was the goal, compare the throw timing with the enemy's arrival."
+msgstr "先看道具有没有拖住进攻、清掉藏点或掩护后撤。如果目的就是打伤害，再比较投掷时机与敌人到达时间。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Won after your own bomb plant"
+msgstr "本人下包后获胜"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your T-side plant rounds"
+msgstr "T 方本人下包回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your team won {count} of {total} T-side rounds in which you planted the bomb."
+msgstr "T 方由你下包的 {total} 个回合中，队伍赢下了 {count} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check the plant position, post-plant sightlines, and remaining time. Keep a setup where a teammate can trade and the bomb forces the opponent to act."
+msgstr "看下包位置、守包枪线和剩余时间，保留队友能补枪、对手必须主动处理炸弹的站位组合。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Lost after your own bomb plant"
+msgstr "本人下包后失利"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Your team lost {count} of {total} T-side rounds in which you planted the bomb."
+msgstr "T 方由你下包的 {total} 个回合中，队伍输掉了 {count} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Pause after the plant. Check whether you could protect the bomb from cover, share a target with a teammate, or let the clock work before taking another fight."
+msgstr "在下包后暂停，检查能否靠掩体守包、和队友架住同一目标，或者先让时间走，而不是马上再接一枪。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "1v1 clutch attempts"
+msgstr "1v1 残局尝试"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "your clutch rounds"
+msgstr "本人残局回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You entered a 1v1 in {count} of {total} recorded clutch rounds, winning {wins} of these 1v1s."
+msgstr "在记录到的 {total} 个残局中，有 {count} 个以 1v1 开始，你赢下其中 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Replay the start of the clutch. List the bomb state, time left, and last known enemy position, then check which of those facts drove your move."
+msgstr "回到残局开始，先列出炸弹状态、剩余时间和敌人最后出现的位置，再看你的行动究竟依据了哪条信息。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "1v2+ clutch attempts"
+msgstr "1v2 及以上残局尝试"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You faced two or more opponents in {count} of {total} recorded clutch rounds, winning {wins} of these attempts."
+msgstr "在记录到的 {total} 个残局中，有 {count} 个开始时面对至少两名敌人，你赢下其中 {wins} 个。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Look for the first isolated fight and what separated it from the next. Rehearse the route or utility that stopped multiple opponents from fighting you together."
+msgstr "找第一场被拆开的单挑，以及它和下一次交战之间的间隔，练习让多个敌人不能同时接枪的路线或道具。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Equipment at $2000 or less, with damage"
+msgstr "装备不超过 $2000，有造成伤害"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "rounds with personal equipment worth $0–2000"
+msgstr "本人开局装备价值 $0–2000 的回合"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+msgstr "本人开局装备价值不超过 $2000 的 {total} 个回合中，你有 {count} 个造成敌方伤害。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check which distance, shared angle, or recovered weapon made your equipment useful. Pick a route that suits the weapon before leaving spawn."
+msgstr "看是哪种交战距离、协同枪线或缴获武器让装备发挥作用。下次出门前，先选一条适合手里武器的路线。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Equipment at $2000 or less, without damage"
+msgstr "装备不超过 $2000，未造成伤害"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "You dealt no enemy damage in {count} of {total} rounds with personal starting equipment worth $2000 or less."
+msgstr "本人开局装备价值不超过 $2000 的 {total} 个回合中，你有 {count} 个没有造成敌方伤害。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Check whether the round plan was to save, stack, or contest a weapon. If you sought a fight, compare its distance and timing with your equipment and teammate support."
+msgstr "看这局的计划是保枪、集体蹲点，还是争取缴枪。如果主动找交战，再对照接枪距离、时机、装备和队友接应。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "No eligible rounds for this scenario in the current selection."
+msgstr "当前筛选中没有符合此场景统计条件的回合。"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Round win rate in this scenario"
+msgstr "该场景回合胜率"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "ADR in matching rounds"
+msgstr "这些回合的 ADR"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "What to check in the replay"
+msgstr "这段复盘看什么"
+
+#: src/ui/habits/tactical-analysis-panels.tsx
+msgid "Open an example round"
+msgstr "打开示例回合"
+
 #: src/ui/habits/use-ai-error-message.ts
 msgid "Check the AI provider, server address, model and output token limit in AI settings."
 msgstr "请在 AI 设置中检查服务类型、服务器地址、模型和输出 token 上限。"
@@ -4915,10 +5283,6 @@ msgstr "未获胜的 1vX 残局次数 ÷ 全部已记录的残局次数。"
 #: src/ui/habits/use-review-labels.ts
 msgid "your opening duels"
 msgstr "次开局交锋"
-
-#: src/ui/habits/use-review-labels.ts
-msgid "your opening-kill rounds"
-msgstr "个取得首杀的回合"
 
 #: src/ui/habits/use-review-labels.ts
 msgid "rounds with a death"

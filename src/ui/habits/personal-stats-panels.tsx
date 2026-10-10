@@ -10,6 +10,7 @@ import { useFormatDate } from 'csdm/ui/hooks/use-format-date';
 import { buildMatchPath } from 'csdm/ui/routes-paths';
 import { HabitsPanel } from './habits-layout';
 import { PersonalAnalysisPanels } from './personal-analysis-panels';
+import { TacticalAnalysisPanels } from './tactical-analysis-panels';
 
 function number(value: number | null, digits = 1) {
   return value === null ? '—' : value.toFixed(digits);
@@ -92,6 +93,7 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
   const skippedMatches = summary.coverage.skippedMatches;
   const tabs = [
     { value: 'overview', label: t`Overview` },
+    { value: 'tactics', label: t`Tactical diagnosis` },
     { value: 'combat', label: t`Output and entry` },
     { value: 'utility', label: t`Teamplay and utility` },
     { value: 'clutch', label: t`Clutches and economy` },
@@ -157,6 +159,7 @@ export function PersonalStatsPanels({ summary }: { summary: PersonalStatsSummary
           </details>
         </>
       )}
+      {tab === 'tactics' && <TacticalAnalysisPanels summary={summary} />}
       {tab === 'combat' && (
         <>
           <MetricsGrid>

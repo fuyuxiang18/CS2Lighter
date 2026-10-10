@@ -7,6 +7,7 @@ import type {
 } from 'csdm/common/types/personal-analysis';
 import type { PersonalMatchStats, PersonalRoundStats } from 'csdm/common/types/personal-stats';
 import { calculatePersonalMetrics, groupMatches } from './personal-metrics';
+import { buildTacticalAnalysis } from './build-tactical-analysis';
 
 type Entry = { match: PersonalMatchStats; round: PersonalRoundStats };
 type Predicate = (round: PersonalRoundStats) => boolean;
@@ -243,6 +244,7 @@ export function buildPersonalAnalysis(
     .filter((value): value is number => value !== null)
     .sort((a, b) => a - b);
   return {
+    tactics: buildTacticalAnalysis(matches),
     scope: {
       matchCount: matches.length,
       roundCount: rounds.length,

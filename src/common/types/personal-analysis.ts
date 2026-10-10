@@ -1,4 +1,5 @@
 import type { PersonalMetrics, PersonalStatsGroup, PersonalStatsSide } from './personal-stats';
+import type { TacticalAnalysis } from './tactical-analysis';
 
 export type PersonalRate = { count: number; total: number; percentage: number | null };
 export type PersonalAverage = { total: number; samples: number; value: number | null };
@@ -38,6 +39,8 @@ export type PersonalAchievementCode =
   | 'clutch-1v3';
 
 export type PersonalAnalysis = {
+  /** Tactical situations derived at read time from the existing per-demo facts. */
+  tactics: TacticalAnalysis;
   /** Advanced analysis uses standard 5v5 facts only; the main summary still contains every selected match. */
   scope: {
     matchCount: number;
