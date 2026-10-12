@@ -9,13 +9,19 @@ import type {
   FetchDeathReviewPage,
 } from 'csdm/common/types/death-review';
 import { deathMatchRevision, type DeathMatchDescriptor } from './death-review-cache';
+import { getDemoCacheGeneration } from 'csdm/node/demo-cache/cache-generation';
 
 type Dependencies = {
   listMatches: (scope: DeathReviewScope) => Promise<DeathMatchDescriptor[]>;
   read: (match: DeathMatchDescriptor) => Promise<DeathReviewRecord[] | undefined>;
   build: (match: DeathMatchDescriptor, signal: AbortSignal) => Promise<DeathReviewRecord[]>;
   isCurrent: (match: DeathMatchDescriptor) => Promise<boolean>;
-  write: (match: DeathMatchDescriptor, records: DeathReviewRecord[], signal: AbortSignal) => Promise<void>;
+  write: (
+    match: DeathMatchDescriptor,
+    records: DeathReviewRecord[],
+    signal: AbortSignal,
+    generation: number,
+  ) => Promise<void>;
   canStart: () => boolean;
   changed: (progress: DeathReviewProgress) => void;
 };
@@ -153,6 +159,7 @@ export class DeathReviewService {
           job.progress.currentChecksum = match.checksum;
           job.progress.currentDemoName = match.name;
           this.emit(job);
+          const generation = getDemoCacheGeneration(match.checksum);
           try {
             // Another scope may already have produced this all-player file while this job was waiting.
             const cached = await this.dependencies.read(match);
@@ -166,7 +173,7 @@ export class DeathReviewService {
               if (!(await this.dependencies.isCurrent(match)))
                 throw new Error('Match changed while preparing death review; retry this match');
               signal.throwIfAborted();
-              await this.dependencies.write(match, records, signal);
+              await this.dependencies.write(match, records, signal, generation);
             }
             signal.throwIfAborted();
             job.ready.add(match.checksum);

@@ -20,7 +20,8 @@ export const deathReview = new DeathReviewService({
   },
   build: buildDeathMatchFromDatabase,
   isCurrent: isDeathMatchCurrent,
-  write: async (match, records, signal) => writeDeathReviewCache(await directory(), match, records, signal),
+  write: async (match, records, signal, generation) =>
+    writeDeathReviewCache(await directory(), match, records, signal, generation),
   canStart: () => !isUpdateMaintenance(),
   changed: (progress) =>
     server.sendPushMessage({

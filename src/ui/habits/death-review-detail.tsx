@@ -7,6 +7,7 @@ import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { HabitsPlaybackButton } from './habits-playback-button';
 import { useDeathReviewCopy } from './use-death-review-copy';
 import { ReviewButton } from './review-button';
+import { DeathEvidencePanel } from './death-evidence-panel';
 
 export function canReplayDeath(record: DeathReviewRecord) {
   return (
@@ -177,6 +178,7 @@ export function DeathReviewDetail({ record }: { record: DeathReviewRecord }) {
           )}
         </div>
       )}
+      <DeathEvidencePanel record={record} />
       <div className="grid grid-cols-1 items-start gap-16 xl:grid-cols-2">
         <section className="flex min-w-0 flex-col gap-12">
           <h3 className="text-body-strong">

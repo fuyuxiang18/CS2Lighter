@@ -134,10 +134,25 @@ async function buildCliBundle() {
   );
 }
 
+async function buildVisibilityWorkerBundle() {
+  await rolldownBuild(
+    createNodeBundleOptions({
+      entryPoint: 'node/death-review/visibility-mesh-worker.ts',
+      outputFileName: 'visibility-mesh-worker.js',
+    }),
+  );
+}
+
 try {
   await validateTranslations(rootFolderPath);
   await buildRendererProcessBundle();
-  await Promise.all([buildWebSocketServerBundle(), buildMainProcessBundle(), buildPreloadBundle(), buildCliBundle()]);
+  await Promise.all([
+    buildWebSocketServerBundle(),
+    buildMainProcessBundle(),
+    buildPreloadBundle(),
+    buildCliBundle(),
+    buildVisibilityWorkerBundle(),
+  ]);
 } catch (error) {
   console.error(error);
   process.exit(1);

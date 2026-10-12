@@ -17,6 +17,8 @@ static/boiler-writter
 static/csgove
 static/postgres
 static/changelog
+static/death-evidence
+static/visibility
 build
 !build/Release/*.node
 *.local.json

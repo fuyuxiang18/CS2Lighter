@@ -2,6 +2,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile, rename, rm, stat } from 'node:fs/promises';
 import type { DemoDataCache } from 'csdm/common/types/demo-data-cache';
+import { getDemoCacheGeneration, writeWithDemoCacheGeneration } from './cache-generation';
 
 // Bump when persisted fields, habits binning or personal-statistics formulas change.
 export const DEMO_CACHE_SCHEMA_VERSION = 3;
@@ -70,7 +71,15 @@ async function readAndValidateCache(file: string, checksum: string): Promise<Dem
   }
 }
 
-export async function writeCacheFile(directory: string, cache: DemoDataCache) {
+export function writeCacheFile(
+  directory: string,
+  cache: DemoDataCache,
+  generation = getDemoCacheGeneration(cache.checksum),
+) {
+  return writeWithDemoCacheGeneration(cache.checksum, generation, () => saveCacheFile(directory, cache));
+}
+
+async function saveCacheFile(directory: string, cache: DemoDataCache) {
   await mkdir(directory, { recursive: true });
   const destination = cachePath(directory, cache.checksum);
   const temporary = `${destination}.${randomUUID()}.tmp`;

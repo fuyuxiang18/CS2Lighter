@@ -1,5 +1,29 @@
 [
   {
+    "component": "CS2Lighter death evidence helper dependencies",
+    "version": "demoinfocs 8e1342e6585c",
+    "file": "death-evidence/THIRD_PARTY_NOTICES.txt",
+    "url": "https://github.com/markus-wa/demoinfocs-golang/tree/8e1342e6585c"
+  },
+  {
+    "component": "ValveResourceFormat / Source 2 Viewer CLI",
+    "version": "20.0",
+    "file": "visibility/LICENSE.ValveResourceFormat.txt",
+    "url": "https://github.com/ValveResourceFormat/ValveResourceFormat/tree/20.0"
+  },
+  {
+    "component": "SkiaSharp (Source 2 Viewer native component)",
+    "version": "bundled with Source 2 Viewer 20.0",
+    "file": "visibility/LICENSE.SkiaSharp.txt",
+    "url": "https://github.com/mono/SkiaSharp"
+  },
+  {
+    "component": "SPIRV-Cross (Source 2 Viewer native component)",
+    "version": "bundled with Source 2 Viewer 20.0",
+    "file": "visibility/LICENSE.SPIRV-Cross.txt",
+    "url": "https://github.com/KhronosGroup/SPIRV-Cross"
+  },
+  {
     "component": "PostgreSQL",
     "version": "18.4 (embedded-postgres package 18.4.0-beta.17)",
     "file": "postgresql/COPYRIGHT",

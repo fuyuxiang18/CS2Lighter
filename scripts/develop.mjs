@@ -202,7 +202,16 @@ async function buildAndWatchMainProcessBundles() {
     },
   };
 
-  const watcher = watch([webSocketServerOptions, mainProcessOptions, preloadOptions]);
+  const watcher = watch([
+    webSocketServerOptions,
+    mainProcessOptions,
+    preloadOptions,
+    {
+      ...commonOptions,
+      input: path.join(srcFolderPath, 'node/death-review/visibility-mesh-worker.ts'),
+      output: { ...commonOutputOptions, file: path.join(outFolderPath, 'visibility-mesh-worker.js') },
+    },
+  ]);
 
   /** @type {Promise<void>} */
   const initialBuild = new Promise((resolve, reject) => {

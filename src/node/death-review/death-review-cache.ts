@@ -3,6 +3,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import type { DeathReviewRecord } from 'csdm/common/types/death-review';
 import type { DemoSource, GameMode } from 'csdm/common/types/counter-strike';
+import { getDemoCacheGeneration, writeWithDemoCacheGeneration } from 'csdm/node/demo-cache/cache-generation';
 
 const DEATH_FACTS_VERSION = 1;
 const DEATH_RULES_VERSION = 1;
@@ -119,7 +120,19 @@ export async function readDeathReviewCache(
   }
 }
 
-export async function writeDeathReviewCache(
+export function writeDeathReviewCache(
+  directory: string,
+  match: DeathMatchDescriptor,
+  records: DeathReviewRecord[],
+  signal: AbortSignal,
+  generation = getDemoCacheGeneration(match.checksum),
+) {
+  return writeWithDemoCacheGeneration(match.checksum, generation, () =>
+    saveDeathReviewCache(directory, match, records, signal),
+  );
+}
+
+async function saveDeathReviewCache(
   directory: string,
   match: DeathMatchDescriptor,
   records: DeathReviewRecord[],

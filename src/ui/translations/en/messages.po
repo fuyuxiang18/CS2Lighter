@@ -2809,6 +2809,435 @@ msgstr "Saved report"
 msgid "Newly generated · Saved locally"
 msgstr "Newly generated · Saved locally"
 
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Replay {offset} s"
+msgstr "Replay {offset} s"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No shots were recorded in this window."
+msgstr "No shots were recorded in this window."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "All shots"
+msgstr "All shots"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Burst {number}"
+msgstr "Burst {number}"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing-center angles"
+msgstr "Firing-center angles"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{count} shots · first shot is the origin"
+msgstr "{count} shots · first shot is the origin"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Recorded firing directions in shot order"
+msgstr "Recorded firing directions in shot order"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot {shotNumber} at {seconds} s"
+msgstr "Shot {shotNumber} at {seconds} s"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Vertical angle ↑"
+msgstr "Vertical angle ↑"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Horizontal angle →"
+msgstr "Horizontal angle →"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The installed map version differs from this demo"
+msgstr "The installed map version differs from this demo"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The map version has not been matched"
+msgstr "The map version has not been matched"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map geometry is incomplete"
+msgstr "Map geometry is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Target geometry is not available"
+msgstr "Target geometry is not available"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Animated player bounds are not available"
+msgstr "Animated player bounds are not available"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Dynamic object coverage is incomplete"
+msgstr "Dynamic object coverage is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic object intersects this firing line"
+msgstr "A dynamic object intersects this firing line"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic object has not been resolved"
+msgstr "A dynamic object has not been resolved"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Eye-position evidence is missing"
+msgstr "Eye-position evidence is missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Camera projection evidence is missing"
+msgstr "Camera projection evidence is missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Flash-effect timing is incomplete"
+msgstr "Flash-effect timing is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The viewer was affected by a flash"
+msgstr "The viewer was affected by a flash"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Outside the recorded view"
+msgstr "Outside the recorded view"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Blocked by geometry"
+msgstr "Blocked by geometry"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing line is close to a geometry edge"
+msgstr "The firing line is close to a geometry edge"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some requested ticks are missing"
+msgstr "Some requested ticks are missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The evidence clocks do not agree"
+msgstr "The evidence clocks do not agree"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot-event coverage is incomplete"
+msgstr "Shot-event coverage is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing player's entity could not be matched"
+msgstr "The firing player's entity could not be matched"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The shot could not be matched to this round"
+msgstr "The shot could not be matched to this round"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A shot could not be matched uniquely"
+msgstr "A shot could not be matched uniquely"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A damage event could not be matched uniquely"
+msgstr "A damage event could not be matched uniquely"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing sequence changes targets"
+msgstr "The firing sequence changes targets"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The target geometry has not been verified"
+msgstr "The target geometry has not been verified"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot-time geometry does not match"
+msgstr "Shot-time geometry does not match"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No uniquely matched damage target in this window"
+msgstr "No uniquely matched damage target in this window"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No raw firing events in this window"
+msgstr "No raw firing events in this window"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A local CS2 installation is needed for map geometry"
+msgstr "A local CS2 installation is needed for map geometry"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The extraction could not be used"
+msgstr "The extraction could not be used"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The evidence timeline could not be joined"
+msgstr "The evidence timeline could not be joined"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Environment object coverage is incomplete"
+msgstr "Environment object coverage is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some environment object types need geometry"
+msgstr "Some environment object types need geometry"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some dynamic models need geometry"
+msgstr "Some dynamic models need geometry"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The environment baseline is missing"
+msgstr "The environment baseline is missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The smoke baseline is missing"
+msgstr "The smoke baseline is missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Active smoke geometry is unavailable"
+msgstr "Active smoke geometry is unavailable"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No living opponent positions in this window"
+msgstr "No living opponent positions in this window"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic model could not be loaded"
+msgstr "A dynamic model could not be loaded"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic model transform is incomplete"
+msgstr "A dynamic model transform is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Clear environment firing line"
+msgstr "Clear environment firing line"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The geometry evidence is incomplete"
+msgstr "The geometry evidence is incomplete"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This geometry region exceeds the analysis budget"
+msgstr "This geometry region exceeds the analysis budget"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This map is not supported yet"
+msgstr "This map is not supported yet"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The local CS2 folder is unavailable"
+msgstr "The local CS2 folder is unavailable"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some map model resources are missing"
+msgstr "Some map model resources are missing"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The map extraction tool needs an update"
+msgstr "The map extraction tool needs an update"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map geometry could not be prepared"
+msgstr "Map geometry could not be prepared"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some firing events could not be matched to the player"
+msgstr "Some firing events could not be matched to the player"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No continuous firing burst in this window"
+msgstr "No continuous firing burst in this window"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center rises above the target"
+msgstr "Spray center rises above the target"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center falls below the target"
+msgstr "Spray center falls below the target"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center crosses the target repeatedly"
+msgstr "Spray center crosses the target repeatedly"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Practice the same weapon in short bursts. Keep the later shots level with the target, then extend the burst gradually."
+msgstr "Practice the same weapon in short bursts. Keep the later shots level with the target, then extend the burst gradually."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shorten the burst and reduce downward correction. Compare the first few shots with the later shots at the same distance."
+msgstr "Shorten the burst and reduce downward correction. Compare the first few shots with the later shots at the same distance."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Practice holding one target through a short burst. Reduce alternating horizontal corrections before adding a target switch."
+msgstr "Practice holding one target through a short burst. Reduce alternating horizontal corrections before adding a target switch."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction rises during the burst"
+msgstr "Firing direction rises during the burst"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction lowers during the burst"
+msgstr "Firing direction lowers during the burst"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction swings from side to side"
+msgstr "Firing direction swings from side to side"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Compare the rising direction with the target's movement. If the target stayed level, practice short bursts at the same distance and extend them gradually."
+msgstr "Compare the rising direction with the target's movement. If the target stayed level, practice short bursts at the same distance and extend them gradually."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Compare the falling direction with the target's movement. If the target stayed level, practice shorter bursts and compare your first and last firing directions."
+msgstr "Compare the falling direction with the target's movement. If the target stayed level, practice shorter bursts and compare your first and last firing directions."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Replay this burst and check whether each turn followed a target switch. Practice holding one target first, then add a deliberate switch."
+msgstr "Replay this burst and check whether each turn followed a target switch. Practice holding one target first, then add a deliberate switch."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Unobstructed"
+msgstr "Unobstructed"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Blocked"
+msgstr "Blocked"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Needs evidence"
+msgstr "Needs evidence"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Multi-opponent firing-line windows"
+msgstr "Multi-opponent firing-line windows"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Recorded firing-direction patterns"
+msgstr "Recorded firing-direction patterns"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{enemies} opponents with clear firing lines"
+msgstr "{enemies} opponents with clear firing lines"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{duration} s · at least {angle}° between firing lines"
+msgstr "{duration} s · at least {angle}° between firing lines"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Use cover to remove one firing line before extending the duel."
+msgstr "Use cover to remove one firing line before extending the duel."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Opponent directions near the death"
+msgstr "Opponent directions near the death"
+
+#: src/ui/habits/death-evidence-panel.tsx
+#: src/ui/habits/death-review-detail.tsx
+msgid "Killer"
+msgstr "Killer"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Opponent {number}"
+msgstr "Opponent {number}"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{angle}° between their facing direction and you"
+msgstr "{angle}° between their facing direction and you"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · {turns} turns · {degrees}° horizontal range"
+msgstr "{shots} shots · {turns} turns · {degrees}° horizontal range"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · {degrees}° vertical change"
+msgstr "{shots} shots · {degrees}° vertical change"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · peak {degrees}° outside the target"
+msgstr "{shots} shots · peak {degrees}° outside the target"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Evidence coverage · {decoded}/{requested} ticks"
+msgstr "Evidence coverage · {decoded}/{requested} ticks"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map version matched"
+msgstr "Map version matched"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map version pending"
+msgstr "Map version pending"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Show all firing-line samples"
+msgstr "Show all firing-line samples"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Preparing this death window"
+msgstr "Preparing this death window"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Reading demo evidence"
+msgstr "Reading demo evidence"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Preparing map geometry"
+msgstr "Preparing map geometry"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Checking firing lines and spray"
+msgstr "Checking firing lines and spray"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing lines and spray"
+msgstr "Firing lines and spray"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Pause extraction"
+msgstr "Pause extraction"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Refresh evidence"
+msgstr "Refresh evidence"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This event has no usable demo timing."
+msgstr "This event has no usable demo timing."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Waiting in the analysis queue"
+msgstr "Waiting in the analysis queue"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{completed}/{total} ticks"
+msgstr "{completed}/{total} ticks"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Death evidence extraction progress"
+msgstr "Death evidence extraction progress"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Loading saved evidence…"
+msgstr "Loading saved evidence…"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Evidence extraction did not finish."
+msgstr "Evidence extraction did not finish."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Retry extraction"
+msgstr "Retry extraction"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Extraction paused."
+msgstr "Extraction paused."
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Resume extraction"
+msgstr "Resume extraction"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Error details"
+msgstr "Error details"
+
 #: src/ui/habits/death-review-detail.tsx
 msgid "Review condition"
 msgstr "Review condition"
@@ -2832,10 +3261,6 @@ msgstr "Evidence at {offset} s"
 #: src/ui/habits/death-review-detail.tsx
 msgid "You"
 msgstr "You"
-
-#: src/ui/habits/death-review-detail.tsx
-msgid "Killer"
-msgstr "Killer"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "Environment"

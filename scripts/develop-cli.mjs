@@ -45,6 +45,11 @@ const commonOutputOptions = {
 const watcher = watch([
   {
     ...commonOptions,
+    input: path.join(srcFolderPath, 'node/death-review/visibility-mesh-worker.ts'),
+    output: { ...commonOutputOptions, file: path.join(outFolderPath, 'visibility-mesh-worker.js') },
+  },
+  {
+    ...commonOptions,
     input: path.join(srcFolderPath, 'cli/cli.ts'),
     output: {
       ...commonOutputOptions,

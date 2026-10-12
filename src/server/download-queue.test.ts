@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vite-plus/test';
 import type { Download } from 'csdm/common/download/download-types';
+import { downloadDemoQueue } from './download-queue';
 
 const mocks = vi.hoisted(() => ({ validateFolder: vi.fn(), checkLink: vi.fn() }));
 vi.mock('csdm/server/server', () => ({ server: { sendPushMessage: vi.fn() } }));
@@ -14,7 +15,6 @@ vi.mock('csdm/node/database/demos/insert-demos', () => ({ insertDemos: vi.fn() }
 
 describe('disabled demo download queue', () => {
   it('rejects single and batch downloads before touching destinations or checking network links', async () => {
-    const { downloadDemoQueue } = await import('./download-queue');
     const download = { matchId: 'test', demoUrl: 'https://example.invalid/demo.dem' } as Download;
     await expect(downloadDemoQueue.addDownload(download)).rejects.toThrow('disabled');
     await expect(downloadDemoQueue.addDownloads([download])).rejects.toThrow('disabled');

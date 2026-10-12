@@ -90,7 +90,7 @@ async function readOrBuild(checksum: string, demoPath?: string): Promise<DemoDat
           metrics,
         };
         controller.signal.throwIfAborted();
-        await writeCacheFile(directory.path, cache);
+        await writeCacheFile(directory.path, cache, generation);
         if (generation !== getDemoCacheGeneration(checksum)) {
           await deleteCacheFile(directory.path, checksum);
           throw new Error('Match was removed while its cache was being saved.');

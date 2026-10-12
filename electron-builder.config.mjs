@@ -129,6 +129,9 @@ const config = {
     },
   ],
   beforePack: async (context) => {
+    if (context.packager.platform.nodeName === 'win32' && Arch[context.arch] === 'x64') {
+      await import('./scripts/build-death-evidence-tools.mjs');
+    }
     const { collectThirdPartyLicenses } = await import('./scripts/collect-third-party-licenses.mjs');
     await collectThirdPartyLicenses();
     const { installBoilerWritter, installCounterStrikeVoiceExtractor, installDemoAnalyzer, installEmbeddedPostgreSql } =

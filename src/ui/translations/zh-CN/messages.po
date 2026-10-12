@@ -2803,6 +2803,435 @@ msgstr "已保存的点评"
 msgid "Newly generated · Saved locally"
 msgstr "刚刚生成 · 已保存到本机"
 
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Replay {offset} s"
+msgstr "回看 {offset} 秒"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No shots were recorded in this window."
+msgstr "此时间窗口没有射击记录。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "All shots"
+msgstr "全部射击"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Burst {number}"
+msgstr "第 {number} 段连射"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing-center angles"
+msgstr "射击中心方向轨迹"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{count} shots · first shot is the origin"
+msgstr "{count} 发 · 以首发方向为原点"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Recorded firing directions in shot order"
+msgstr "按射击顺序排列的方向轨迹"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot {shotNumber} at {seconds} s"
+msgstr "第 {shotNumber} 发 · 死亡前后 {seconds} 秒"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Vertical angle ↑"
+msgstr "垂直角度 ↑"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Horizontal angle →"
+msgstr "水平角度 →"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The installed map version differs from this demo"
+msgstr "本机地图版本与 demo 不一致"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The map version has not been matched"
+msgstr "地图版本尚未匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map geometry is incomplete"
+msgstr "地图几何数据不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Target geometry is not available"
+msgstr "尚缺目标几何数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Animated player bounds are not available"
+msgstr "尚缺角色动画包络数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Dynamic object coverage is incomplete"
+msgstr "动态物体数据覆盖不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic object intersects this firing line"
+msgstr "动态物体与这条枪线相交"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic object has not been resolved"
+msgstr "动态物体尚未解析"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Eye-position evidence is missing"
+msgstr "缺少眼位数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Camera projection evidence is missing"
+msgstr "缺少视野投影数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Flash-effect timing is incomplete"
+msgstr "闪光影响的时序数据不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The viewer was affected by a flash"
+msgstr "观察者处于闪光影响中"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Outside the recorded view"
+msgstr "位于记录视野之外"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Blocked by geometry"
+msgstr "被地图几何遮挡"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing line is close to a geometry edge"
+msgstr "枪线贴近地图几何边缘"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some requested ticks are missing"
+msgstr "部分请求时刻缺少数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The evidence clocks do not agree"
+msgstr "证据时间基准不一致"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot-event coverage is incomplete"
+msgstr "射击事件覆盖不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing player's entity could not be matched"
+msgstr "射击者实体未能匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The shot could not be matched to this round"
+msgstr "射击事件未能匹配到本回合"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A shot could not be matched uniquely"
+msgstr "射击事件未能唯一匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A damage event could not be matched uniquely"
+msgstr "伤害事件未能唯一匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The firing sequence changes targets"
+msgstr "此段射击中切换了目标"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The target geometry has not been verified"
+msgstr "目标几何尚未核实"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shot-time geometry does not match"
+msgstr "射击时刻的几何数据不匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No uniquely matched damage target in this window"
+msgstr "此时间窗口没有唯一匹配的伤害目标"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No raw firing events in this window"
+msgstr "此时间窗口没有原始射击事件"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A local CS2 installation is needed for map geometry"
+msgstr "提取地图几何需要本机安装 CS2"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The extraction could not be used"
+msgstr "提取结果无法用于核对"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The evidence timeline could not be joined"
+msgstr "证据时间线未能对齐"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Environment object coverage is incomplete"
+msgstr "环境物体数据覆盖不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some environment object types need geometry"
+msgstr "部分环境物体类型尚缺几何数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some dynamic models need geometry"
+msgstr "部分动态模型尚缺几何数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The environment baseline is missing"
+msgstr "缺少环境状态基线"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The smoke baseline is missing"
+msgstr "缺少烟雾状态基线"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Active smoke geometry is unavailable"
+msgstr "生效中的烟雾尚缺几何数据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No living opponent positions in this window"
+msgstr "此时间窗口没有存活对手的有效位置"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic model could not be loaded"
+msgstr "动态模型未能加载"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "A dynamic model transform is incomplete"
+msgstr "动态模型的变换数据不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Clear environment firing line"
+msgstr "环境枪线连通"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The geometry evidence is incomplete"
+msgstr "几何证据不完整"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This geometry region exceeds the analysis budget"
+msgstr "当前几何区域超出分析预算"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This map is not supported yet"
+msgstr "暂不支持此地图"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The local CS2 folder is unavailable"
+msgstr "本机 CS2 文件夹不可用"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some map model resources are missing"
+msgstr "缺少部分地图模型资源"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The map extraction tool needs an update"
+msgstr "地图提取工具需要更新"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map geometry could not be prepared"
+msgstr "地图几何未能准备完成"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Some firing events could not be matched to the player"
+msgstr "部分射击事件未能匹配到玩家"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No continuous firing burst in this window"
+msgstr "此时间窗口没有连续射击段"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center rises above the target"
+msgstr "连射中心上移至目标上方"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center falls below the target"
+msgstr "连射中心下移至目标下方"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Spray center crosses the target repeatedly"
+msgstr "连射中心反复横穿目标"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Practice the same weapon in short bursts. Keep the later shots level with the target, then extend the burst gradually."
+msgstr "用同一武器练短连射，让后续射击方向保持在目标高度，再逐步增加发数。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shorten the burst and reduce downward correction. Compare the first few shots with the later shots at the same distance."
+msgstr "缩短连射并减少向下修正，在同距离对比前几发与后续射击方向。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Practice holding one target through a short burst. Reduce alternating horizontal corrections before adding a target switch."
+msgstr "先练短连射保持同一目标，减少左右交替修正，再加入切换目标。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction rises during the burst"
+msgstr "连续射击方向上扬"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction lowers during the burst"
+msgstr "连续射击方向下压"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing direction swings from side to side"
+msgstr "连续射击横向摆动"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Compare the rising direction with the target's movement. If the target stayed level, practice short bursts at the same distance and extend them gradually."
+msgstr "对照目标移动，看上扬是否跟随目标。若目标高度没变，下次先在同距离练短连射，再逐步增加发数。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Compare the falling direction with the target's movement. If the target stayed level, practice shorter bursts and compare your first and last firing directions."
+msgstr "对照目标移动，看下压是否跟随目标。若目标高度没变，下次练习缩短连射，并对比首发与末发方向。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Replay this burst and check whether each turn followed a target switch. Practice holding one target first, then add a deliberate switch."
+msgstr "回看这段连射，检查每次转向是否对应换目标。练习时先保持一个目标，再加入有意的目标切换。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Unobstructed"
+msgstr "无遮挡"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Blocked"
+msgstr "遮挡"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Needs evidence"
+msgstr "待补证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Multi-opponent firing-line windows"
+msgstr "多人枪线片段"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Recorded firing-direction patterns"
+msgstr "已记录的射击方向模式"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{enemies} opponents with clear firing lines"
+msgstr "同时暴露在 {enemies} 名对手的枪线中"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{duration} s · at least {angle}° between firing lines"
+msgstr "持续 {duration} 秒 · 枪线夹角至少 {angle}°"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Use cover to remove one firing line before extending the duel."
+msgstr "继续接枪前，先借掩体隔开一条枪线。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Opponent directions near the death"
+msgstr "死亡前的对手朝向"
+
+#: src/ui/habits/death-evidence-panel.tsx
+#: src/ui/habits/death-review-detail.tsx
+msgid "Killer"
+msgstr "击杀者"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Opponent {number}"
+msgstr "对手 {number}"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{angle}° between their facing direction and you"
+msgstr "对手朝向与你的方位相差 {angle}°"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · {turns} turns · {degrees}° horizontal range"
+msgstr "连续 {shots} 发 · {turns} 次转向 · 横向范围 {degrees}°"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · {degrees}° vertical change"
+msgstr "连续 {shots} 发 · 垂直方向变化 {degrees}°"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{shots} shots · peak {degrees}° outside the target"
+msgstr "{shots} 发 · 超出目标角度最大 {degrees}°"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Evidence coverage · {decoded}/{requested} ticks"
+msgstr "证据覆盖 · {decoded}/{requested} tick"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map version matched"
+msgstr "地图版本已匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Map version pending"
+msgstr "地图版本待匹配"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Show all firing-line samples"
+msgstr "展开全部枪线采样"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Preparing this death window"
+msgstr "正在准备死亡时间窗口"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Reading demo evidence"
+msgstr "正在读取 demo 证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Preparing map geometry"
+msgstr "正在准备地图几何"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Checking firing lines and spray"
+msgstr "正在核对枪线与连射轨迹"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Firing lines and spray"
+msgstr "枪线与连射轨迹"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Pause extraction"
+msgstr "暂停提取"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Refresh evidence"
+msgstr "重新提取证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This event has no usable demo timing."
+msgstr "此事件没有可用的 demo 时间信息。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Waiting in the analysis queue"
+msgstr "正在分析队列中等待"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "{completed}/{total} ticks"
+msgstr "{completed}/{total} tick"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Death evidence extraction progress"
+msgstr "死亡片段证据提取进度"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Loading saved evidence…"
+msgstr "正在加载已保存的证据…"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Evidence extraction did not finish."
+msgstr "证据提取未完成。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Retry extraction"
+msgstr "重试提取"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Extraction paused."
+msgstr "提取已暂停。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Resume extraction"
+msgstr "继续提取"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Error details"
+msgstr "错误详情"
+
 #: src/ui/habits/death-review-detail.tsx
 msgid "Review condition"
 msgstr "复盘条件"
@@ -2826,10 +3255,6 @@ msgstr "查看 {offset} 秒的依据"
 #: src/ui/habits/death-review-detail.tsx
 msgid "You"
 msgstr "你"
-
-#: src/ui/habits/death-review-detail.tsx
-msgid "Killer"
-msgstr "击杀者"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "Environment"

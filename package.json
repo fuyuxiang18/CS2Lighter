@@ -1,6 +1,6 @@
 {
   "name": "cs2lighter",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Local CS2 review with real POV clips, personal habits and AI coaching.",
   "keywords": [
     "CS",
@@ -23,6 +23,7 @@
   "main": "main.js",
   "scripts": {
     "build": "node ./scripts/build.mjs",
+    "build:death-tools": "node ./scripts/build-death-evidence-tools.mjs",
     "compile": "tsc --noEmit",
     "deadcode": "knip",
     "dev": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/develop.mjs",

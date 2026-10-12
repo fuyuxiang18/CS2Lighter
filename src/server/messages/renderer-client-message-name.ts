@@ -2,6 +2,7 @@
 export const RendererClientMessageName = {
   FetchDeathReviewPage: 'fetch-death-review-page',
   ControlDeathReview: 'control-death-review',
+  InspectDeathEvidence: 'inspect-death-evidence',
   GetRecordingQueue: 'get-recording-queue',
   AddToRecordingQueue: 'add-to-recording-queue',
   ControlRecordingQueue: 'control-recording-queue',
