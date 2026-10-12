@@ -1,9 +1,18 @@
+import type { DeathRiskInput, DeathRiskReport } from './death-risk';
+import type { DeathMechanicsEvidence } from './death-mechanics';
+
 export type DeathEvidenceKey = { checksum: string; steamId: string; deathId: string };
 
 export type DeathEvidenceReport = DeathEvidenceKey & {
   version: 1;
   matchRevision?: string;
   generatedAt: string;
+  /** Absent in the original 0.7.3 cache; absence is not a negative risk assessment. */
+  risk?: DeathRiskReport;
+  /** Compact, verified inputs allow rule-only changes to reuse the extracted evidence. */
+  riskFacts?: DeathRiskInput;
+  /** Measured shot values remain available even when attribution cannot be established. */
+  mechanics?: DeathMechanicsEvidence;
   startTick: number;
   endTick: number;
   deathTick: number;

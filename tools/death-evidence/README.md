@@ -12,6 +12,57 @@ go build -trimpath -ldflags="-s -w" -o death-evidence.exe .
 
 Build artifacts belong in the app's tool staging directory, not source control. Include `THIRD_PARTY_NOTICES.txt` when distributing the executable. No demo, account, or real-match fixture belongs in this directory.
 
+## Weapon mechanics evidence
+
+The helper now requests explicit ground flags, movement type, armor/helmet, defusing,
+duck state, controller tick base, active-weapon magazine/reload/mode, and attack timers.
+Untransmitted fields still have `present: false`; network schema fields are not
+assumed to be present just because they exist in the engine's in-memory schema.
+
+`controller.m_nTickBase` is sampled through the controller that owns the exact pawn
+handle/serial. Its `lastUpdate` is null: the helper does not pretend that a snapshot
+read is an observed property update. The controller clock, packet server clock and
+demo clock remain separate.
+
+The pinned parser falls back to unsigned varint decoding for the signed `GameTick_t`
+typedef. The helper reads the demo's flattened serializer and emits additional
+`decoded.m_nNextPrimaryAttackTick`, `decoded.m_nNextSecondaryAttackTick` and
+`decoded.m_nDeployTick` fields only after confirming the scalar type. It ZigZag
+decodes `GameTick_t`, preserves actual signed `int32`, and leaves unknown/conflicting
+types unavailable. Original properties are kept alongside these derived fields.
+An actual patch-14190 probe produced raw next-attack 17846, decoded 8923, with
+controller/server tick 8917; the next-attack clock therefore cannot safely be read
+directly from the original property.
+
+`FireBullets.extra`, when transmitted, contains direct movement/air inaccuracy and
+sub-tick clocks. The patch-14165 and patch-14190 demos sampled here did not transmit
+these optional fields. `raw.tick` was either the packet server tick or one tick
+earlier. Never treat a frame-end snapshot as an exact sub-tick firing state.
+Only explicitly transmitted selected cvars are included with shots; missing cvars
+do not imply engine defaults.
+
+The application carries numeric weapon facts extracted from Valve's
+`scripts/weapons.vdata_c` (CRC32 `b6efe34a`, patch 14190, ClientVersion 2000930,
+Steam build 25815307). The 34 weapon profiles contain separate fire-mode cadence,
+standing/crouching inaccuracy, spread and recovery parameters. Unsupported demo
+patches are rejected instead of reusing current-game weapon values.
+
+The conservative mechanics provider checks measured inaccuracy and penalty
+trajectories, requires a clean measured baseline, and excludes mixed stance,
+scope, airborne, reload and turning states. Unknown turning inaccuracy prevents
+residual-component attribution; explicit `extra.inaccuracy_move` can establish
+the movement component independently. Exact zero velocity is used only as a
+sufficient stationary condition, never as a counter-strafe speed threshold.
+It deliberately does not widen this condition with an arbitrary epsilon.
+
+Full player-body certification is still separate from weapon facts. The actual
+`agents/models/ctm_fbi/ctm_fbi.vmdl_c` has authored view/hull bounds
+`[-16,-16,0]..[16,16,72]`, while one of its mesh bounds already extends to
+`[-15.166242,-22.727013,-0.014049]..[8.836346,22.636650,78.344368]`.
+The model also references external world-model animation graphs. Consequently,
+neither the movement hull nor these authored view bounds certify all animated
+body poses; they cannot enable a target-relative spray diagnosis.
+
 ## Request and budgets
 
 ```json

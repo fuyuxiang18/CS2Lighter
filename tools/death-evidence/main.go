@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -20,6 +21,7 @@ import (
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/msgs2"
 	st "github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/sendtables"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 var playerFields = []string{
@@ -30,12 +32,19 @@ var playerFields = []string{
 	"m_pAimPunchServices.m_predictableBaseAngle", "m_pAimPunchServices.m_predictableBaseAngleVel", "m_pAimPunchServices.m_predictableBaseTick", "m_pAimPunchServices.m_predictableBaseTickInterpAmount", "m_pAimPunchServices.m_unpredictableBaseAngle", "m_pAimPunchServices.m_unpredictableBaseTick",
 	"CBodyComponent.m_skeletonInstance.m_modelState.m_hModel", "CBodyComponent.m_skeletonInstance.m_flScale",
 	"m_flFlashDuration", "m_flFlashMaxAlpha", "m_flFlashBangTime",
+	"m_fFlags", "m_hGroundEntity", "m_MoveType", "m_nActualMoveType", "m_nWaterLevel",
+	"m_ArmorValue", "m_pItemServices.m_bHasHelmet", "m_bIsDefusing", "m_bIsRescuing", "m_bIsGrabbingHostage",
+	"m_pMovementServices.m_bDucking", "m_pMovementServices.m_bDucked", "m_pMovementServices.m_flFallVelocity",
+	"m_flVelocityModifier", "m_flSimulationTime", "m_flOldSimulationTime", "m_nTickBase",
 	"m_pWeaponServices.m_hActiveWeapon", "m_pWeaponServices.m_flNextAttack",
 }
 var weaponFields = []string{
 	"m_AttributeManager.m_Item.m_iItemDefinitionIndex", "m_iClip1", "m_iClip2", "m_bInReload", "m_bReloadHeldSinceStart",
 	"m_fLastShotTime", "m_nDeployTick", "m_nNextPrimaryAttackTick", "m_flNextPrimaryAttackTickRatio", "m_nNextSecondaryAttackTick", "m_flNextSecondaryAttackTickRatio",
 	"m_flRecoilIndex", "m_iRecoilIndex", "m_fAccuracyPenalty", "m_flAttackHoldStartTime",
+	"m_weaponMode", "m_bSilencerOn", "m_bBurstMode", "m_bFireOnEmpty", "m_fFireDuration",
+	"m_bStartedArming", "m_bBombPlacedAnimation", "m_flArmedTime", "m_flPostponeFireReadyTime",
+	"m_flTurningInaccuracy", "m_flTurningInaccuracyDelta", "m_flLastAccuracyUpdateTime", "m_fAccuracySmoothedForZoom",
 }
 var weaponGeometryFields = []string{
 	"CBodyComponent.m_skeletonInstance.m_modelState.m_hModel", "CBodyComponent.m_skeletonInstance.m_angRotation", "CBodyComponent.m_skeletonInstance.m_flScale", "CBodyComponent.m_skeletonInstance.m_hParent",
@@ -86,6 +95,7 @@ type extractor struct {
 	shots              int
 	duplicateTicks     int
 	lastProgress       time.Time
+	mechanicsTypes     map[string]string
 }
 
 func kind(class string) string {
@@ -235,8 +245,68 @@ func (x *extractor) fields(tr *tracked, names []string) map[string]field {
 	for _, name := range names {
 		value, present := tr.entity.PropertyValue(name)
 		result[name] = field{Present: present && value.Any != nil, Value: normalize(value.Any), LastUpdate: tr.last[name]}
+		if name == "m_nNextPrimaryAttackTick" || name == "m_nNextSecondaryAttackTick" || name == "m_nDeployTick" {
+			decoded := decodeGameTick(value.Any, x.mechanicsTypes[name])
+			result["decoded."+name] = field{Present: present && decoded != nil, Value: decoded, LastUpdate: tr.last[name]}
+		}
 	}
 	return result
+}
+
+// The pinned demoinfocs decoder falls back to unsigned varint for GameTick_t.
+// Valve serializes that signed typedef as ZigZag. Only correct a field when the
+// demo's own flattened serializer confirms its type; raw values are retained.
+func decodeGameTick(value any, typeName string) *int64 {
+	if typeName == "GameTick_t" {
+		var u uint64
+		switch v := value.(type) {
+		case uint32:
+			u = uint64(v)
+		case uint64:
+			u = v
+		default:
+			return nil
+		}
+		if u > 0xffffffff {
+			return nil
+		}
+		n := int64(u>>1) ^ -int64(u&1)
+		return &n
+	}
+	if typeName == "int32" {
+		v, ok := value.(int32)
+		if ok {
+			n := int64(v)
+			return &n
+		}
+	}
+	return nil
+}
+
+func (x *extractor) mechanicsSchema(message *msgs2.CDemoSendTables) {
+	size, count := binary.Uvarint(message.Data)
+	if count <= 0 || size > 32<<20 || size > uint64(len(message.Data)-count) {
+		return
+	}
+	var schema msgs2.CSVCMsg_FlattenedSerializer
+	if proto.Unmarshal(message.Data[count:count+int(size)], &schema) != nil {
+		return
+	}
+	x.mechanicsTypes = map[string]string{}
+	for _, f := range schema.Fields {
+		if f.VarNameSym == nil || f.VarTypeSym == nil || *f.VarNameSym < 0 || *f.VarTypeSym < 0 || int(*f.VarNameSym) >= len(schema.Symbols) || int(*f.VarTypeSym) >= len(schema.Symbols) {
+			continue
+		}
+		name, typ := schema.Symbols[*f.VarNameSym], schema.Symbols[*f.VarTypeSym]
+		if name != "m_nNextPrimaryAttackTick" && name != "m_nNextSecondaryAttackTick" && name != "m_nDeployTick" {
+			continue
+		}
+		if previous, exists := x.mechanicsTypes[name]; exists && previous != typ {
+			x.mechanicsTypes[name] = "ambiguous"
+		} else {
+			x.mechanicsTypes[name] = typ
+		}
+	}
 }
 func raw(e st.Entity, name string) any {
 	value, present := e.PropertyValue(name)
@@ -306,7 +376,22 @@ func (x *extractor) player(tr *tracked) playerRecord {
 		yaw = &angle[1]
 		pitch = &angle[0]
 	}
-	return playerRecord{ID: entityID(e), SteamID: x.playerSteamID(e), Origin: pos, Eyes: eyes, Yaw: yaw, Pitch: pitch, Velocity: components(e, "m_vecVelocity"), Team: number(raw(e, "m_iTeamNum")), Health: number(raw(e, "m_iHealth")), LifeState: number(raw(e, "m_lifeState")), Hull: hull{Mins: vec(raw(e, "m_Collision.m_vecMins")), Maxs: vec(raw(e, "m_Collision.m_vecMaxs"))}, FieldsComplete: true, Fields: x.fields(tr, playerFields), ActiveWeapon: x.activeWeapon(e)}
+	fields := x.fields(tr, playerFields)
+	// Tick base is owned by the controller in Source 2. Keep it separate from
+	// the server clock: it is not necessarily the packet's server tick.
+	fields["controller.m_nTickBase"] = field{Present: false, Value: nil}
+	for _, participant := range x.p.GameState().Participants().All() {
+		if participant.Entity == nil {
+			continue
+		}
+		handle, ok := raw(participant.Entity, "m_hPlayerPawn").(uint64)
+		if ok && matchesHandle(e, handle) {
+			v, present := participant.Entity.PropertyValue("m_nTickBase")
+			fields["controller.m_nTickBase"] = field{Present: present && v.Any != nil, Value: normalize(v.Any), LastUpdate: nil}
+			break
+		}
+	}
+	return playerRecord{ID: entityID(e), SteamID: x.playerSteamID(e), Origin: pos, Eyes: eyes, Yaw: yaw, Pitch: pitch, Velocity: components(e, "m_vecVelocity"), Team: number(raw(e, "m_iTeamNum")), Health: number(raw(e, "m_iHealth")), LifeState: number(raw(e, "m_lifeState")), Hull: hull{Mins: vec(raw(e, "m_Collision.m_vecMins")), Maxs: vec(raw(e, "m_Collision.m_vecMaxs"))}, FieldsComplete: true, Fields: fields, ActiveWeapon: x.activeWeapon(e)}
 }
 
 func (x *extractor) activeWeapon(pawn st.Entity) *weaponRecord {
@@ -568,7 +653,13 @@ func (x *extractor) shot(message *msgs2.CMsgTEFireBullets) {
 	}
 	x.emitHeader()
 	x.shots++
-	x.send(map[string]any{"type": "shot", "frame": clock.Frame, "tick": clock.Tick, "serverTick": clock.ServerTick, "playerHandle": message.Player, "playerEntityId": playerEntityID, "playerSlot": slot, "steamId": steamID, "raw": json.RawMessage(raw)})
+	conVars := map[string]string{}
+	for _, name := range []string{"weapon_accuracy_nospread", "weapon_accuracy_forcespread", "weapon_air_spread_scale", "weapon_recoil_scale", "sv_maxunlag"} {
+		if value, found := x.p.GameState().Rules().ConVars()[name]; found && len(value) <= 64 {
+			conVars[name] = value
+		}
+	}
+	x.send(map[string]any{"type": "shot", "frame": clock.Frame, "tick": clock.Tick, "serverTick": clock.ServerTick, "playerHandle": message.Player, "playerEntityId": playerEntityID, "playerSlot": slot, "steamId": steamID, "raw": json.RawMessage(raw), "conVars": conVars})
 }
 func run(req request, writer io.Writer) (result error) {
 	started := false
@@ -619,11 +710,13 @@ func run(req request, writer io.Writer) (result error) {
 			errorText = &text
 		}
 		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": []string{"bounded-player-fields", "dynamic-entity-state", "environment-model-candidates", "raw-smoke-frame", "raw-fire-bullets"}, "error": errorText}
+		end["mechanicsFieldTypes"] = x.mechanicsTypes
 		if err := x.output.send(end); result == nil && err != nil {
 			result = err
 		}
 	}()
 	p.RegisterNetMessageHandler(func(header *msgs2.CDemoFileHeader) { x.header = header })
+	p.RegisterNetMessageHandler(x.mechanicsSchema)
 	p.RegisterNetMessageHandler(func(tick *msgs2.CNETMsg_Tick) {
 		if tick.Tick != nil {
 			n := int(*tick.Tick)

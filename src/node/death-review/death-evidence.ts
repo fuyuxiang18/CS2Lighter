@@ -22,8 +22,12 @@ import type { EvidenceHeader, EvidenceFrame, EvidenceShot } from './evidence-pro
 import { readVisibilityMapRevision, resolveVisibilityMap } from './visibility-map-provider';
 import { buildSprayProviderEvidence } from './spray-provider';
 import { describeSprayMotion } from './spray-motion';
-import { buildGunlineEvidence, resolveGunlineEntityBounds } from './gunline-evidence';
+import { buildGunlineEvidence, resolveGunlineEntityBounds, type GunlineFrameContext } from './gunline-evidence';
 import { createSource2ModelResourceResolver } from './source2-model-resources';
+import { buildRiskTacticalEvidence } from './risk-tactical-provider';
+import { buildRiskMechanicsEvidence, type RiskMechanicsContact } from './risk-mechanics-provider';
+import { buildDeathRiskReport } from './death-risk-engine';
+import { collectSupportTransitions } from './risk-spatial-provider';
 
 async function prepare(key: DeathEvidenceKey) {
   await assertMatchImportComplete(key.checksum);
@@ -161,6 +165,7 @@ async function build(
           signal,
         })
       : null;
+  const gunlineContexts = new Map<number, GunlineFrameContext>();
   const gunline =
     map.status === 'ready' && modelResolver
       ? await buildGunlineEvidence({
@@ -170,6 +175,7 @@ async function build(
           targetSteamId: key.steamId,
           map,
           signal,
+          onFrame: (frame) => gunlineContexts.set(frame.tick, frame),
           resolveEntityBounds: async (entity) => {
             const handles = [
               ...new Set(
@@ -238,6 +244,70 @@ async function build(
       };
     });
   const ownRawShots = rawShots.filter((shot) => shot.steamId === key.steamId);
+  const riskFacts = await buildRiskTacticalEvidence({
+    record,
+    startTick,
+    frames,
+    contexts: gunlineContexts,
+    gunlines: gunline.gunlines,
+    damages,
+    kills,
+    shots,
+    blinds,
+    shotsComplete: shots.length === context.match.shotCount,
+    signal,
+  });
+  const contacts: RiskMechanicsContact[] = [];
+  for (const shot of ownRawShots) {
+    // A single shot and a single hurt target at that tick establish association. Missed shots do not.
+    if (ownRawShots.filter((candidate) => candidate.tick === shot.tick).length !== 1) continue;
+    const hits = riskFacts.events.filter(
+      (event) =>
+        event.kind === 'damage' &&
+        event.weaponKind === 'gun' &&
+        event.actorId === key.steamId &&
+        event.tick === shot.tick &&
+        riskFacts.enemyIds.includes(event.targetId),
+    );
+    const targets = [...new Set(hits.map((event) => event.targetId))];
+    if (targets.length !== 1) continue;
+    const frame = riskFacts.frames.find((frame) => frame.tick === shot.tick);
+    const from = frame?.actors.find((actor) => actor.id === key.steamId)?.eye;
+    const to = frame?.actors.find((actor) => actor.id === targets[0])?.eye;
+    if (!from || !to) continue;
+    contacts.push({
+      shotTick: shot.tick,
+      targetId: targets[0],
+      distance: Math.hypot(to.x - from.x, to.y - from.y, to.z - from.z),
+      source: hits.map((event) => `event:${event.id}`).join(','),
+    });
+  }
+  const mechanics = buildRiskMechanicsEvidence({
+    header,
+    frames,
+    shots: rawShots,
+    end,
+    subjectId: key.steamId,
+    contacts,
+  });
+  // Keep recorded shots even when their accuracy state could not be reconstructed.
+  // Otherwise a missing mechanics measurement could be mistaken for "did not shoot".
+  riskFacts.shots = [
+    ...mechanics.shots,
+    ...riskFacts.shots.filter(
+      (shot) =>
+        !mechanics.shots.some(
+          (measured) =>
+            measured.actorId === shot.actorId && measured.tick === shot.tick && measured.weaponName === shot.weaponName,
+        ),
+    ),
+  ];
+  riskFacts.precision = mechanics.precision;
+  riskFacts.aim = mechanics.aim;
+  riskFacts.coverage.precision = mechanics.coverage.precision;
+  riskFacts.coverage.aim = mechanics.coverage.aim;
+  riskFacts.supportTransitions = collectSupportTransitions({ ...riskFacts, contexts: gunlineContexts });
+  const risk = buildDeathRiskReport(riskFacts);
   const shotReasons: string[] = [];
   if (end.missingTicks.length > 0) shotReasons.push('extraction-incomplete');
   if (ownRawShots.length !== points.length || rawShots.some((shot) => shot.steamId === null))
@@ -252,6 +322,9 @@ async function build(
     version: 1,
     matchRevision: deathMatchRevision(context.match),
     generatedAt: new Date().toISOString(),
+    risk,
+    riskFacts,
+    mechanics: { measurements: mechanics.measurements, reasons: mechanics.reasons },
     startTick,
     endTick,
     deathTick: record.eventTick,

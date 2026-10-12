@@ -1,0 +1,52 @@
+import { WeaponName } from 'csdm/common/types/counter-strike';
+
+const weaponNames = new Map<number, WeaponName>([
+  [1, WeaponName.Deagle],
+  [2, WeaponName.DualBerettas],
+  [3, WeaponName.FiveSeven],
+  [4, WeaponName.Glock],
+  [7, WeaponName.AK47],
+  [8, WeaponName.AUG],
+  [9, WeaponName.AWP],
+  [10, WeaponName.Famas],
+  [11, WeaponName.G3SG1],
+  [13, WeaponName.GalilAR],
+  [14, WeaponName.M249],
+  [16, WeaponName.M4A4],
+  [17, WeaponName.Mac10],
+  [19, WeaponName.P90],
+  [23, WeaponName.MP5],
+  [24, WeaponName.UMP45],
+  [25, WeaponName.XM1014],
+  [26, WeaponName.PPBizon],
+  [27, WeaponName.MAG7],
+  [28, WeaponName.Negev],
+  [29, WeaponName.SawedOff],
+  [30, WeaponName.Tec9],
+  [32, WeaponName.P2000],
+  [33, WeaponName.MP7],
+  [34, WeaponName.MP9],
+  [35, WeaponName.Nova],
+  [36, WeaponName.P250],
+  [38, WeaponName.Scar20],
+  [39, WeaponName.SG553],
+  [40, WeaponName.Scout],
+  [60, WeaponName.M4A1],
+  [61, WeaponName.USP],
+  [63, WeaponName.CZ75],
+  [64, WeaponName.Revolver],
+  [42, WeaponName.Knife],
+  [43, WeaponName.Flashbang],
+  [44, WeaponName.HEGrenade],
+  [45, WeaponName.Smoke],
+  [46, WeaponName.Molotov],
+  [47, WeaponName.Decoy],
+  [48, WeaponName.Incendiary],
+  [49, WeaponName.Bomb],
+  [59, WeaponName.Knife],
+]);
+
+export function getEvidenceWeaponName(item: number): WeaponName | undefined {
+  if (item >= 500 && item < 600) return WeaponName.Knife;
+  return weaponNames.get(item);
+}

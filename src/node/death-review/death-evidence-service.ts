@@ -151,7 +151,8 @@ export class DeathEvidenceService<T extends Context> {
           job.state.phase = 'evaluate';
           job.state.completedTicks = report.coverage.decodedTicks;
           job.state.totalTicks = report.coverage.requestedTicks;
-          job.state.report = report;
+          job.state.report = { ...report };
+          delete job.state.report.riskFacts;
         } catch (error) {
           job.state.status = signal.aborted ? 'canceled' : 'error';
           job.state.error = signal.aborted

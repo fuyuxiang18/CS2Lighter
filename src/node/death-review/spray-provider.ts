@@ -1,4 +1,4 @@
-import { WeaponName } from 'csdm/common/types/counter-strike';
+import { getEvidenceWeaponName } from './evidence-weapon-name';
 import type { DeathMatchInput } from './build-death-review';
 import type { EvidenceEnd, EvidenceFrame, EvidenceHeader, EvidenceShot } from './evidence-protocol';
 import {
@@ -74,43 +74,6 @@ export type SprayProviderResult = {
     evaluatedShots: number;
   };
 };
-
-const weaponNames = new Map<number, WeaponName>([
-  [1, WeaponName.Deagle],
-  [2, WeaponName.DualBerettas],
-  [3, WeaponName.FiveSeven],
-  [4, WeaponName.Glock],
-  [7, WeaponName.AK47],
-  [8, WeaponName.AUG],
-  [9, WeaponName.AWP],
-  [10, WeaponName.Famas],
-  [11, WeaponName.G3SG1],
-  [13, WeaponName.GalilAR],
-  [14, WeaponName.M249],
-  [16, WeaponName.M4A4],
-  [17, WeaponName.Mac10],
-  [19, WeaponName.P90],
-  [23, WeaponName.MP5],
-  [24, WeaponName.UMP45],
-  [25, WeaponName.XM1014],
-  [26, WeaponName.PPBizon],
-  [27, WeaponName.MAG7],
-  [28, WeaponName.Negev],
-  [29, WeaponName.SawedOff],
-  [30, WeaponName.Tec9],
-  [32, WeaponName.P2000],
-  [33, WeaponName.MP7],
-  [34, WeaponName.MP9],
-  [35, WeaponName.Nova],
-  [36, WeaponName.P250],
-  [38, WeaponName.Scar20],
-  [39, WeaponName.SG553],
-  [40, WeaponName.Scout],
-  [60, WeaponName.M4A1],
-  [61, WeaponName.USP],
-  [63, WeaponName.CZ75],
-  [64, WeaponName.Revolver],
-]);
 
 function finiteNumber(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
@@ -261,7 +224,7 @@ export async function buildSprayProviderEvidence(input: SprayProviderInput): Pro
         s.player_steam_id === raw.steamId &&
         s.round_number === shot.roundNumber &&
         sameTickFrame(s, raw) &&
-        s.weapon_name === weaponNames.get(item) &&
+        s.weapon_name === getEvidenceWeaponName(item) &&
         !s.is_player_controlling_bot,
     );
     if (sameRawShots.length === 1 && dbShots.length === 1) dbById.set(id, dbShots[0]);
@@ -310,7 +273,7 @@ export async function buildSprayProviderEvidence(input: SprayProviderInput): Pro
         d.attacker_steam_id === segment.shooterSteamId &&
         d.tick >= startTick &&
         d.tick <= endTick &&
-        d.weapon_name === weaponNames.get(segment.itemDefinitionIndex) &&
+        d.weapon_name === getEvidenceWeaponName(segment.itemDefinitionIndex) &&
         d.health_damage > 0 &&
         d.victim_steam_id !== targetSteamId,
     );

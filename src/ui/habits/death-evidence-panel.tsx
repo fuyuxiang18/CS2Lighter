@@ -8,6 +8,8 @@ import { ServerPushMessageName } from 'csdm/server/messages/server-push-message-
 import { useWebSocketClient } from 'csdm/ui/hooks/use-web-socket-client';
 import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { ReviewButton } from './review-button';
+import { DeathRiskPanel, DeathRiskCoverage } from './death-risk-panel';
+import { DeathMechanicsTable } from './death-mechanics-table';
 
 function replayPath(record: DeathReviewRecord, tick: number) {
   return `${buildMatch2dViewerRoundPath(record.checksum, record.roundNumber)}?${new URLSearchParams({ player: record.steamId, tick: String(tick) })}`;
@@ -216,36 +218,27 @@ function EvidenceResults({ report, record }: { report: DeathEvidenceReport; reco
     'no-continuous-burst': t`No continuous firing burst in this window`,
   };
   const reasonLabel = (reason: string) => reasons[reason] ?? reasons[reason.split(':')[0]] ?? reason;
-  const titles = {
-    spray_center_rising: t`Spray center rises above the target`,
-    spray_center_falling: t`Spray center falls below the target`,
-    spray_center_lateral_crossings: t`Spray center crosses the target repeatedly`,
-  };
-  const actions = {
-    spray_center_rising: t`Practice the same weapon in short bursts. Keep the later shots level with the target, then extend the burst gradually.`,
-    spray_center_falling: t`Shorten the burst and reduce downward correction. Compare the first few shots with the later shots at the same distance.`,
-    spray_center_lateral_crossings: t`Practice holding one target through a short burst. Reduce alternating horizontal corrections before adding a target switch.`,
-  };
   const motionTitles = {
     firing_rise: t`Firing direction rises during the burst`,
     firing_fall: t`Firing direction lowers during the burst`,
     firing_lateral_swings: t`Firing direction swings from side to side`,
   };
-  const motionActions = {
-    firing_rise: t`Compare the rising direction with the target's movement. If the target stayed level, practice short bursts at the same distance and extend them gradually.`,
-    firing_fall: t`Compare the falling direction with the target's movement. If the target stayed level, practice shorter bursts and compare your first and last firing directions.`,
-    firing_lateral_swings: t`Replay this burst and check whether each turn followed a target switch. Practice holding one target first, then add a deliberate switch.`,
-  };
   const motions = report.spray.motion ?? [];
-  const exposureCount = report.exposures.length;
-  const motionCount = motions.length;
+  const mechanicsReasons = {
+    'shot-state-incomplete': t`The player's state around the firing instant is incomplete.`,
+    'weapon-profile-unverified': t`This demo's weapon profile has not been verified.`,
+    'shot-accuracy-missing': t`The native shot accuracy parameters are missing.`,
+    'no-material-accuracy-loss': t`No material loss from the stationary accuracy baseline was recorded.`,
+    'accuracy-component-unverified': t`The accuracy change cannot be assigned to movement, landing or previous shots.`,
+    'target-exchange-unverified': t`This shot could not be linked uniquely to a target exchange.`,
+    'target-body-clock-unverified': t`Target body geometry and its firing-time alignment are unavailable.`,
+  };
   const decoded = report.coverage.decodedTicks;
   const requested = report.coverage.requestedTicks;
   const evidenceReasons = [
     ...new Set([...report.geometry.reasons, ...(report.gunlineAnalysis?.reasons ?? []), ...report.spray.reasons]),
   ];
   const lineStatuses = { clear: t`Unobstructed`, blocked: t`Blocked`, unknown: t`Needs evidence` };
-  const evaluatedLines = report.gunlines.filter((line) => line.status !== 'unknown').length;
   const nearestLines = new Map<string, DeathEvidenceReport['gunlines'][number]>();
   for (const line of report.gunlines) {
     if (line.tick > report.deathTick) continue;
@@ -254,126 +247,96 @@ function EvidenceResults({ report, record }: { report: DeathEvidenceReport; reco
   }
   return (
     <div className="flex min-w-0 flex-col gap-16">
-      <div className="grid grid-cols-2 gap-12">
-        <div className="rounded-8 bg-gray-75 p-12">
-          <p className="text-caption text-gray-700">
-            <Trans>Multi-opponent firing-line windows</Trans>
-          </p>
-          <p className="mt-4 text-heading tabular-nums">{evaluatedLines > 0 ? exposureCount : '—'}</p>
-        </div>
-        <div className="rounded-8 bg-gray-75 p-12">
-          <p className="text-caption text-gray-700">
-            <Trans>Recorded firing-direction patterns</Trans>
-          </p>
-          <p className="mt-4 text-heading tabular-nums">{report.spray.points.length > 0 ? motionCount : '—'}</p>
-        </div>
-      </div>
-      {report.exposures.map((exposure) => {
-        const enemies = exposure.enemyIds.length;
-        const duration = ((exposure.endTick - exposure.startTick + 1) / report.tickrate).toFixed(2);
-        const angle = exposure.minimumAngleDegrees.toFixed(1);
-        return (
-          <article
-            key={`${exposure.startTick}:${exposure.endTick}:${exposure.enemyIds.join(',')}`}
-            className="rounded-8 border border-accent-muted bg-accent-soft p-12"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-8">
-              <h4 className="text-body-strong">
-                <Trans>{enemies} opponents with clear firing lines</Trans>
-              </h4>
-              <EvidenceLink record={record} tick={exposure.startTick} />
-            </div>
-            <p className="mt-8 text-body">
-              <Trans>
-                {duration} s · at least {angle}° between firing lines
-              </Trans>
-            </p>
-            <p className="mt-8 text-body">
-              <Trans>Use cover to remove one firing line before extending the duel.</Trans>
-            </p>
-          </article>
-        );
-      })}
-      {nearestLines.size > 0 && (
-        <details className="rounded-8 border border-gray-300">
-          <summary className="cursor-pointer p-12 text-body">
-            <Trans>Opponent directions near the death</Trans>
-          </summary>
-          <div className="flex flex-col gap-8 border-t border-gray-300 p-12">
-            {Array.from(nearestLines.values(), (line, index) => {
-              const number = index + 1;
-              const opponent = line.enemySteamId === record.killerSteamId ? t`Killer` : t`Opponent ${number}`;
-              const angle = line.facingOffset?.toFixed(1);
-              return (
-                <div
-                  key={line.enemySteamId}
-                  className="flex flex-wrap items-center justify-between gap-8 rounded-4 bg-gray-75 p-8"
-                >
-                  <div className="min-w-0 text-body">
-                    <span className="font-semibold">{opponent}</span> · {lineStatuses[line.status]}
-                    {angle !== undefined && (
-                      <p className="mt-4 text-caption text-gray-700">
-                        <Trans>{angle}° between their facing direction and you</Trans>
-                      </p>
-                    )}
-                  </div>
-                  <EvidenceLink record={record} tick={line.tick} />
+      <DeathRiskPanel report={report.risk} record={record} />
+      {report.mechanics && <DeathMechanicsTable evidence={report.mechanics} record={record} />}
+      <details className="rounded-8 border border-gray-300">
+        <summary className="cursor-pointer p-12 text-body-strong">
+          <Trans>Firing lines and shot traces</Trans>
+        </summary>
+        <div className="flex min-w-0 flex-col gap-12 border-t border-gray-300 p-12">
+          {report.exposures.map((exposure) => {
+            const enemies = exposure.enemyIds.length;
+            const duration = ((exposure.endTick - exposure.startTick) / report.tickrate).toFixed(2);
+            const angle = exposure.minimumAngleDegrees.toFixed(1);
+            return (
+              <article
+                key={`${exposure.startTick}:${exposure.endTick}:${exposure.enemyIds.join(',')}`}
+                className="rounded-8 border border-gray-300 bg-gray-75 p-12"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-8">
+                  <h4 className="text-body-strong">
+                    <Trans>{enemies} opponents with clear firing lines</Trans>
+                  </h4>
+                  <EvidenceLink record={record} tick={exposure.startTick} />
                 </div>
-              );
-            })}
-          </div>
-        </details>
-      )}
-      <FiringChart report={report} />
-      {motions.map((motion) => {
-        const shots = motion.shotIds.length;
-        const degrees = motion.degrees.toFixed(1);
-        const turns = motion.turns;
-        return (
-          <article
-            key={`${motion.burstId}:${motion.code}`}
-            className="rounded-8 border border-accent-muted bg-accent-soft p-12"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-8">
-              <h4 className="text-body-strong">{motionTitles[motion.code]}</h4>
-              <EvidenceLink record={record} tick={motion.startTick} />
-            </div>
-            <p className="mt-8 text-caption text-gray-700">
-              {motion.code === 'firing_lateral_swings' ? (
-                <Trans>
-                  {shots} shots · {turns} turns · {degrees}° horizontal range
-                </Trans>
-              ) : (
-                <Trans>
-                  {shots} shots · {degrees}° vertical change
-                </Trans>
-              )}
-            </p>
-            <p className="mt-8 text-body">{motionActions[motion.code]}</p>
-          </article>
-        );
-      })}
-      {report.spray.findings.map((finding, index) => {
-        const degrees = finding.peakOutsideDegrees.toFixed(1);
-        const shots = finding.shotIds.length;
-        return (
-          <article
-            key={`${finding.code}:${finding.eventTick}:${index}`}
-            className="rounded-8 border border-gray-300 p-12"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-8">
-              <h4 className="text-body-strong">{titles[finding.code]}</h4>
-              <EvidenceLink record={record} tick={finding.eventTick} />
-            </div>
-            <p className="mt-8 text-caption text-gray-700">
-              <Trans>
-                {shots} shots · peak {degrees}° outside the target
-              </Trans>
-            </p>
-            <p className="mt-8 text-body">{actions[finding.code]}</p>
-          </article>
-        );
-      })}
+                <p className="mt-8 text-body">
+                  <Trans>
+                    {duration} s · at least {angle}° between firing lines
+                  </Trans>
+                </p>
+              </article>
+            );
+          })}
+          {nearestLines.size > 0 && (
+            <details className="rounded-8 border border-gray-300">
+              <summary className="cursor-pointer p-12 text-body">
+                <Trans>Opponent directions near the death</Trans>
+              </summary>
+              <div className="flex flex-col gap-8 border-t border-gray-300 p-12">
+                {Array.from(nearestLines.values(), (line, index) => {
+                  const number = index + 1;
+                  const opponent = line.enemySteamId === record.killerSteamId ? t`Killer` : t`Opponent ${number}`;
+                  const angle = line.facingOffset?.toFixed(1);
+                  return (
+                    <div
+                      key={line.enemySteamId}
+                      className="flex flex-wrap items-center justify-between gap-8 rounded-4 bg-gray-75 p-8"
+                    >
+                      <div className="min-w-0 text-body">
+                        <span className="font-semibold">{opponent}</span> · {lineStatuses[line.status]}
+                        {angle !== undefined && (
+                          <p className="mt-4 text-caption text-gray-700">
+                            <Trans>{angle}° between their facing direction and you</Trans>
+                          </p>
+                        )}
+                      </div>
+                      <EvidenceLink record={record} tick={line.tick} />
+                    </div>
+                  );
+                })}
+              </div>
+            </details>
+          )}
+          <FiringChart report={report} />
+          {motions.map((motion) => {
+            const shots = motion.shotIds.length;
+            const degrees = motion.degrees.toFixed(1);
+            const turns = motion.turns;
+            return (
+              <article
+                key={`${motion.burstId}:${motion.code}`}
+                className="rounded-8 border border-gray-300 bg-gray-75 p-12"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-8">
+                  <h4 className="text-body-strong">{motionTitles[motion.code]}</h4>
+                  <EvidenceLink record={record} tick={motion.startTick} />
+                </div>
+                <p className="mt-8 text-caption text-gray-700">
+                  {motion.code === 'firing_lateral_swings' ? (
+                    <Trans>
+                      {shots} shots · {turns} turns · {degrees}° horizontal range
+                    </Trans>
+                  ) : (
+                    <Trans>
+                      {shots} shots · {degrees}° vertical change
+                    </Trans>
+                  )}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+      </details>
       <details className="rounded-8 border border-gray-300">
         <summary className="cursor-pointer p-12 text-body">
           <Trans>
@@ -381,6 +344,32 @@ function EvidenceResults({ report, record }: { report: DeathEvidenceReport; reco
           </Trans>
         </summary>
         <div className="flex flex-col gap-12 border-t border-gray-300 p-12">
+          {report.risk && <DeathRiskCoverage report={report.risk} />}
+          {report.mechanics && report.mechanics.reasons.length > 0 && (
+            <div className="flex flex-col gap-8">
+              <h4 className="text-body-strong">
+                <Trans>Accuracy evidence</Trans>
+              </h4>
+              {report.mechanics.reasons.map((reason) => {
+                const shots = report
+                  .mechanics!.measurements.flatMap((measurement, index) =>
+                    measurement.reasons.includes(reason) ? [index + 1] : [],
+                  )
+                  .join(', ');
+                return (
+                  <p key={reason} className="text-caption text-gray-700">
+                    {mechanicsReasons[reason]}
+                    {shots && (
+                      <>
+                        {' '}
+                        <Trans>Shots: {shots}</Trans>
+                      </>
+                    )}
+                  </p>
+                );
+              })}
+            </div>
+          )}
           <p className="text-body">
             {report.geometry.mapName} ·{' '}
             {report.geometry.match === 'installed-build-matched' ? t`Map version matched` : t`Map version pending`}
@@ -517,7 +506,7 @@ function EvidenceSession({ record }: { record: DeathReviewRecord }) {
     prepare: t`Preparing this death window`,
     decode: t`Reading demo evidence`,
     map: t`Preparing map geometry`,
-    evaluate: t`Checking firing lines and spray`,
+    evaluate: t`Checking operation risks`,
   };
   const completed = state?.completedTicks ?? 0;
   const total = state?.totalTicks ?? 0;
@@ -529,7 +518,7 @@ function EvidenceSession({ record }: { record: DeathReviewRecord }) {
     >
       <div className="flex flex-wrap items-center justify-between gap-12">
         <h3 className="text-body-strong">
-          <Trans>Firing lines and spray</Trans>
+          <Trans>Operation review</Trans>
         </h3>
         {active && (
           <ReviewButton onClick={() => void control('cancel')} disabled={controlling}>
@@ -538,7 +527,7 @@ function EvidenceSession({ record }: { record: DeathReviewRecord }) {
         )}
         {state?.status === 'completed' && (
           <ReviewButton onClick={() => void control('refresh')} disabled={controlling}>
-            <Trans>Refresh evidence</Trans>
+            {state.report?.risk ? <Trans>Refresh evidence</Trans> : <Trans>Run operation review</Trans>}
           </ReviewButton>
         )}
       </div>

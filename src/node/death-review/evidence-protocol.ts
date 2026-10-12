@@ -64,6 +64,8 @@ export type EvidenceShot = {
   playerEntityId: string | null;
   steamId: string | null;
   raw: Record<string, unknown>;
+  /** Only explicitly transmitted values. Absent cvars are never inferred from engine defaults. */
+  conVars?: Record<string, string>;
 };
 export type EvidenceHeader = {
   type: 'header';

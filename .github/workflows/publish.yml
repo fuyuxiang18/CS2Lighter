@@ -4,6 +4,12 @@ on:
   push:
     tags: ['v*.*.*']
   workflow_dispatch:
+    inputs:
+      replace_v073:
+        description: 'Replace v0.7.3 with the explicitly authorized death-risk redesign'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -26,9 +32,12 @@ jobs:
           cache-dependency-path: tools/death-evidence/go.sum
       - name: Validate version
         shell: pwsh
+        env:
+          REPLACE_V073: ${{ github.event_name == 'workflow_dispatch' && inputs.replace_v073 }}
         run: |
           $version = (Get-Content package.json | ConvertFrom-Json).version
-          if ($env:GITHUB_REF -ne "refs/tags/v$version") { throw 'Run this workflow on the tag matching package.json.' }
+          $replacement = $env:REPLACE_V073 -eq 'true' -and $version -eq '0.7.3' -and $env:GITHUB_REF -eq 'refs/heads/main'
+          if (!$replacement -and $env:GITHUB_REF -ne "refs/tags/v$version") { throw 'Run this workflow on the tag matching package.json.' }
       - run: vp check --no-fmt
       - run: vp run test
       - run: vp run deadcode
@@ -44,17 +53,31 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          REPLACE_V073: ${{ github.event_name == 'workflow_dispatch' && inputs.replace_v073 }}
         run: |
           $version = (Get-Content package.json | ConvertFrom-Json).version
           $tag = "v$version"
+          $replacement = $env:REPLACE_V073 -eq 'true' -and $version -eq '0.7.3' -and $env:GITHUB_REF -eq 'refs/heads/main'
+          foreach ($asset in @("dist/CS2Lighter-$version-x64.exe", "dist/CS2Lighter-$version-x64.exe.blockmap", 'dist/latest.yml')) {
+            if (!(Test-Path -LiteralPath $asset) -or (Get-Item -LiteralPath $asset).Length -eq 0) { throw "Missing release asset: $asset" }
+          }
           $existing = gh release view $tag --json isDraft 2>$null
           if ($LASTEXITCODE -eq 0) {
-            if (!(($existing | ConvertFrom-Json).isDraft)) { throw "Release $tag is already public. Do not replace published updates." }
+            if (!(($existing | ConvertFrom-Json).isDraft)) {
+              if (!$replacement) { throw "Release $tag is already public. Do not replace published updates." }
+              # Hide the feed while replacing all three assets; never expose a partially updated manifest.
+              gh release edit $tag --draft=true
+              if ($LASTEXITCODE -ne 0) { throw 'Could not make the explicitly authorized replacement private' }
+            }
           } else {
             gh release create $tag --draft --verify-tag --title "CS2Lighter $version" --notes-file "releases/$version.md"
             if ($LASTEXITCODE -ne 0) { throw 'Could not create release draft' }
           }
           gh release upload $tag "dist/CS2Lighter-$version-x64.exe" "dist/CS2Lighter-$version-x64.exe.blockmap" "dist/latest.yml" --clobber
           if ($LASTEXITCODE -ne 0) { throw 'Release stays draft because upload failed' }
-          gh release edit $tag --draft=false --latest
+          if ($replacement) {
+            gh api --method PATCH "repos/$env:GITHUB_REPOSITORY/git/refs/tags/$tag" -f "sha=$env:GITHUB_SHA" -F force=true
+            if ($LASTEXITCODE -ne 0) { throw 'Release stays draft because tag replacement failed' }
+          }
+          gh release edit $tag --draft=false --latest --notes-file "releases/$version.md"
           if ($LASTEXITCODE -ne 0) { throw 'Could not publish release' }

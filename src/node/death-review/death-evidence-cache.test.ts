@@ -4,7 +4,10 @@ import { mkdtemp, readFile, rm, writeFile, stat } from 'node:fs/promises';
 import { gzipSync, gunzipSync } from 'node:zlib';
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import type { DeathEvidenceReport } from 'csdm/common/types/death-evidence';
-import { readDeathEvidenceCache, writeDeathEvidenceCache } from './death-evidence-cache';
+import type { DeathRiskInput } from 'csdm/common/types/death-risk';
+import { DEATH_RISK_REVISION } from 'csdm/common/death-review/death-risk-rules';
+import { buildDeathRiskReport } from './death-risk-engine';
+import { readDeathEvidenceCache, readDeathRiskReports, writeDeathEvidenceCache } from './death-evidence-cache';
 import { advanceDemoCacheGeneration, getDemoCacheGeneration } from 'csdm/node/demo-cache/cache-generation';
 
 const directories: string[] = [];
@@ -34,6 +37,63 @@ afterEach(async () => {
 });
 
 describe('per-demo advanced death evidence cache', () => {
+  it('recomputes rule revisions from compressed facts and keeps internal frame data off the UI response', async () => {
+    const folder = await directory();
+    const facts: DeathRiskInput = {
+      version: 1,
+      eligible: false,
+      subjectId: report.steamId,
+      startTick: 1,
+      deathTick: 10,
+      tickrate: 64,
+      enemyIds: [],
+      teammateIds: [],
+      frames: [],
+      shots: [],
+      events: [],
+      precision: [],
+      aim: [],
+      cover: [],
+      support: [],
+      interventions: [],
+      coverage: {
+        events: true,
+        shots: true,
+        weaponState: false,
+        flash: false,
+        precision: false,
+        aim: false,
+        repeekInterventions: false,
+      },
+    };
+    const saved = {
+      ...report,
+      matchRevision: 'a'.repeat(64),
+      riskFacts: facts,
+      risk: { ...buildDeathRiskReport(facts), ruleRevision: 'previous-rules' },
+    };
+    await writeDeathEvidenceCache(folder, 'one', saved, new AbortController().signal);
+    const disk = JSON.parse(gunzipSync(await readFile(path.join(folder, 'abc.json.gz'))).toString('utf8'));
+    expect(typeof disk.entries[0].report.riskFacts).toBe('string');
+    const loaded = await readDeathEvidenceCache(folder, report, 'one');
+    expect(loaded?.risk?.ruleRevision).toBe(DEATH_RISK_REVISION);
+    expect(loaded?.riskFacts).toBeUndefined();
+    expect(loaded?.spray).toEqual(report.spray);
+    expect(
+      (await readDeathRiskReports(folder, 'abc', saved.matchRevision)).get(`${report.steamId}:${report.deathId}`),
+    ).toEqual(loaded?.risk);
+    expect((await readDeathRiskReports(folder, 'abc', 'b'.repeat(64))).size).toBe(0);
+  });
+  it('drops malformed optional risk without losing the original saved measurements', async () => {
+    const folder = await directory();
+    const saved = {
+      ...report,
+      risk: { version: 1, ruleRevision: DEATH_RISK_REVISION, findings: null },
+      mechanics: { measurements: null, reasons: [] },
+    } as unknown as DeathEvidenceReport;
+    await writeDeathEvidenceCache(folder, 'one', saved, new AbortController().signal);
+    expect(await readDeathEvidenceCache(folder, report, 'one')).toEqual(report);
+  });
   it('reuses saved evidence without its demo only for the same match revision, independent of the current map', async () => {
     const folder = await directory();
     const saved = { ...report, matchRevision: 'a'.repeat(64) };

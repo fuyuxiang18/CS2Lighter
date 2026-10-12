@@ -20,6 +20,13 @@ import type { Source2ModelResourceResult } from 'csdm/node/death-review/source2-
 
 type ReadyMap = Extract<Awaited<ReturnType<typeof resolveVisibilityMap>>, { status: 'ready' }>;
 type Bound = { min: VisibilityVector; max: VisibilityVector };
+export type GunlineFrameContext = {
+  tick: number;
+  source: string;
+  reason: string | null;
+  /** Trace another reference-point segment against exactly this frame's environment. */
+  trace: (from: VisibilityVector, to: VisibilityVector) => Promise<VisibilityTrace>;
+};
 export type GunlineEntityBounds =
   | { status: 'bounded'; bounds: Bound; source: string }
   | { status: 'non-rendering'; source: string }
@@ -32,6 +39,7 @@ type Input = {
   map: ReadyMap;
   resolveEntityBounds: (entity: EvidenceEntity) => Promise<GunlineEntityBounds>;
   signal?: AbortSignal;
+  onFrame?: (context: GunlineFrameContext) => void;
 };
 type Result = {
   basis: 'environment-eye-reference';
@@ -197,6 +205,26 @@ export async function buildGunlineEvidence(input: Input): Promise<Result> {
       observerEye: target.eyes,
       enemies: [] as Parameters<typeof findMultipleEnemyExposure>[0][number]['enemies'],
     };
+    const blockedReason =
+      frameReason ?? (unbounded.length ? `unbounded-dynamic-model:${[...new Set(unbounded)].sort().join(',')}` : null);
+    const traceLine = (from: VisibilityVector, to: VisibilityVector): Promise<VisibilityTrace> =>
+      blockedReason
+        ? Promise.resolve(unknown())
+        : traceVisibilityMeshGunline({
+            mesh: input.map.mesh,
+            provenance: input.map.provenance,
+            viewer: { eye: from, eyeCertified: true },
+            target: { referencePoint: to, reference: 'decoded-eye', referenceCertified: true },
+            dynamics: { complete: true, opaqueVolumes: [], unknownVolumes: volumes },
+            clearanceUnits: 0.1,
+            signal: input.signal,
+          });
+    input.onFrame?.({
+      tick: frame.tick,
+      source: `map:${input.map.manifest.sourceFingerprint}:tick:${frame.tick}`,
+      reason: blockedReason,
+      trace: traceLine,
+    });
     for (const enemy of frame.players) {
       if (
         enemy.team === target.team ||
@@ -206,24 +234,13 @@ export async function buildGunlineEvidence(input: Input): Promise<Result> {
         !/^\d{17}$/.test(enemy.steamId)
       )
         continue;
-      const blockedReason =
-        frameReason ??
-        (unbounded.length ? `unbounded-dynamic-model:${[...new Set(unbounded)].sort().join(',')}` : null);
       let trace: VisibilityTrace;
       let reason: string;
       if (blockedReason) {
         trace = unknown();
         reason = blockedReason;
       } else {
-        trace = await traceVisibilityMeshGunline({
-          mesh: input.map.mesh,
-          provenance: input.map.provenance,
-          viewer: { eye: enemy.eyes, eyeCertified: true },
-          target: { referencePoint: target.eyes, reference: 'decoded-eye', referenceCertified: true },
-          dynamics: { complete: true, opaqueVolumes: [], unknownVolumes: volumes },
-          clearanceUnits: 0.1,
-          signal: input.signal,
-        });
+        trace = await traceLine(enemy.eyes, target.eyes);
         reason = trace.reason;
       }
       if (trace.status === 'unknown') reasons.add(reason);

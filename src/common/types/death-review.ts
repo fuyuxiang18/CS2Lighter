@@ -1,16 +1,10 @@
 import type { DemoSource } from './counter-strike';
 import type { PersonalStatsSide } from './personal-stats';
 import type { ReviewBattleRequest } from './review-batch';
+import type { DeathRiskReport } from './death-risk';
 
 export type DeathKind = 'enemy' | 'team' | 'self' | 'world' | 'unknown';
-export type DeathRuleCategory =
-  | 'mechanics'
-  | 'exposure'
-  | 'utility'
-  | 'trading'
-  | 'objectives'
-  | 'resources'
-  | 'context';
+type DeathRuleCategory = 'mechanics' | 'exposure' | 'utility' | 'trading' | 'objectives' | 'resources' | 'context';
 export type DeathSignal = 'shots' | 'positions' | 'visibility' | 'input' | 'weapon-state' | 'communication';
 type DeathMeasureUnit = 'seconds' | 'units' | 'speed' | 'degrees' | 'count' | 'damage' | 'health' | 'armor';
 export type DeathMeasure = { key: string; value: number; unit: DeathMeasureUnit };
@@ -60,6 +54,8 @@ export type DeathReviewRecord = {
   teammatesAlive: number | null;
   enemiesAlive: number | null;
   findings: DeathFinding[];
+  /** Read from the separate advanced-evidence cache, never inferred from legacy labels. */
+  risk?: DeathRiskReport;
   evaluatedRules: string[];
   missingSignals: DeathSignal[];
   timeline: DeathTimelineEvent[];
@@ -95,7 +91,7 @@ export type DeathReviewPage = {
   page: number;
   pageSize: number;
   total: number;
-  totals: { deaths: number; flagged: number; needsData: number };
+  totals: { deaths: number; flagged: number; needsData: number; analyzed?: number };
   coverage: { availableMatches: number; readyMatches: number; missingMatches: number; failedMatches: number };
   progress: DeathReviewProgress;
 };

@@ -1,6 +1,8 @@
 import { expect, it, vi } from 'vite-plus/test';
 import { DemoSource, GameMode, TeamNumber } from 'csdm/common/types/counter-strike';
 import type { DeathReviewRecord } from 'csdm/common/types/death-review';
+import type { DeathRiskReport } from 'csdm/common/types/death-risk';
+import { DEATH_RISK_REVISION, DEATH_RISK_RULES } from 'csdm/common/death-review/death-risk-rules';
 import type { DeathMatchDescriptor } from './death-review-cache';
 import { DeathReviewService } from './death-review-service';
 
@@ -77,6 +79,36 @@ function deferred<T>() {
   return { promise, resolve };
 }
 
+function riskReport(matched = false): DeathRiskReport {
+  return {
+    version: 1,
+    ruleRevision: DEATH_RISK_REVISION,
+    status: 'evaluated',
+    findings: matched
+      ? [
+          {
+            id: 'risk-13',
+            ruleId: 'r13',
+            relatedRuleIds: [],
+            startTick: 990,
+            endTick: 1000,
+            priority: 95,
+            targetIds: [otherId],
+            evidence: [{ code: 'incoming-hit', tick: 1000, values: { damage: 40 }, sources: ['event:damage'] }],
+            advice: { code: 'wait-out-blindness-in-cover', values: {} },
+          },
+        ]
+      : [],
+    selectedFindingIds: matched ? ['risk-13'] : [],
+    evaluations: DEATH_RISK_RULES.map((rule) => ({
+      ruleId: rule.id,
+      status: matched && rule.id === 'r13' ? 'matched' : 'clear',
+      reasons: [],
+      findingIds: matched && rule.id === 'r13' ? ['risk-13'] : [],
+    })),
+  };
+}
+
 it('returns a progress snapshot before generation and then reuses each all-player cache', async () => {
   const { service, dependencies } = fixture([match('a'), match('b')]);
   const pending = deferred<DeathReviewRecord[]>();
@@ -105,6 +137,8 @@ it('filters the full death collection before paging and keeps scope IDs independ
   const { service, caches, dependencies } = fixture();
   const records = Array.from({ length: 55 }, (_, index) =>
     record(index, {
+      evaluatedRules: ['opening_death'],
+      risk: riskReport(index >= 22),
       findings:
         index >= 22
           ? [
@@ -119,24 +153,47 @@ it('filters the full death collection before paging and keeps scope IDs independ
           : [],
     }),
   );
-  records.push(record(60, { steamId: otherId }), record(61, { side: TeamNumber.CT, missingSignals: ['positions'] }));
+  records.push(
+    record(60, { steamId: otherId }),
+    record(61, { side: TeamNumber.CT, evaluatedRules: ['opening_death'], missingSignals: ['positions'] }),
+  );
   caches.set('a', records);
   const filtered = await service.fetch({
     steamId,
     side: TeamNumber.T,
-    findingCode: 'died_flashed',
+    findingCode: 'r13',
     page: 1,
   });
   expect(filtered.total).toBe(33);
   expect(filtered.items).toHaveLength(13);
   expect(filtered.items[0].roundNumber).toBe(43);
-  expect(filtered.totals).toEqual({ deaths: 55, flagged: 33, needsData: 0 });
+  expect(filtered.totals).toEqual({ deaths: 55, flagged: 33, needsData: 0, analyzed: 55 });
   const all = await service.fetch({ steamId, side: TeamNumber.T });
   expect(all.progress.id).toBe(filtered.progress.id);
   const otherSide = await service.fetch({ steamId, side: TeamNumber.CT, filter: 'needs-data' });
   expect(otherSide.progress.id).not.toBe(filtered.progress.id);
   expect(otherSide.total).toBe(1);
   expect(dependencies.build).not.toHaveBeenCalled();
+});
+
+it('does not count legacy state tags as action risks or silently treat missing evidence as analyzed', async () => {
+  const { service, caches } = fixture();
+  caches.set('a', [
+    record(0, {
+      evaluatedRules: ['opening_death'],
+      findings: [
+        { code: 'first_shot_high_speed', category: 'mechanics', kind: 'review', evidenceTicks: [1000], measures: [] },
+      ],
+    }),
+    record(1, { evaluatedRules: ['opening_death'], risk: riskReport() }),
+    record(2, { evaluatedRules: ['opening_death'], risk: riskReport(true) }),
+  ]);
+  const all = await service.fetch({ steamId });
+  expect(all.totals).toEqual({ deaths: 3, flagged: 1, needsData: 1, analyzed: 2 });
+  const flagged = await service.fetch({ steamId, filter: 'flagged' });
+  expect(flagged.items.map((item) => item.id)).toEqual(['a:2']);
+  const missing = await service.fetch({ steamId, filter: 'needs-data' });
+  expect(missing.items.map((item) => item.id)).toEqual(['a:0']);
 });
 
 it('cancels without saving late results, does not restart on fetch, and resumes only on explicit retry', async () => {

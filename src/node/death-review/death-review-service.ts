@@ -243,15 +243,23 @@ export class DeathReviewService {
           a.eventTick - b.eventTick ||
           a.id.localeCompare(b.id),
       );
-    const flagged = all.filter((record) => record.findings.some((finding) => finding.kind === 'review'));
-    const needsData = all.filter((record) => record.missingSignals.length > 0);
+    const hasRisk = (record: DeathReviewRecord) => (record.risk?.findings.length ?? 0) > 0;
+    const needsEvidence = (record: DeathReviewRecord) =>
+      record.kind === 'enemy' && record.evaluatedRules.length > 0 && record.risk?.status !== 'evaluated';
+    const flagged = all.filter(hasRisk);
+    const needsData = all.filter(needsEvidence);
     const filtered = all.filter(
       (record) =>
         (payload.kind === undefined || record.kind === payload.kind) &&
         (payload.findingCode === undefined ||
-          record.findings.some((finding) => finding.code === payload.findingCode)) &&
-        (payload.filter !== 'flagged' || record.findings.some((finding) => finding.kind === 'review')) &&
-        (payload.filter !== 'needs-data' || record.missingSignals.length > 0),
+          record.findings.some((finding) => finding.code === payload.findingCode) ||
+          record.risk?.findings.some(
+            (finding) =>
+              finding.ruleId === payload.findingCode ||
+              finding.relatedRuleIds.some((ruleId) => ruleId === payload.findingCode),
+          )) &&
+        (payload.filter !== 'flagged' || hasRisk(record)) &&
+        (payload.filter !== 'needs-data' || needsEvidence(record)),
     );
     const pageSize = 20;
     const page = Math.min(payload.page ?? 0, Math.max(0, Math.ceil(filtered.length / pageSize) - 1));
@@ -260,7 +268,12 @@ export class DeathReviewService {
       page,
       pageSize,
       total: filtered.length,
-      totals: { deaths: all.length, flagged: flagged.length, needsData: needsData.length },
+      totals: {
+        deaths: all.length,
+        flagged: flagged.length,
+        needsData: needsData.length,
+        analyzed: all.filter((record) => record.risk !== undefined).length,
+      },
       coverage: {
         availableMatches: matches.length,
         readyMatches: inspected.ready.size,

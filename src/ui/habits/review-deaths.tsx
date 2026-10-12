@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { DEATH_RULES } from 'csdm/common/death-review/death-rules';
+import { DEATH_RISK_RULES } from 'csdm/common/death-review/death-risk-rules';
 import { TeamNumber } from 'csdm/common/types/counter-strike';
+import type { DeathEvidenceState } from 'csdm/common/types/death-evidence';
 import type {
   DeathKind,
   DeathReviewPage,
@@ -22,6 +23,8 @@ import { RoutePath } from 'csdm/ui/routes-paths';
 import { DeathReviewDetail, canReplayDeath } from './death-review-detail';
 import { ReviewButton } from './review-button';
 import { useDeathReviewCopy } from './use-death-review-copy';
+import { useDeathRiskCopy } from './use-death-risk-copy';
+import { DEATH_BACKGROUND_CODES, deathRiskPresentation } from './death-review-presentation';
 
 export function ReviewDeaths({ scope }: { scope: DeathReviewScope }) {
   return <DeathList key={JSON.stringify(scope)} scope={scope} />;
@@ -32,6 +35,7 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
   const client = useWebSocketClient();
   const formatDate = useFormatDate();
   const copy = useDeathReviewCopy();
+  const riskCopy = useDeathRiskCopy();
   const [filter, setFilter] = useState<NonNullable<FetchDeathReviewPage['filter']>>('all');
   const [findingCode, setFindingCode] = useState('all');
   const [kind, setKind] = useState<DeathKind | 'all'>('all');
@@ -51,6 +55,20 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
   const pushSequence = useRef(0);
   const progressPushes = useRef(new Map<string, { sequence: number; progress: DeathReviewProgress }>());
   const scopeKey = JSON.stringify(scope);
+
+  useEffect(() => {
+    const onEvidenceSaved = (next: DeathEvidenceState) => {
+      if (
+        next.status === 'completed' &&
+        next.report?.risk &&
+        next.steamId === scope.steamId &&
+        (!scope.checksum || next.checksum === scope.checksum)
+      )
+        setRevision((value) => value + 1);
+    };
+    client.on(ServerPushMessageName.DeathEvidenceUpdated, onEvidenceSaved);
+    return () => client.off(ServerPushMessageName.DeathEvidenceUpdated, onEvidenceSaved);
+  }, [client, scope.steamId, scope.checksum]);
 
   useEffect(() => {
     const onProgress = (next: DeathReviewProgress) => {
@@ -232,7 +250,7 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
             <Trans>Every death</Trans>
           </h2>
           <p className="text-body text-gray-700">
-            <Trans>Follow each death through its events, rule checks, and one action to practice.</Trans>
+            <Trans>Find the action to improve, inspect the evidence, and review the fight.</Trans>
           </p>
         </div>
         <Link className="text-body text-accent" to={RoutePath.RecordingQueue}>
@@ -333,29 +351,35 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
         <>
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-3">
             {[
-              { value: 'all' as const, title: t`All deaths`, count: data.totals.deaths },
-              { value: 'flagged' as const, title: t`With review points`, count: data.totals.flagged },
-              { value: 'needs-data' as const, title: t`Missing extra data`, count: data.totals.needsData },
+              { title: t`All deaths`, count: data.totals.deaths },
+              { title: t`Operation reviews saved`, count: data.totals.analyzed ?? 0 },
+              { title: t`Deaths with operation risks`, count: data.totals.flagged },
             ].map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                aria-pressed={filter === item.value}
-                className={`flex min-w-0 flex-col gap-8 rounded-12 border p-16 text-left ${filter === item.value ? 'border-accent-muted bg-accent-soft text-accent' : 'border-gray-300 bg-gray-100 text-gray-800'}`}
-                onClick={() => {
-                  if (filter === item.value && page === 0) return;
-                  setFilter(item.value);
-                  resetPage();
-                }}
+              <div
+                key={item.title}
+                className="flex min-w-0 flex-col gap-8 rounded-12 border border-gray-300 bg-gray-100 p-16 text-left text-gray-800"
               >
                 <span className="text-caption">{item.title}</span>
                 <strong className="text-heading tabular-nums">{item.count}</strong>
-              </button>
+              </div>
             ))}
           </div>
           <div className="flex flex-wrap items-end gap-12">
             <Select
-              label={t`Rule`}
+              label={t`Analysis status`}
+              value={filter}
+              onChange={(value) => {
+                setFilter(value);
+                resetPage();
+              }}
+              options={[
+                { value: 'all' as const, label: t`All deaths` },
+                { value: 'flagged' as const, label: t`With operation risks` },
+                { value: 'needs-data' as const, label: t`Awaiting analysis or evidence` },
+              ]}
+            />
+            <Select
+              label={t`Risk or background`}
               value={findingCode}
               onChange={(value) => {
                 if (findingCode === value && page === 0) return;
@@ -363,10 +387,14 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
                 resetPage();
               }}
               options={[
-                { value: 'all', label: t`All rules` },
-                ...DEATH_RULES.filter((rule) => rule.support !== 'unavailable').map((rule) => ({
-                  value: rule.code,
-                  label: copy.rules[rule.code]?.title ?? rule.code,
+                { value: 'all', label: t`All risks and backgrounds` },
+                ...DEATH_RISK_RULES.map((rule) => ({
+                  value: rule.id,
+                  label: `${rule.id.toUpperCase()} · ${riskCopy.titles[rule.id]}`,
+                })),
+                ...DEATH_BACKGROUND_CODES.map((code) => ({
+                  value: code,
+                  label: copy.rules[code].title,
                 })),
               ]}
             />
@@ -400,8 +428,10 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
                   const round = record.roundNumber;
                   const selected = selectedId === record.id;
                   const queued = queueItem(record);
-                  const reviewed = record.findings.filter((finding) => finding.kind === 'review');
-                  const badges = (reviewed.length ? reviewed : record.findings).slice(0, 2);
+                  const risk = deathRiskPresentation(record.risk);
+                  const badges = DEATH_BACKGROUND_CODES.filter((code) =>
+                    record.findings.some((finding) => finding.code === code),
+                  ).slice(0, 2);
                   return (
                     <article
                       key={record.id}
@@ -424,26 +454,32 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
                             {record.weapon ? ` · ${record.weapon}` : ''}
                           </span>
                           <span className="flex flex-wrap gap-8">
-                            {badges.map((finding) => (
+                            {risk.findings.map((finding) => (
                               <span
-                                key={finding.code}
-                                className="rounded-4 bg-gray-75 px-8 py-4 text-caption text-gray-800"
+                                key={finding.id}
+                                className="rounded-4 bg-accent-soft px-8 py-4 text-caption text-accent"
                               >
-                                {copy.rules[finding.code]?.title ?? finding.code}
+                                {riskCopy.titles[finding.ruleId]}
                               </span>
                             ))}
-                            {record.findings.length === 0 && (
-                              <span className="text-caption text-gray-700">
-                                {record.evaluatedRules.length === 0 ? (
-                                  <Trans>Not applicable here</Trans>
-                                ) : (
-                                  <Trans>No matching rule</Trans>
-                                )}
+                            {badges.map((code) => (
+                              <span key={code} className="rounded-4 bg-gray-75 px-8 py-4 text-caption text-gray-800">
+                                {copy.rules[code].title}
                               </span>
-                            )}
-                            {record.missingSignals.length > 0 && (
-                              <span className="rounded-4 bg-gray-75 px-8 py-4 text-caption text-gray-700">
-                                <Trans>Extra data needed</Trans>
+                            ))}
+                            {risk.status !== 'risks' && (
+                              <span className="text-caption text-gray-700">
+                                {risk.status === 'not-analyzed' ? (
+                                  <Trans>Operation review not run</Trans>
+                                ) : risk.status === 'not-applicable' ? (
+                                  <Trans>Not applicable here</Trans>
+                                ) : risk.status === 'insufficient' ? (
+                                  <Trans>More evidence needed</Trans>
+                                ) : risk.status === 'partial-clear' ? (
+                                  <Trans>No risk found in checked items</Trans>
+                                ) : (
+                                  <Trans>No clear operation risk found</Trans>
+                                )}
                               </span>
                             )}
                           </span>

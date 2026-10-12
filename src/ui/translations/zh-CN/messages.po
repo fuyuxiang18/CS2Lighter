@@ -1276,12 +1276,14 @@ msgid "All"
 msgstr "全部"
 
 #: src/ui/components/inputs/radio/radio-group-tri-state.tsx
+#: src/ui/habits/use-death-risk-copy.ts
 #: src/ui/settings/ui/system-startup-behavior.tsx
 #: src/ui/videos/video-entry.tsx
 msgid "Yes"
 msgstr "是"
 
 #: src/ui/components/inputs/radio/radio-group-tri-state.tsx
+#: src/ui/habits/use-death-risk-copy.ts
 #: src/ui/settings/ui/system-startup-behavior.tsx
 #: src/ui/videos/video-entry.tsx
 msgid "No"
@@ -2671,7 +2673,6 @@ msgid "Trading"
 msgstr "补枪"
 
 #: src/ui/habits/ai-report-content.tsx
-#: src/ui/habits/use-death-review-copy.ts
 msgid "Utility"
 msgstr "道具"
 
@@ -3040,30 +3041,6 @@ msgid "No continuous firing burst in this window"
 msgstr "此时间窗口没有连续射击段"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Spray center rises above the target"
-msgstr "连射中心上移至目标上方"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Spray center falls below the target"
-msgstr "连射中心下移至目标下方"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Spray center crosses the target repeatedly"
-msgstr "连射中心反复横穿目标"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Practice the same weapon in short bursts. Keep the later shots level with the target, then extend the burst gradually."
-msgstr "用同一武器练短连射，让后续射击方向保持在目标高度，再逐步增加发数。"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Shorten the burst and reduce downward correction. Compare the first few shots with the later shots at the same distance."
-msgstr "缩短连射并减少向下修正，在同距离对比前几发与后续射击方向。"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Practice holding one target through a short burst. Reduce alternating horizontal corrections before adding a target switch."
-msgstr "先练短连射保持同一目标，减少左右交替修正，再加入切换目标。"
-
-#: src/ui/habits/death-evidence-panel.tsx
 msgid "Firing direction rises during the burst"
 msgstr "连续射击方向上扬"
 
@@ -3076,16 +3053,32 @@ msgid "Firing direction swings from side to side"
 msgstr "连续射击横向摆动"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Compare the rising direction with the target's movement. If the target stayed level, practice short bursts at the same distance and extend them gradually."
-msgstr "对照目标移动，看上扬是否跟随目标。若目标高度没变，下次先在同距离练短连射，再逐步增加发数。"
+msgid "The player's state around the firing instant is incomplete."
+msgstr "开枪瞬间前后的玩家状态不完整。"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Compare the falling direction with the target's movement. If the target stayed level, practice shorter bursts and compare your first and last firing directions."
-msgstr "对照目标移动，看下压是否跟随目标。若目标高度没变，下次练习缩短连射，并对比首发与末发方向。"
+msgid "This demo's weapon profile has not been verified."
+msgstr "尚未核实这份 demo 对应的武器参数。"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Replay this burst and check whether each turn followed a target switch. Practice holding one target first, then add a deliberate switch."
-msgstr "回看这段连射，检查每次转向是否对应换目标。练习时先保持一个目标，再加入有意的目标切换。"
+msgid "The native shot accuracy parameters are missing."
+msgstr "缺少原始射击精度参数。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "No material loss from the stationary accuracy baseline was recorded."
+msgstr "未记录到明显超出站定基线的精度损失。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "The accuracy change cannot be assigned to movement, landing or previous shots."
+msgstr "无法把精度变化确定归因于移动、落地或前次射击。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "This shot could not be linked uniquely to a target exchange."
+msgstr "本发射击无法唯一对应到具体目标的交火。"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Target body geometry and its firing-time alignment are unavailable."
+msgstr "缺少目标身体几何及其与开枪时刻的对齐数据。"
 
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Unobstructed"
@@ -3096,16 +3089,13 @@ msgid "Blocked"
 msgstr "遮挡"
 
 #: src/ui/habits/death-evidence-panel.tsx
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Needs evidence"
 msgstr "待补证据"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Multi-opponent firing-line windows"
-msgstr "多人枪线片段"
-
-#: src/ui/habits/death-evidence-panel.tsx
-msgid "Recorded firing-direction patterns"
-msgstr "已记录的射击方向模式"
+msgid "Firing lines and shot traces"
+msgstr "枪线与逐发轨迹"
 
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "{enemies} opponents with clear firing lines"
@@ -3116,19 +3106,17 @@ msgid "{duration} s · at least {angle}° between firing lines"
 msgstr "持续 {duration} 秒 · 枪线夹角至少 {angle}°"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Use cover to remove one firing line before extending the duel."
-msgstr "继续接枪前，先借掩体隔开一条枪线。"
-
-#: src/ui/habits/death-evidence-panel.tsx
 msgid "Opponent directions near the death"
 msgstr "死亡前的对手朝向"
 
 #: src/ui/habits/death-evidence-panel.tsx
 #: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/death-risk-panel.tsx
 msgid "Killer"
 msgstr "击杀者"
 
 #: src/ui/habits/death-evidence-panel.tsx
+#: src/ui/habits/death-risk-panel.tsx
 msgid "Opponent {number}"
 msgstr "对手 {number}"
 
@@ -3145,12 +3133,16 @@ msgid "{shots} shots · {degrees}° vertical change"
 msgstr "连续 {shots} 发 · 垂直方向变化 {degrees}°"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "{shots} shots · peak {degrees}° outside the target"
-msgstr "{shots} 发 · 超出目标角度最大 {degrees}°"
-
-#: src/ui/habits/death-evidence-panel.tsx
 msgid "Evidence coverage · {decoded}/{requested} ticks"
 msgstr "证据覆盖 · {decoded}/{requested} tick"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Accuracy evidence"
+msgstr "精度证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Shots: {shots}"
+msgstr "对应射击：{shots}"
 
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Map version matched"
@@ -3177,12 +3169,12 @@ msgid "Preparing map geometry"
 msgstr "正在准备地图几何"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Checking firing lines and spray"
-msgstr "正在核对枪线与连射轨迹"
+msgid "Checking operation risks"
+msgstr "正在检查操作风险"
 
 #: src/ui/habits/death-evidence-panel.tsx
-msgid "Firing lines and spray"
-msgstr "枪线与连射轨迹"
+msgid "Operation review"
+msgstr "操作分析"
 
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Pause extraction"
@@ -3191,6 +3183,10 @@ msgstr "暂停提取"
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Refresh evidence"
 msgstr "重新提取证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
+msgid "Run operation review"
+msgstr "运行操作分析"
 
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "This event has no usable demo timing."
@@ -3232,25 +3228,55 @@ msgstr "继续提取"
 msgid "Error details"
 msgstr "错误详情"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Review condition"
-msgstr "复盘条件"
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Accuracy shot by shot"
+msgstr "逐发精度"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Review this decision"
-msgstr "优先复盘这个选择"
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Shot"
+msgstr "射击"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Recorded state"
-msgstr "记录到的状态"
+#: src/ui/habits/death-mechanics-table.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Weapon"
+msgstr "武器"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Replay and practice"
-msgstr "复盘与训练动作"
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Shot cone half-angle"
+msgstr "射击散布半角"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Evidence at {offset} s"
-msgstr "查看 {offset} 秒的依据"
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Stationary baseline half-angle"
+msgstr "站定基线半角"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Peak speed in shot interval"
+msgstr "射击区间最高速度"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Show more shots"
+msgstr "显示更多射击"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Raw accuracy parameters"
+msgstr "原始精度参数"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Inaccuracy radius"
+msgstr "不精准度半径"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Spread radius"
+msgstr "散布半径"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Stationary inaccuracy radius"
+msgstr "站定基线半径"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Server tick interval"
+msgstr "服务器 tick 区间"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "You"
@@ -3265,11 +3291,13 @@ msgid "Player {number}"
 msgstr "玩家 {number}"
 
 #: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/use-death-review-copy.ts
 msgid "Health before the final hit"
 msgstr "致命一击前血量"
 
 #: src/ui/habits/death-review-detail.tsx
 #: src/ui/habits/use-death-review-copy.ts
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Living teammates"
 msgstr "存活队友数"
 
@@ -3295,8 +3323,12 @@ msgid "Opponent view"
 msgstr "对手视角"
 
 #: src/ui/habits/death-review-detail.tsx
-msgid "Death timeline"
-msgstr "死亡前后时间线"
+msgid "Fight background"
+msgstr "交战背景"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Fight timeline"
+msgstr "交火时间线"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "Open {title} at {offset} seconds in 2D"
@@ -3314,42 +3346,50 @@ msgstr "展开更多事件"
 msgid "No timeline events are available for this death."
 msgstr "此次死亡没有可用的时间线事件。"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Triggered rules"
-msgstr "命中规则"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "Locate {offset} s"
+msgstr "定位 {offset} 秒"
 
-#: src/ui/habits/death-review-detail.tsx
-#: src/ui/habits/review-deaths.tsx
-msgid "Not applicable here"
-msgstr "此处不适用"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "First improvement"
+msgstr "优先改进"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "No current rule matched this death."
-msgstr "此次死亡未命中当前规则。"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "Additional risk"
+msgstr "其他风险"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Rule coverage"
-msgstr "规则检查范围"
+#: src/ui/habits/death-risk-panel.tsx
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Your own flash"
+msgstr "自己的闪光"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "{evaluated} / {supportedCount} automatic rules evaluated"
-msgstr "已检查 {evaluated} / {supportedCount} 项自动规则"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "Advanced while flashed"
+msgstr "致盲期间前压"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Data needed for additional checks"
-msgstr "补充检查所需的数据"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "Next time"
+msgstr "下次怎么做"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Checked"
-msgstr "已检查"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "These saved traces have not been checked with the new operation rules. Run the operation review to add conclusions."
+msgstr "已保存的轨迹尚未执行新操作规则。运行操作分析后可补充结论。"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Needs data"
-msgstr "缺少数据"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "The operation rules do not apply to this death."
+msgstr "这次死亡不适用操作风险规则。"
 
-#: src/ui/habits/death-review-detail.tsx
-msgid "Checks not enabled in this version"
-msgstr "本版本尚未启用的检查项"
+#: src/ui/habits/death-risk-panel.tsx
+msgid "There is not enough evidence for an operation conclusion."
+msgstr "证据不足，暂未给出操作结论。"
+
+#: src/ui/habits/death-risk-panel.tsx
+msgid "No clear operation risk was found in the items that could be checked."
+msgstr "已检查项目未发现明确操作风险。"
+
+#: src/ui/habits/death-risk-panel.tsx
+msgid "No clear operation risk was found in this death."
+msgstr "本次未发现明确操作风险。"
 
 #: src/ui/habits/habits-dashboard.tsx
 #: src/ui/left-bar/left-bar.tsx
@@ -4563,10 +4603,6 @@ msgid "Damage"
 msgstr "伤害"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Weapon"
-msgstr "武器"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Shots fired"
 msgstr "开火次数"
 
@@ -4846,8 +4882,8 @@ msgid "Your older video is still available. Edited review videos are saved separ
 msgstr "旧视频仍可播放，新剪辑视频会单独保存。"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "Follow each death through its events, rule checks, and one action to practice."
-msgstr "逐次还原死亡经过，核对规则依据，找到下一次可以练的动作。"
+msgid "Find the action to improve, inspect the evidence, and review the fight."
+msgstr "找到值得改进的动作，查看证据，回到这次交火。"
 
 #: src/ui/habits/review-deaths.tsx
 msgid "Death review preparation"
@@ -4906,20 +4942,32 @@ msgid "All deaths"
 msgstr "全部死亡"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "With review points"
-msgstr "有复盘检查点"
+msgid "Operation reviews saved"
+msgstr "已保存操作分析"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "Missing extra data"
-msgstr "缺少补充数据"
+msgid "Deaths with operation risks"
+msgstr "存在操作风险的死亡"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "Rule"
-msgstr "规则"
+msgid "Analysis status"
+msgstr "分析状态"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "All rules"
-msgstr "全部规则"
+msgid "With operation risks"
+msgstr "有操作风险"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Awaiting analysis or evidence"
+msgstr "待分析或待补证据"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Risk or background"
+msgstr "风险或背景"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "All risks and backgrounds"
+msgstr "全部风险与背景"
 
 #: src/ui/habits/review-deaths.tsx
 msgid "Death type"
@@ -4942,12 +4990,25 @@ msgid "Outside a numbered round"
 msgstr "未编号回合"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "No matching rule"
-msgstr "未命中规则"
+msgid "Operation review not run"
+msgstr "尚未执行操作分析"
 
 #: src/ui/habits/review-deaths.tsx
-msgid "Extra data needed"
-msgstr "缺少补充数据"
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Not applicable here"
+msgstr "此处不适用"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "More evidence needed"
+msgstr "待补证据"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "No risk found in checked items"
+msgstr "已检查项目无风险"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "No clear operation risk found"
+msgstr "未发现明确操作风险"
 
 #: src/ui/habits/review-deaths.tsx
 #: src/ui/habits/review-duels.tsx
@@ -5051,6 +5112,7 @@ msgid "Round {roundNumber}"
 msgstr "回合 {roundNumber}"
 
 #: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Headshot"
 msgstr "爆头"
@@ -5789,492 +5851,193 @@ msgid "Another AI review is being generated. Wait for it to finish, then refresh
 msgstr "已有 AI 点评正在生成，请等待完成后刷新此面板。"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Opening death"
-msgstr "回合首死"
+msgid "First death"
+msgstr "首死"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Replay first contact with your nearest teammate's position in view. Plan who takes contact and who follows before the next opening."
-msgstr "回看首次接敌时你与最近队友的位置。下次开局前，先约定谁接第一枪、谁跟进。"
+msgid "Early round"
+msgstr "开局阶段"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Died early in the round"
-msgstr "回合前期阵亡"
+msgid "Earlier damage"
+msgstr "此前受伤"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Compare your arrival with the opponent's timing. Rehearse the opening route with one planned stopping point before contact."
-msgstr "对照你和对手的到位时间。练开局路线时，先安排一个接敌前的停顿点。"
+msgid "Damage sequence"
+msgstr "连续受伤记录"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Took damage before the final hit"
-msgstr "致命一击前已受到伤害"
+msgid "Final-shot speed"
+msgstr "末枪速度"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Find the first damage event. Decide where you could break contact or ask for support before taking the next hit."
-msgstr "找到第一次受伤的时刻，确定哪里可以脱离接触，或在下一次中弹前呼叫支援。"
+msgid "First-shot speed"
+msgstr "首枪速度"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Low health before the final hit"
-msgstr "致命一击前血量偏低"
+msgid "Shots while flashed"
+msgstr "致盲期间开火"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check how your health changed the next fight. Practice a covered route that still lets you trade or support the objective."
-msgstr "看剩余血量对下一枪的影响。练一条有掩护、仍能补枪或支持目标的路线。"
+msgid "No return fire"
+msgstr "未记录到回击"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Rapid damage sequence"
-msgstr "短时间连续受伤"
+msgid "Shots without damage"
+msgstr "射击未造成伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Step through the first and final hits. Check how much of your body was exposed when contact began, then rehearse a smaller exposure."
-msgstr "逐步看第一次和最后一次中弹，检查接敌瞬间暴露了多少身体，再练一次更小的露身。"
+msgid "Firing-direction change"
+msgstr "射击方向变化"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Killed by a headshot"
-msgstr "被爆头击杀"
+msgid "Damaged another opponent"
+msgstr "伤到其他对手"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check your movement and cover at first contact. Compare the same position from the opponent's view before changing your peek."
-msgstr "检查接敌时的移动和掩体。调整拉枪方式前，先从对手视角看同一枪位。"
+msgid "Damage dealt to killer"
+msgstr "对击杀者的伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "High movement speed at the final shot"
-msgstr "末枪时移动速度较高"
+msgid "Death after a kill"
+msgstr "击杀后死亡"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Replay the last shot and your movement. Practice stopping before firing at the same range, then compare the next recorded attempt."
-msgstr "回看最后一枪和当时的移动，练习在相同距离停稳再开枪，下次对照新的记录。"
+msgid "Same killer as teammate"
+msgstr "与队友被同一人击杀"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "High movement speed at the first shot"
-msgstr "首枪时移动速度较高"
+msgid "Traded"
+msgstr "已被补枪"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Replay the start of this shooting sequence. Practice arriving, stopping, and firing as separate steps at the same distance."
-msgstr "回到这段射击的起点，在相同距离把到位、停稳、开枪拆开练。"
+msgid "No recorded trade"
+msgstr "未记录到补枪"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Fired during a recorded blind interval"
-msgstr "致盲记录期间开枪"
+msgid "Player advantage"
+msgstr "人数优势"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check what you knew about the enemy's position before the flash. Rehearse holding cover or retreating while a teammate takes contact."
-msgstr "检查被闪之前掌握的敌人位置，练习借掩体等待或后撤，让队友接应当前交战。"
+msgid "Last alive"
+msgstr "最后存活"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "No recorded return fire"
-msgstr "受伤后没有开枪还击记录"
+msgid "Enemy flash"
+msgstr "敌方闪光"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check when you first had a chance to shoot and what you were holding. Rehearse reaching this angle ready to fire or ready to retreat."
-msgstr "看第一次有机会开枪时你在做什么、手里拿着什么。练习以能开枪或能撤退的状态到达这个角度。"
+msgid "Teammate flash"
+msgstr "队友闪光"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Long shot sequence without gun damage"
-msgstr "长连射未造成枪伤"
+msgid "Own flash"
+msgstr "自己闪光"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Watch the target and aim direction through the shot sequence. Practice a shorter burst followed by a reset at this distance."
-msgstr "沿射击序列检查目标和瞄准方向，在相同距离练习缩短连射、停顿后重新开枪。"
+msgid "Recent utility throw"
+msgstr "近期投掷道具"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Short shot sequence without gun damage"
-msgstr "短连射未造成枪伤"
+msgid "Own utility damage"
+msgstr "自身道具伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Replay the first shot and target movement. Practice the same peek with a deliberate stop and one controlled burst."
-msgstr "回看首枪和目标的移动，练同一次拉出时先停稳，再打一组受控的短连射。"
+msgid "Fire damage"
+msgstr "燃烧伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Large direction change between shots"
-msgstr "连续射击间朝向变化较大"
+msgid "HE damage"
+msgstr "高爆手雷伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check whether you switched targets or corrected your aim. Practice clearing one threat at a time before moving to the next."
-msgstr "检查当时是在切换目标，还是修正瞄准。练习先处理一个威胁，再转向下一个。"
+msgid "Flashed an opponent"
+msgstr "闪到对手"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Damaged another enemy before dying"
-msgstr "打伤其他敌人后阵亡"
+msgid "Airborne"
+msgstr "空中"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Compare the enemy you damaged with the player who killed you. Plan cover or teammate support for the second threat."
-msgstr "对照被你打伤的敌人和击杀你的人，为第二个威胁安排掩体或队友接应。"
+msgid "Inspecting weapon"
+msgstr "检视武器"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "High damage dealt to your killer"
-msgstr "已对击杀者造成较高伤害"
+#: src/ui/search/filters/kills-filter.tsx
+msgid "Through smoke"
+msgstr "穿烟"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check the finishing shots and remaining cover. Rehearse finishing one target or calling the damage so a teammate can complete the exchange."
-msgstr "检查收尾几枪和还能利用的掩体。练习完成同一目标的击杀，或及时报出伤害让队友补枪。"
+msgid "Through cover"
+msgstr "穿透掩体"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Died shortly after a kill"
-msgstr "击杀后短时间内阵亡"
+msgid "Multiple damage sources"
+msgstr "多个伤害来源"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Pause at your kill. Practice one immediate reposition or retreat that changes the opponent's next shot."
-msgstr "在击杀发生时暂停，练一个立即换位或脱离的动作，改变对手接下来的枪线。"
+msgid "Crouching"
+msgstr "蹲姿"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Killer had just killed a teammate"
-msgstr "击杀者刚刚击杀了队友"
+msgid "Scoped"
+msgstr "开镜"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check your position when your teammate died. Rehearse reaching the same target with a coordinated timing instead of separate entries."
-msgstr "看队友阵亡时你在哪里，练习用协调好的时机打到同一目标，避免分开进场。"
+msgid "Killer behind aim"
+msgstr "击杀者在朝向后侧"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Your death was traded"
-msgstr "阵亡后被队友补枪"
+msgid "Teammate distance"
+msgstr "队友距离"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check the spacing and timing around the trade. Keep a repeatable setup that also advances the round objective."
-msgstr "检查补枪前后的间距和时机，保留可重复、也能推进回合目标的配合方式。"
+msgid "Holding knife"
+msgstr "持刀"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "No trade within the trade window"
-msgstr "补枪窗口内未被补枪"
+msgid "Holding utility"
+msgstr "持道具"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check the closest teammate's route and sightline. Agree on a follow-up position before attempting the same fight again."
-msgstr "查看最近队友的路线和视角，下次接同一枪前先约定跟进位置。"
+msgid "Holding C4"
+msgstr "手持 C4"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Died with a player-count advantage"
-msgstr "人数优势时阵亡"
+msgid "No armor"
+msgstr "无护甲"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Pause before contact and name what the fight could gain. Practice holding the objective with shared angles when another duel adds little."
-msgstr "在接敌前暂停，说明这枪能换来什么。若收益不大，练习用交叉接应守住目标。"
+msgid "No helmet"
+msgstr "无头盔"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Last teammate alive"
-msgstr "最后一名存活队员"
+msgid "Utility remaining"
+msgstr "剩余道具"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "List the time, bomb state, and last enemy information. Practice choosing one isolated fight or a safe exit from that starting point."
-msgstr "列出剩余时间、炸弹状态和最后的敌人信息，从这个起点练习拆出单挑或安全撤离。"
+msgid "Planting"
+msgstr "正在下包"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Enemy flash active at death"
-msgstr "阵亡时处于敌方闪光致盲记录内"
+msgid "Defusing"
+msgstr "正在拆包"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Check the flash cue and nearest cover. Rehearse turning away or stepping behind cover while your teammate holds contact."
-msgstr "检查闪光预兆和最近掩体，练习转头背闪或退到掩体后，让队友接住交战。"
+msgid "Carrying C4"
+msgstr "携带 C4"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Teammate flash active at death"
-msgstr "阵亡时处于队友闪光致盲记录内"
+msgid "Carrying kit"
+msgstr "携带拆弹器"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Compare the flash call with your exposure. Agree on a clear pop timing and turn-away cue before repeating the entry."
-msgstr "对照报闪时间和你的露身，重复进点前先约定清楚爆点时机和背闪口令。"
+msgid "Post-plant T"
+msgstr "T 下包后"
 
 #: src/ui/habits/use-death-review-copy.ts
-msgid "Your own flash active at death"
-msgstr "阵亡时处于自己闪光致盲记录内"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the bounce and pop position from your view. Practice the throw with your turn and peek included."
-msgstr "从本人视角核对反弹和爆点，把投掷、转头与拉出连起来练。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Threw utility shortly before dying"
-msgstr "投掷道具后短时间内阵亡"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the gap between the throw and the next threat. Rehearse throwing from cover while a teammate protects the exposed angle."
-msgstr "检查投掷到下次接敌之间的空档，练习从掩体后投掷，并让队友保护暴露的方向。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Recent damage from your own utility"
-msgstr "近期受到自己的道具伤害"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the grenade path and your retreat. Practice the same throw with a route that leaves the blast or fire area."
-msgstr "查看道具路径和自己的撤离路线，练同一投法时同时退出爆炸或燃烧区域。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Recent fire damage"
-msgstr "阵亡前近期受到燃烧伤害"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check when the fire appeared and where you could leave it. Rehearse the exit before committing to the position."
-msgstr "看火焰何时出现、可以从哪里离开。下次站进这个位置前，先练好退出路线。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Recent HE grenade damage"
-msgstr "阵亡前近期受到手雷伤害"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check your position when the grenade arrived. Compare nearby cover and spacing before repeating the hold."
-msgstr "检查手雷到达时的站位，再对比附近掩体和与队友的间距。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "You blinded an enemy before dying"
-msgstr "阵亡前曾闪到敌人"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Compare the blinded enemy with your killer and the flash timing. Practice using the flash with a teammate ready to cover the other threat."
-msgstr "对照被闪敌人与击杀者，以及闪光的时机。练这颗闪时，让队友准备好覆盖另一处威胁。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Airborne at death"
-msgstr "阵亡时处于空中"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check whether this was a jump for information, movement, or a fight. Rehearse landing behind cover before committing to a shot."
-msgstr "看这次起跳是为了获取信息、移动还是交战。练习先落在掩体后，再决定开枪。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Inspecting weapon at death"
-msgstr "阵亡时正在检视武器"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check what you expected beyond the next corner. Keep your weapon ready through uncleared areas on the next route."
-msgstr "检查你对下一个拐角的预期。下一次经过未清理的区域时，保持武器就绪。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Killed through smoke"
-msgstr "被穿烟击杀"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check what revealed your position before the smoke shot. Practice crossing on a different line or timing with cover from a teammate."
-msgstr "检查穿烟射击前什么信息暴露了你的位置，练习换一条经过烟雾的路线或时机，并让队友掩护。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Killed through penetrated cover"
-msgstr "被穿透掩体击杀"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Identify the surface between you and the killer. Rehearse a second position that changes the shot line after your location is revealed."
-msgstr "找出双方之间被穿透的表面。位置暴露后，练习换到能改变枪线的第二个位置。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Recent damage from multiple enemies"
-msgstr "近期受到多名敌人伤害"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Replay each damage source. Practice using cover or a smoke to reduce the threats you must handle at once."
-msgstr "依次查看各个伤害来源，练习用掩体或烟雾减少需要同时处理的威胁。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Crouched near the death event"
-msgstr "死亡前快照中处于蹲伏"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check how crouching affected your exposure and ability to leave. Compare a standing or repositioning option in the same spot."
-msgstr "检查蹲下如何改变露身和撤离能力，在同一个点对比站立或换位的选择。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Scoped near the death event"
-msgstr "死亡前快照中处于开镜"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the angle you held and the threat outside it. Rehearse unscoping or changing position when that threat becomes likely."
-msgstr "检查正在架的角度及其外侧威胁，练习在另一处威胁出现前收镜或换位。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Killer behind your recorded aim direction"
-msgstr "击杀者位于记录朝向的后方"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check when the rear route became open. Agree on who watches it and rehearse a position that reduces the turn needed."
-msgstr "检查后路何时放空，约定由谁看守，并练一个能减少转身幅度的站位。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Large distance to the nearest living teammate"
-msgstr "距最近存活队友较远"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Compare your route with the nearest teammate at contact. Plan a meeting point or a supported timing before repeating the entry."
-msgstr "对照接敌时双方的路线，下次重复进点前先确定会合点或有接应的启动时机。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Knife held near the death event"
-msgstr "死亡前快照中手持刀"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Mark the last safe point on the route. Practice drawing your weapon there before entering the next uncleared area."
-msgstr "标出这条路线最后一个安全位置，练习在那里切出武器，再进入下一段未清理区域。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Grenade held near the death event"
-msgstr "死亡前快照中手持道具"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check whether cover or a teammate protected the setup. Practice preparing this grenade from a protected position."
-msgstr "检查准备道具时有没有掩体或队友保护，练习从受保护的位置完成准备。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Bomb held near the death event"
-msgstr "死亡前快照中手持 C4"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the route to the plant and who covered it. Rehearse drawing the bomb only once the planting position is protected."
-msgstr "检查走向下包点的路线及掩护者，练习确认下包位置有保护后再拿出 C4。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "No armor near the death event"
-msgstr "死亡前快照中没有护甲"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the team's buy plan and the fight distance. Choose a route and trade setup suited to this equipment on the next low buy."
-msgstr "检查全队购买计划和交战距离，下次低配局选择适合当前装备的路线与补枪组合。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Headshot with no helmet in the snapshot"
-msgstr "快照中没有头盔且被爆头"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Compare your buy with the team's plan and expected opposing weapons. Set the next purchase before choosing the fight."
-msgstr "对照自己的购买、全队计划和预期敌方武器，下一局先确定装备，再选择交战方式。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Remaining grenades near the death event"
-msgstr "死前仍携带道具"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Pick one remaining grenade and find a useful moment before contact. Practice that throw as part of the route."
-msgstr "选一颗剩余道具，在接敌前找一个有用的使用时机，把这次投掷加入路线练习。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Planting near the death event"
-msgstr "死亡前快照中正在下包"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the plant position and uncovered approach. Rehearse the plant with a teammate covering the active threat."
-msgstr "检查下包位置和无人覆盖的来路，练习让队友架住当前威胁后再下包。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Defusing near the death event"
-msgstr "死亡前快照中正在拆包"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Compare the remaining time with the known threats. Practice the tap, cover, and teammate timing from this bomb position."
-msgstr "对照剩余时间和已知威胁，从这个包位练习点包、掩护以及队友跟进的时机。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Carrying the bomb near the death event"
-msgstr "死亡前快照中携带 C4"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check where the bomb would fall and how teammates could recover it. Rehearse a route that keeps the objective reachable."
-msgstr "检查 C4 会掉在哪里、队友能否回收，练一条让回合目标仍然可接近的路线。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Carrying a defuse kit near the death event"
-msgstr "死亡前快照中携带拆弹器"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check the kit's location and the retake plan. Agree on who carries it and which route keeps it available for the defuse."
-msgstr "检查拆弹器落点和回防计划，先约定由谁携带，以及哪条路线能让拆弹器到达包点。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "T-side death after the plant"
-msgstr "T 方下包后阵亡"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check whether the clock or bomb could force the opponent to act. Practice a covered post-plant position with a tradeable angle."
-msgstr "看时间或炸弹能否逼对手主动行动，练一个有掩体、队友能补枪的守包站位。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "CT-side death after the plant"
-msgstr "CT 方下包后阵亡"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Check time, kit availability, and teammate routes before contact. Rehearse the retake order with one shared target at a time."
-msgstr "接敌前检查时间、拆弹器和队友路线，练习一次只处理一个共同目标的回防顺序。"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Enemies visible at the same time"
-msgstr "同时可见的敌人"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Simultaneous visible firing angles"
-msgstr "同时暴露的可见枪线"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Exposure during a wide peek"
-msgstr "大身位拉出的露身情况"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Repeeking the same angle"
-msgstr "重复拉出同一角度"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Distance from shared cover"
-msgstr "双方与共同掩体的距离"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Crosshair placement"
-msgstr "预瞄位置"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "First-shot inaccuracy"
-msgstr "首发不精准度"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Counter-strafe timing"
-msgstr "急停时机"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Recoil compensation"
-msgstr "压枪补偿"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Mouse corrections"
-msgstr "鼠标修正"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Exposure while reloading"
-msgstr "换弹时暴露"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Empty magazine"
-msgstr "弹匣打空"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Weapon switching delay"
-msgstr "切枪后可开火时间"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Missed trade opportunity"
-msgstr "错失补枪机会"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Use of team information"
-msgstr "团队信息利用"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Rotation decision"
-msgstr "转点决策"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Shooting"
-msgstr "射击表现"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Exposure"
-msgstr "暴露状态"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Teamplay"
-msgstr "团队配合"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Objectives"
-msgstr "回合目标"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Equipment"
-msgstr "装备"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Death context"
-msgstr "死亡背景"
+msgid "Post-plant CT"
+msgstr "CT 下包后"
 
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Enemy kill"
@@ -6296,30 +6059,6 @@ msgstr "环境伤害"
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Unknown cause"
 msgstr "死因未知"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Shot events"
-msgstr "射击事件"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Position snapshots"
-msgstr "位置快照"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Visibility checks"
-msgstr "视线可见性检查"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Movement and mouse input"
-msgstr "移动与鼠标输入"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Weapon state"
-msgstr "武器状态"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Team communication"
-msgstr "团队交流信息"
 
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Damage taken"
@@ -6355,6 +6094,7 @@ msgid "Evidence window"
 msgstr "统计窗口"
 
 #: src/ui/habits/use-death-review-copy.ts
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Health damage"
 msgstr "生命伤害"
 
@@ -6363,10 +6103,12 @@ msgid "Health"
 msgstr "血量"
 
 #: src/ui/habits/use-death-review-copy.ts
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Movement speed"
 msgstr "移动速度"
 
 #: src/ui/habits/use-death-review-copy.ts
+#: src/ui/habits/use-death-risk-copy.ts
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "Shots"
 msgstr "射击次数"
@@ -6399,6 +6141,388 @@ msgstr "手雷"
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Armor"
 msgstr "护甲"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "First shot before stopping"
+msgstr "首枪未急停"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Firing too soon after landing"
+msgstr "落地开枪过早"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Firing again too soon"
+msgstr "续枪过早"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Spray control error"
+msgstr "压枪失误"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Multiple firing lines"
+msgstr "多线暴露"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Overexposed peek"
+msgstr "身位控制过大"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Repeating the same fight"
+msgstr "死磕一条枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Exposed after a kill"
+msgstr "杀后暴露"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Weapon drawn too late"
+msgstr "掏枪过晚"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Poor reload timing"
+msgstr "换弹时机错误"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Poor ammunition management"
+msgstr "子弹管理有误"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Forcing a fight while flashed"
+msgstr "致盲强行对枪"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Fighting without support"
+msgstr "脱节交火"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "At the marked first shot, your weapon was still losing accuracy to movement. Let the stop finish before firing at this distance; practice this weapon with the same stop-and-fire rhythm."
+msgstr "这次首枪发射时，移动仍在影响精度。按图示距离练习这把枪的停步开火，等移动精度恢复再打首枪。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Let this weapon recover after landing before taking the shot. Compare the marked landing and firing times, then rehearse the landing behind cover."
+msgstr "落地后等这把枪恢复精度再开火。对照落地与开枪时刻，在掩体后练习同样的落地开火动作。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Allow this weapon to recover between these bursts. Extend the recorded pause before repeating the same firing rhythm at this distance."
+msgstr "给这把枪留出恢复精度的停顿。对照两段射击的间隔，延长停顿后再练习同样距离的短连射。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Start correcting from the first marked shot that leaves the target. Rehearse this weapon at the same distance with a shorter burst, then extend it while keeping the later shots on target."
+msgstr "从标出的偏离首发开始修正。在同样距离先练短连射，再逐步延长，确保后续射击仍围绕目标。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Use cover to remove one of the marked enemy firing lines before extending the fight. Approach so that you handle one angle at a time."
+msgstr "先用掩体挡住图示中的一条敌方枪线，再继续接敌。调整路线，让自己依次处理不同角度。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Stop at the earlier marked position. Your next movement added an enemy firing line; shorten this peek before choosing whether to extend it."
+msgstr "在标出的较早位置停住。后续移动增加了敌方枪线，先缩短这次拉出的距离，再决定是否继续探出。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The same opponent still controlled this line when you returned. Change the angle or coordinate a new timing with a teammate or utility before taking it again."
+msgstr "重新露身时，同一名对手仍控制着这条枪线。换个角度，或等队友、道具配合后再接。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "After the kill, return along the marked route to cover before taking the next fight. Rehearse the kill and the immediate retreat together."
+msgstr "击杀后沿标出的路线退回掩体，再处理下一名对手。把击杀与立即回撤作为一个完整动作练习。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Complete the weapon switch before entering the marked firing line. Rehearse this route with your gun ready at the corner."
+msgstr "出掩体前先完成切枪。练习这条路线时，把枪械就绪的位置提前到拐角内侧。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Complete the reload behind cover before entering the marked firing line. Avoid combining the reload with this forward movement."
+msgstr "在掩体后完成换弹，再进入图示枪线。不要把换弹和这次前压放在同一个动作里。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Reload or finish switching to a loaded weapon before leaving cover. Check the magazine at the marked point in this route."
+msgstr "出掩体前补弹，或完成向有弹武器的切换。把弹匣检查加入这段接敌路线。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Adjust the order of your throw, turn, recovery and peek. Rehearse the full sequence so that your own flash has ended before you enter this fight."
+msgstr "调整投掷、转头、恢复视野和拉出的顺序。完整练习这套动作，避免自己的闪还在生效就进入交火。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Hold or return to cover while flashed. Resume the peek after the blind interval instead of adding this firing line while unable to see clearly."
+msgstr "被闪时停在掩体后或退回掩体。等致盲结束再拉出，避免视野受影响时继续增加暴露枪线。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Coordinate contact with a teammate or change your route so they can establish a support line. Use the recorded support timing to avoid entering this fight alone."
+msgstr "与队友同步接敌，或调整路线让队友建立支援枪线。对照记录中的支援时机，避免单独开打。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Risk found"
+msgstr "发现风险"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Checked"
+msgstr "已检查"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Recorded action"
+msgstr "动作记录"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Accuracy at the shot"
+msgstr "开枪时的精度"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Shot sequence relative to the target"
+msgstr "相对目标的射击轨迹"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Overlapping enemy firing lines"
+msgstr "同时暴露的敌方枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Your movement opened a firing line"
+msgstr "本人移动新增了枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Position before entering the firing line"
+msgstr "进入枪线前的位置"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Reload started in an enemy firing line"
+msgstr "在敌方枪线内开始换弹"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Opponent hit during this action"
+msgstr "动作期间受到命中"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "First exchange on this line"
+msgstr "这条枪线的首次交火"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Returned to the same controlled line"
+msgstr "重新进入同一条受控枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Kill before the next exposure"
+msgstr "下一次暴露前的击杀"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Verified cover reachable before the next hit"
+msgstr "下次受击前可到达的掩体"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Contact without an available support line"
+msgstr "接敌时没有可用支援枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Earliest possible teammate support"
+msgstr "队友最早可能建立支援的时间"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Earlier shared firing line"
+msgstr "此前共同控制的枪线"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Accuracy component"
+msgstr "精度影响来源"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Fight distance"
+msgstr "交战距离"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Recovered accuracy half-angle"
+msgstr "恢复后的精度半角"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Shot accuracy half-angle"
+msgstr "本次射击精度半角"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Target half-angle"
+msgstr "目标半角"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Recovered spread radius at this distance"
+msgstr "此距离下稳定散布半径"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Shot spread radius at this distance"
+msgstr "此距离下实际散布半径"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Accuracy recovered at"
+msgstr "精度恢复时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Landed at"
+msgstr "落地时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Previous shot at"
+msgstr "上一枪时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "First shot outside target"
+msgstr "开始偏离的发数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Deviation direction"
+msgstr "偏离方向"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Horizontal reversals"
+msgstr "水平反向次数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Enemy firing lines"
+msgstr "敌方枪线数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Minimum angle between lines"
+msgstr "枪线最小夹角"
+
+#: src/ui/habits/use-death-risk-copy.ts
+#: src/ui/match/grenades/stats/labels/flashbang-labels.tsx
+#: src/ui/videos/video-entry.tsx
+msgid "Duration"
+msgstr "持续时间"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Firing lines before moving"
+msgstr "移动前枪线数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Firing lines after moving"
+msgstr "移动后枪线数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Movement distance"
+msgstr "移动距离"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Magazine"
+msgstr "弹匣余弹"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Weapon ready"
+msgstr "枪械就绪"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Flash source"
+msgstr "闪光来源"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Blind interval ends at"
+msgstr "致盲结束时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Previous contact at"
+msgstr "上次接敌时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Opponent weapon ready"
+msgstr "对手枪械就绪"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Travel time to cover"
+msgstr "到达掩体用时"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Next hit at"
+msgstr "下次受击时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Support can arrive after"
+msgstr "支援最早可达时刻"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Distance from the shared position"
+msgstr "离开原协同位置的距离"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Earlier opponent"
+msgstr "此前对手"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Teammates sharing the earlier line"
+msgstr "此前共同控制枪线的队友数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "This rule needs more evidence."
+msgstr "这项检查需要更多证据。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The evidence timeline is incomplete."
+msgstr "证据时间线不完整。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The weapon's accuracy at the firing instant has not been verified."
+msgstr "尚未核实开枪瞬间的武器精度。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Target-relative firing directions are not available."
+msgstr "缺少相对目标的射击方向。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Some enemy firing lines could not be checked."
+msgstr "部分敌方枪线无法检查。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The new firing line could not be attributed to your movement."
+msgstr "无法确认新增枪线由本人移动造成。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Weapon readiness or the moment of entering the firing line is missing."
+msgstr "缺少武器就绪状态或进入枪线时刻的证据。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Blind timing or the moment of entering the firing line is missing."
+msgstr "缺少致盲区间或进入枪线时刻的证据。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The repeat peek, opponent readiness or intervening support is incomplete."
+msgstr "重复露身、对手就绪状态或期间支援记录不完整。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "A usable retreat route has not been verified."
+msgstr "尚未核实可用的回撤路线。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The earliest possible teammate support has not been verified."
+msgstr "尚未核实队友最早可能建立支援的时间。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The change from a shared firing line to unsupported contact has not been verified."
+msgstr "尚未核实从共同枪线到失去直接支援的队形变化。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "This death is outside the supported competitive fight context."
+msgstr "这次死亡不属于支持的正式交火场景。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Movement"
+msgstr "移动"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Landing"
+msgstr "落地"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Previous shots"
+msgstr "前次射击"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Above the target"
+msgstr "高于目标"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Below the target"
+msgstr "低于目标"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Across the target"
+msgstr "左右越过目标"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Other player"
+msgstr "其他玩家"
 
 #: src/ui/habits/use-review-clip-messages.ts
 msgid "Not recorded"
@@ -7675,11 +7799,6 @@ msgstr "每次投掷伤害敌方人数"
 #: src/ui/match/grenades/stats/labels/fire-labels.tsx
 msgid "Average damage per round"
 msgstr "每回合平均伤害"
-
-#: src/ui/match/grenades/stats/labels/flashbang-labels.tsx
-#: src/ui/videos/video-entry.tsx
-msgid "Duration"
-msgstr "持续时间"
 
 #: src/ui/match/grenades/stats/labels/flashbang-labels.tsx
 msgid "Players flashed"
@@ -9806,7 +9925,7 @@ msgstr "成功"
 #: src/ui/player/overview/player-opening-duels-panel.tsx
 msgctxt "Panel label"
 msgid "Traded"
-msgstr "补枪"
+msgstr "已被补枪"
 
 #: src/ui/player/overview/player-opening-duels-panel.tsx
 msgctxt "Panel label"
@@ -9979,10 +10098,6 @@ msgstr "穿墙"
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Jump"
 msgstr "跳杀"
-
-#: src/ui/search/filters/kills-filter.tsx
-msgid "Through smoke"
-msgstr "穿烟"
 
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Collateral"
