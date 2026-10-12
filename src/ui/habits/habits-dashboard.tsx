@@ -32,6 +32,7 @@ import { useSettingsOverlay } from 'csdm/ui/settings/use-settings-overlay';
 import { SettingsCategory } from 'csdm/ui/settings/settings-category';
 import { useImportProgress } from 'csdm/ui/imports/import-progress-provider';
 import { PersonalStatsPanels } from './personal-stats-panels';
+import { ReviewDeaths } from './review-deaths';
 
 type ReviewData = { key: string; summary: HabitsSummary; stats: PersonalStatsSummary; insights: ReviewInsightsSummary };
 
@@ -88,6 +89,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
   const pendingRefresh = useRef(false);
   const importBusy = useRef(false);
   const { mapName, side, source, tab } = preferences;
+  const isDeathReview = page === 'review' && tab === 'deaths';
   const trainingKey = JSON.stringify(preferences.focus?.scope ?? null);
   const requestKey = JSON.stringify([steamId, mapName, side, source, revision, trainingKey]);
   const loading = data?.key !== requestKey && failedKey !== requestKey;
@@ -234,6 +236,7 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
         <nav aria-label={t`Review sections`} className="flex flex-wrap gap-8 border-b border-gray-300 pb-12">
           {[
             { value: 'overview' as const, label: t`Performance dashboard` },
+            { value: 'deaths' as const, label: t`Every death` },
             { value: 'review' as const, label: t`Review priorities` },
             { value: 'duels' as const, label: t`Combat and POV` },
             { value: 'style' as const, label: t`My playing style` },
@@ -250,12 +253,12 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
           ))}
         </nav>
       )}
-      {loading && (
+      {loading && !isDeathReview && (
         <div role="status" className="rounded-12 border border-gray-300 bg-gray-100 p-24 text-gray-700">
           <Trans>Reading your saved match data…</Trans>
         </div>
       )}
-      {failed && (
+      {failed && !isDeathReview && (
         <HabitsPanel title={<Trans>Could not load your review</Trans>}>
           <p role="alert">
             <Trans>Your demo files are unchanged. Retry loading the saved data.</Trans>
@@ -267,7 +270,18 @@ function ReviewContent({ steamId, page }: { steamId: string; page: 'review' | 'm
           </div>
         </HabitsPanel>
       )}
-      {data && (
+      {isDeathReview && (
+        <ReviewDeaths
+          key={revision}
+          scope={{
+            steamId,
+            ...(mapName === 'all' ? {} : { mapName }),
+            ...(source === 'all' ? {} : { source }),
+            ...(side === 'all' ? {} : { side: side === 'ct' ? TeamNumber.CT : TeamNumber.T }),
+          }}
+        />
+      )}
+      {data && !isDeathReview && (
         <div className="flex min-w-0 flex-col gap-20">
           {page === 'review' && tab === 'progress' ? (
             <ReviewProgress insights={data.insights} preferences={preferences} update={update} />

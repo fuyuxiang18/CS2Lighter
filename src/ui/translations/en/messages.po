@@ -2654,6 +2654,7 @@ msgstr "Open the event in 2D"
 #: src/ui/habits/personal-analysis-panels.tsx
 #: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-batch-viewer.tsx
+#: src/ui/habits/review-deaths.tsx
 #: src/ui/habits/review-workbench.tsx
 #: src/ui/habits/tactical-analysis-panels.tsx
 msgid "Round {round}"
@@ -2676,6 +2677,7 @@ msgid "Trading"
 msgstr "Trading"
 
 #: src/ui/habits/ai-report-content.tsx
+#: src/ui/habits/use-death-review-copy.ts
 msgid "Utility"
 msgstr "Utility"
 
@@ -2807,6 +2809,129 @@ msgstr "Saved report"
 msgid "Newly generated · Saved locally"
 msgstr "Newly generated · Saved locally"
 
+#: src/ui/habits/death-review-detail.tsx
+msgid "Review condition"
+msgstr "Review condition"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Review this decision"
+msgstr "Review this decision"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Recorded state"
+msgstr "Recorded state"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Replay and practice"
+msgstr "Replay and practice"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Evidence at {offset} s"
+msgstr "Evidence at {offset} s"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "You"
+msgstr "You"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Killer"
+msgstr "Killer"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Environment"
+msgstr "Environment"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Player {number}"
+msgstr "Player {number}"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Health before the final hit"
+msgstr "Health before the final hit"
+
+#: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Living teammates"
+msgstr "Living teammates"
+
+#: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Living enemies"
+msgstr "Living enemies"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Killer distance"
+msgstr "Killer distance"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Open 2D context"
+msgstr "Open 2D context"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Your view"
+msgstr "Your view"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Opponent view"
+msgstr "Opponent view"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Death timeline"
+msgstr "Death timeline"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Open {title} at {offset} seconds in 2D"
+msgstr "Open {title} at {offset} seconds in 2D"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Locate"
+msgstr "Locate"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Show more events"
+msgstr "Show more events"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "No timeline events are available for this death."
+msgstr "No timeline events are available for this death."
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Triggered rules"
+msgstr "Triggered rules"
+
+#: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/review-deaths.tsx
+msgid "Not applicable here"
+msgstr "Not applicable here"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "No current rule matched this death."
+msgstr "No current rule matched this death."
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Rule coverage"
+msgstr "Rule coverage"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "{evaluated} / {supportedCount} automatic rules evaluated"
+msgstr "{evaluated} / {supportedCount} automatic rules evaluated"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Data needed for additional checks"
+msgstr "Data needed for additional checks"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Checked"
+msgstr "Checked"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Needs data"
+msgstr "Needs data"
+
+#: src/ui/habits/death-review-detail.tsx
+msgid "Checks not enabled in this version"
+msgstr "Checks not enabled in this version"
+
 #: src/ui/habits/habits-dashboard.tsx
 #: src/ui/left-bar/left-bar.tsx
 msgid "Review workspace"
@@ -2893,6 +3018,11 @@ msgid "Performance dashboard"
 msgstr "Performance dashboard"
 
 #: src/ui/habits/habits-dashboard.tsx
+#: src/ui/habits/review-deaths.tsx
+msgid "Every death"
+msgstr "Every death"
+
+#: src/ui/habits/habits-dashboard.tsx
 msgid "Review priorities"
 msgstr "Review priorities"
 
@@ -2921,6 +3051,7 @@ msgid "Your demo files are unchanged. Retry loading the saved data."
 msgstr "Your demo files are unchanged. Retry loading the saved data."
 
 #: src/ui/habits/habits-dashboard.tsx
+#: src/ui/habits/review-deaths.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "Retry"
 msgstr "Retry"
@@ -2944,12 +3075,14 @@ msgstr "Opening position"
 #: src/ui/habits/habits-evidence.tsx
 #: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
 msgid "Kill"
 msgstr "Kill"
 
 #: src/ui/habits/habits-evidence.tsx
 #: src/ui/habits/recording-queue-page.tsx
 #: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
 msgid "Death"
 msgstr "Death"
 
@@ -3304,6 +3437,7 @@ msgid "Budget multi-kill"
 msgstr "Budget multi-kill"
 
 #: src/ui/habits/personal-analysis-panels.tsx
+#: src/ui/habits/use-death-review-copy.ts
 msgid "Bomb planted"
 msgstr "Bomb planted"
 
@@ -4066,6 +4200,7 @@ msgid "Waiting to record"
 msgstr "Waiting to record"
 
 #: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-deaths.tsx
 #: src/ui/habits/review-duels.tsx
 msgid "In this session"
 msgstr "In this session"
@@ -4198,6 +4333,7 @@ msgid "Add selected events to recording queue"
 msgstr "Add selected events to recording queue"
 
 #: src/ui/habits/review-batch-studio.tsx
+#: src/ui/habits/review-deaths.tsx
 #: src/ui/habits/review-duels.tsx
 #: src/ui/match/video/add-video-to-queue-button.tsx
 #: src/ui/videos/resume-or-pause-video-queue-button.tsx
@@ -4290,6 +4426,146 @@ msgstr "Previously saved single POV clip"
 msgid "Your older video is still available. Edited review videos are saved separately."
 msgstr "Your older video is still available. Edited review videos are saved separately."
 
+#: src/ui/habits/review-deaths.tsx
+msgid "Follow each death through its events, rule checks, and one action to practice."
+msgstr "Follow each death through its events, rule checks, and one action to practice."
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death review preparation"
+msgstr "Death review preparation"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Preparing death reviews"
+msgstr "Preparing death reviews"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death review preparation paused"
+msgstr "Death review preparation paused"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Some demos need another attempt"
+msgstr "Some demos need another attempt"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death review data is not ready"
+msgstr "Death review data is not ready"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "{processed} / {totalDemos} demos processed"
+msgstr "{processed} / {totalDemos} demos processed"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death review progress"
+msgstr "Death review progress"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "{successful} ready · {failedDemos} failed"
+msgstr "{successful} ready · {failedDemos} failed"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Pause preparation"
+msgstr "Pause preparation"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Continue and retry missing demos"
+msgstr "Continue and retry missing demos"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Failed demos"
+msgstr "Failed demos"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Loading death review data…"
+msgstr "Loading death review data…"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death reviews could not be loaded."
+msgstr "Death reviews could not be loaded."
+
+#: src/ui/habits/review-deaths.tsx
+msgid "All deaths"
+msgstr "All deaths"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "With review points"
+msgstr "With review points"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Missing extra data"
+msgstr "Missing extra data"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Rule"
+msgstr "Rule"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "All rules"
+msgstr "All rules"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Death type"
+msgstr "Death type"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "All death types"
+msgstr "All death types"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "{totalDeaths} deaths · page {pageNumber} of {pages}"
+msgstr "{totalDeaths} deaths · page {pageNumber} of {pages}"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Loading deaths…"
+msgstr "Loading deaths…"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Outside a numbered round"
+msgstr "Outside a numbered round"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "No matching rule"
+msgstr "No matching rule"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Extra data needed"
+msgstr "Extra data needed"
+
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Video saved"
+msgstr "Video saved"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Record this death"
+msgstr "Record this death"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Close details"
+msgstr "Close details"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Review death"
+msgstr "Review death"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "No deaths match these filters."
+msgstr "No deaths match these filters."
+
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Previous"
+msgstr "Previous"
+
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Next"
+msgstr "Next"
+
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Could not update the recording queue."
+msgstr "Could not update the recording queue."
+
 #: src/ui/habits/review-duels.tsx
 msgid "Your combat events"
 msgstr "Your combat events"
@@ -4329,10 +4605,6 @@ msgid "Add this page to recording queue"
 msgstr "Add this page to recording queue"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Could not update the recording queue."
-msgstr "Could not update the recording queue."
-
-#: src/ui/habits/review-duels.tsx
 msgid "Loading combat events…"
 msgstr "Loading combat events…"
 
@@ -4369,10 +4641,6 @@ msgid "Dealt {damageGiven} / taken {damageTaken}"
 msgstr "Dealt {damageGiven} / taken {damageTaken}"
 
 #: src/ui/habits/review-duels.tsx
-msgid "Video saved"
-msgstr "Video saved"
-
-#: src/ui/habits/review-duels.tsx
 msgid "Add to recording queue"
 msgstr "Add to recording queue"
 
@@ -4383,14 +4651,6 @@ msgstr "2D context"
 #: src/ui/habits/review-duels.tsx
 msgid "No combat events match this selection."
 msgstr "No combat events match this selection."
-
-#: src/ui/habits/review-duels.tsx
-msgid "Previous"
-msgstr "Previous"
-
-#: src/ui/habits/review-duels.tsx
-msgid "Next"
-msgstr "Next"
 
 #: src/ui/habits/review-maps.tsx
 msgid "Your space on the map"
@@ -5108,6 +5368,618 @@ msgstr "The server or model could not accept this visual request, or reported th
 #: src/ui/habits/use-ai-error-message.ts
 msgid "Another AI review is being generated. Wait for it to finish, then refresh this panel."
 msgstr "Another AI review is being generated. Wait for it to finish, then refresh this panel."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Opening death"
+msgstr "Opening death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Replay first contact with your nearest teammate's position in view. Plan who takes contact and who follows before the next opening."
+msgstr "Replay first contact with your nearest teammate's position in view. Plan who takes contact and who follows before the next opening."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Died early in the round"
+msgstr "Died early in the round"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare your arrival with the opponent's timing. Rehearse the opening route with one planned stopping point before contact."
+msgstr "Compare your arrival with the opponent's timing. Rehearse the opening route with one planned stopping point before contact."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Took damage before the final hit"
+msgstr "Took damage before the final hit"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Find the first damage event. Decide where you could break contact or ask for support before taking the next hit."
+msgstr "Find the first damage event. Decide where you could break contact or ask for support before taking the next hit."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Low health before the final hit"
+msgstr "Low health before the final hit"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check how your health changed the next fight. Practice a covered route that still lets you trade or support the objective."
+msgstr "Check how your health changed the next fight. Practice a covered route that still lets you trade or support the objective."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Rapid damage sequence"
+msgstr "Rapid damage sequence"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Step through the first and final hits. Check how much of your body was exposed when contact began, then rehearse a smaller exposure."
+msgstr "Step through the first and final hits. Check how much of your body was exposed when contact began, then rehearse a smaller exposure."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Killed by a headshot"
+msgstr "Killed by a headshot"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check your movement and cover at first contact. Compare the same position from the opponent's view before changing your peek."
+msgstr "Check your movement and cover at first contact. Compare the same position from the opponent's view before changing your peek."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "High movement speed at the final shot"
+msgstr "High movement speed at the final shot"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Replay the last shot and your movement. Practice stopping before firing at the same range, then compare the next recorded attempt."
+msgstr "Replay the last shot and your movement. Practice stopping before firing at the same range, then compare the next recorded attempt."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "High movement speed at the first shot"
+msgstr "High movement speed at the first shot"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Replay the start of this shooting sequence. Practice arriving, stopping, and firing as separate steps at the same distance."
+msgstr "Replay the start of this shooting sequence. Practice arriving, stopping, and firing as separate steps at the same distance."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Fired during a recorded blind interval"
+msgstr "Fired during a recorded blind interval"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check what you knew about the enemy's position before the flash. Rehearse holding cover or retreating while a teammate takes contact."
+msgstr "Check what you knew about the enemy's position before the flash. Rehearse holding cover or retreating while a teammate takes contact."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "No recorded return fire"
+msgstr "No recorded return fire"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check when you first had a chance to shoot and what you were holding. Rehearse reaching this angle ready to fire or ready to retreat."
+msgstr "Check when you first had a chance to shoot and what you were holding. Rehearse reaching this angle ready to fire or ready to retreat."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Long shot sequence without gun damage"
+msgstr "Long shot sequence without gun damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Watch the target and aim direction through the shot sequence. Practice a shorter burst followed by a reset at this distance."
+msgstr "Watch the target and aim direction through the shot sequence. Practice a shorter burst followed by a reset at this distance."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Short shot sequence without gun damage"
+msgstr "Short shot sequence without gun damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Replay the first shot and target movement. Practice the same peek with a deliberate stop and one controlled burst."
+msgstr "Replay the first shot and target movement. Practice the same peek with a deliberate stop and one controlled burst."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Large direction change between shots"
+msgstr "Large direction change between shots"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check whether you switched targets or corrected your aim. Practice clearing one threat at a time before moving to the next."
+msgstr "Check whether you switched targets or corrected your aim. Practice clearing one threat at a time before moving to the next."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Damaged another enemy before dying"
+msgstr "Damaged another enemy before dying"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare the enemy you damaged with the player who killed you. Plan cover or teammate support for the second threat."
+msgstr "Compare the enemy you damaged with the player who killed you. Plan cover or teammate support for the second threat."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "High damage dealt to your killer"
+msgstr "High damage dealt to your killer"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the finishing shots and remaining cover. Rehearse finishing one target or calling the damage so a teammate can complete the exchange."
+msgstr "Check the finishing shots and remaining cover. Rehearse finishing one target or calling the damage so a teammate can complete the exchange."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Died shortly after a kill"
+msgstr "Died shortly after a kill"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Pause at your kill. Practice one immediate reposition or retreat that changes the opponent's next shot."
+msgstr "Pause at your kill. Practice one immediate reposition or retreat that changes the opponent's next shot."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Killer had just killed a teammate"
+msgstr "Killer had just killed a teammate"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check your position when your teammate died. Rehearse reaching the same target with a coordinated timing instead of separate entries."
+msgstr "Check your position when your teammate died. Rehearse reaching the same target with a coordinated timing instead of separate entries."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Your death was traded"
+msgstr "Your death was traded"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the spacing and timing around the trade. Keep a repeatable setup that also advances the round objective."
+msgstr "Check the spacing and timing around the trade. Keep a repeatable setup that also advances the round objective."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "No trade within the trade window"
+msgstr "No trade within the trade window"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the closest teammate's route and sightline. Agree on a follow-up position before attempting the same fight again."
+msgstr "Check the closest teammate's route and sightline. Agree on a follow-up position before attempting the same fight again."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Died with a player-count advantage"
+msgstr "Died with a player-count advantage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Pause before contact and name what the fight could gain. Practice holding the objective with shared angles when another duel adds little."
+msgstr "Pause before contact and name what the fight could gain. Practice holding the objective with shared angles when another duel adds little."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Last teammate alive"
+msgstr "Last teammate alive"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "List the time, bomb state, and last enemy information. Practice choosing one isolated fight or a safe exit from that starting point."
+msgstr "List the time, bomb state, and last enemy information. Practice choosing one isolated fight or a safe exit from that starting point."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Enemy flash active at death"
+msgstr "Enemy flash active at death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the flash cue and nearest cover. Rehearse turning away or stepping behind cover while your teammate holds contact."
+msgstr "Check the flash cue and nearest cover. Rehearse turning away or stepping behind cover while your teammate holds contact."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Teammate flash active at death"
+msgstr "Teammate flash active at death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare the flash call with your exposure. Agree on a clear pop timing and turn-away cue before repeating the entry."
+msgstr "Compare the flash call with your exposure. Agree on a clear pop timing and turn-away cue before repeating the entry."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Your own flash active at death"
+msgstr "Your own flash active at death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the bounce and pop position from your view. Practice the throw with your turn and peek included."
+msgstr "Check the bounce and pop position from your view. Practice the throw with your turn and peek included."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Threw utility shortly before dying"
+msgstr "Threw utility shortly before dying"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the gap between the throw and the next threat. Rehearse throwing from cover while a teammate protects the exposed angle."
+msgstr "Check the gap between the throw and the next threat. Rehearse throwing from cover while a teammate protects the exposed angle."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Recent damage from your own utility"
+msgstr "Recent damage from your own utility"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the grenade path and your retreat. Practice the same throw with a route that leaves the blast or fire area."
+msgstr "Check the grenade path and your retreat. Practice the same throw with a route that leaves the blast or fire area."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Recent fire damage"
+msgstr "Recent fire damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check when the fire appeared and where you could leave it. Rehearse the exit before committing to the position."
+msgstr "Check when the fire appeared and where you could leave it. Rehearse the exit before committing to the position."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Recent HE grenade damage"
+msgstr "Recent HE grenade damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check your position when the grenade arrived. Compare nearby cover and spacing before repeating the hold."
+msgstr "Check your position when the grenade arrived. Compare nearby cover and spacing before repeating the hold."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "You blinded an enemy before dying"
+msgstr "You blinded an enemy before dying"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare the blinded enemy with your killer and the flash timing. Practice using the flash with a teammate ready to cover the other threat."
+msgstr "Compare the blinded enemy with your killer and the flash timing. Practice using the flash with a teammate ready to cover the other threat."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Airborne at death"
+msgstr "Airborne at death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check whether this was a jump for information, movement, or a fight. Rehearse landing behind cover before committing to a shot."
+msgstr "Check whether this was a jump for information, movement, or a fight. Rehearse landing behind cover before committing to a shot."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Inspecting weapon at death"
+msgstr "Inspecting weapon at death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check what you expected beyond the next corner. Keep your weapon ready through uncleared areas on the next route."
+msgstr "Check what you expected beyond the next corner. Keep your weapon ready through uncleared areas on the next route."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Killed through smoke"
+msgstr "Killed through smoke"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check what revealed your position before the smoke shot. Practice crossing on a different line or timing with cover from a teammate."
+msgstr "Check what revealed your position before the smoke shot. Practice crossing on a different line or timing with cover from a teammate."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Killed through penetrated cover"
+msgstr "Killed through penetrated cover"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Identify the surface between you and the killer. Rehearse a second position that changes the shot line after your location is revealed."
+msgstr "Identify the surface between you and the killer. Rehearse a second position that changes the shot line after your location is revealed."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Recent damage from multiple enemies"
+msgstr "Recent damage from multiple enemies"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Replay each damage source. Practice using cover or a smoke to reduce the threats you must handle at once."
+msgstr "Replay each damage source. Practice using cover or a smoke to reduce the threats you must handle at once."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Crouched near the death event"
+msgstr "Crouched near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check how crouching affected your exposure and ability to leave. Compare a standing or repositioning option in the same spot."
+msgstr "Check how crouching affected your exposure and ability to leave. Compare a standing or repositioning option in the same spot."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Scoped near the death event"
+msgstr "Scoped near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the angle you held and the threat outside it. Rehearse unscoping or changing position when that threat becomes likely."
+msgstr "Check the angle you held and the threat outside it. Rehearse unscoping or changing position when that threat becomes likely."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Killer behind your recorded aim direction"
+msgstr "Killer behind your recorded aim direction"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check when the rear route became open. Agree on who watches it and rehearse a position that reduces the turn needed."
+msgstr "Check when the rear route became open. Agree on who watches it and rehearse a position that reduces the turn needed."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Large distance to the nearest living teammate"
+msgstr "Large distance to the nearest living teammate"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare your route with the nearest teammate at contact. Plan a meeting point or a supported timing before repeating the entry."
+msgstr "Compare your route with the nearest teammate at contact. Plan a meeting point or a supported timing before repeating the entry."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Knife held near the death event"
+msgstr "Knife held near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Mark the last safe point on the route. Practice drawing your weapon there before entering the next uncleared area."
+msgstr "Mark the last safe point on the route. Practice drawing your weapon there before entering the next uncleared area."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Grenade held near the death event"
+msgstr "Grenade held near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check whether cover or a teammate protected the setup. Practice preparing this grenade from a protected position."
+msgstr "Check whether cover or a teammate protected the setup. Practice preparing this grenade from a protected position."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Bomb held near the death event"
+msgstr "Bomb held near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the route to the plant and who covered it. Rehearse drawing the bomb only once the planting position is protected."
+msgstr "Check the route to the plant and who covered it. Rehearse drawing the bomb only once the planting position is protected."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "No armor near the death event"
+msgstr "No armor near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the team's buy plan and the fight distance. Choose a route and trade setup suited to this equipment on the next low buy."
+msgstr "Check the team's buy plan and the fight distance. Choose a route and trade setup suited to this equipment on the next low buy."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Headshot with no helmet in the snapshot"
+msgstr "Headshot with no helmet in the snapshot"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare your buy with the team's plan and expected opposing weapons. Set the next purchase before choosing the fight."
+msgstr "Compare your buy with the team's plan and expected opposing weapons. Set the next purchase before choosing the fight."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Remaining grenades near the death event"
+msgstr "Remaining grenades near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Pick one remaining grenade and find a useful moment before contact. Practice that throw as part of the route."
+msgstr "Pick one remaining grenade and find a useful moment before contact. Practice that throw as part of the route."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Planting near the death event"
+msgstr "Planting near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the plant position and uncovered approach. Rehearse the plant with a teammate covering the active threat."
+msgstr "Check the plant position and uncovered approach. Rehearse the plant with a teammate covering the active threat."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Defusing near the death event"
+msgstr "Defusing near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Compare the remaining time with the known threats. Practice the tap, cover, and teammate timing from this bomb position."
+msgstr "Compare the remaining time with the known threats. Practice the tap, cover, and teammate timing from this bomb position."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Carrying the bomb near the death event"
+msgstr "Carrying the bomb near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check where the bomb would fall and how teammates could recover it. Rehearse a route that keeps the objective reachable."
+msgstr "Check where the bomb would fall and how teammates could recover it. Rehearse a route that keeps the objective reachable."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Carrying a defuse kit near the death event"
+msgstr "Carrying a defuse kit near the death event"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check the kit's location and the retake plan. Agree on who carries it and which route keeps it available for the defuse."
+msgstr "Check the kit's location and the retake plan. Agree on who carries it and which route keeps it available for the defuse."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "T-side death after the plant"
+msgstr "T-side death after the plant"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check whether the clock or bomb could force the opponent to act. Practice a covered post-plant position with a tradeable angle."
+msgstr "Check whether the clock or bomb could force the opponent to act. Practice a covered post-plant position with a tradeable angle."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "CT-side death after the plant"
+msgstr "CT-side death after the plant"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Check time, kit availability, and teammate routes before contact. Rehearse the retake order with one shared target at a time."
+msgstr "Check time, kit availability, and teammate routes before contact. Rehearse the retake order with one shared target at a time."
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Enemies visible at the same time"
+msgstr "Enemies visible at the same time"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Simultaneous visible firing angles"
+msgstr "Simultaneous visible firing angles"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Exposure during a wide peek"
+msgstr "Exposure during a wide peek"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Repeeking the same angle"
+msgstr "Repeeking the same angle"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Distance from shared cover"
+msgstr "Distance from shared cover"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Crosshair placement"
+msgstr "Crosshair placement"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "First-shot inaccuracy"
+msgstr "First-shot inaccuracy"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Counter-strafe timing"
+msgstr "Counter-strafe timing"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Recoil compensation"
+msgstr "Recoil compensation"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Mouse corrections"
+msgstr "Mouse corrections"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Exposure while reloading"
+msgstr "Exposure while reloading"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Empty magazine"
+msgstr "Empty magazine"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Weapon switching delay"
+msgstr "Weapon switching delay"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Missed trade opportunity"
+msgstr "Missed trade opportunity"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Use of team information"
+msgstr "Use of team information"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Rotation decision"
+msgstr "Rotation decision"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Shooting"
+msgstr "Shooting"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Exposure"
+msgstr "Exposure"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Teamplay"
+msgstr "Teamplay"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Objectives"
+msgstr "Objectives"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Equipment"
+msgstr "Equipment"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Death context"
+msgstr "Death context"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Enemy kill"
+msgstr "Enemy kill"
+
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/search/filters/kills-filter.tsx
+msgid "Team kill"
+msgstr "Team kill"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Self-inflicted death"
+msgstr "Self-inflicted death"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "World damage"
+msgstr "World damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Unknown cause"
+msgstr "Unknown cause"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Shot events"
+msgstr "Shot events"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Position snapshots"
+msgstr "Position snapshots"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Visibility checks"
+msgstr "Visibility checks"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Movement and mouse input"
+msgstr "Movement and mouse input"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Weapon state"
+msgstr "Weapon state"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Team communication"
+msgstr "Team communication"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Damage taken"
+msgstr "Damage taken"
+
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Damage dealt"
+msgstr "Damage dealt"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Shot fired"
+msgstr "Shot fired"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Flash blindness"
+msgstr "Flash blindness"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Utility thrown"
+msgstr "Utility thrown"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Bomb defused"
+msgstr "Bomb defused"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Time between events"
+msgstr "Time between events"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Evidence window"
+msgstr "Evidence window"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Health damage"
+msgstr "Health damage"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Health"
+msgstr "Health"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Movement speed"
+msgstr "Movement speed"
+
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Shots"
+msgstr "Shots"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Angle"
+msgstr "Angle"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Enemy damage sources"
+msgstr "Enemy damage sources"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Blind time remaining"
+msgstr "Blind time remaining"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Penetrated surfaces"
+msgstr "Penetrated surfaces"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Distance"
+msgstr "Distance"
+
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Grenades"
+msgstr "Grenades"
+
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Armor"
+msgstr "Armor"
 
 #: src/ui/habits/use-review-clip-messages.ts
 msgid "Not recorded"
@@ -7210,10 +8082,6 @@ msgid "Blinded deaths"
 msgstr "Blinded deaths"
 
 #: src/ui/match/rounds/round/players-information.tsx
-msgid "Grenades"
-msgstr "Grenades"
-
-#: src/ui/match/rounds/round/players-information.tsx
 msgid "Flash"
 msgstr "Flash"
 
@@ -7229,14 +8097,6 @@ msgstr "Molotov"
 #: src/ui/match/weapons/weapons-accuracy.tsx
 msgid "Damages"
 msgstr "Damages"
-
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Shots"
-msgstr "Shots"
-
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Damage dealt"
-msgstr "Damage dealt"
 
 #: src/ui/match/rounds/round/players-information.tsx
 msgid "Opponents hurt"
@@ -8707,10 +9567,6 @@ msgstr "Jump"
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Through smoke"
 msgstr "Through smoke"
-
-#: src/ui/search/filters/kills-filter.tsx
-msgid "Team kill"
-msgstr "Team kill"
 
 #: src/ui/search/filters/kills-filter.tsx
 msgid "Collateral"

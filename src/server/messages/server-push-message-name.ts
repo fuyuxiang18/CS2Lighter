@@ -1,4 +1,5 @@
 import type { Settings } from 'csdm/node/settings/settings';
+import type { DeathReviewProgress } from 'csdm/common/types/death-review';
 import type { ReviewClip, ReviewPovState } from 'csdm/common/types/review-clip';
 import type { ReviewBatch } from 'csdm/common/types/review-batch';
 import type { RecordingQueue } from 'csdm/common/types/recording-queue';
@@ -21,6 +22,7 @@ import type { CounterStrikeErrorPayload } from 'csdm/server/counter-strike';
 
 // Message names pushed from the WebSocket server to the renderer Electron process and the connected CLI processes.
 export const ServerPushMessageName = {
+  DeathReviewProgressUpdated: 'death-review-progress-updated',
   ReviewClipUpdated: 'review-clip-updated',
   ReviewBatchUpdated: 'review-batch-updated',
   RecordingQueueUpdated: 'recording-queue-updated',
@@ -70,6 +72,7 @@ export type ServerPushMessageName =
   | SharedServerMessageName;
 
 export interface ServerPushMessagePayload extends SharedServerMessagePayload {
+  [ServerPushMessageName.DeathReviewProgressUpdated]: DeathReviewProgress;
   [ServerPushMessageName.ReviewClipUpdated]: ReviewClip;
   [ServerPushMessageName.ReviewBatchUpdated]: ReviewBatch;
   [ServerPushMessageName.RecordingQueueUpdated]: RecordingQueue;

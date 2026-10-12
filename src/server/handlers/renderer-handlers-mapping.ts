@@ -1,4 +1,14 @@
 import type { Download } from 'csdm/common/download/download-types';
+import type {
+  ControlDeathReview,
+  DeathReviewPage,
+  DeathReviewProgress,
+  FetchDeathReviewPage,
+} from 'csdm/common/types/death-review';
+import {
+  controlDeathReviewHandler,
+  fetchDeathReviewPageHandler,
+} from './renderer-process/habits/death-review-handlers';
 import type { ReviewDuelsPage, ReviewDuelsPayload } from 'csdm/common/types/review-duels';
 import { fetchReviewDuelsHandler } from './renderer-process/habits/fetch-review-duels-handler';
 import type { ImportProgress, ControlImportQueuePayload } from 'csdm/common/types/import-progress';
@@ -261,6 +271,8 @@ import type { RenownMatch } from 'csdm/common/types/renown-match';
 import { fetchLastRenownMatchesHandler } from './renderer-process/renown/fetch-last-renown-matches-handler';
 
 export interface RendererMessageHandlers {
+  [RendererClientMessageName.FetchDeathReviewPage]: Handler<FetchDeathReviewPage, DeathReviewPage>;
+  [RendererClientMessageName.ControlDeathReview]: Handler<ControlDeathReview, DeathReviewProgress>;
   [RendererClientMessageName.FetchReviewDuels]: Handler<ReviewDuelsPayload, ReviewDuelsPage>;
   [RendererClientMessageName.GetReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
   [RendererClientMessageName.GenerateReviewBatch]: Handler<ReviewBatchRequest, ReviewBatchInspection>;
@@ -407,6 +419,8 @@ export interface RendererMessageHandlers {
 
 // Mapping between message names and server handlers sent from the Electron renderer process to the WebSocket server.
 export const rendererHandlers: RendererMessageHandlers = {
+  [RendererClientMessageName.FetchDeathReviewPage]: fetchDeathReviewPageHandler,
+  [RendererClientMessageName.ControlDeathReview]: controlDeathReviewHandler,
   [RendererClientMessageName.FetchReviewDuels]: fetchReviewDuelsHandler,
   [RendererClientMessageName.GetReviewClip]: getReviewClipHandler,
   [RendererClientMessageName.GenerateReviewBatch]: generateReviewBatchHandler,

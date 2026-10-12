@@ -11,6 +11,7 @@ import { reviewClips } from 'csdm/node/video/review-clips/review-clips';
 import { isReviewPovBusy } from 'csdm/node/video/review-clips/watch-review-pov';
 import { isReviewBatchBusy } from 'csdm/node/video/review-clips/review-batches';
 import { recordingQueue } from 'csdm/node/video/review-clips/recording-queue';
+import { deathReview } from 'csdm/node/death-review/death-review';
 
 // The daemon has work in progress, regardless of connected clients.
 // A pending database connection counts: it may be starting the embedded server or running migrations, exiting in
@@ -23,6 +24,7 @@ export function hasWorkInProgress() {
     isReviewPovBusy() ||
     isReviewBatchBusy() ||
     recordingQueue.isBusy() ||
+    deathReview.isBusy() ||
     downloadDemoQueue.hasDownloads() ||
     isDatabaseConnectionPending() ||
     isAutoImportScanning() ||

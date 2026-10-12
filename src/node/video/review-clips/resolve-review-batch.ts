@@ -19,10 +19,11 @@ export type BattleContact = {
   kill: boolean;
 };
 export function chooseBattleOpponent(request: ReviewBattleRequest, contacts: BattleContact[]): string | undefined {
-  const relevant = contacts.filter(
+  const inRange = contacts.filter(
+    (contact) => contact.tick >= request.startTick && contact.tick <= (request.endTick ?? Infinity),
+  );
+  const relevant = inRange.filter(
     (contact) =>
-      contact.tick >= request.startTick &&
-      contact.tick <= (request.endTick ?? Infinity) &&
       [2, 3].includes(contact.attackerSide) &&
       [2, 3].includes(contact.victimSide) &&
       contact.attackerSide !== contact.victimSide &&
@@ -31,6 +32,23 @@ export function chooseBattleOpponent(request: ReviewBattleRequest, contacts: Bat
   );
   const opponent = (contact: BattleContact) =>
     contact.attacker === request.steamId ? contact.victim : contact.attacker;
+  const ownNonCombatDeath =
+    request.eventTick !== undefined &&
+    inRange.some(
+      (contact) =>
+        contact.kill &&
+        contact.victim === request.steamId &&
+        contact.tick === request.eventTick &&
+        !relevant.includes(contact),
+    );
+  // A real death can be reviewed from the victim POV without inventing an enemy contact.
+  if (ownNonCombatDeath) {
+    if (request.includeOpponent !== false)
+      throw new ReviewClipError('invalid-request', 'The event tick has no combat death involving this player');
+    if (request.opponentSteamId)
+      throw new ReviewClipError('invalid-request', 'An own-only death has no requested opponent');
+    return undefined;
+  }
   if (request.eventTick !== undefined && !relevant.some((contact) => contact.tick === request.eventTick))
     throw new ReviewClipError('invalid-request', 'The event tick has no combat involving this player');
   if (request.opponentSteamId) {
@@ -44,6 +62,20 @@ export function chooseBattleOpponent(request: ReviewBattleRequest, contacts: Bat
       : Number(b.kill) - Number(a.kill) || b.damage - a.damage || a.tick - b.tick,
   );
   return relevant[0] ? opponent(relevant[0]) : undefined;
+}
+
+export function battleEventKind(
+  request: ReviewBattleRequest,
+  contacts: BattleContact[],
+): 'kill' | 'death' | 'damage' | 'range' {
+  const exact = contacts.filter(
+    (contact) =>
+      contact.tick === request.eventTick &&
+      (contact.attacker === request.steamId || contact.victim === request.steamId),
+  );
+  if (exact.some((contact) => contact.kill && contact.victim === request.steamId)) return 'death';
+  if (exact.some((contact) => contact.kill && contact.attacker === request.steamId)) return 'kill';
+  return exact.some((contact) => !contact.kill) ? 'damage' : 'range';
 }
 
 export function aliveEndTick(startTick: number, requestedEndTick: number, deathTick?: number): number | undefined {
@@ -122,7 +154,7 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
         .where('match_checksum', '=', clip.checksum)
         .execute(),
     ]);
-    const opponentId = chooseBattleOpponent(clip, [
+    const contacts: BattleContact[] = [
       ...kills.map((k) => ({
         tick: k.tick,
         attacker: k.killer_steam_id,
@@ -141,7 +173,8 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
         damage: d.health_damage,
         kill: false,
       })),
-    ]);
+    ];
+    const opponentId = chooseBattleOpponent({ ...clip, includeOpponent }, contacts);
     const segments: ReviewBatchSegment[] = [];
     for (const [perspective, steamId] of [
       ['player', clip.steamId],
@@ -172,13 +205,7 @@ export async function resolveReviewBatch(request: ReviewBatchRequest): Promise<R
     }
     items.push({
       input,
-      eventKind: kills.some((kill) => kill.tick === clip.eventTick && kill.killer_steam_id === clip.steamId)
-        ? 'kill'
-        : kills.some((kill) => kill.tick === clip.eventTick && kill.victim_steam_id === clip.steamId)
-          ? 'death'
-          : damages.some((damage) => damage.tick === clip.eventTick)
-            ? 'damage'
-            : 'range',
+      eventKind: battleEventKind(clip, contacts),
       opening:
         clip.eventTick !== undefined &&
         clip.eventTick ===
