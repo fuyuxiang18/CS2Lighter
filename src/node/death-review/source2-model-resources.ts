@@ -690,25 +690,38 @@ function validCachedModel(
 }
 
 export function createSource2ModelResourceResolver(
-  options: ToolOptions & { vpkPaths: string[]; cacheDirectory?: string; sourceRevision?: string },
+  options: ToolOptions & {
+    vpkPaths: string[];
+    cacheDirectory?: string;
+    sourceRevision?: string;
+    verifyResource?: (entry: Source2ResourceEntry) => Promise<boolean>;
+  },
 ) {
   let inventoryPromise: Promise<Source2ResourceEntry[]> | undefined;
   let modelsById: Map<string, Source2ResourceEntry[]> | undefined;
   const pending = new Map<string, Promise<Source2ModelResourceResult>>();
+  const resolvedDependencies = new Map<string, Source2ResourceEntry[]>();
+  const verified = async (entries: Source2ResourceEntry[]) =>
+    !options.verifyResource || (await Promise.all(entries.map(options.verifyResource))).every(Boolean);
   const inventory = () =>
     (inventoryPromise ??= Promise.all(
       options.vpkPaths.map((vpkPath) => readSource2PackageIndex({ ...options, vpkPath })),
     ).then((all) => {
       const seen = new Set<string>();
       return all.flat().filter((entry) => {
-        const key = `${entry.path}:${entry.crc32}:${entry.size}`;
+        const key = `${options.verifyResource ? entry.vpkPath : ''}:${entry.path}:${entry.crc32}:${entry.size}`;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
       });
     }));
-  const locate = (entries: Source2ResourceEntry[], resourcePath: string) => {
-    const hits = entries.filter((entry) => entry.path === resourcePath);
+  const trustedEntries = async (entries: Source2ResourceEntry[]) => {
+    if (!options.verifyResource) return entries;
+    const allowed = await Promise.all(entries.map(options.verifyResource));
+    return entries.filter((_, index) => allowed[index]);
+  };
+  const locate = async (entries: Source2ResourceEntry[], resourcePath: string) => {
+    const hits = await trustedEntries(entries.filter((entry) => entry.path === resourcePath));
     return hits.length === 1 ? hits[0] : null;
   };
   const resolve = async (modelId: string, includePhysicsBounds: boolean): Promise<Source2ModelResourceResult> => {
@@ -725,12 +738,17 @@ export function createSource2ModelResourceResolver(
           modelsById.set(id, hits);
         }
       }
-      const hits = modelsById.get(modelId) ?? [];
+      const candidates = modelsById.get(modelId) ?? [];
+      const hits = await trustedEntries(candidates);
       if (hits.length !== 1)
         return {
           status: 'unavailable',
           modelId,
-          reason: hits.length ? 'ambiguous-model-resource' : 'model-resource-missing',
+          reason: hits.length
+            ? 'ambiguous-model-resource'
+            : candidates.length
+              ? 'model-resource-content-unverified'
+              : 'model-resource-missing',
         };
       const entry = hits[0];
       const sourceRevision = options.sourceRevision ?? '';
@@ -745,8 +763,12 @@ export function createSource2ModelResourceResolver(
           const stat = await fs.stat(cachePath);
           if (stat.size <= 256_000) {
             const cache = JSON.parse(await fs.readFile(cachePath, 'utf8')) as ModelCache;
-            if (validCachedModel(cache, entry, modelId, sourceRevision, entries)) {
+            if (
+              validCachedModel(cache, entry, modelId, sourceRevision, entries) &&
+              (await verified(cache.dependencies))
+            ) {
               options.signal?.throwIfAborted();
+              resolvedDependencies.set(`${modelId}:${includePhysicsBounds}`, cache.dependencies);
               return cache.result;
             }
           }
@@ -775,7 +797,7 @@ export function createSource2ModelResourceResolver(
       for (const name of references.filter((ref) => ref !== '')) {
         if (typeof name !== 'string' || !validResourcePath(name) || !name.endsWith('.vmesh'))
           throw new Error('invalid-mesh-reference');
-        const meshEntry = locate(entries, `${name}_c`);
+        const meshEntry = await locate(entries, `${name}_c`);
         if (!meshEntry) throw new Error('external-mesh-missing-or-ambiguous');
         dependencies.push(meshEntry);
         const dump = await readSource2ResourceBlock({ ...options, entry: meshEntry, block: 'DATA' });
@@ -817,6 +839,8 @@ export function createSource2ModelResourceResolver(
         ...(includePhysicsBounds ? { physicsBounds } : {}),
       };
       options.signal?.throwIfAborted();
+      if (!(await verified(dependencies))) throw new Error('model-resource-content-unverified');
+      resolvedDependencies.set(`${modelId}:${includePhysicsBounds}`, dependencies);
       if (cachePath && options.cacheDirectory) {
         await fs.mkdir(options.cacheDirectory, { recursive: true });
         const payload = { version: CACHE_VERSION, sourceRevision, dependencies, result };
@@ -848,7 +872,14 @@ export function createSource2ModelResourceResolver(
         pending.set(key, result);
         result.catch(() => pending.delete(key));
       }
-      return result;
+      if (!options.verifyResource) return result;
+      return result.then(async (value): Promise<Source2ModelResourceResult> => {
+        if (value.status !== 'ready') return value;
+        const dependencies = resolvedDependencies.get(key);
+        return dependencies && (await verified(dependencies))
+          ? value
+          : { status: 'unavailable', modelId, reason: 'model-resource-content-unverified' };
+      });
     },
   };
 }

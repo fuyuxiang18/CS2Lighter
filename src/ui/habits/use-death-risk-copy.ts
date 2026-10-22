@@ -100,6 +100,7 @@ export function useDeathRiskCopy() {
     supportingTeammateCount: t`Teammates sharing the earlier line`,
   };
   const reasons: Record<string, string> = {
+    'surface-unverified': t`The surface has not been verified as opaque cover.`,
     'missing-evidence': t`This rule needs more evidence.`,
     'invalid-input': t`The evidence timeline is incomplete.`,
     'weapon-precision-unverified': t`The weapon's accuracy at the firing instant has not been verified.`,

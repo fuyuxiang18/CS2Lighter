@@ -2,6 +2,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { stat } from 'node:fs/promises';
 import { Game } from 'csdm/common/types/counter-strike';
+import { DEATH_ENVIRONMENT_REVISION } from 'csdm/common/death-review/death-risk-rules';
 import type { DeathEvidenceKey, DeathEvidenceReport, DeathEvidenceState } from 'csdm/common/types/death-evidence';
 import { getDemoCacheDirectory } from 'csdm/node/demo-cache/cache-directory';
 import { getDemoCacheGeneration } from 'csdm/node/demo-cache/invalidate-demo-cache';
@@ -30,7 +31,6 @@ import { buildRiskMechanicsEvidence, type RiskMechanicsContact } from './risk-me
 import { buildDeathRiskReport } from './death-risk-engine';
 import { collectSupportTransitions } from './risk-spatial-provider';
 import { collectPostKillCoverDepartures } from './cover-proof-provider';
-import { buildAnimationEvidence, type EvidenceAnimationContext } from './animation-evidence';
 
 async function prepare(key: DeathEvidenceKey) {
   await assertMatchImportComplete(key.checksum);
@@ -121,7 +121,6 @@ async function build(
   const frames: EvidenceFrame[] = [];
   const rawShots: EvidenceShot[] = [];
   const bulletDamages: EvidenceBulletDamage[] = [];
-  const animationContexts: EvidenceAnimationContext[] = [];
   progress({ phase: 'decode', completedTicks: 0, totalTicks });
   const end = await runDeathEvidenceProcess({
     executable: path.join(getStaticFolderPath(), 'death-evidence', 'death-evidence.exe'),
@@ -132,7 +131,6 @@ async function build(
       else if (message.type === 'frame') frames.push(message);
       else if (message.type === 'shot') rawShots.push(message);
       else if (message.type === 'bullet-damage') bulletDamages.push(message);
-      else if (message.type === 'animation-context') animationContexts.push(message);
       else if (message.type === 'progress')
         progress({ phase: 'decode', completedTicks: message.emittedTicks, totalTicks });
     },
@@ -164,11 +162,12 @@ async function build(
       ? createSource2ModelResourceResolver({
           vrfExecutablePath: path.join(getStaticFolderPath(), 'visibility', 'Source2Viewer-CLI.exe'),
           vpkPaths: [
-            path.join(context.csgoDirectory, 'pak01_dir.vpk'),
             path.join(context.csgoDirectory, 'maps', `${record.mapName}.vpk`),
+            path.join(context.csgoDirectory, 'pak01_dir.vpk'),
           ],
           cacheDirectory: path.join(context.directory, 'visibility-models', map.manifest.sourceFingerprint),
           sourceRevision: map.manifest.sourceFingerprint,
+          verifyResource: map.verifyResource,
           signal,
         })
       : null;
@@ -334,16 +333,11 @@ async function build(
     deathId: key.deathId,
     version: 1,
     matchRevision: deathMatchRevision(context.match),
+    environmentRevision: DEATH_ENVIRONMENT_REVISION,
     generatedAt: new Date().toISOString(),
     risk,
     riskFacts,
     mechanics: { measurements: mechanics.measurements, reasons: mechanics.reasons },
-    animation: buildAnimationEvidence({
-      patch: header.patch,
-      contexts: animationContexts,
-      frames,
-      subjectId: key.steamId,
-    }),
     startTick,
     endTick,
     deathTick: record.eventTick,

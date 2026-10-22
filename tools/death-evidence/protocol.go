@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,16 +16,20 @@ const parserVersion = "demoinfocs-v4.5.2-0.20260909182438-8e1342e6585c"
 const maxTicks = 4096
 const maxSafeInteger = (1 << 53) - 1
 const maxOutputBytes = 128 << 20
+const maxLineBytes = 2 << 20
+const maxFrameBytes = 16 << 20
+const frameChunkBytes = 256 << 10
 
 type window struct {
 	StartTick int `json:"startTick"`
 	EndTick   int `json:"endTick"`
 }
 type request struct {
-	Version  int      `json:"version"`
-	DemoPath string   `json:"demoPath"`
-	Windows  []window `json:"windows"`
-	Players  []string `json:"players,omitempty"`
+	Version          int      `json:"version"`
+	DemoPath         string   `json:"demoPath"`
+	Windows          []window `json:"windows"`
+	Players          []string `json:"players,omitempty"`
+	IncludeAnimation bool     `json:"includeAnimation,omitempty"`
 }
 type clockPoint struct {
 	Frame      int  `json:"frame"`
@@ -55,7 +61,7 @@ type playerRecord struct {
 	FieldsComplete bool             `json:"fieldsComplete"`
 	Fields         map[string]field `json:"fields"`
 	ActiveWeapon   *weaponRecord    `json:"activeWeapon"`
-	Animation      *animationRecipe `json:"animation"`
+	Animation      *animationRecipe `json:"animation,omitempty"`
 }
 type weaponRecord struct {
 	ID             string           `json:"id"`
@@ -81,6 +87,24 @@ type delta[T any] struct {
 	Upserts  []T      `json:"upserts"`
 	Removed  []string `json:"removed"`
 }
+type frameRecord struct {
+	Type string `json:"type"`
+	clockPoint
+	Players []playerRecord       `json:"players"`
+	World   delta[dynamicRecord] `json:"world"`
+	Smokes  delta[smokeRecord]   `json:"smokes"`
+}
+type frameChunkRecord struct {
+	Type       string `json:"type"`
+	ID         string `json:"id"`
+	Frame      int    `json:"frame"`
+	Tick       int    `json:"tick"`
+	Index      int    `json:"index"`
+	Count      int    `json:"count"`
+	Bytes      int    `json:"bytes"`
+	SHA256     string `json:"sha256"`
+	DataBase64 string `json:"dataBase64"`
+}
 type emitter struct {
 	out   io.Writer
 	bytes int
@@ -91,7 +115,10 @@ func (e *emitter) send(value any) error {
 	if err != nil {
 		return err
 	}
-	if len(b) > 2<<20 {
+	if len(b) > maxLineBytes {
+		if frame, ok := value.(frameRecord); ok {
+			return e.sendFrameChunks(frame.clockPoint, b)
+		}
 		return fmt.Errorf("evidence record exceeds 2 MiB")
 	}
 	if e.bytes+len(b)+1 > maxOutputBytes {
@@ -104,6 +131,24 @@ func (e *emitter) send(value any) error {
 		return io.ErrShortWrite
 	}
 	return err
+}
+
+// A large frame remains one atomic snapshot. Chunk boundaries have no entity or
+// delta meaning; consumers must verify and reassemble it before using any fields.
+func (e *emitter) sendFrameChunks(clock clockPoint, data []byte) error {
+	if len(data) > maxFrameBytes {
+		return fmt.Errorf("evidence frame exceeds 16 MiB")
+	}
+	id := fmt.Sprintf("%d:%d", clock.Frame, clock.Tick)
+	hash := fmt.Sprintf("%x", sha256.Sum256(data))
+	count := (len(data) + frameChunkBytes - 1) / frameChunkBytes
+	for index, offset := 0, 0; offset < len(data); index, offset = index+1, offset+frameChunkBytes {
+		end := min(offset+frameChunkBytes, len(data))
+		if err := e.send(frameChunkRecord{Type: "frame-chunk", ID: id, Frame: clock.Frame, Tick: clock.Tick, Index: index, Count: count, Bytes: len(data), SHA256: hash, DataBase64: base64.StdEncoding.EncodeToString(data[offset:end])}); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 func validateRequest(r *request) (map[int]bool, error) {
 	if r.Version != protocolVersion || r.DemoPath == "" || len(r.Windows) == 0 || len(r.Windows) > 128 || len(r.Players) > 64 {

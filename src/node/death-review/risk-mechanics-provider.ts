@@ -19,23 +19,6 @@ export type RiskMechanicsContact = {
   source: string;
 };
 
-/** Optional exact target envelope; collision movement hulls do not satisfy this contract. */
-export type RiskMechanicsAimProof = {
-  shotTick: number;
-  targetId: string;
-  burstId: string;
-  source: string;
-  fullBodyAndClockVerified: boolean;
-  targetAssociationVerified: boolean;
-  mapDynamicSmokeClear: boolean;
-  relativePitch: number;
-  relativeYaw: number;
-  bodyPitchMin: number;
-  bodyPitchMax: number;
-  bodyYawMin: number;
-  bodyYawMax: number;
-};
-
 type State = {
   frame: EvidenceFrame;
   player: EvidencePlayer;
@@ -156,7 +139,6 @@ export function buildRiskMechanicsEvidence(input: {
   subjectId: string;
   contacts?: readonly RiskMechanicsContact[];
   bulletDamages?: readonly EvidenceBulletDamage[];
-  aimProofs?: readonly RiskMechanicsAimProof[];
 }): RiskMechanicsResult {
   const result: RiskMechanicsResult = {
     shots: [],
@@ -479,40 +461,14 @@ export function buildRiskMechanicsEvidence(input: {
       ...(kind === 'recovery' && previous ? { precedingShotTick: previous.tick } : {}),
     });
   }
-  // R4 accepts target-relative data only from a certified geometry/clock producer.
-  for (const proof of input.aimProofs ?? []) {
-    const matches = result.shots.filter((s) => s.tick === proof.shotTick),
-      raw = raws.filter((s) => s.tick === proof.shotTick);
-    if (
-      matches.length !== 1 ||
-      raw.length !== 1 ||
-      !proof.fullBodyAndClockVerified ||
-      !proof.targetAssociationVerified ||
-      !proof.mapDynamicSmokeClear ||
-      !proof.source
-    )
-      continue;
-    const profile = getWeaponAccuracyProfile(
-      input.header.patch,
-      Number(raw[0].raw.item_def_index),
-      Number(raw[0].raw.mode),
-    );
-    if (!profile || !profile.fullAuto || profile.bullets !== 1 || profile.burst) continue;
-    result.aim.push({
-      ...proof,
-      shotId: matches[0].id,
-      verified: true,
-      maximumGapTicks: Math.ceil(profile.cycle * input.header.tickRate) + 1,
-    });
-  }
   result.coverage.precision =
     complete &&
     result.measurements.length > 0 &&
     result.measurements.every(
       (m) => m.reasons.length === 0 || m.reasons.every((r) => r === 'no-material-accuracy-loss'),
     );
-  result.coverage.aim = complete && result.shots.length > 0 && result.aim.length === result.shots.length;
+
   result.reasons = [...new Set(result.measurements.flatMap((m) => m.reasons))];
-  if (!result.coverage.aim) result.reasons.push('target-body-clock-unverified');
+
   return result;
 }

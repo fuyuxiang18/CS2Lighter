@@ -1,9 +1,23 @@
 import fs, { type FileHandle } from 'node:fs/promises';
 import path from 'node:path';
 
-type Entry = { name: string; file: string; offset: number; length: number; preload: Buffer };
+export type VisibilityResourceEntry = {
+  name: string;
+  file: string;
+  packageFile: string;
+  crc32: string;
+  offset: number;
+  length: number;
+  preload: Buffer;
+};
+type Entry = VisibilityResourceEntry;
 type Package = { entries: Map<string, Entry> };
-type Request = { csgoDirectory: string; mapName: string; signal: AbortSignal };
+type Request = {
+  csgoDirectory: string;
+  mapName: string;
+  signal: AbortSignal;
+  verifyResourceSource?: (entry: VisibilityResourceEntry) => Promise<boolean>;
+};
 
 function requireValue(condition: unknown): asserts condition {
   if (!condition) throw new Error('Invalid Source 2 visibility resource index');
@@ -45,7 +59,8 @@ async function indexPackage(file: string, handles: Map<string, FileHandle>): Pro
     for (let directory; (directory = string());) {
       for (let name; (name = string());) {
         requireValue(cursor + 18 <= tree.length);
-        const preloadLength = tree.readUInt16LE(cursor + 4),
+        const crc32 = tree.readUInt32LE(cursor).toString(16).padStart(8, '0'),
+          preloadLength = tree.readUInt16LE(cursor + 4),
           archive = tree.readUInt16LE(cursor + 6),
           offset = tree.readUInt32LE(cursor + 8),
           length = tree.readUInt32LE(cursor + 12);
@@ -60,6 +75,8 @@ async function indexPackage(file: string, handles: Map<string, FileHandle>): Pro
         entries.set(resource, {
           name: resource,
           file: archiveFile,
+          packageFile: file,
+          crc32,
           offset: offset + (archive === 0x7fff ? headerLength + treeLength : 0),
           length,
           preload,
@@ -68,6 +85,16 @@ async function indexPackage(file: string, handles: Map<string, FileHandle>): Pro
     }
   }
   return { entries };
+}
+
+/** Reads only the bounded directory tree; resource payloads stay in the original package. */
+export async function readVisibilityResourceIndex(file: string): Promise<Map<string, VisibilityResourceEntry>> {
+  const handles = new Map<string, FileHandle>();
+  try {
+    return (await indexPackage(file, handles)).entries;
+  } finally {
+    await Promise.all(Array.from(handles.values(), (handle) => handle.close()));
+  }
 }
 
 async function entrySlice(entry: Entry, offset: number, length: number, handles: Map<string, FileHandle>) {
@@ -146,6 +173,10 @@ export async function auditVisibilityResources(
       const entry = map.entries.get(name) ?? base.entries.get(name);
       if (!entry) {
         if (missing.size < 100) missing.add(name);
+        continue;
+      }
+      if (request.verifyResourceSource && !(await request.verifyResourceSource(entry))) {
+        if (missing.size < 100) missing.add(`unverified-content:${name}`);
         continue;
       }
       const refs = await references(entry, handles);

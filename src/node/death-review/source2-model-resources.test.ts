@@ -343,4 +343,51 @@ describe('model resolver asset validation and persistent cache', () => {
     ).rejects.toThrow();
     expect(execute).not.toHaveBeenCalled();
   });
+  it('rejects an unverified model before reading metadata, even with a valid old cache', async () => {
+    await createSource2ModelResourceResolver(options()).resolveModel(id);
+    expect(dumps()).toBe(2);
+    const result = await createSource2ModelResourceResolver({
+      ...options(),
+      verifyResource: () => Promise.resolve(false),
+    }).resolveModel(id);
+    expect(result).toMatchObject({ status: 'unavailable', reason: 'model-resource-content-unverified' });
+    expect(dumps()).toBe(2);
+  });
+  it('does not let a cached model bypass the content proof of its external mesh', async () => {
+    await createSource2ModelResourceResolver(options()).resolveModel(id);
+    const result = await createSource2ModelResourceResolver({
+      ...options(),
+      verifyResource: (entry) => Promise.resolve(entry.path.endsWith('.vmdl_c')),
+    }).resolveModel(id);
+    expect(result.status).toBe('unavailable');
+    // Only the verified model was re-read; the unverified mesh was never decoded.
+    expect(dumps()).toBe(3);
+  });
+  it('prefers the content-proven candidate without merging an unverified CRC-identical alias', async () => {
+    const result = await createSource2ModelResourceResolver({
+      ...options(),
+      vpkPaths: ['test.vpk', 'second.vpk'],
+      verifyResource: (entry) => Promise.resolve(entry.vpkPath === 'second.vpk'),
+    }).resolveModel(id);
+    expect(result.status).toBe('ready');
+    expect(
+      execute.mock.calls
+        .filter((call) => !(call[1] as string[]).includes('-l'))
+        .every((call) => (call[1] as string[])[1] === 'second.vpk'),
+    ).toBe(true);
+  });
+  it('rechecks content before returning an already resolved in-memory model', async () => {
+    let allowed = true;
+    const resolver = createSource2ModelResourceResolver({
+      ...options(),
+      verifyResource: () => Promise.resolve(allowed),
+    });
+    expect((await resolver.resolveModel(id)).status).toBe('ready');
+    allowed = false;
+    expect(await resolver.resolveModel(id)).toMatchObject({
+      status: 'unavailable',
+      reason: 'model-resource-content-unverified',
+    });
+    expect(dumps()).toBe(2);
+  });
 });

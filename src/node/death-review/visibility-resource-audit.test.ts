@@ -107,6 +107,21 @@ describe('world render dependency audit', () => {
       ).complete,
     ).toBe(false);
   });
+  it('rejects a present dependency when its package has no historic content proof', async () => {
+    const mapFile = path.join(temporary, 'maps', 'de_fixture.vpk');
+    await fs.writeFile(
+      mapFile,
+      vpk([{ name: 'maps/de_fixture/world.vwrld_c', bytes: resource('models/fixture.vmdl') }]),
+    );
+    expect(
+      await auditVisibilityResources({
+        csgoDirectory: temporary,
+        mapName: 'de_fixture',
+        signal: new AbortController().signal,
+        verifyResourceSource: (entry) => Promise.resolve(entry.file === mapFile && entry.packageFile === mapFile),
+      }),
+    ).toEqual({ complete: false, checked: 1, missing: ['unverified-content:models/fixture.vmdl_c'] });
+  });
   it('honors cancellation and rejects traversal names', async () => {
     expect(
       (

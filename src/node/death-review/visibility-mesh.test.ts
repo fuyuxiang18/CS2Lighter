@@ -19,6 +19,7 @@ function glbFixture(
     sparse?: boolean;
     duplicateNode?: boolean;
     exporter?: string;
+    material?: { alphaMode?: 'OPAQUE' | 'MASK' | 'BLEND'; doubleSided?: boolean };
   } = {},
 ) {
   // The unused fourth vertex must never enter the baked triangle or its bounds.
@@ -37,7 +38,12 @@ function glbFixture(
       { bufferView: 0, componentType: 5126, type: 'VEC3', count: 4, ...(options.sparse ? { sparse: {} } : {}) },
       { bufferView: 1, componentType: 5123, type: 'SCALAR', count: 3 },
     ],
-    meshes: [{ primitives: [{ attributes: { POSITION: 0 }, indices: 1 }] }],
+    meshes: [
+      {
+        primitives: [{ attributes: { POSITION: 0 }, indices: 1, ...(options.material ? { material: 0 } : {}) }],
+      },
+    ],
+    ...(options.material ? { materials: [options.material] } : {}),
     nodes: options.parentTranslation ? [{ translation: [1, 2, 3], children: [1] }, child] : [child],
     scenes: [{ nodes: options.duplicateNode ? [0, 0] : [0] }],
   };
@@ -76,7 +82,11 @@ describe('VRF mesh baking', () => {
       clearanceUnits: 0.1,
     };
     const before = Buffer.from(decoded.chunks[0].data);
-    expect(await traceVisibilityMeshGunline(request)).toMatchObject({ status: 'blocked', reason: 'occluded' });
+    expect(await traceVisibilityMeshGunline(request)).toMatchObject({
+      status: 'unknown',
+      reason: 'surface-unverified',
+      rays: [{ status: 'unknown', reason: 'surface-unverified' }],
+    });
     request.viewer.eye = [-10, 30, 30];
     request.target.referencePoint = [10, 30, 30];
     expect((await traceVisibilityMeshGunline(request)).status).toBe('clear');
@@ -129,7 +139,7 @@ describe('VRF mesh baking', () => {
     ).toBe('dynamic-uncertain');
   });
 
-  it('agrees with the exact BVH core for multiple chunks, near edges, coplanar and unobstructed rays', async () => {
+  it('agrees with the opacity-unverified BVH for multiple chunks, edges, coplanar and unobstructed rays', async () => {
     const triangles = [
       {
         id: 'first',
@@ -162,7 +172,10 @@ describe('VRF mesh baking', () => {
         };
       }),
     };
-    const geometry = buildVisibilityGeometry({ provenance, triangles });
+    const geometry = buildVisibilityGeometry({
+      provenance: { ...provenance, staticOcclusion: 'unverified' },
+      triangles,
+    });
     for (const [origin, target] of [
       [
         [-10, 5, 5],
@@ -199,6 +212,83 @@ describe('VRF mesh baking', () => {
       const exact = traceGunline({ ...request, geometry });
       expect({ status: packed.status, reason: packed.reason }).toEqual({ status: exact.status, reason: exact.reason });
     }
+  });
+
+  it('never upgrades missing, transparent or glTF opaque materials into verified CS2 cover', async () => {
+    for (const material of [
+      undefined,
+      {},
+      { alphaMode: 'OPAQUE' as const },
+      { alphaMode: 'MASK' as const },
+      { alphaMode: 'BLEND' as const },
+      { alphaMode: 'OPAQUE' as const, doubleSided: false },
+      { alphaMode: 'OPAQUE' as const, doubleSided: true },
+    ]) {
+      const mesh = parseVisibilityGlb(glbFixture({ material }));
+      // Existing version-1 caches deliberately have no material certificate.
+      const legacy = encodeVisibilityMeshCache(mesh);
+      const header = JSON.parse(legacy.toString('utf8', 12, 12 + legacy.readUInt32LE(8)));
+      expect(header.version).toBe(1);
+      for (const candidate of [mesh, decodeVisibilityMeshCache(legacy, mesh.sourceAssetHash)]) {
+        for (const direction of [-1, 1]) {
+          const result = await traceVisibilityMeshGunline({
+            mesh: candidate,
+            provenance,
+            viewer: { eye: [-10 * direction, 10, 10], eyeCertified: true },
+            target: {
+              referencePoint: [10 * direction, 10, 10],
+              reference: 'decoded-eye',
+              referenceCertified: true,
+            },
+            dynamics: { complete: true, opaqueVolumes: [], unknownVolumes: [] },
+            clearanceUnits: 0.1,
+          });
+          expect(result).toMatchObject({
+            status: 'unknown',
+            reason: 'surface-unverified',
+            rays: [{ status: 'unknown', reason: 'surface-unverified' }],
+          });
+        }
+      }
+    }
+  });
+
+  it('preserves unverified surface semantics when selecting a cached regional mesh', () => {
+    const mesh = parseVisibilityGlb(glbFixture());
+    const decoded = decodeVisibilityMeshCache(encodeVisibilityMeshCache(mesh), mesh.sourceAssetHash);
+    const selected = selectVisibilityWindow(decoded, { min: [-1, -1, -1], max: [1, 41, 41] }, provenance);
+    expect(selected.status).toBe('ready');
+    if (selected.status !== 'ready') throw new Error('Expected selected geometry');
+    expect(selected.geometry.provenance.staticOcclusion).toBe('unverified');
+    const request = {
+      geometry: selected.geometry,
+      viewer: { eye: [-0.5, 10, 10] as VisibilityVector, eyeCertified: true },
+      target: {
+        referencePoint: [0.5, 10, 10] as VisibilityVector,
+        reference: 'decoded-eye' as const,
+        referenceCertified: true,
+      },
+      dynamics: { complete: true, opaqueVolumes: [], unknownVolumes: [] },
+      clearanceUnits: 0.1,
+    };
+    expect(traceGunline(request)).toMatchObject({ status: 'unknown', reason: 'surface-unverified' });
+    expect(
+      traceGunline({
+        ...request,
+        viewer: { ...request.viewer, eye: [-0.5, 30, 30] },
+        target: { ...request.target, referencePoint: [0.5, 30, 30] },
+      }),
+    ).toMatchObject({ status: 'clear', reason: 'clear' });
+    expect(
+      traceGunline({
+        ...request,
+        dynamics: {
+          complete: true,
+          opaqueVolumes: [{ id: 'certified-solid', min: [-0.2, 9, 9], max: [0.2, 11, 11] }],
+          unknownVolumes: [],
+        },
+      }),
+    ).toMatchObject({ status: 'blocked', rays: [{ obstacleId: 'certified-solid' }] });
   });
 
   it('yields and responds to cancellation before scanning candidate chunks', async () => {

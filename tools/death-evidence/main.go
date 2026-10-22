@@ -200,7 +200,7 @@ func (x *extractor) send(v any) {
 func (x *extractor) attach(tr *tracked, duringCreation bool) {
 	var names []string
 	if tr.category == "player" {
-		names = animationFields()
+		names = x.requestedPlayerFields()
 	} else if tr.category == "weapon" {
 		names = append(append([]string{}, weaponFields...), weaponGeometryFields...)
 		for _, node := range []string{"m_skeletonInstance", "m_sceneNode"} {
@@ -411,7 +411,7 @@ func (x *extractor) player(tr *tracked) playerRecord {
 		yaw = &angle[1]
 		pitch = &angle[0]
 	}
-	fields := x.fields(tr, animationFields())
+	fields := x.fields(tr, x.requestedPlayerFields())
 	// Tick base is owned by the controller in Source 2. Keep it separate from
 	// the server clock: it is not necessarily the packet's server tick.
 	fields["controller.m_nTickBase"] = field{Present: false, Value: nil}
@@ -642,7 +642,7 @@ func (x *extractor) flushFrame() {
 	x.frames++
 	x.visited[clock.Tick] = true
 	x.lastFrameTick = &clock.Tick
-	x.send(map[string]any{"type": "frame", "frame": clock.Frame, "tick": clock.Tick, "serverTick": clock.ServerTick, "players": snapshot.players, "world": differences(snapshot.world, x.worldPrevious, func(r dynamicRecord) string { return r.ID }, complete), "smokes": differences(snapshot.smokes, x.smokePrevious, func(r smokeRecord) string { return r.ID }, complete)})
+	x.send(frameRecord{Type: "frame", clockPoint: clock, Players: snapshot.players, World: differences(snapshot.world, x.worldPrevious, func(r dynamicRecord) string { return r.ID }, complete), Smokes: differences(snapshot.smokes, x.smokePrevious, func(r smokeRecord) string { return r.ID }, complete)})
 }
 func (x *extractor) shot(message *msgs2.CMsgTEFireBullets) {
 	clock := x.clock()
@@ -741,7 +741,11 @@ func run(req request, writer io.Writer) (result error) {
 			text := result.Error()
 			errorText = &text
 		}
-		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "bulletDamages": x.bulletDamages, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": []string{"bounded-player-fields", "dynamic-entity-state", "environment-model-candidates", "raw-smoke-frame", "raw-fire-bullets", "raw-bullet-damage", "ag2-animation-context", "ag2-active-pose-recipe"}, "error": errorText}
+		capabilities := []string{"bounded-player-fields", "dynamic-entity-state", "environment-model-candidates", "raw-smoke-frame", "raw-fire-bullets", "raw-bullet-damage", "chunked-frames-sha256"}
+		if req.IncludeAnimation {
+			capabilities = append(capabilities, "ag2-animation-context", "ag2-active-pose-recipe")
+		}
+		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "bulletDamages": x.bulletDamages, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": capabilities, "error": errorText}
 		end["mechanicsFieldTypes"] = x.mechanicsTypes
 		if err := x.output.send(end); result == nil && err != nil {
 			result = err
@@ -749,9 +753,11 @@ func run(req request, writer io.Writer) (result error) {
 	}()
 	p.RegisterNetMessageHandler(func(header *msgs2.CDemoFileHeader) { x.header = header })
 	p.RegisterNetMessageHandler(x.mechanicsSchema)
-	p.RegisterNetMessageHandler(x.animationCreate)
-	p.RegisterNetMessageHandler(x.animationUpdate)
-	p.RegisterNetMessageHandler(x.animationClear)
+	if req.IncludeAnimation {
+		p.RegisterNetMessageHandler(x.animationCreate)
+		p.RegisterNetMessageHandler(x.animationUpdate)
+		p.RegisterNetMessageHandler(x.animationClear)
+	}
 	p.RegisterNetMessageHandler(func(tick *msgs2.CNETMsg_Tick) {
 		if tick.Tick != nil {
 			n := int(*tick.Tick)

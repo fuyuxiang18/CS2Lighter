@@ -8,6 +8,8 @@ export type EvidenceRequest = {
   demoPath: string;
   windows: EvidenceWindow[];
   players?: string[];
+  /** Research-only animation collection is opt-in; normal death reviews omit it. */
+  includeAnimation?: boolean;
 };
 
 export type WireField = {
@@ -63,6 +65,18 @@ export type EvidenceFrame = {
   players: EvidencePlayer[];
   world: { complete: boolean; upserts: EvidenceEntity[]; removed: string[] };
   smokes: { complete: boolean; upserts: EvidenceSmoke[]; removed: string[] };
+};
+/** Transport-only pieces; the subprocess reader delivers one verified EvidenceFrame. */
+export type EvidenceFrameChunk = {
+  type: 'frame-chunk';
+  id: string;
+  frame: number;
+  tick: number;
+  index: number;
+  count: number;
+  bytes: number;
+  sha256: string;
+  dataBase64: string;
 };
 export type EvidenceShot = {
   type: 'shot';

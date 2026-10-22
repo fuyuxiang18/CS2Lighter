@@ -160,7 +160,7 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
     (shot) => shot.actorId === input.subjectId && shot.tick >= input.startTick && shot.tick <= input.deathTick,
   );
   const shotById = new Map(shots.map((shot) => [shot.id, shot]));
-  const shotOrder = new Map(shots.toSorted((a, b) => a.tick - b.tick).map((shot, index) => [shot.id, index]));
+
   const events = input.events.filter(
     (event) => Number.isInteger(event.tick) && event.tick >= input.startTick && event.tick <= input.deathTick,
   );
@@ -306,117 +306,6 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
     }
     evaluate(ruleId, allVerified, shots.length > 0, 'weapon-precision-unverified');
   }
-
-  // R4 uses target-relative aim, so camera tracking and changing world angles cannot trigger it.
-  const aimGroups = new Map<string, typeof input.aim>();
-  let aimComplete = input.coverage.aim;
-  for (const sample of input.aim) {
-    const shot = shotById.get(sample.shotId);
-    if (
-      !shot ||
-      !sample.verified ||
-      !sample.source ||
-      !enemies.has(sample.targetId) ||
-      !finite(
-        sample.relativePitch,
-        sample.relativeYaw,
-        sample.bodyPitchMin,
-        sample.bodyPitchMax,
-        sample.bodyYawMin,
-        sample.bodyYawMax,
-        sample.maximumGapTicks,
-      ) ||
-      sample.bodyPitchMax <= sample.bodyPitchMin ||
-      sample.bodyYawMax <= sample.bodyYawMin ||
-      sample.maximumGapTicks < 1
-    ) {
-      aimComplete = false;
-      continue;
-    }
-    const key = `${sample.burstId}:${sample.targetId}:${shot.weaponEntityId}`;
-    const group = aimGroups.get(key) ?? [];
-    group.push(sample);
-    aimGroups.set(key, group);
-  }
-  for (const group of aimGroups.values()) {
-    group.sort((a, b) => shotById.get(a.shotId)!.tick - shotById.get(b.shotId)!.tick);
-    const segments: (typeof group)[] = [];
-    for (const sample of group) {
-      const segment = segments.at(-1);
-      const previous = segment?.at(-1);
-      const gap = previous ? shotById.get(sample.shotId)!.tick - shotById.get(previous.shotId)!.tick : 0;
-      if (
-        !previous ||
-        gap <= 0 ||
-        gap > Math.min(previous.maximumGapTicks, sample.maximumGapTicks) ||
-        shotOrder.get(sample.shotId)! !== shotOrder.get(previous.shotId)! + 1
-      ) {
-        segments.push([sample]);
-      } else {
-        segment!.push(sample);
-      }
-    }
-    for (const segment of segments) {
-      const inside = (sample: (typeof segment)[number]) =>
-        sample.relativePitch >= sample.bodyPitchMin &&
-        sample.relativePitch <= sample.bodyPitchMax &&
-        sample.relativeYaw >= sample.bodyYawMin &&
-        sample.relativeYaw <= sample.bodyYawMax;
-      if (segment.length < 4 || !segment.slice(0, 2).some(inside)) {
-        continue;
-      }
-      let sideRun = 0;
-      let lastSide = '';
-      let horizontalReversals = 0;
-      let lastHorizontal = 0;
-      let firstHorizontalOutside = 0;
-      for (let index = 1; index < segment.length; index++) {
-        const sample = segment[index];
-        const side =
-          sample.relativePitch < sample.bodyPitchMin
-            ? 'above'
-            : sample.relativePitch > sample.bodyPitchMax
-              ? 'below'
-              : '';
-        sideRun = side && side === lastSide ? sideRun + 1 : side ? 1 : 0;
-        lastSide = side;
-        const horizontal = sample.relativeYaw < sample.bodyYawMin ? -1 : sample.relativeYaw > sample.bodyYawMax ? 1 : 0;
-        if (horizontal !== 0) {
-          if (firstHorizontalOutside === 0) firstHorizontalOutside = index + 1;
-          if (lastHorizontal !== 0 && horizontal !== lastHorizontal) horizontalReversals++;
-          lastHorizontal = horizontal;
-        }
-        if (sideRun >= 3 || horizontalReversals >= 3) {
-          const first = shotById.get(segment[0].shotId)!;
-          const last = shotById.get(sample.shotId)!;
-          add(
-            'r4',
-            first.tick,
-            last.tick,
-            [sample.targetId],
-            [
-              evidence(
-                'target-relative-spray',
-                first.tick,
-                {
-                  shotCount: index + 1,
-                  firstOutsideShot: sideRun >= 3 ? index - sideRun + 2 : firstHorizontalOutside,
-                  direction: sideRun >= 3 ? side : 'lateral',
-                  reversals: horizontalReversals,
-                  weapon: first.weaponName,
-                },
-                segment.slice(0, index + 1).flatMap((point) => [`shot:${point.shotId}`, point.source]),
-                { endTick: last.tick, targetId: sample.targetId },
-              ),
-            ],
-            sideRun >= 3 ? side : 'lateral',
-          );
-          break;
-        }
-      }
-    }
-  }
-  evaluate('r4', aimComplete, shots.length > 0, 'target-relative-aim-unverified');
 
   // R5 follows stable enemy sets across contiguous decoded ticks; a missing frame ends the episode.
   const exposures: { startIndex: number; endIndex: number; targetIds: string[]; minimumAngle: number }[] = [];

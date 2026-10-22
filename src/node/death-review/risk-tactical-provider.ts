@@ -1,5 +1,6 @@
 import { WeaponName, WeaponType } from 'csdm/common/types/counter-strike';
 import type { DeathReviewRecord } from 'csdm/common/types/death-review';
+import { DEATH_ENVIRONMENT_REVISION } from 'csdm/common/death-review/death-risk-rules';
 import type { DeathEvidenceReport } from 'csdm/common/types/death-evidence';
 import type {
   DeathRiskActorFrame,
@@ -78,6 +79,7 @@ export async function buildRiskTacticalEvidence(input: Input): Promise<DeathRisk
     enemyIds.length === 5 && teammateIds.length === 4 && [...observedTeams.values()].every((teams) => teams.size === 1);
   const result: DeathRiskInput = {
     version: 1,
+    environmentRevision: DEATH_ENVIRONMENT_REVISION,
     eligible: record.kind === 'enemy' && record.evaluatedRules.length > 0 && rosterValid,
     subjectId: record.steamId,
     enemyIds: enemyIds.slice(0, 5),

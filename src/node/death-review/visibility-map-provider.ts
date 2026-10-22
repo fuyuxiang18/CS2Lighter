@@ -5,6 +5,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { decodeVisibilityMeshCache, type VisibilityMesh } from 'csdm/node/death-review/visibility-mesh';
 import { auditVisibilityResources } from 'csdm/node/death-review/visibility-resource-audit';
+import {
+  resolveVisibilityContentProof,
+  type VisibilityContentCertificate,
+} from 'csdm/node/death-review/visibility-content-proof';
+import type { Source2ResourceEntry } from 'csdm/node/death-review/source2-model-resources';
 
 const MAX_MESH_BYTES = 256 * 1024 * 1024;
 const MAX_GLB_BYTES = 512 * 1024 * 1024;
@@ -19,7 +24,8 @@ type SourceInventory = {
 type VisibilityMapManifest = {
   version: 1;
   mapName: string;
-  matchType: 'installed-build-matched';
+  matchType: 'content-manifest-matched';
+  contentProof: VisibilityContentCertificate;
   buildMatch: BuildMatch;
   sourceFingerprint: string;
   inventory: SourceInventory;
@@ -45,13 +51,16 @@ type Result =
       status: 'ready';
       mesh: VisibilityMesh;
       manifest: VisibilityMapManifest;
+      verifyResource: (entry: Source2ResourceEntry) => Promise<boolean>;
       provenance: {
         mapName: string;
         sourceFingerprint: string;
         demoFingerprint: null;
-        matchType: 'installed-build-matched';
+        matchType: 'content-manifest-matched';
+        contentProof: VisibilityContentCertificate;
         buildMatch: BuildMatch;
         coordinates: 'source';
+        staticOcclusion: 'unverified';
         opaqueCoverageComplete: boolean;
       };
     }
@@ -87,13 +96,14 @@ export async function readVisibilityMapRevision(csgoDirectory: string, mapName: 
   return createHash('sha256').update(JSON.stringify(parts)).digest('hex');
 }
 
-/** Exact version mapping checked against Valve's public steam.inf history. */
+/** Installed metadata is provenance only; full-file content verification decides compatibility. */
 export function matchVisibilityBuild(demoPatch: number, steamInf: string, appManifest: string): BuildMatch | null {
   const clientVersion = Number(/^ClientVersion=(\d+)\s*$/m.exec(steamInf)?.[1]);
   const patch = /^PatchVersion=(\d+)\.(\d+)\.(\d+)\.(\d+)\s*$/m.exec(steamInf);
   const installedPatch = patch ? Number(patch.slice(1).join('')) : NaN;
   const buildId = Number(/"buildid"\s+"(\d+)"/.exec(appManifest)?.[1]);
-  if (demoPatch !== 14190 || installedPatch !== 14190 || clientVersion !== 2000930 || buildId !== 25815307) return null;
+  if (![demoPatch, installedPatch, clientVersion, buildId].every((value) => Number.isSafeInteger(value) && value > 0))
+    return null;
   return { demoPatch, installedPatch, clientVersion, buildId };
 }
 
@@ -104,7 +114,12 @@ async function hashFile(file: string, signal: AbortSignal) {
   return hash.digest('hex');
 }
 
-async function inventory(csgoDirectory: string, mapName: string, signal: AbortSignal): Promise<SourceInventory> {
+async function inventory(
+  csgoDirectory: string,
+  mapName: string,
+  signal: AbortSignal,
+  mapSha256: string,
+): Promise<SourceInventory> {
   const names = (await fs.readdir(csgoDirectory)).filter((name) => /^pak01_(?:dir|\d+)\.vpk$/i.test(name));
   if (!names.includes('pak01_dir.vpk')) throw new Error('CS2 package index is missing');
   names.push(`maps/${mapName}.vpk`);
@@ -117,7 +132,7 @@ async function inventory(csgoDirectory: string, mapName: string, signal: AbortSi
     files.push({ name, size: stat.size, modified: stat.mtimeMs });
   }
   return {
-    vpkSha256: await hashFile(path.join(csgoDirectory, 'maps', `${mapName}.vpk`), signal),
+    vpkSha256: mapSha256,
     packageIndexSha256: await hashFile(path.join(csgoDirectory, 'pak01_dir.vpk'), signal),
     files,
   };
@@ -223,13 +238,26 @@ export async function resolveVisibilityMap(request: Request): Promise<Result> {
     const steamInf = await readSmall(path.join(request.csgoDirectory, 'steam.inf'));
     const appManifestPath = path.resolve(request.csgoDirectory, '..', '..', '..', '..', 'appmanifest_730.acf');
     const buildMatch = matchVisibilityBuild(request.demoPatch, steamInf, await readSmall(appManifestPath));
-    if (!buildMatch) return { status: 'unavailable', reason: 'installed-build-mismatch' };
+    if (!buildMatch) return { status: 'unavailable', reason: 'installed-build-metadata-invalid' };
     const initialRevision = await readVisibilityMapRevision(request.csgoDirectory, request.mapName);
-    const source = await inventory(request.csgoDirectory, request.mapName, request.signal);
-    const resourceAudit = await auditVisibilityResources(request);
+    const proof = await resolveVisibilityContentProof(request);
+    const source = await inventory(request.csgoDirectory, request.mapName, request.signal, proof.mapSha256);
+    const resourceAudit = await auditVisibilityResources({
+      ...request,
+      verifyResourceSource: proof.verifyResourceSource,
+    });
     if (!resourceAudit.complete)
       return { status: 'unavailable', reason: `map-render-dependencies-missing:${resourceAudit.missing.join(',')}` };
-    const sourceFingerprint = createHash('sha256').update(JSON.stringify({ buildMatch, source })).digest('hex');
+    const sourceFingerprint = createHash('sha256')
+      .update(
+        JSON.stringify({
+          mapName: request.mapName,
+          mapSha256: proof.mapSha256,
+          contentProof: proof.certificate,
+          exporter: 'Source 2 Viewer 20',
+        }),
+      )
+      .digest('hex');
     const stem = `${request.mapName}-${sourceFingerprint}`;
     const manifestPath = path.join(request.cacheDirectory, `${stem}.json`);
     const meshPath = path.join(request.cacheDirectory, `${stem}.mesh`);
@@ -240,15 +268,20 @@ export async function resolveVisibilityMap(request: Request): Promise<Result> {
       if (
         candidate.version === 1 &&
         candidate.mapName === request.mapName &&
-        candidate.matchType === 'installed-build-matched' &&
+        candidate.matchType === 'content-manifest-matched' &&
+        JSON.stringify(candidate.contentProof) === JSON.stringify(proof.certificate) &&
         candidate.sourceFingerprint === sourceFingerprint &&
-        JSON.stringify(candidate.buildMatch) === JSON.stringify(buildMatch) &&
-        JSON.stringify(candidate.inventory) === JSON.stringify(source) &&
+        candidate.inventory.vpkSha256 === source.vpkSha256 &&
         candidate.exporter === 'Source 2 Viewer 20'
       ) {
         mesh = await readMesh(meshPath, candidate.sourceAssetHash);
         if (mesh.triangleCount === candidate.triangleCount && (await fs.stat(meshPath)).size === candidate.meshBytes)
-          manifest = { ...candidate, resourceAudit: { complete: true, checked: resourceAudit.checked } };
+          manifest = {
+            ...candidate,
+            buildMatch,
+            inventory: source,
+            resourceAudit: { complete: true, checked: resourceAudit.checked },
+          };
       }
     } catch {
       // Incomplete or damaged derived files are rebuilt, never interpreted as an empty map.
@@ -297,7 +330,8 @@ export async function resolveVisibilityMap(request: Request): Promise<Result> {
       manifest = {
         version: 1,
         mapName: request.mapName,
-        matchType: 'installed-build-matched',
+        matchType: 'content-manifest-matched',
+        contentProof: proof.certificate,
         buildMatch,
         sourceFingerprint,
         inventory: source,
@@ -319,18 +353,23 @@ export async function resolveVisibilityMap(request: Request): Promise<Result> {
       throw new Error('CS2 assets changed while reading map cache');
     if ((await readVisibilityMapRevision(request.csgoDirectory, request.mapName)) !== initialRevision)
       throw new Error('CS2 build changed while preparing map cache');
+    if (!(await proof.unchanged())) throw new Error('CS2 map content changed while preparing map cache');
     request.onProgress?.('cache');
     return {
       status: 'ready',
       mesh,
       manifest,
+      verifyResource: proof.verifyResource,
       provenance: {
         mapName: request.mapName,
         sourceFingerprint,
         demoFingerprint: null,
-        matchType: 'installed-build-matched',
+        matchType: 'content-manifest-matched',
+        contentProof: proof.certificate,
         buildMatch,
         coordinates: 'source',
+        staticOcclusion: 'unverified',
+        // All potential occluding geometry is present, but material opacity is not authenticated.
         opaqueCoverageComplete: resourceAudit.complete && !mesh.hasAnimatedNodes,
       },
     };

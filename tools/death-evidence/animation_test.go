@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -85,9 +86,45 @@ func TestAnimationTableRejectsTruncationAndLimits(t *testing.T) {
 		t.Fatal("unbounded entry count accepted")
 	}
 }
+func TestAnimationCollectionRequiresExplicitOptIn(t *testing.T) {
+	for _, input := range []string{
+		`{"version":1,"demoPath":"sample.dem","windows":[{"startTick":100,"endTick":101}]}`,
+		`{"version":1,"demoPath":"sample.dem","windows":[{"startTick":100,"endTick":101}],"includeAnimation":false}`,
+	} {
+		req, err := readRequest(strings.NewReader(input))
+		if err != nil || req.IncludeAnimation {
+			t.Fatalf("unexpected default: %+v %v", req, err)
+		}
+		var output bytes.Buffer
+		x := extractor{request: req, output: emitter{out: &output}, wanted: map[int]bool{100: true}}
+		x.animationCreate(&msgs2.CSVCMsg_CreateStringTable{Name: proto.String("AnimTaskTypes"), NumEntries: proto.Int32(1), StringData: animationTestTable("CNmSampleTask", nil)})
+		x.animationUpdate(&msgs2.CSVCMsg_UpdateStringTable{TableId: proto.Int32(0), StringData: []byte{3}})
+		x.animationClear(nil)
+		x.emitAnimationContext(clockPoint{Tick: 100})
+		if len(x.animation.tables) != 0 || x.animation.revision != 0 || len(x.animation.errors) != 0 || output.Len() != 0 || x.animationRecipe(nil) != nil {
+			t.Fatal("disabled animation collected state")
+		}
+		if !reflect.DeepEqual(x.requestedPlayerFields(), playerFields) {
+			t.Fatal("disabled animation expanded player fields")
+		}
+	}
+	req, err := readRequest(strings.NewReader(`{"version":1,"demoPath":"sample.dem","windows":[{"startTick":100,"endTick":101}],"includeAnimation":true}`))
+	if err != nil || !req.IncludeAnimation {
+		t.Fatal("explicit animation request lost")
+	}
+	x := extractor{request: req}
+	if len(x.requestedPlayerFields()) <= len(playerFields) {
+		t.Fatal("opt-in omitted animation fields")
+	}
+	for _, value := range []string{`1`, `"true"`, `{}`} {
+		if _, err := readRequest(strings.NewReader(`{"version":1,"demoPath":"sample.dem","windows":[{"startTick":100,"endTick":101}],"includeAnimation":` + value + `}`)); err == nil {
+			t.Fatal("non-boolean animation request accepted")
+		}
+	}
+}
 func TestAnimationContextUsesAllTableIDsAndOnlyWindowEmission(t *testing.T) {
 	var output bytes.Buffer
-	x := extractor{output: emitter{out: &output}, wanted: map[int]bool{100: true, 101: true}}
+	x := extractor{request: request{IncludeAnimation: true}, output: emitter{out: &output}, wanted: map[int]bool{100: true, 101: true}}
 	x.animationCreate(&msgs2.CSVCMsg_CreateStringTable{Name: proto.String("unrelated")})
 	x.animationCreate(&msgs2.CSVCMsg_CreateStringTable{Name: proto.String("AnimTaskTypes"), NumEntries: proto.Int32(1), StringData: animationTestTable("CNmSampleTask", nil)})
 	x.emitAnimationContext(clockPoint{Tick: 99})
@@ -114,7 +151,7 @@ func TestAnimationContextUsesAllTableIDsAndOnlyWindowEmission(t *testing.T) {
 	}
 }
 func TestAnimationErrorsCannotReuseTruncatedUpdateAsValid(t *testing.T) {
-	x := extractor{}
+	x := extractor{request: request{IncludeAnimation: true}}
 	x.animationCreate(&msgs2.CSVCMsg_CreateStringTable{Name: proto.String("AnimTaskTypes"), NumEntries: proto.Int32(1), StringData: animationTestTable("CNmSampleTask", nil)})
 	x.animationUpdate(&msgs2.CSVCMsg_UpdateStringTable{TableId: proto.Int32(0), NumChangedEntries: proto.Int32(1), StringData: []byte{3}})
 	if len(x.animation.errors) != 1 || x.animation.tables[0].items[0].key != "CNmSampleTask" {

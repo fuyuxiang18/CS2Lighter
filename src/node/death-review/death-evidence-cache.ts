@@ -6,7 +6,11 @@ import { promisify } from 'node:util';
 import type { DeathEvidenceKey, DeathEvidenceReport } from 'csdm/common/types/death-evidence';
 import type { DeathRiskInput, DeathRiskReport } from 'csdm/common/types/death-risk';
 import { getDemoCacheGeneration, writeWithDemoCacheGeneration } from 'csdm/node/demo-cache/cache-generation';
-import { DEATH_RISK_REVISION } from 'csdm/common/death-review/death-risk-rules';
+import {
+  DEATH_ENVIRONMENT_REVISION,
+  DEATH_RISK_REVISION,
+  DEATH_RISK_RULES,
+} from 'csdm/common/death-review/death-risk-rules';
 import { buildDeathRiskReport } from './death-risk-engine';
 import { isDeathRiskInput, isDeathRiskReport } from './death-risk-cache-validation';
 
@@ -80,6 +84,73 @@ function validMechanics(value: unknown, startTick: number, endTick: number) {
   );
 }
 
+/** Retire R4 and any old conclusions that depended on unverified opaque surfaces. */
+function retireUnsupportedRisk(report: unknown, environmentCurrent: boolean): DeathRiskReport | undefined {
+  if (
+    !isDeathRiskReport(report) ||
+    !['2026-10-22.1', '2026-10-22.2', DEATH_RISK_REVISION].includes(report.ruleRevision)
+  )
+    return undefined;
+  const active = new Set(DEATH_RISK_RULES.map(({ id }) => id));
+  const reusable = (id: string) => environmentCurrent || ['r1', 'r2', 'r3', 'r5'].includes(id);
+  const findings = report.findings
+    .filter((item) => active.has(item.ruleId) && reusable(item.ruleId))
+    .map((item) => ({
+      ...item,
+      relatedRuleIds: item.relatedRuleIds.filter((id) => active.has(id) && reusable(id)),
+    }));
+  const ids = new Set(findings.map(({ id }) => id));
+  const selectedFindingIds = report.selectedFindingIds.filter((id) => ids.has(id));
+  // Preserve the previous independent selection. If its only item was retired, show one remaining risk.
+  if (selectedFindingIds.length === 0 && findings.length > 0)
+    selectedFindingIds.push(findings.toSorted((a, b) => b.priority - a.priority)[0].id);
+  const evaluations = report.evaluations
+    .filter(({ ruleId }) => active.has(ruleId))
+    .map((item) => {
+      if (
+        environmentCurrent ||
+        ['r1', 'r2', 'r3'].includes(item.ruleId) ||
+        item.status === 'not-applicable' ||
+        (item.ruleId === 'r5' && item.status === 'matched')
+      )
+        return item;
+      return { ...item, status: 'unavailable' as const, reasons: ['surface-unverified'], findingIds: [] };
+    });
+  const unavailable = evaluations.filter(({ status }) => status === 'unavailable').length;
+  return {
+    ...report,
+    ruleRevision: DEATH_RISK_REVISION,
+    findings,
+    selectedFindingIds,
+    evaluations,
+    status: unavailable === evaluations.length ? 'unavailable' : unavailable > 0 ? 'partial' : 'evaluated',
+  };
+}
+
+function currentEnvironmentFacts(facts: DeathRiskInput): DeathRiskInput {
+  if (facts.environmentRevision === DEATH_ENVIRONMENT_REVISION) return facts;
+  return {
+    ...facts,
+    environmentRevision: DEATH_ENVIRONMENT_REVISION,
+    frames: facts.frames.map((frame) => ({
+      ...frame,
+      lines: frame.lines.map((line) => ({
+        ...line,
+        ...(line.status === 'blocked' ? { status: 'unknown' as const, reason: 'surface-unverified' } : {}),
+        ...(line.previousObserverPosition?.status === 'blocked'
+          ? {
+              previousObserverPosition: { ...line.previousObserverPosition, status: 'unknown' as const },
+            }
+          : {}),
+      })),
+    })),
+    cover: [],
+    support: [],
+    supportTransitions: undefined,
+    postKillCoverDepartures: undefined,
+  };
+}
+
 function currentReport(report: StoredReport): DeathEvidenceReport {
   const previous = currentReports.get(report);
   if (previous) return previous;
@@ -87,7 +158,21 @@ function currentReport(report: StoredReport): DeathEvidenceReport {
   delete result.riskFacts;
   if (!validMechanics(result.mechanics, result.startTick, result.deathTick)) delete result.mechanics;
   if (!validAnimation(result.animation, result.coverage.decodedTicks)) delete result.animation;
-  if (!isDeathRiskReport(result.risk) || result.risk.ruleRevision !== DEATH_RISK_REVISION) delete result.risk;
+  const environmentCurrent = report.environmentRevision === DEATH_ENVIRONMENT_REVISION;
+  if (!environmentCurrent && result.gunlines.some((line) => line.status === 'blocked')) {
+    result.gunlines = result.gunlines.map((line) =>
+      line.status === 'blocked' ? { ...line, status: 'unknown', reason: 'surface-unverified' } : line,
+    );
+    if (result.gunlineAnalysis)
+      result.gunlineAnalysis = {
+        ...result.gunlineAnalysis,
+        status: result.gunlines.some((line) => line.status === 'clear') ? 'partial' : 'unavailable',
+        reasons: [...new Set([...result.gunlineAnalysis.reasons, 'surface-unverified'])],
+      };
+  }
+  const migrated = retireUnsupportedRisk(result.risk, environmentCurrent);
+  if (migrated) result.risk = migrated;
+  else delete result.risk;
   if (!result.risk) {
     try {
       const facts: unknown =
@@ -103,7 +188,7 @@ function currentReport(report: StoredReport): DeathEvidenceReport {
         facts.deathTick === result.deathTick &&
         facts.tickrate === result.tickrate
       )
-        result.risk = buildDeathRiskReport(facts);
+        result.risk = buildDeathRiskReport(currentEnvironmentFacts(facts));
     } catch {
       // Optional facts may be unavailable; the original trajectory remains readable.
     }

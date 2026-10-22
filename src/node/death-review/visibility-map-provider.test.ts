@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
+import { createHash } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
 import { encodeVisibilityMeshCache } from 'csdm/node/death-review/visibility-mesh';
 import {
@@ -15,6 +16,25 @@ const { spawn } = vi.hoisted(() => ({ spawn: vi.fn() }));
 vi.mock('node:child_process', () => ({ spawn }));
 vi.mock('csdm/node/death-review/visibility-resource-audit', () => ({
   auditVisibilityResources: () => Promise.resolve({ complete: true, checked: 1, missing: [] }),
+}));
+vi.mock('csdm/node/death-review/visibility-content-proof', () => ({
+  resolveVisibilityContentProof: async (request: { csgoDirectory: string; mapName: string; demoPatch: number }) => {
+    if (request.demoPatch !== 14190) throw new Error('map-content-reference-unavailable');
+    const raw = await fs.readFile(path.join(request.csgoDirectory, 'maps', `${request.mapName}.vpk`));
+    return {
+      certificate: {
+        algorithm: 'sha1',
+        depotId: 2347770,
+        demoPatch: request.demoPatch,
+        mapSha1: createHash('sha1').update(raw).digest('hex'),
+        manifestIds: ['1'],
+      },
+      mapSha256: createHash('sha256').update(raw).digest('hex'),
+      verifyResource: () => Promise.resolve(true),
+      verifyResourceSource: () => Promise.resolve(true),
+      unchanged: () => Promise.resolve(true),
+    };
+  },
 }));
 const steamInf = 'ClientVersion=2000930\nPatchVersion=1.41.9.0\n';
 const appManifest = '"AppState" { "buildid" "25815307" }';
@@ -115,16 +135,19 @@ function request() {
 }
 
 describe('installed map provider', () => {
-  it('matches only the verified installed patch, client version and Steam build', () => {
+  it('records installed provenance without treating patch or build numbers as content proof', () => {
     expect(matchVisibilityBuild(14190, steamInf, appManifest)).toEqual({
       demoPatch: 14190,
       installedPatch: 14190,
       clientVersion: 2000930,
       buildId: 25815307,
     });
-    expect(matchVisibilityBuild(14189, steamInf, appManifest)).toBeNull();
-    expect(matchVisibilityBuild(14190, steamInf.replace('2000930', '2000931'), appManifest)).toBeNull();
-    expect(matchVisibilityBuild(14190, steamInf, appManifest.replace('25815307', '25815308'))).toBeNull();
+    expect(matchVisibilityBuild(14189, steamInf, appManifest)?.demoPatch).toBe(14189);
+    expect(matchVisibilityBuild(14190, steamInf.replace('2000930', '2000931'), appManifest)?.clientVersion).toBe(
+      2000931,
+    );
+    expect(matchVisibilityBuild(14190, 'invalid', appManifest)).toBeNull();
+    expect(matchVisibilityBuild(14190, steamInf, 'invalid')).toBeNull();
   });
 
   it('keeps a stable cheap revision and changes it when source assets change or disappear', async () => {
@@ -143,8 +166,9 @@ describe('installed map provider', () => {
     expect(first.status).toBe('ready');
     if (first.status !== 'ready') throw new Error(first.reason);
     expect(first.provenance).toMatchObject({
-      matchType: 'installed-build-matched',
+      matchType: 'content-manifest-matched',
       demoFingerprint: null,
+      staticOcclusion: 'unverified',
       opaqueCoverageComplete: true,
     });
     expect(first.manifest.inventory.vpkSha256).toMatch(/^[a-f0-9]{64}$/);
@@ -172,6 +196,27 @@ describe('installed map provider', () => {
     expect((await resolveVisibilityMap(request())).status).toBe('ready');
     expect(spawn).toHaveBeenCalledTimes(9);
   });
+  it('reuses content-proven self-contained geometry across unrelated installed hotfix changes', async () => {
+    const first = await resolveVisibilityMap(request());
+    if (first.status !== 'ready') throw new Error(first.reason);
+    await fs.writeFile(path.join(csgoDirectory, 'steam.inf'), 'ClientVersion=2000934\nPatchVersion=1.41.9.1\n');
+    await fs.writeFile(path.join(temporary, 'steamapps', 'appmanifest_730.acf'), '"AppState" { "buildid" "26087496" }');
+    await fs.writeFile(path.join(csgoDirectory, 'pak01_dir.vpk'), 'updated unrelated shared package index');
+    await fs.writeFile(path.join(csgoDirectory, 'pak01_001.vpk'), 'unrelated shared archive');
+    const second = await resolveVisibilityMap(request());
+    if (second.status !== 'ready') throw new Error(second.reason);
+    expect(second.manifest.sourceFingerprint).toBe(first.manifest.sourceFingerprint);
+    expect(second.provenance.buildMatch).toMatchObject({
+      demoPatch: 14190,
+      installedPatch: 14191,
+      clientVersion: 2000934,
+      buildId: 26087496,
+    });
+    expect(second.manifest.inventory.packageIndexSha256).not.toBe(first.manifest.inventory.packageIndexSha256);
+    expect(second.manifest.inventory.files.some((file) => file.name === 'pak01_001.vpk')).toBe(true);
+    expect(spawn).toHaveBeenCalledTimes(3);
+    expect(await fs.readdir(cacheDirectory)).toHaveLength(2);
+  });
 
   it('does not start helpers for unsupported maps, unmatched builds or canceled requests', async () => {
     expect(await resolveVisibilityMap({ ...request(), mapName: '../outside' })).toEqual({
@@ -180,7 +225,11 @@ describe('installed map provider', () => {
     });
     expect(await resolveVisibilityMap({ ...request(), demoPatch: 14189 })).toEqual({
       status: 'unavailable',
-      reason: 'installed-build-mismatch',
+      reason: 'map-content-reference-unavailable',
+    });
+    expect(await resolveVisibilityMap({ ...request(), demoPatch: 14191 })).toEqual({
+      status: 'unavailable',
+      reason: 'map-content-reference-unavailable',
     });
     const controller = new AbortController();
     controller.abort();

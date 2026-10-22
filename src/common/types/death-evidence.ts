@@ -7,6 +7,7 @@ export type DeathEvidenceKey = { checksum: string; steamId: string; deathId: str
 export type DeathEvidenceReport = DeathEvidenceKey & {
   version: 1;
   matchRevision?: string;
+  environmentRevision?: string;
   generatedAt: string;
   /** A saved same-match report whose original extraction resources have since changed. */
   loadedFromSavedEvidence?: true;
@@ -25,7 +26,7 @@ export type DeathEvidenceReport = DeathEvidenceKey & {
   geometry: {
     status: 'available' | 'unavailable';
     mapName: string;
-    match: 'installed-build-matched' | 'unverified';
+    match: 'installed-build-matched' | 'content-manifest-matched' | 'unverified';
     reasons: string[];
   };
   exposures: {

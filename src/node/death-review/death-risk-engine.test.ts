@@ -121,12 +121,12 @@ function precision(input: DeathRiskInput, kind: DeathRiskPrecisionSample['kind']
 }
 
 describe('deterministic death risks', () => {
-  it('retains all fourteen coverage decisions and produces no guessed risks', () => {
+  it('retains active coverage decisions and produces no guessed risks', () => {
     const input = fixture();
     input.frames = [];
     const report = buildDeathRiskReport(input);
     expect(report.findings).toEqual([]);
-    expect(report.evaluations).toHaveLength(14);
+    expect(report.evaluations).toHaveLength(13);
     expect(report.evaluations.find((value) => value.ruleId === 'r5')!.status).toBe('unavailable');
   });
 
@@ -229,30 +229,12 @@ describe('deterministic death risks', () => {
     return input;
   }
 
-  it('requires target-relative sustained deviation after initially aiming at the target', () => {
-    expect(status(aimFixture([0, -2, -3, -4]), 'r4')).toBe('matched');
-    expect(status(aimFixture([0, -2, 0, -4]), 'r4')).toBe('clear');
-    expect(status(aimFixture([-2, -3, -4, -5]), 'r4')).toBe('clear');
+  it('ignores legacy synthetic aim proofs after retiring R4', () => {
+    const report = buildDeathRiskReport(aimFixture([0, -2, -3, -4]));
+    expect(report.evaluations.some(({ ruleId }) => ruleId === 'r4')).toBe(false);
+    expect(report.findings.some(({ ruleId }) => ruleId === 'r4')).toBe(false);
+    expect(isDeathRiskReport(report)).toBe(true);
   });
-
-  it('does not equate world-angle motion, invalid target association, or separated bursts with poor spray', () => {
-    const input = aimFixture([0, -2, -3, -4]);
-    input.aim[2].verified = false;
-    expect(status(input, 'r4')).toBe('unavailable');
-    input.aim[2].verified = true;
-    input.aim[2].targetId = 'b';
-    expect(status(input, 'r4')).toBe('clear');
-    input.aim[2].targetId = 'a';
-    input.shots[2].tick = 15;
-    expect(status(input, 'r4')).toBe('clear');
-  });
-
-  it('detects target-relative left/right crossings independently of fixed bullet count', () => {
-    const input = aimFixture([0, 0, 0, 0, 0]);
-    [0, -2, 2, -2, 2].forEach((yaw, index) => (input.aim[index].relativeYaw = yaw));
-    expect(status(input, 'r4')).toBe('matched');
-  });
-
   it('times multiline exposure using actual elapsed ticks, not inclusive sample count', () => {
     const input = fixture(13);
     expose(input, 'a', 0);
@@ -675,7 +657,7 @@ describe('deterministic death risks', () => {
     }
     const report = buildDeathRiskReport(input);
     expect(report.selectedFindingIds.length).toBeLessThanOrEqual(3);
-    expect(report.evaluations).toHaveLength(14);
+    expect(report.evaluations).toHaveLength(13);
     expect(report.findings.length).toBeGreaterThan(report.selectedFindingIds.length);
   });
 });

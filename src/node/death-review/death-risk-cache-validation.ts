@@ -1,8 +1,13 @@
 import type { DeathRiskInput, DeathRiskReport } from 'csdm/common/types/death-risk';
 import { DEATH_RISK_RULES } from 'csdm/common/death-review/death-risk-rules';
 
-const ruleIds = new Set<string>(DEATH_RISK_RULES.map((rule) => rule.id));
-const adviceCodes = new Set<string>([...DEATH_RISK_RULES.map((rule) => rule.advice), 'hold-post-kill-cover']);
+// R4 is accepted only for reading old cache files; it is never evaluated again.
+const ruleIds = new Set<string>([...DEATH_RISK_RULES.map((rule) => rule.id), 'r4']);
+const adviceCodes = new Set<string>([
+  ...DEATH_RISK_RULES.map((rule) => rule.advice),
+  'hold-post-kill-cover',
+  'correct-target-relative-spray',
+]);
 function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
@@ -51,7 +56,7 @@ export function isDeathRiskReport(value: unknown): value is DeathRiskReport {
     !array(value.findings, 128) ||
     !strings(value.selectedFindingIds, 3) ||
     !array(value.evaluations, 14) ||
-    value.evaluations.length !== 14
+    ![DEATH_RISK_RULES.length, 14].includes(value.evaluations.length)
   )
     return false;
   const ids = new Set<string>();
@@ -125,7 +130,9 @@ export function isDeathRiskReport(value: unknown): value is DeathRiskReport {
   }
   return (
     referenced.size === ids.size &&
-    value.status === (unavailable === 14 ? 'unavailable' : unavailable > 0 ? 'partial' : 'evaluated')
+    DEATH_RISK_RULES.every(({ id }) => evaluated.has(id)) &&
+    value.status ===
+      (unavailable === value.evaluations.length ? 'unavailable' : unavailable > 0 ? 'partial' : 'evaluated')
   );
 }
 
@@ -135,6 +142,7 @@ export function isDeathRiskInput(value: unknown): value is DeathRiskInput {
     !object(value) ||
     value.version !== 1 ||
     !text(value.subjectId) ||
+    (value.environmentRevision !== undefined && !text(value.environmentRevision)) ||
     (value.eligible !== undefined && typeof value.eligible !== 'boolean') ||
     !uniqueStrings(value.enemyIds, 5) ||
     !uniqueStrings(value.teammateIds, 4) ||

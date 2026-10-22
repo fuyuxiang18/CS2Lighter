@@ -2804,62 +2804,6 @@ msgstr "已保存的点评"
 msgid "Newly generated · Saved locally"
 msgstr "刚刚生成 · 已保存到本机"
 
-#: src/ui/habits/death-animation-details.tsx
-msgid "This window contains no usable character animation instructions."
-msgstr "此片段没有可用的角色动作指令。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The animation resource table is missing or does not match this frame."
-msgstr "动画资源表缺失，或与当前帧不匹配。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The animation resource table could not be decoded completely."
-msgstr "动画资源表未能完整解码。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Some animation instructions are incomplete."
-msgstr "部分动作指令不完整。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "This animation instruction format has not been verified."
-msgstr "此版本的动作指令格式尚未验证。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Final character bone poses have not been reconstructed."
-msgstr "尚未还原角色骨骼的最终姿态。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Character poses still need alignment with the shot and target rewind time."
-msgstr "还需将人体姿态与射击时刻、目标回溯时刻对齐。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The character entity could not be matched uniquely."
-msgstr "无法唯一匹配角色实体。"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Aim pose"
-msgstr "瞄准姿态"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Weapon alignment"
-msgstr "持枪对齐"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Character animation evidence"
-msgstr "角色动作证据"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
-msgstr "{framesWithRecipe} 帧记录了动作指令 · {decodedTopologyFrames} 帧已解出指令链"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
-msgstr "资源定义中的最大条目数：{graphResourceCount} 个动画引用 · {boneCount} 根骨骼 · {maskCount} 组骨骼遮罩"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Pose tasks awaiting reconstruction:"
-msgstr "待还原的姿态任务："
-
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "回看 {offset} 秒"
@@ -6535,6 +6479,10 @@ msgstr "此前对手"
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Teammates sharing the earlier line"
 msgstr "此前共同控制枪线的队友数"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The surface has not been verified as opaque cover."
+msgstr "尚未确认该表面能遮挡视线。"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "This rule needs more evidence."

@@ -1,3 +1,6 @@
+import { getVisibilityContentExpectation } from './visibility-content-catalog';
+import type { VisibilityContentCertificate } from './visibility-content-proof';
+
 // Offline geometry only. A clear result requires certified map, eye, body points,
 // FOV and dynamic coverage. Unknown evidence must never become a visible player.
 export type VisibilityVector = readonly [number, number, number];
@@ -9,10 +12,14 @@ type Provenance = {
   mapName: string;
   sourceFingerprint: string | null;
   demoFingerprint: string | null;
-  matchType?: 'demo-fingerprint' | 'installed-build-matched';
+  matchType?: 'demo-fingerprint' | 'installed-build-matched' | 'content-manifest-matched';
+  contentProof?: VisibilityContentCertificate;
   buildMatch?: { demoPatch: number; installedPatch: number; clientVersion: number; buildId: number };
   coordinates: 'source';
   opaqueCoverageComplete: boolean;
+  // Complete render geometry can rule out intersections without proving that
+  // any intersected surface is opaque in CS2 (shader, alpha and culling rules).
+  staticOcclusion?: 'unverified';
   coordinateErrorUnits?: number;
   // Optional region after conservative spatial filtering of a full map asset.
   // A query outside it cannot use the filtered geometry as complete coverage.
@@ -32,6 +39,7 @@ type Reason =
   | 'flashed'
   | 'outside-fov'
   | 'occluded'
+  | 'surface-unverified'
   | 'dynamic-uncertain'
   | 'edge-clearance'
   | 'volume-occluded'
@@ -309,7 +317,9 @@ function traceRay(input: TraceInput | GunlineInput, target: VisibilityVector): V
     for (const t of node.triangles ?? []) {
       const fraction = triangleIntersection(origin, delta, t);
       if (fraction !== null) {
-        if (!hit || fraction < hit.fraction) hit = { id: t.id, fraction };
+        if (input.geometry.provenance.staticOcclusion === 'unverified')
+          uncertain = { id: t.id, reason: 'surface-unverified' };
+        else if (!hit || fraction < hit.fraction) hit = { id: t.id, fraction };
         continue;
       }
       const clearance = Math.min(
@@ -353,6 +363,21 @@ function traceRay(input: TraceInput | GunlineInput, target: VisibilityVector): V
 
 function hasMapMatch(provenance: Provenance): boolean {
   if (!provenance.mapName || !provenance.sourceFingerprint || provenance.coordinates !== 'source') return false;
+  if (provenance.matchType === 'content-manifest-matched') {
+    const proof = provenance.contentProof;
+    if (!proof || proof.algorithm !== 'sha1' || proof.depotId !== 2347770 || provenance.demoFingerprint !== null)
+      return false;
+    const expected = getVisibilityContentExpectation(proof.demoPatch, provenance.mapName);
+    return !!(
+      expected &&
+      proof.mapSha1 === expected.sha1 &&
+      Array.isArray(proof.manifestIds) &&
+      proof.manifestIds.length === expected.manifestIds.length &&
+      new Set(proof.manifestIds).size === proof.manifestIds.length &&
+      expected.manifestIds.every((id) => proof.manifestIds.includes(id)) &&
+      (!provenance.buildMatch || provenance.buildMatch.demoPatch === proof.demoPatch)
+    );
+  }
   if (provenance.matchType === 'installed-build-matched') {
     const match = provenance.buildMatch;
     // This is an explicitly labelled installed-build match, not a demo map hash.

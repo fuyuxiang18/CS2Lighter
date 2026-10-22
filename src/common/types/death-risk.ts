@@ -4,7 +4,7 @@ export type DeathRiskRuleId =
   | 'r1'
   | 'r2'
   | 'r3'
-  | 'r4'
+  | 'r4' // Retired; retained only to decode legacy cached reports.
   | 'r5'
   | 'r6'
   | 'r7'
@@ -159,7 +159,7 @@ export type DeathRiskPrecisionSample = {
   precedingShotTick?: number;
 };
 
-/** Target-relative directions; producer must certify firing-centre and target association. */
+/** Legacy R4 cache data. No current rule consumes or generates these samples. */
 export type DeathRiskAimSample = {
   shotId: string;
   targetId: string;
@@ -241,6 +241,7 @@ export type DeathRiskSupportTransition = {
 
 export type DeathRiskInput = {
   version: 1;
+  environmentRevision?: string;
   /** False for unsupported warmups, revives, bot takeovers, or incomplete 5v5 identities. */
   eligible?: boolean;
   subjectId: string;

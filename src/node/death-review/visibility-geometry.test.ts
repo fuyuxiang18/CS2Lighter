@@ -218,6 +218,44 @@ describe('decoded eye-reference gunlines', () => {
     input.geometry.provenance.buildMatch!.demoPatch = 14189;
     expect(traceVisibility(input).reason).toBe('map-unverified');
   });
+
+  it('requires the whole patch resource cohort, matching map content and no fabricated demo hash', () => {
+    const input = scene();
+    const contentProof = {
+      algorithm: 'sha1' as const,
+      depotId: 2347770 as const,
+      demoPatch: 14190,
+      mapSha1: '0def8c7402b1ecf6d387f6e559d210b5a1856b32',
+      manifestIds: ['4758919807587010422'],
+    };
+    input.geometry.provenance = {
+      ...input.geometry.provenance,
+      mapName: 'de_mirage',
+      demoFingerprint: null,
+      matchType: 'content-manifest-matched',
+      contentProof,
+    };
+    expect(traceVisibility(input).status).toBe('clear');
+    for (const change of [
+      { manifestIds: [] },
+      { manifestIds: Array(4).fill(contentProof.manifestIds[0]) },
+      { mapSha1: 'a'.repeat(40) },
+      { demoPatch: 14165 },
+      {
+        demoPatch: 14191,
+        manifestIds: ['7851647903998529455', '2312433566686574487', '2520908610273941189', '6962766052972832680'],
+      },
+    ]) {
+      input.geometry.provenance.contentProof = { ...contentProof, ...change };
+      expect(traceVisibility(input).reason).toBe('map-unverified');
+    }
+    input.geometry.provenance.contentProof = contentProof;
+    input.geometry.provenance.mapName = 'de_nuke';
+    expect(traceVisibility(input).reason).toBe('map-unverified');
+    input.geometry.provenance.mapName = 'de_mirage';
+    input.geometry.provenance.demoFingerprint = input.geometry.provenance.sourceFingerprint;
+    expect(traceVisibility(input).reason).toBe('map-unverified');
+  });
 });
 
 describe('complete target-volume visibility', () => {

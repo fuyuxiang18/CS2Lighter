@@ -2,7 +2,10 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io"
 	"math"
 	"reflect"
@@ -13,6 +16,57 @@ import (
 	st "github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/sendtables"
 	"google.golang.org/protobuf/encoding/protojson"
 )
+
+func TestLargeFrameChunksPreserveEveryByteAndBaseline(t *testing.T) {
+	value := frameRecord{Type: "frame", clockPoint: clockPoint{Frame: 10, Tick: 100}, Players: []playerRecord{}, World: delta[dynamicRecord]{Complete: true, Upserts: []dynamicRecord{{ID: "2:3", ClassName: "CDynamicProp", Fields: map[string]field{"payload": {Present: true, Value: strings.Repeat("测试", 400000)}, "missing": {Present: false, Value: nil}}}}, Removed: []string{}}, Smokes: delta[smokeRecord]{Complete: false, Upserts: []smokeRecord{}, Removed: []string{"8:2"}}}
+	expected, err := json.Marshal(value)
+	if err != nil || len(expected) <= maxLineBytes {
+		t.Fatal("invalid large fixture")
+	}
+	var output bytes.Buffer
+	e := emitter{out: &output}
+	if err := e.send(value); err != nil {
+		t.Fatal(err)
+	}
+	var reconstructed bytes.Buffer
+	lines := bytes.Split(bytes.TrimSpace(output.Bytes()), []byte{'\n'})
+	for index, line := range lines {
+		if len(line) > 512<<10 {
+			t.Fatal("frame chunk exceeded 512 KiB")
+		}
+		var chunk frameChunkRecord
+		if err := json.Unmarshal(line, &chunk); err != nil {
+			t.Fatal(err)
+		}
+		if chunk.Type != "frame-chunk" || chunk.ID != "10:100" || chunk.Frame != 10 || chunk.Tick != 100 || chunk.Index != index || chunk.Count != len(lines) || chunk.Bytes != len(expected) || chunk.SHA256 != fmt.Sprintf("%x", sha256.Sum256(expected)) {
+			t.Fatal("chunk metadata mismatch")
+		}
+		decoded, err := base64.StdEncoding.DecodeString(chunk.DataBase64)
+		if err != nil {
+			t.Fatal(err)
+		}
+		reconstructed.Write(decoded)
+	}
+	if !bytes.Equal(reconstructed.Bytes(), expected) || e.bytes != output.Len() {
+		t.Fatal("frame content or byte accounting changed")
+	}
+}
+
+func TestFrameChunkLimitsAndLegacySmallFrame(t *testing.T) {
+	var output bytes.Buffer
+	e := emitter{out: &output}
+	small := frameRecord{Type: "frame", clockPoint: clockPoint{Frame: 1, Tick: 2}}
+	if err := e.send(small); err != nil || bytes.Contains(output.Bytes(), []byte("frame-chunk")) {
+		t.Fatal("small frame changed protocol")
+	}
+	if err := e.sendFrameChunks(clockPoint{}, make([]byte, maxFrameBytes+1)); err == nil {
+		t.Fatal("oversized assembled frame accepted")
+	}
+	e.bytes = maxOutputBytes - 10
+	if err := e.sendFrameChunks(clockPoint{}, make([]byte, frameChunkBytes)); err == nil {
+		t.Fatal("chunking escaped total budget")
+	}
+}
 
 func TestRequestMergesWindowsWithoutChargingOverlapTwice(t *testing.T) {
 	r := request{Version: 1, DemoPath: "sample.dem", Windows: []window{{12, 15}, {1, 5}, {4, 11}, {20, 20}}}

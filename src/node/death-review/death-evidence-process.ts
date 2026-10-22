@@ -1,7 +1,8 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { StringDecoder } from 'node:string_decoder';
-import type { EvidenceEnd, EvidenceMessage, EvidenceRequest, WireField } from './evidence-protocol';
+import type { EvidenceEnd, EvidenceMessage, EvidenceFrameChunk, EvidenceRequest, WireField } from './evidence-protocol';
+import { EvidenceFrameAssembler } from './evidence-frame-chunks';
 
 const MAX_LINE_BYTES = 2 * 1024 * 1024;
 const MAX_OUTPUT_BYTES = 128 * 1024 * 1024;
@@ -15,6 +16,7 @@ export function validateEvidenceRequest(request: EvidenceRequest) {
     !Array.isArray(request.windows) ||
     request.windows.length === 0 ||
     request.windows.length > 128 ||
+    (request.includeAnimation !== undefined && typeof request.includeAnimation !== 'boolean') ||
     (request.players !== undefined &&
       (!Array.isArray(request.players) ||
         request.players.length > 64 ||
@@ -56,10 +58,9 @@ function boundedText(value: unknown, maximumLength: number) {
   return typeof value === 'string' && value.length > 0 && value.length <= maximumLength;
 }
 
-function parseMessage(line: string): EvidenceMessage {
-  const value: unknown = JSON.parse(line);
+function parseMessage(value: unknown): EvidenceMessage | EvidenceFrameChunk {
   if (!value || typeof value !== 'object') throw new Error('Invalid death evidence response');
-  const message = value as Partial<EvidenceMessage>;
+  const message = value as Partial<EvidenceMessage | EvidenceFrameChunk>;
   if (message.type === 'header') {
     if (
       message.version !== 1 ||
@@ -72,6 +73,8 @@ function parseMessage(line: string): EvidenceMessage {
       message.tickRate! <= 0
     )
       throw new Error('Invalid death evidence header');
+  } else if (message.type === 'frame-chunk') {
+    // All chunk fields are validated by the bounded assembler before delivery.
   } else if (message.type === 'frame') {
     if (
       !integer(message.frame) ||
@@ -140,7 +143,7 @@ function parseMessage(line: string): EvidenceMessage {
     )
       throw new Error('Invalid death evidence result');
   } else throw new Error('Unknown death evidence message');
-  return message as EvidenceMessage;
+  return message as EvidenceMessage | EvidenceFrameChunk;
 }
 
 /** The native parser runs outside the daemon so cancellation also interrupts synchronous decoding. */
@@ -196,11 +199,22 @@ export async function runDeathEvidenceProcess({
   let totalBytes = 0;
   let pending = '';
   const decoder = new StringDecoder('utf8');
+  const assembler = new EvidenceFrameAssembler();
   const accept = async (line: string) => {
     if (line.length === 0) return;
     if (Buffer.byteLength(line) > MAX_LINE_BYTES) throw new Error('Death evidence line exceeds its size limit');
     if (end) throw new Error('Death evidence continued after its final result');
-    const message = parseMessage(line);
+    let message = parseMessage(JSON.parse(line));
+    if (message.type === 'frame-chunk') {
+      if (!headerSeen) throw new Error('Death evidence header is missing');
+      if (!wanted.has(message.tick)) throw new Error('Death evidence escaped its requested windows');
+      if (frames.has(message.tick) || (previousTick !== undefined && message.tick <= previousTick))
+        throw new Error('Death evidence frame chunks repeat an already delivered frame');
+      const assembled = assembler.accept(message);
+      if (assembled === undefined) return;
+      message = parseMessage(assembled);
+      if (message.type !== 'frame') throw new Error('Invalid reassembled death evidence frame');
+    } else assembler.assertIdle();
     if (message.type === 'header') {
       if (headerSeen || message.requestedTicks !== wanted.size) throw new Error('Mismatched death evidence header');
       headerSeen = true;
@@ -320,6 +334,7 @@ export async function runDeathEvidenceProcess({
     }
     pending += decoder.end();
     if (pending.trim()) await accept(pending);
+    assembler.assertIdle();
     const code = await closed;
     signal.throwIfAborted();
     if (failure) throw failure;

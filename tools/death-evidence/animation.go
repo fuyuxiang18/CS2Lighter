@@ -251,6 +251,9 @@ func (a *animationState) apply(table *animationTable, items []animationTableItem
 	a.revision++
 }
 func (x *extractor) animationCreate(message *msgs2.CSVCMsg_CreateStringTable) {
+	if !x.request.IncludeAnimation {
+		return
+	}
 	a := &x.animation
 	if len(a.tables) >= maxAnimationEntries {
 		a.fail("animation-table-count-limit")
@@ -279,6 +282,9 @@ func (x *extractor) animationCreate(message *msgs2.CSVCMsg_CreateStringTable) {
 	a.apply(table, items)
 }
 func (x *extractor) animationUpdate(message *msgs2.CSVCMsg_UpdateStringTable) {
+	if !x.request.IncludeAnimation {
+		return
+	}
 	a := &x.animation
 	index := int(message.GetTableId())
 	if index < 0 || index >= len(a.tables) {
@@ -301,11 +307,17 @@ func (x *extractor) animationUpdate(message *msgs2.CSVCMsg_UpdateStringTable) {
 	a.apply(table, items)
 }
 func (x *extractor) animationClear(_ *msgs2.CSVCMsg_ClearAllStringTables) {
+	if !x.request.IncludeAnimation {
+		return
+	}
 	x.animation.tables = nil
 	x.animation.errors = nil
 	x.animation.revision++
 }
 func (x *extractor) emitAnimationContext(clock clockPoint) {
+	if !x.request.IncludeAnimation {
+		return
+	}
 	a := &x.animation
 	if !x.wanted[clock.Tick] || a.emitted == a.revision+1 {
 		return
@@ -346,7 +358,16 @@ func animationFields() []string {
 	}
 	return names
 }
+func (x *extractor) requestedPlayerFields() []string {
+	if x.request.IncludeAnimation {
+		return animationFields()
+	}
+	return playerFields
+}
 func (x *extractor) animationRecipe(entity st.Entity) *animationRecipe {
+	if !x.request.IncludeAnimation {
+		return nil
+	}
 	version := integer(raw(entity, animationPrefix+"m_nSerializePoseRecipeVersionAG2"))
 	slot := animationActiveSlot(raw(entity, animationPrefix+"m_nSerializePoseRecipeAG2ActiveSlot"), raw(entity, animationPrefix+"m_SerializePoseRecipeAG2Slots"))
 	if version == nil && slot == nil {

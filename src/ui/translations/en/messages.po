@@ -2810,62 +2810,6 @@ msgstr "Saved report"
 msgid "Newly generated · Saved locally"
 msgstr "Newly generated · Saved locally"
 
-#: src/ui/habits/death-animation-details.tsx
-msgid "This window contains no usable character animation instructions."
-msgstr "This window contains no usable character animation instructions."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The animation resource table is missing or does not match this frame."
-msgstr "The animation resource table is missing or does not match this frame."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The animation resource table could not be decoded completely."
-msgstr "The animation resource table could not be decoded completely."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Some animation instructions are incomplete."
-msgstr "Some animation instructions are incomplete."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "This animation instruction format has not been verified."
-msgstr "This animation instruction format has not been verified."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Final character bone poses have not been reconstructed."
-msgstr "Final character bone poses have not been reconstructed."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Character poses still need alignment with the shot and target rewind time."
-msgstr "Character poses still need alignment with the shot and target rewind time."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "The character entity could not be matched uniquely."
-msgstr "The character entity could not be matched uniquely."
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Aim pose"
-msgstr "Aim pose"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Weapon alignment"
-msgstr "Weapon alignment"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Character animation evidence"
-msgstr "Character animation evidence"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
-msgstr "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
-msgstr "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
-
-#: src/ui/habits/death-animation-details.tsx
-msgid "Pose tasks awaiting reconstruction:"
-msgstr "Pose tasks awaiting reconstruction:"
-
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "Replay {offset} s"
@@ -6541,6 +6485,10 @@ msgstr "Earlier opponent"
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Teammates sharing the earlier line"
 msgstr "Teammates sharing the earlier line"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The surface has not been verified as opaque cover."
+msgstr "The surface has not been verified as opaque cover."
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "This rule needs more evidence."

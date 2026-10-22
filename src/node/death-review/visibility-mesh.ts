@@ -311,6 +311,8 @@ export function parseVisibilityGlb(input: Uint8Array): VisibilityMesh {
 }
 
 export function encodeVisibilityMeshCache(mesh: VisibilityMesh): Buffer {
+  // Version 1 stores geometry only. Neither new nor legacy caches certify
+  // material opacity; both tracing paths enforce that independently below.
   const pieces: Buffer[] = [],
     chunks: object[] = [];
   let offset = 0;
@@ -458,6 +460,7 @@ export function selectVisibilityWindow(
     geometry: buildVisibilityGeometry({
       provenance: {
         ...provenance,
+        staticOcclusion: 'unverified',
         coverageBounds: bounds,
         coordinateErrorUnits: mesh.maximumRoundingError * Math.sqrt(3),
       },
@@ -513,6 +516,7 @@ export async function traceVisibilityMeshGunline(
     triangles: [],
     provenance: {
       ...input.provenance,
+      staticOcclusion: 'unverified',
       coverageBounds: input.provenance.coverageBounds ?? coverageBounds,
       coordinateErrorUnits: input.mesh.maximumRoundingError * Math.sqrt(3),
     },
@@ -563,7 +567,16 @@ export async function traceVisibilityMeshGunline(
       }
     }
     const ray = traceTriangleSegment({ origin, target, triangles: triangles(), clearanceUnits: input.clearanceUnits });
-    if (ray.status === 'blocked') return { status: 'blocked', reason: ray.reason, rays: [ray] };
+    // VRF 20 exports geometry without materials by default. Even its optional
+    // glTF OPAQUE conversion does not certify CS2 shader, alpha or culling
+    // semantics. An intersection therefore cannot prove cover in either
+    // direction; complete geometry still supports a ray with no intersections.
+    if (ray.status === 'blocked')
+      return {
+        status: 'unknown',
+        reason: 'surface-unverified',
+        rays: [{ ...ray, status: 'unknown', reason: 'surface-unverified' }],
+      };
     if (ray.status === 'unknown') uncertainty = ray;
   }
   return uncertainty ? { status: 'unknown', reason: uncertainty.reason, rays: [uncertainty] } : gates;

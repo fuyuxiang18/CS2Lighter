@@ -44,7 +44,14 @@ function input(): Parameters<typeof buildGunlineEvidence>[0] {
     world: { complete: tick === 10, upserts: [], removed: [] },
     smokes: { complete: tick === 10, upserts: [], removed: [] },
   }));
-  const buildMatch = { demoPatch: 14190, installedPatch: 14190, clientVersion: 2000930, buildId: 25815307 };
+  const buildMatch = { demoPatch: 14190, installedPatch: 14191, clientVersion: 2000934, buildId: 26087496 };
+  const contentProof = {
+    algorithm: 'sha1' as const,
+    depotId: 2347770 as const,
+    demoPatch: 14190,
+    mapSha1: '0def8c7402b1ecf6d387f6e559d210b5a1856b32',
+    manifestIds: ['4758919807587010422'],
+  };
   return {
     targetSteamId,
     tickrate: 10,
@@ -62,6 +69,7 @@ function input(): Parameters<typeof buildGunlineEvidence>[0] {
     },
     map: {
       status: 'ready',
+      verifyResource: () => Promise.resolve(true),
       mesh: {
         sourceAssetHash: 'a'.repeat(64),
         triangleCount: 1,
@@ -73,8 +81,9 @@ function input(): Parameters<typeof buildGunlineEvidence>[0] {
       },
       manifest: {
         version: 1,
-        mapName: 'de_fixture',
-        matchType: 'installed-build-matched',
+        mapName: 'de_mirage',
+        matchType: 'content-manifest-matched',
+        contentProof,
         buildMatch,
         sourceFingerprint: 'source',
         inventory: { vpkSha256: 'a'.repeat(64), packageIndexSha256: 'b'.repeat(64), files: [] },
@@ -86,10 +95,12 @@ function input(): Parameters<typeof buildGunlineEvidence>[0] {
         resourceAudit: { complete: true, checked: 1 },
       },
       provenance: {
-        mapName: 'de_fixture',
+        staticOcclusion: 'unverified',
+        mapName: 'de_mirage',
         sourceFingerprint: 'source',
         demoFingerprint: null,
-        matchType: 'installed-build-matched',
+        matchType: 'content-manifest-matched',
+        contentProof,
         buildMatch,
         coordinates: 'source',
         opaqueCoverageComplete: true,

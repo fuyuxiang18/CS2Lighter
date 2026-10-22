@@ -76,7 +76,26 @@ body poses; they cannot enable a target-relative spray diagnosis.
 
 `startTick` and `endTick` are inclusive demo/game ticks. Overlapping and adjacent windows are merged. A request accepts at most 128 windows and 4096 unique ticks. `players` is optional; omitted or empty selects all pawns. Specified Steam IDs filter player rows and known shot actors. An unresolved shot actor is retained with null identity.
 
+`includeAnimation` is an optional boolean and defaults to `false`. Normal death
+reviews omit it: the helper skips its additional animation string-table handlers,
+player property subscriptions, context payloads and pose recipes. Research callers
+must set `"includeAnimation": true` explicitly to collect `animation-context` and
+player `animation` records. The corresponding `ag2-*` capabilities are only
+advertised for an opted-in request. Existing consumers can still read older helper
+streams containing those optional records.
+
 The helper processes the demo sequentially to preserve entity baselines, but emits full per-tick evidence only within these windows and stops immediately after their last tick. There is no whole-match trajectory export. Limits are 1 MiB input, 2 MiB per output line, and 128 MiB total output. An exceeded limit fails the job instead of truncating evidence silently.
+
+Frames exceeding the line limit use contiguous `frame-chunk` records, each with
+256 KiB or less of original JSON bytes encoded as base64 (under 512 KiB per line).
+`id` is `frame:tick`; every chunk repeats `frame`, `tick`, zero-based `index`,
+`count`, original `bytes` and SHA-256 `sha256`. The complete frame is limited to
+16 MiB. The Node reader requires consecutive indexes, identical metadata, exact
+decoded lengths, canonical base64, valid UTF-8 and the complete frame checksum.
+It rejects missing chunks, replayed frames and intervening records, then applies
+normal frame validation and delta expansion only after full reassembly. Chunks
+never become partial world baselines. Ordinary frames from older helpers remain
+readable; `chunked-frames-sha256` identifies the new transport capability.
 
 ## Stream
 
@@ -119,3 +138,8 @@ Demo tick, parser frame, network server tick, and embedded shot tick are separat
 ## Validation
 
 Tests cover merged-window limits, missing-versus-zero evidence, full-path eye/velocity separation, exact large integer preservation, optional protobuf nulls, entity serial changes, delta resets across gaps, property disappearance, output limits, short writes, and early error results. Real demo checks are performed separately with bounded windows; only anonymous aggregate reports are retained outside the repository.
+
+A real patch-14165 Inferno death window exposed a 3,840,014-byte first world
+baseline, including 395 physics props (3,081,901 bytes). Atomic chunk transport
+preserved the complete 449-frame window under the unchanged total budget; the
+installed-map mismatch remained unavailable instead of enabling old-map geometry.

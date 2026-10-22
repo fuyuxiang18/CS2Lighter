@@ -11,6 +11,9 @@ Keep upstream acknowledgements and required licenses. Cache each demo's reusable
 The user requests ongoing GitHub synchronization: after completing and validating authorized changes, commit and push
 to origin (fuyuxiang18/CS2Lighter). Upstream is the original project and must not receive pushes.
 Use patch versions for small bug fixes, minor versions for larger features, and major versions for major milestones.
+Only publish a new version when the user explicitly requests publication. Ordinary implementation requests do not
+authorize a version bump, release tag, GitHub release, or distribution update. Keep the current version while
+developing and validating unreleased changes; validated source commits and pushes remain authorized separately.
 See docs/RELEASING.md for releases and data compatibility. Never change the legacy appId, data path, or identity/notes
 storage keys just to rename the product. Never commit demos, user profiles, databases, credentials or QA fixtures with personal data.
 
