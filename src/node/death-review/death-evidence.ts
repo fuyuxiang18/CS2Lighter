@@ -19,6 +19,7 @@ import { readDeathEvidenceCache, writeDeathEvidenceCache } from './death-evidenc
 import { DeathEvidenceService } from './death-evidence-service';
 import { runDeathEvidenceProcess } from './death-evidence-process';
 import type { EvidenceHeader, EvidenceFrame, EvidenceShot } from './evidence-protocol';
+import type { EvidenceBulletDamage } from './evidence-ballistics';
 import { readVisibilityMapRevision, resolveVisibilityMap } from './visibility-map-provider';
 import { buildSprayProviderEvidence } from './spray-provider';
 import { describeSprayMotion } from './spray-motion';
@@ -28,6 +29,8 @@ import { buildRiskTacticalEvidence } from './risk-tactical-provider';
 import { buildRiskMechanicsEvidence, type RiskMechanicsContact } from './risk-mechanics-provider';
 import { buildDeathRiskReport } from './death-risk-engine';
 import { collectSupportTransitions } from './risk-spatial-provider';
+import { collectPostKillCoverDepartures } from './cover-proof-provider';
+import { buildAnimationEvidence, type EvidenceAnimationContext } from './animation-evidence';
 
 async function prepare(key: DeathEvidenceKey) {
   await assertMatchImportComplete(key.checksum);
@@ -117,6 +120,8 @@ async function build(
   let header: EvidenceHeader | undefined;
   const frames: EvidenceFrame[] = [];
   const rawShots: EvidenceShot[] = [];
+  const bulletDamages: EvidenceBulletDamage[] = [];
+  const animationContexts: EvidenceAnimationContext[] = [];
   progress({ phase: 'decode', completedTicks: 0, totalTicks });
   const end = await runDeathEvidenceProcess({
     executable: path.join(getStaticFolderPath(), 'death-evidence', 'death-evidence.exe'),
@@ -126,6 +131,8 @@ async function build(
       if (message.type === 'header') header = message;
       else if (message.type === 'frame') frames.push(message);
       else if (message.type === 'shot') rawShots.push(message);
+      else if (message.type === 'bullet-damage') bulletDamages.push(message);
+      else if (message.type === 'animation-context') animationContexts.push(message);
       else if (message.type === 'progress')
         progress({ phase: 'decode', completedTicks: message.emittedTicks, totalTicks });
     },
@@ -289,6 +296,7 @@ async function build(
     end,
     subjectId: key.steamId,
     contacts,
+    bulletDamages,
   });
   // Keep recorded shots even when their accuracy state could not be reconstructed.
   // Otherwise a missing mechanics measurement could be mistaken for "did not shoot".
@@ -307,6 +315,11 @@ async function build(
   riskFacts.coverage.precision = mechanics.coverage.precision;
   riskFacts.coverage.aim = mechanics.coverage.aim;
   riskFacts.supportTransitions = collectSupportTransitions({ ...riskFacts, contexts: gunlineContexts });
+  riskFacts.postKillCoverDepartures = await collectPostKillCoverDepartures({
+    ...riskFacts,
+    contexts: gunlineContexts,
+    signal,
+  });
   const risk = buildDeathRiskReport(riskFacts);
   const shotReasons: string[] = [];
   if (end.missingTicks.length > 0) shotReasons.push('extraction-incomplete');
@@ -325,6 +338,12 @@ async function build(
     risk,
     riskFacts,
     mechanics: { measurements: mechanics.measurements, reasons: mechanics.reasons },
+    animation: buildAnimationEvidence({
+      patch: header.patch,
+      contexts: animationContexts,
+      frames,
+      subjectId: key.steamId,
+    }),
     startTick,
     endTick,
     deathTick: record.eventTick,
@@ -368,7 +387,7 @@ export const deathEvidence = new DeathEvidenceService({
       path.join(context.directory, 'death-evidence'),
       key,
       context.revision,
-      context.sourceStamp === null ? deathMatchRevision(context.match) : undefined,
+      deathMatchRevision(context.match),
     ),
   build,
   current,

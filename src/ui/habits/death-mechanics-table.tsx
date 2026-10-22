@@ -108,6 +108,15 @@ export function DeathMechanicsTable({
                   <th className="p-8 font-medium">
                     <Trans>Server tick interval</Trans>
                   </th>
+                  <th className="p-8 font-medium">
+                    <Trans>Recorded movement component</Trans>
+                  </th>
+                  <th className="p-8 font-medium">
+                    <Trans>Recorded airborne component</Trans>
+                  </th>
+                  <th className="p-8 font-medium">
+                    <Trans>Component source</Trans>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -125,6 +134,25 @@ export function DeathMechanicsTable({
                     </td>
                     <td className="p-8 whitespace-nowrap">
                       {measurement.firstServerTick ?? '—'} → {measurement.lastServerTick ?? '—'}
+                    </td>
+                    <td className="p-8">
+                      {measurement.movementInaccuracy === undefined
+                        ? '—'
+                        : Number(measurement.movementInaccuracy.toFixed(6))}
+                    </td>
+                    <td className="p-8">
+                      {measurement.airborneInaccuracy === undefined
+                        ? '—'
+                        : Number(measurement.airborneInaccuracy.toFixed(6))}
+                    </td>
+                    <td className="p-8 whitespace-nowrap">
+                      {measurement.measurementSource === 'fire-bullets-extra' ? (
+                        <Trans>Firing event</Trans>
+                      ) : measurement.measurementSource === 'bullet-damage' ? (
+                        <Trans>Bullet damage event</Trans>
+                      ) : (
+                        '—'
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vite-plus/test';
 import { buildRiskMechanicsEvidence } from './risk-mechanics-provider';
 import type { EvidenceFrame, EvidencePlayer, EvidenceShot, WireField } from './evidence-protocol';
+import type { EvidenceBulletDamage } from './evidence-ballistics';
 
 function f(value: unknown): WireField {
   return { present: true, value, lastUpdate: null };
@@ -108,6 +109,27 @@ describe('measured weapon accuracy attribution', () => {
     input.shots[0].raw.inaccuracy = 0.00641;
     expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
   });
+  it('rejects explicit shot-time state conflicting with the frame-end snapshot', () => {
+    for (const change of [{ player_inair: true }, { player_scoped: true }]) {
+      const input = fixture();
+      Object.assign(input.shots[0].raw, change);
+      expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+    }
+  });
+  it('does not turn an explicitly forced accuracy configuration into a player mistake', () => {
+    const configurations: Record<string, string>[] = [
+      { weapon_accuracy_nospread: 'true' },
+      { weapon_debug_max_inaccuracy: '1' },
+      { weapon_accuracy_forcespread: '0.15' },
+    ];
+    for (const conVars of configurations) {
+      const input = fixture();
+      input.shots[0].conVars = conVars;
+      input.shots[0].raw.player_inair = false;
+      input.shots[0].raw.extra = { inaccuracy_move: 0.12, inaccuracy_air: 0 };
+      expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+    }
+  });
   it('does not attribute missing or nonzero turning inaccuracy to movement', () => {
     for (const value of [undefined, 0.03]) {
       const input = fixture();
@@ -121,10 +143,98 @@ describe('measured weapon accuracy attribution', () => {
   it('uses a transmitted movement component without assuming untransmitted components are zero', () => {
     const input = fixture();
     for (const frame of input.frames) delete frame.players[0].activeWeapon!.fields.m_flTurningInaccuracy;
+    input.shots[0].raw.player_inair = false;
     input.shots[0].raw.extra = { inaccuracy_move: 0.12, inaccuracy_air: 0 };
     expect(buildRiskMechanicsEvidence(input).precision[0]).toMatchObject({ kind: 'movement' });
     input.shots[0].raw.extra = { inaccuracy_move: 0.12 };
     expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+  });
+  it('uses direct shot-time movement even when no clean snapshot anchor is recorded', () => {
+    const input = fixture();
+    for (const frame of input.frames) {
+      delete frame.players[0].activeWeapon!.fields.m_flTurningInaccuracy;
+      delete frame.players[0].activeWeapon!.fields.m_fAccuracyPenalty;
+    }
+    input.shots[0].raw.player_inair = false;
+    input.shots[0].raw.extra = { inaccuracy_move: 0.12, inaccuracy_air: 0 };
+    const result = buildRiskMechanicsEvidence(input);
+    expect(result.precision[0]).toMatchObject({ kind: 'movement', componentVerified: true });
+    expect(result.precision[0].profileSource).toContain('fire-bullets-extra');
+    expect(result.precision[0].movementSpeed).toBeUndefined();
+    input.shots[0].raw.player_inair = true;
+    expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+  });
+  it('accepts an explicitly disabled turning setting but never infers its default', () => {
+    const input = fixture();
+    for (const frame of input.frames) delete frame.players[0].activeWeapon!.fields.m_flTurningInaccuracy;
+    input.shots[0].conVars = { sv_turning_inaccuracy_enabled: 'false' };
+    expect(buildRiskMechanicsEvidence(input).precision[0]?.kind).toBe('movement');
+    input.shots[0].conVars.sv_turning_inaccuracy_enabled = '1';
+    expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+    input.shots[0].conVars = {};
+    expect(buildRiskMechanicsEvidence(input).precision).toEqual([]);
+  });
+  it('uses separately transmitted damage components and checks their stream count', () => {
+    const input = fixture();
+    for (const frame of input.frames) delete frame.players[0].activeWeapon!.fields.m_flTurningInaccuracy;
+    const damage: EvidenceBulletDamage = {
+      type: 'bullet-damage',
+      tick: 20,
+      frame: 20,
+      serverTick: 120,
+      attackerEntityId: '1:1',
+      attackerSteamId: input.subjectId,
+      victimEntityId: '3:1',
+      victimSteamId: 'enemy',
+      weaponEntityId: '2:1',
+      itemDefinitionIndex: 7,
+      raw: {
+        distance: 1200,
+        inaccuracy_total: 0.15,
+        inaccuracy_move: 0.12,
+        inaccuracy_air: 0,
+        recoil_index: 0,
+        attack_tick_count: 120,
+        attack_tick_frac: 0.25,
+        render_tick_count: 119,
+        render_tick_frac: 0.5,
+        in_air: false,
+      },
+    };
+    const joined = { ...input, bulletDamages: [damage], end: { ...input.end, bulletDamages: 1 } };
+    const result = buildRiskMechanicsEvidence(joined);
+    expect(result.precision[0].profileSource).toContain('bullet-damage');
+    expect(result.measurements[0]).toMatchObject({
+      component: 'movement',
+      measurementSource: 'bullet-damage',
+      movementInaccuracy: 0.12,
+      airborneInaccuracy: 0,
+    });
+    expect(buildRiskMechanicsEvidence({ ...input, bulletDamages: [damage] }).precision).toEqual([]);
+    joined.end.bulletDamages = 2;
+    expect(buildRiskMechanicsEvidence(joined).precision).toEqual([]);
+  });
+  it('never falls back to a residual estimate after contradictory independent evidence', () => {
+    const input = fixture();
+    input.shots[0].raw.extra = { inaccuracy_move: 0.12, inaccuracy_air: 0 };
+    input.shots[0].raw.player_inair = false;
+    const damage = {
+      type: 'bullet-damage' as const,
+      tick: 20,
+      frame: 20,
+      serverTick: 120,
+      attackerEntityId: '1:1',
+      attackerSteamId: input.subjectId,
+      victimEntityId: '3:1',
+      victimSteamId: 'other',
+      weaponEntityId: '2:1',
+      itemDefinitionIndex: 7,
+      raw: {},
+    };
+    expect(
+      buildRiskMechanicsEvidence({ ...input, bulletDamages: [damage], end: { ...input.end, bulletDamages: 1 } })
+        .precision,
+    ).toEqual([]);
   });
   it('rejects missing states, wrong weapon lifecycle and crouch transitions', () => {
     for (const mutate of [

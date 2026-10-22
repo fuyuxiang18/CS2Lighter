@@ -22,6 +22,27 @@ let memoryBytes = 0;
 const maximumMemoryBytes = 32 * 1024 ** 2;
 const currentReports = new WeakMap<StoredReport, DeathEvidenceReport>();
 
+function validAnimation(value: unknown, maximumFrames: number) {
+  if (!value || typeof value !== 'object') return false;
+  const data = value as Record<string, unknown>;
+  const count = (name: string, max: number) =>
+    typeof data[name] === 'number' && Number.isSafeInteger(data[name]) && data[name] >= 0 && data[name] <= max;
+  const names = (name: string, max: number) =>
+    Array.isArray(data[name]) &&
+    data[name].length <= max &&
+    data[name].every((item: unknown) => typeof item === 'string' && item.length <= 256);
+  return (
+    count('framesWithRecipe', maximumFrames) &&
+    count('decodedTopologyFrames', data.framesWithRecipe as number) &&
+    count('graphResourceCount', 16384) &&
+    count('boneCount', 16384) &&
+    count('maskCount', 16384) &&
+    names('taskTypes', 255) &&
+    names('blockingTasks', 255) &&
+    names('reasons', 32)
+  );
+}
+
 function validMechanics(value: unknown, startTick: number, endTick: number) {
   if (!value || typeof value !== 'object') return false;
   const data = value as Record<string, unknown>;
@@ -48,6 +69,12 @@ function validMechanics(value: unknown, startTick: number, endTick: number) {
           finiteOrNull(item[key]),
         ) &&
         (item.component === null || ['movement', 'landing', 'recovery'].includes(item.component)) &&
+        (item.measurementSource === undefined ||
+          ['fire-bullets-extra', 'bullet-damage'].includes(item.measurementSource)) &&
+        ['movementInaccuracy', 'airborneInaccuracy'].every(
+          (key) =>
+            item[key] === undefined || (typeof item[key] === 'number' && Number.isFinite(item[key]) && item[key] >= 0),
+        ) &&
         reasons(item.reasons),
     )
   );
@@ -59,6 +86,7 @@ function currentReport(report: StoredReport): DeathEvidenceReport {
   const result = { ...report, riskFacts: undefined } as DeathEvidenceReport;
   delete result.riskFacts;
   if (!validMechanics(result.mechanics, result.startTick, result.deathTick)) delete result.mechanics;
+  if (!validAnimation(result.animation, result.coverage.decodedTicks)) delete result.animation;
   if (!isDeathRiskReport(result.risk) || result.risk.ruleRevision !== DEATH_RISK_REVISION) delete result.risk;
   if (!result.risk) {
     try {
@@ -207,20 +235,27 @@ export async function readDeathEvidenceCache(
   directory: string,
   key: DeathEvidenceKey,
   revision: string,
-  offlineMatchRevision?: string,
+  savedMatchRevision?: string,
 ) {
   validateDeathEvidenceKey(key);
+  if (savedMatchRevision !== undefined && !/^[a-f0-9]{64}$/.test(savedMatchRevision)) return undefined;
   const data = await readFileCache(directory, key.checksum);
   const candidates = data?.entries.filter(
     (entry) =>
       entry.report.steamId === key.steamId &&
       entry.report.deathId === key.deathId &&
-      (offlineMatchRevision === undefined
+      (savedMatchRevision === undefined
         ? entry.revision === revision
-        : entry.report.matchRevision === offlineMatchRevision),
+        : entry.report.matchRevision === savedMatchRevision ||
+          (entry.report.matchRevision === undefined && entry.revision === revision)),
   );
-  const report = candidates?.toSorted((a, b) => b.report.generatedAt.localeCompare(a.report.generatedAt))[0]?.report;
-  return report ? currentReport(report) : undefined;
+  const entry = candidates?.toSorted((a, b) => b.report.generatedAt.localeCompare(a.report.generatedAt))[0];
+  if (!entry) return undefined;
+  const report = currentReport(entry.report);
+  // Saved facts describe the original recording/resources. Reading them does
+  // not certify newly installed map assets or trigger another demo extraction.
+  // Copy the view-only flag; never contaminate the normalized cache object.
+  return entry.revision === revision ? report : { ...report, loadedFromSavedEvidence: true as const };
 }
 
 /** Called by the one serial evidence worker. It retains other deaths in the same demo file. */

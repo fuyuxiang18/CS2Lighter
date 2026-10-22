@@ -87,11 +87,26 @@ describe('production saved death evidence access', () => {
     expect(mocks.process).not.toHaveBeenCalled();
     expect(mocks.checksum).not.toHaveBeenCalled();
   });
-  it('keeps the exact source/map revision requirement when the original file is present', async () => {
+  it('keeps saved original-map evidence accessible when the demo is present but CS2 has updated', async () => {
     mocks.stat.mockResolvedValue({ size: 100, mtimeMs: 1, ctimeMs: 2 });
+    const historical = { ...saved, loadedFromSavedEvidence: true };
+    mocks.read.mockResolvedValue(historical);
     const { deathEvidence } = await import('./death-evidence');
-    await deathEvidence.inspect({ ...key, action: 'read' });
-    expect(mocks.read.mock.calls[0]?.[3]).toBeUndefined();
+    expect((await deathEvidence.inspect({ ...key, action: 'read' })).report).toEqual(historical);
+    expect(mocks.read.mock.calls[0]?.[3]).toBe(mocks.matchRevision);
+    expect(mocks.process).not.toHaveBeenCalled();
+    expect(mocks.checksum).not.toHaveBeenCalled();
+  });
+  it('reuses saved evidence for an analyze request rather than reparsing solely because CS2 updated', async () => {
+    mocks.stat.mockResolvedValue({ size: 100, mtimeMs: 1, ctimeMs: 2 });
+    mocks.read.mockResolvedValue({ ...saved, loadedFromSavedEvidence: true });
+    const { deathEvidence } = await import('./death-evidence');
+    const state = await deathEvidence.inspect({ ...key, action: 'analyze' });
+    expect(state.status).toBe('completed');
+    expect(state.report).toMatchObject({ loadedFromSavedEvidence: true, geometry: saved.geometry });
+    expect(mocks.read.mock.calls[0]?.[3]).toBe(mocks.matchRevision);
+    expect(mocks.process).not.toHaveBeenCalled();
+    expect(mocks.checksum).not.toHaveBeenCalled();
   });
   it('explains the missing demo when a manual refresh is requested and retains the saved report', async () => {
     const { deathEvidence } = await import('./death-evidence');
@@ -106,6 +121,23 @@ describe('production saved death evidence access', () => {
     expect((await deathEvidence.inspect({ ...key, action: 'read' })).report).toEqual(saved);
     expect(mocks.process).not.toHaveBeenCalled();
     expect(mocks.checksum).not.toHaveBeenCalled();
+  });
+  it('still enters source validation on explicit refresh and preserves history when new extraction fails', async () => {
+    mocks.stat.mockResolvedValue({ size: 100, mtimeMs: 1, ctimeMs: 2 });
+    const historical = { ...saved, loadedFromSavedEvidence: true };
+    mocks.read.mockResolvedValue(historical);
+    mocks.checksum.mockRejectedValueOnce(new Error('The original demo has changed'));
+    const { deathEvidence } = await import('./death-evidence');
+    await deathEvidence.inspect({ ...key, action: 'refresh' });
+    await vi.waitFor(() => expect(deathEvidence.isBusy()).toBe(false));
+    expect(mocks.checksum).toHaveBeenCalledOnce();
+    expect(mocks.push.mock.calls.at(-1)?.[0].payload).toMatchObject({
+      status: 'error',
+      report: historical,
+      error: 'The original demo has changed',
+    });
+    expect(mocks.process).not.toHaveBeenCalled();
+    expect((await deathEvidence.inspect({ ...key, action: 'read' })).report).toEqual(historical);
   });
   it('does not silently treat a permission error as a missing original', async () => {
     mocks.stat.mockRejectedValue(Object.assign(new Error('denied'), { code: 'EACCES' }));

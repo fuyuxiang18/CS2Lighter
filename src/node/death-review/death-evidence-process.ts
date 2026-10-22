@@ -43,6 +43,19 @@ function integer(value: unknown) {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
 }
 
+function boundedBase64(value: unknown, maximumLength: number) {
+  return (
+    typeof value === 'string' &&
+    value.length <= maximumLength &&
+    value.length % 4 === 0 &&
+    /^[A-Za-z0-9+/]*={0,2}$/.test(value)
+  );
+}
+
+function boundedText(value: unknown, maximumLength: number) {
+  return typeof value === 'string' && value.length > 0 && value.length <= maximumLength;
+}
+
 function parseMessage(line: string): EvidenceMessage {
   const value: unknown = JSON.parse(line);
   if (!value || typeof value !== 'object') throw new Error('Invalid death evidence response');
@@ -76,6 +89,44 @@ function parseMessage(line: string): EvidenceMessage {
   } else if (message.type === 'shot') {
     if (!integer(message.frame) || !integer(message.tick) || !message.raw || typeof message.raw !== 'object')
       throw new Error('Invalid death evidence shot');
+  } else if (message.type === 'bullet-damage') {
+    const entity = (value: unknown) => value === null || (typeof value === 'string' && /^\d+:\d+$/.test(value));
+    const identity = (value: unknown) => value === null || (typeof value === 'string' && /^\d{17}$/.test(value));
+    if (
+      !integer(message.frame) ||
+      !integer(message.tick) ||
+      (message.serverTick !== null && !integer(message.serverTick)) ||
+      !entity(message.attackerEntityId) ||
+      !entity(message.victimEntityId) ||
+      !entity(message.weaponEntityId) ||
+      !identity(message.attackerSteamId) ||
+      !identity(message.victimSteamId) ||
+      (message.itemDefinitionIndex !== null && !integer(message.itemDefinitionIndex)) ||
+      !message.raw ||
+      typeof message.raw !== 'object' ||
+      Array.isArray(message.raw) ||
+      Object.keys(message.raw).length > 32
+    )
+      throw new Error('Invalid death evidence bullet damage');
+  } else if (message.type === 'animation-context') {
+    if (
+      !integer(message.frame) ||
+      !integer(message.tick) ||
+      !integer(message.contextId) ||
+      !Array.isArray(message.taskTypes) ||
+      message.taskTypes.length > 255 ||
+      !message.taskTypes.every((entry) => entry && integer(entry.index) && boundedText(entry.name, 256)) ||
+      !Array.isArray(message.assets) ||
+      message.assets.length > 4096 ||
+      !message.assets.every(
+        (entry) =>
+          entry && integer(entry.index) && boundedText(entry.path, 2048) && boundedBase64(entry.dataBase64, 1_398_104),
+      ) ||
+      !Array.isArray(message.errors) ||
+      message.errors.length > 32 ||
+      !message.errors.every((value) => boundedText(value, 256))
+    )
+      throw new Error('Invalid death evidence animation context');
   } else if (message.type === 'progress') {
     if (!integer(message.requestedTicks) || !integer(message.emittedTicks))
       throw new Error('Invalid death evidence progress');
@@ -84,7 +135,8 @@ function parseMessage(line: string): EvidenceMessage {
       !['ok', 'error'].includes(message.status ?? '') ||
       !integer(message.emittedTicks) ||
       !Array.isArray(message.missingTicks) ||
-      !message.missingTicks.every(integer)
+      !message.missingTicks.every(integer) ||
+      (message.bulletDamages !== undefined && !integer(message.bulletDamages))
     )
       throw new Error('Invalid death evidence result');
   } else throw new Error('Unknown death evidence message');
@@ -139,6 +191,8 @@ export async function runDeathEvidenceProcess({
   const playerFields = new Map<string, Record<string, WireField>>();
   const weaponFields = new Map<string, { id: string; fields: Record<string, WireField> }>();
   let previousTick: number | undefined;
+  let bulletDamageCount = 0;
+  const animationContexts = new Set<number>();
   let totalBytes = 0;
   let pending = '';
   const decoder = new StringDecoder('utf8');
@@ -152,8 +206,20 @@ export async function runDeathEvidenceProcess({
       headerSeen = true;
     } else if (!headerSeen && !(message.type === 'end' && message.status === 'error'))
       throw new Error('Death evidence header is missing');
-    if (message.type === 'frame' || message.type === 'shot') {
+    if (
+      message.type === 'frame' ||
+      message.type === 'shot' ||
+      message.type === 'bullet-damage' ||
+      message.type === 'animation-context'
+    ) {
       if (!wanted.has(message.tick)) throw new Error('Death evidence escaped its requested windows');
+      if (message.type === 'animation-context') {
+        if (animationContexts.has(message.contextId) || animationContexts.size >= 4096)
+          throw new Error('Death evidence animation context is duplicated or exceeds its count limit');
+        animationContexts.add(message.contextId);
+      }
+      if (message.type === 'bullet-damage' && ++bulletDamageCount > 4096)
+        throw new Error('Death evidence bullet damage exceeds its count limit');
       if (message.type === 'frame') {
         if (previousTick !== undefined && message.tick <= previousTick)
           throw new Error('Death evidence frames are not in increasing tick order');
@@ -175,6 +241,17 @@ export async function runDeathEvidenceProcess({
           )
             throw new Error('Invalid death evidence player fields');
           seenIds.add(player.id);
+          const recipe = player.animation;
+          if (
+            recipe !== undefined &&
+            recipe !== null &&
+            (!integer(recipe.contextId) ||
+              (recipe.recipeVersion !== null && !integer(recipe.recipeVersion)) ||
+              (recipe.activeSlot !== null && (!integer(recipe.activeSlot) || recipe.activeSlot > 31)) ||
+              (recipe.topologyBase64 !== null && !boundedBase64(recipe.topologyBase64, 5464)) ||
+              (recipe.dynamicBase64 !== null && !boundedBase64(recipe.dynamicBase64, 5464)))
+          )
+            throw new Error('Invalid death evidence animation recipe');
           if (!player.fieldsComplete && !playerFields.has(player.id))
             throw new Error('Death evidence player delta has no baseline');
           const expanded = {
@@ -219,7 +296,11 @@ export async function runDeathEvidenceProcess({
         frames.add(message.tick);
       }
     }
-    if (message.type === 'end') end = message;
+    if (message.type === 'end') {
+      if ((message.bulletDamages ?? 0) !== bulletDamageCount)
+        throw new Error('Death evidence bullet damage count mismatch');
+      end = message;
+    }
     await onMessage(message);
     signal.throwIfAborted();
     if (failure) throw failure;

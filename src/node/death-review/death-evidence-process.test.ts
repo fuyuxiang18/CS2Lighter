@@ -57,6 +57,93 @@ function run(source: string, signal = new AbortController().signal, timeoutMs = 
 }
 
 describe('bounded death evidence subprocess', () => {
+  const animationContext = {
+    type: 'animation-context',
+    frame: 1,
+    tick: 10,
+    contextId: 11,
+    taskTypes: [{ index: 0, name: 'CNmSampleTask' }],
+    assets: [{ index: 0, path: 'test.vnmskel', dataBase64: 'AQAAAA==' }],
+    errors: [],
+  };
+  it('delivers animation context and frame recipes without expanding them into player deltas', async () => {
+    const animation = { contextId: 11, recipeVersion: 3, activeSlot: 0, topologyBase64: 'AA==', dynamicBase64: 'AAAA' };
+    const player = { id: '8:1', fieldsComplete: true, fields: {}, animation };
+    const job = run(script([header, animationContext, { ...frame, players: [player] }, end]));
+    await job.result;
+    expect(job.messages[1]).toEqual(animationContext);
+    expect(job.messages[2]).toMatchObject({ players: [{ animation }] });
+  });
+  it('rejects duplicate, out-of-window and malformed animation context records', async () => {
+    await expect(run(script([header, animationContext, animationContext, frame, end])).result).rejects.toThrow(
+      'duplicated',
+    );
+    await expect(run(script([header, { ...animationContext, tick: 12 }, frame, end])).result).rejects.toThrow(
+      'escaped',
+    );
+    await expect(
+      run(script([header, { ...animationContext, assets: [{ index: 0, path: 'test', dataBase64: '***=' }] }, end]))
+        .result,
+    ).rejects.toThrow('animation context');
+  });
+  it('rejects malformed animation recipes while keeping older frames without recipes readable', async () => {
+    const animation = {
+      contextId: 11,
+      recipeVersion: 3,
+      activeSlot: 0,
+      topologyBase64: 'AA==',
+      dynamicBase64: 'broken',
+    };
+    await expect(
+      run(script([header, { ...frame, players: [{ id: '8:1', fieldsComplete: true, fields: {}, animation }] }, end]))
+        .result,
+    ).rejects.toThrow('animation recipe');
+    await expect(
+      run(
+        script([
+          header,
+          {
+            ...frame,
+            players: [
+              {
+                id: '8:1',
+                fieldsComplete: true,
+                fields: {},
+                animation: { ...animation, dynamicBase64: 'AAAA', activeSlot: 32 },
+              },
+            ],
+          },
+          end,
+        ]),
+      ).result,
+    ).rejects.toThrow('animation recipe');
+    await expect(run(script([header, frame, end])).result).resolves.toMatchObject({ status: 'ok' });
+  });
+  const bulletDamage = {
+    type: 'bullet-damage',
+    frame: 1,
+    tick: 10,
+    serverTick: 100,
+    attackerEntityId: '12:3',
+    attackerSteamId: '76561198000000001',
+    victimEntityId: '13:4',
+    victimSteamId: '76561198000000002',
+    weaponEntityId: '14:5',
+    itemDefinitionIndex: 7,
+    raw: { inaccuracy_move: 0, in_air: false },
+  };
+  it('preserves separately recorded ballistics, including absent fields, with exact message counts', async () => {
+    const job = run(script([header, frame, bulletDamage, { ...end, bulletDamages: 1 }]));
+    await expect(job.result).resolves.toMatchObject({ bulletDamages: 1 });
+    expect(job.messages[2]).toEqual(bulletDamage);
+    await expect(run(script([header, frame, bulletDamage, end])).result).rejects.toThrow('count mismatch');
+  });
+  it('rejects ballistic events outside the extraction window or with malformed identities', async () => {
+    await expect(run(script([header, { ...bulletDamage, tick: 12 }, end])).result).rejects.toThrow('escaped');
+    await expect(run(script([header, { ...bulletDamage, attackerEntityId: '12' }, end])).result).rejects.toThrow(
+      'bullet damage',
+    );
+  });
   it('preserves missing ticks instead of treating them as empty world snapshots', async () => {
     const job = run(script([header, frame, end]));
     await expect(job.result).resolves.toMatchObject({ missingTicks: [11], emittedTicks: 1 });

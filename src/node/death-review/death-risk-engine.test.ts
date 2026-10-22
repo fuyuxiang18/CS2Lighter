@@ -7,6 +7,8 @@ import type {
 } from 'csdm/common/types/death-risk';
 import { buildDeathRiskReport } from './death-risk-engine';
 import { collectSupportTransitions } from './risk-spatial-provider';
+import { collectPostKillCoverDepartures } from './cover-proof-provider';
+import { isDeathRiskInput, isDeathRiskReport } from './death-risk-cache-validation';
 
 function player(id: string, x: number, y: number): DeathRiskActorFrame {
   return {
@@ -560,6 +562,105 @@ describe('deterministic death risks', () => {
     const input = supportFixture();
     input.supportTransitions!.observations[0].previousSupport.subjectPosition.x = -10;
     expect(status(input, 'r14')).toBe('unavailable');
+  });
+
+  async function postKillFixture() {
+    const input = fixture(12);
+    input.events.push({ id: 'kill-b', kind: 'kill', tick: 1, actorId: 'self', targetId: 'b', weaponKind: 'gun' });
+    for (const frame of input.frames)
+      if (frame.tick >= 1) frame.actors.find((actor) => actor.id === 'b')!.alive = false;
+    expose(input, 'a', 5);
+    hurt(input, 8, 'a');
+    input.postKillCoverDepartures = await collectPostKillCoverDepartures({
+      ...input,
+      contexts: new Map(
+        input.frames.map((frame) => [
+          frame.tick,
+          {
+            tick: frame.tick,
+            source: `map:verified:${frame.tick}`,
+            reason: null,
+            trace: () => Promise.resolve({ status: 'blocked' as const, reason: 'occluded', rays: [] }),
+          },
+        ]),
+      ),
+    });
+    return input;
+  }
+
+  it('diagnoses a witnessed post-kill departure without claiming a traversable retreat', async () => {
+    const input = await postKillFixture();
+    expect(input.cover).toEqual([]);
+    expect(isDeathRiskInput(input)).toBe(true);
+    const report = buildDeathRiskReport(input);
+    const finding = report.findings.find((item) => item.ruleId === 'r8');
+    expect(finding?.subtype).toBe('left-verified-post-kill-cover');
+    expect(finding?.advice.code).toBe('hold-post-kill-cover');
+    expect(finding?.evidence.map((item) => item.code)).toEqual([
+      'kill-before-exposure',
+      'post-kill-cover',
+      'left-post-kill-cover',
+    ]);
+    expect(finding?.evidence[2].values.damage).toBe(30);
+    expect(isDeathRiskReport(report)).toBe(true);
+    expect(buildDeathRiskReport(JSON.parse(JSON.stringify(input)))).toEqual(report);
+  });
+
+  it('cross-checks collected post-kill proofs against positions, events and continuous live gunlines', async () => {
+    const changes: ((input: DeathRiskInput) => void)[] = [
+      (input) => {
+        input.frames[7].lines[0].status = 'unknown';
+      },
+      (input) => {
+        input.frames = input.frames.filter((frame) => frame.tick !== 6);
+      },
+      (input) => {
+        input.postKillCoverDepartures!.observations[0].coverPosition.x += 1;
+      },
+      (input) => {
+        input.postKillCoverDepartures!.observations[0].hitEventId = 'not-an-event';
+      },
+      (input) => {
+        input.events[1].weaponKind = 'grenade';
+      },
+      (input) => {
+        hurt(input, 4, 'a');
+      },
+      (input) => {
+        input.frames[7].actors[0].alive = false;
+      },
+      (input) => {
+        input.frames[5].actors[0].onGround = false;
+      },
+      (input) => {
+        input.frames[5].actors[0].position.z = 10;
+        input.postKillCoverDepartures!.observations[0].entryPosition.z = 10;
+      },
+    ];
+    for (const change of changes) {
+      const input = await postKillFixture();
+      change(input);
+      expect(status(input, 'r8')).toBe('unavailable');
+    }
+  });
+
+  it('rejects corrupted post-kill cache facts while retaining compatibility without the optional facts', async () => {
+    const input = await postKillFixture();
+    const observation = input.postKillCoverDepartures!.observations[0];
+    observation.entryTick = observation.coverTick;
+    expect(isDeathRiskInput(input)).toBe(false);
+    delete input.postKillCoverDepartures;
+    expect(isDeathRiskInput(input)).toBe(true);
+    expect(status(input, 'r8')).toBe('unavailable');
+  });
+
+  it('retains concrete post-kill evidence gaps in the rule decision', () => {
+    const input = fixture();
+    input.events.push({ id: 'kill', kind: 'kill', tick: 0, actorId: 'self', targetId: 'b' });
+    input.postKillCoverDepartures = { observations: [], reasons: ['post-kill-ground-state-incomplete'] };
+    expect(buildDeathRiskReport(input).evaluations.find((item) => item.ruleId === 'r8')?.reasons).toContain(
+      'post-kill-ground-state-incomplete',
+    );
   });
 
   it('never offers more than three independent risks and retains all rule decisions', () => {

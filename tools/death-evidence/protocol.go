@@ -55,6 +55,7 @@ type playerRecord struct {
 	FieldsComplete bool             `json:"fieldsComplete"`
 	Fields         map[string]field `json:"fields"`
 	ActiveWeapon   *weaponRecord    `json:"activeWeapon"`
+	Animation      *animationRecipe `json:"animation"`
 }
 type weaponRecord struct {
 	ID             string           `json:"id"`

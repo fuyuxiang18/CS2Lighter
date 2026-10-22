@@ -1,6 +1,25 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
+
+func TestMechanicsConVarsPreserveRecordedValues(t *testing.T) {
+	values := mechanicsConVars(map[string]string{
+		"sv_turning_inaccuracy_enabled":  "false",
+		"weapon_accuracy_forcespread":    "0",
+		"sv_strafing_inaccuracy_enabled": "1",
+		"weapon_recoil_scale":            strings.Repeat("0", 65),
+		"unrelated_server_data":          "private",
+	})
+	if len(values) != 3 || values["sv_turning_inaccuracy_enabled"] != "false" || values["weapon_accuracy_forcespread"] != "0" || values["sv_strafing_inaccuracy_enabled"] != "1" {
+		t.Fatalf("recorded mechanics cvars were not preserved: %v", values)
+	}
+	if len(mechanicsConVars(nil)) != 0 {
+		t.Fatal("missing cvars were replaced with defaults")
+	}
+}
 
 func TestGameTickSignedTypedef(t *testing.T) {
 	for _, tc := range []struct {

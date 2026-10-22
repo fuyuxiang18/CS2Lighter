@@ -2810,6 +2810,62 @@ msgstr "Saved report"
 msgid "Newly generated · Saved locally"
 msgstr "Newly generated · Saved locally"
 
+#: src/ui/habits/death-animation-details.tsx
+msgid "This window contains no usable character animation instructions."
+msgstr "This window contains no usable character animation instructions."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The animation resource table is missing or does not match this frame."
+msgstr "The animation resource table is missing or does not match this frame."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The animation resource table could not be decoded completely."
+msgstr "The animation resource table could not be decoded completely."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Some animation instructions are incomplete."
+msgstr "Some animation instructions are incomplete."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "This animation instruction format has not been verified."
+msgstr "This animation instruction format has not been verified."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Final character bone poses have not been reconstructed."
+msgstr "Final character bone poses have not been reconstructed."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Character poses still need alignment with the shot and target rewind time."
+msgstr "Character poses still need alignment with the shot and target rewind time."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The character entity could not be matched uniquely."
+msgstr "The character entity could not be matched uniquely."
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Aim pose"
+msgstr "Aim pose"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Weapon alignment"
+msgstr "Weapon alignment"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Character animation evidence"
+msgstr "Character animation evidence"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
+msgstr "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
+msgstr "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Pose tasks awaiting reconstruction:"
+msgstr "Pose tasks awaiting reconstruction:"
+
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "Replay {offset} s"
@@ -3100,6 +3156,10 @@ msgid "Needs evidence"
 msgstr "Needs evidence"
 
 #: src/ui/habits/death-evidence-panel.tsx
+msgid "Loaded saved review evidence"
+msgstr "Loaded saved review evidence"
+
+#: src/ui/habits/death-evidence-panel.tsx
 msgid "Firing lines and shot traces"
 msgstr "Firing lines and shot traces"
 
@@ -3283,6 +3343,26 @@ msgstr "Stationary inaccuracy radius"
 #: src/ui/habits/death-mechanics-table.tsx
 msgid "Server tick interval"
 msgstr "Server tick interval"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Recorded movement component"
+msgstr "Recorded movement component"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Recorded airborne component"
+msgstr "Recorded airborne component"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Component source"
+msgstr "Component source"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Firing event"
+msgstr "Firing event"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Bullet damage event"
+msgstr "Bullet damage event"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "You"
@@ -6233,6 +6313,10 @@ msgid "After the kill, return along the marked route to cover before taking the 
 msgstr "After the kill, return along the marked route to cover before taking the next fight. Rehearse the kill and the immediate retreat together."
 
 #: src/ui/habits/use-death-risk-copy.ts
+msgid "After this kill, the earlier position still separated you from the remaining enemy firing lines. Hold that cover while checking the next angle, then coordinate the next peek."
+msgstr "After this kill, the earlier position still separated you from the remaining enemy firing lines. Hold that cover while checking the next angle, then coordinate the next peek."
+
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Complete the weapon switch before entering the marked firing line. Rehearse this route with your gun ready at the corner."
 msgstr "Complete the weapon switch before entering the marked firing line. Rehearse this route with your gun ready at the corner."
 
@@ -6313,6 +6397,14 @@ msgid "Verified cover reachable before the next hit"
 msgstr "Verified cover reachable before the next hit"
 
 #: src/ui/habits/use-death-risk-copy.ts
+msgid "Covered position after the kill"
+msgstr "Covered position after the kill"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Left cover and took the next hit"
+msgstr "Left cover and took the next hit"
+
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Contact without an available support line"
 msgstr "Contact without an available support line"
 
@@ -6333,8 +6425,8 @@ msgid "Fight distance"
 msgstr "Fight distance"
 
 #: src/ui/habits/use-death-risk-copy.ts
-msgid "Recovered accuracy half-angle"
-msgstr "Recovered accuracy half-angle"
+msgid "Reference accuracy half-angle"
+msgstr "Reference accuracy half-angle"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Shot accuracy half-angle"
@@ -6345,8 +6437,8 @@ msgid "Target half-angle"
 msgstr "Target half-angle"
 
 #: src/ui/habits/use-death-risk-copy.ts
-msgid "Recovered spread radius at this distance"
-msgstr "Recovered spread radius at this distance"
+msgid "Reference spread radius at this distance"
+msgstr "Reference spread radius at this distance"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Shot spread radius at this distance"
@@ -6489,6 +6581,34 @@ msgstr "The repeat peek, opponent readiness or intervening support is incomplete
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "A usable retreat route has not been verified."
 msgstr "A usable retreat route has not been verified."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The post-kill evidence window is invalid."
+msgstr "The post-kill evidence window is invalid."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The post-kill evidence contains conflicting records."
+msgstr "The post-kill evidence contains conflicting records."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Post-kill damage events are incomplete."
+msgstr "Post-kill damage events are incomplete."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Post-kill positions or matching map geometry are incomplete."
+msgstr "Post-kill positions or matching map geometry are incomplete."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Some post-kill enemy firing lines could not be checked."
+msgstr "Some post-kill enemy firing lines could not be checked."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Grounded movement at the cover exit could not be confirmed."
+msgstr "Grounded movement at the cover exit could not be confirmed."
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The earlier position could not be checked against the later enemy positions."
+msgstr "The earlier position could not be checked against the later enemy positions."
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "The earliest possible teammate support has not been verified."

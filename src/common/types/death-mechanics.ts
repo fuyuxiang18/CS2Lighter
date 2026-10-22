@@ -22,6 +22,10 @@ export type DeathMechanicsMeasurement = {
   firstServerTick: number | null;
   lastServerTick: number | null;
   component: 'movement' | 'landing' | 'recovery' | null;
+  /** Shot-time components are explicitly transmitted, never inferred from frame-end speed. */
+  measurementSource?: 'fire-bullets-extra' | 'bullet-damage';
+  movementInaccuracy?: number;
+  airborneInaccuracy?: number;
   reasons: DeathMechanicsReason[];
 };
 

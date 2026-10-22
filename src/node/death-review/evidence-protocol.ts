@@ -1,3 +1,6 @@
+import type { EvidenceBulletDamage } from './evidence-ballistics';
+import type { EvidenceAnimationContext } from './animation-evidence';
+
 export type EvidenceVector = [number, number, number];
 type EvidenceWindow = { startTick: number; endTick: number };
 export type EvidenceRequest = {
@@ -33,6 +36,13 @@ export type EvidencePlayer = {
   /** The subprocess can send deltas; the Node reader expands them before delivering a frame. */
   fieldsComplete: boolean;
   fields: Record<string, WireField>;
+  animation?: {
+    contextId: number;
+    recipeVersion: number | null;
+    activeSlot: number | null;
+    topologyBase64: string | null;
+    dynamicBase64: string | null;
+  } | null;
   activeWeapon?: {
     id: string;
     className: string;
@@ -88,6 +98,7 @@ export type EvidenceEnd = {
   duplicateTicks: number;
   frames: number;
   shots: number;
+  bulletDamages?: number;
   outputBytes?: number;
   capabilities?: string[];
   supportedClasses?: Record<string, number>;
@@ -98,6 +109,8 @@ export type EvidenceMessage =
   | EvidenceHeader
   | EvidenceFrame
   | EvidenceShot
+  | EvidenceBulletDamage
+  | EvidenceAnimationContext
   | EvidenceEnd
   | { type: 'progress'; frame: number; tick: number; requestedTicks: number; emittedTicks: number };
 

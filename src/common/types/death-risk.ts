@@ -1,3 +1,5 @@
+import type { DeathRiskPostKillCoverDeparture } from './death-cover';
+
 export type DeathRiskRuleId =
   | 'r1'
   | 'r2'
@@ -40,6 +42,7 @@ export type DeathRiskAdvice = {
     | 'stop-at-earlier-cover'
     | 'change-repeek-timing-or-angle'
     | 'return-to-verified-cover'
+    | 'hold-post-kill-cover'
     | 'ready-weapon-before-peeking'
     | 'reload-behind-cover'
     | 'check-magazine-before-contact'
@@ -254,6 +257,7 @@ export type DeathRiskInput = {
   cover: DeathRiskCoverProof[];
   support: DeathRiskSupportProof[];
   supportTransitions?: { observations: DeathRiskSupportTransition[]; reasons: string[] };
+  postKillCoverDepartures?: { observations: DeathRiskPostKillCoverDeparture[]; reasons: string[] };
   /** Unknown coverage must not be interpreted as a negative observation. */
   coverage: {
     events: boolean;

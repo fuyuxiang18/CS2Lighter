@@ -1,6 +1,7 @@
 import { DEATH_RISK_REVISION, DEATH_RISK_RULES } from 'csdm/common/death-review/death-risk-rules';
 import type {
   DeathRiskActorFrame,
+  DeathRiskAdvice,
   DeathRiskEvidence,
   DeathRiskFinding,
   DeathRiskFrame,
@@ -96,6 +97,7 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
     items: DeathRiskEvidence[],
     subtype?: string,
     priorityOverride?: number,
+    adviceCode?: DeathRiskAdvice['code'],
   ) => {
     if (
       report.findings.length >= MAX_FINDINGS ||
@@ -118,7 +120,7 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
       subtype,
       targetIds,
       evidence: items,
-      advice: { code: definition.advice, values: items.at(-1)?.values ?? {} },
+      advice: { code: adviceCode ?? definition.advice, values: items.at(-1)?.values ?? {} },
     });
     const entry = report.evaluations.find((value) => value.ruleId === ruleId)!;
     entry.status = 'matched';
@@ -775,7 +777,116 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
     'repeek-context-incomplete',
   );
 
-  // R8 requires a currently verified escape, not a guessed nearby wall or an arbitrary post-kill timer.
+  // R8 can prove a witnessed loss of existing cover without inventing a return route.
+  for (const observation of input.postKillCoverDepartures?.observations ?? []) {
+    const kill = events.find((event) => event.id === observation.killEventId);
+    const hit = events.find((event) => event.id === observation.hitEventId);
+    const before = frames.find((frame) => frame.tick === observation.coverTick);
+    const entry = frames.find((frame) => frame.tick === observation.entryTick);
+    const covered = frames.filter((frame) => frame.tick > observation.killTick && frame.tick <= observation.coverTick);
+    const exposed = frames.filter((frame) => frame.tick >= observation.entryTick && frame.tick <= observation.endTick);
+    if (
+      !input.coverage.events ||
+      observation.actorId !== input.subjectId ||
+      !kill ||
+      kill.kind !== 'kill' ||
+      kill.actorId !== input.subjectId ||
+      kill.targetId !== observation.killedEnemyId ||
+      kill.tick !== observation.killTick ||
+      !hit ||
+      hit.kind !== 'damage' ||
+      hit.weaponKind !== 'gun' ||
+      hit.amount <= 0 ||
+      hit.targetId !== input.subjectId ||
+      hit.actorId !== observation.attackerId ||
+      hit.tick !== observation.endTick ||
+      !enemies.has(observation.attackerId) ||
+      !enemies.has(observation.killedEnemyId) ||
+      observation.coverTick <= kill.tick ||
+      observation.entryTick !== observation.coverTick + 1 ||
+      observation.endTick <= observation.entryTick ||
+      !before ||
+      !entry ||
+      covered.length !== observation.coverTick - kill.tick ||
+      exposed.length !== observation.endTick - observation.entryTick + 1 ||
+      observation.sources.length === 0 ||
+      observation.enemyIds.length === 0 ||
+      !observation.enemyIds.includes(observation.attackerId) ||
+      !observation.enemyIds.every((id) => enemies.has(id) && entered(entry, before, id)) ||
+      !subject(before) ||
+      !subject(entry) ||
+      subject(before)!.onGround !== true ||
+      subject(entry)!.onGround !== true ||
+      subject(before)!.position.z !== subject(entry)!.position.z ||
+      distance(subject(before)!.position, observation.coverPosition) > EPSILON ||
+      distance(subject(before)!.eye, observation.coverEye) > EPSILON ||
+      distance(subject(entry)!.position, observation.entryPosition) > EPSILON ||
+      covered.some(
+        (frame) =>
+          !subject(frame)?.alive ||
+          actor(frame, kill.targetId)?.alive !== false ||
+          !knownEnemyLines(frame) ||
+          clearEnemies(frame).length !== 0,
+      ) ||
+      exposed.some(
+        (frame) =>
+          !subject(frame)?.alive ||
+          actor(frame, hit.actorId)?.alive !== true ||
+          actor(frame, kill.targetId)?.alive !== false ||
+          !knownEnemyLines(frame) ||
+          line(frame, input.subjectId, hit.actorId)?.status !== 'clear',
+      ) ||
+      events.some(
+        (event) =>
+          event.kind === 'damage' &&
+          event.targetId === input.subjectId &&
+          event.tick > kill.tick &&
+          event.tick <= entry.tick,
+      ) ||
+      events.some(
+        (event) =>
+          event.kind === 'kill' &&
+          event.actorId === input.subjectId &&
+          event.tick > kill.tick &&
+          event.tick <= hit.tick,
+      )
+    )
+      continue;
+    add(
+      'r8',
+      kill.tick,
+      hit.tick,
+      observation.enemyIds,
+      [
+        evidence('kill-before-exposure', kill.tick, {}, [`event:${kill.id}`], { targetId: kill.targetId }),
+        evidence(
+          'post-kill-cover',
+          before.tick,
+          { enemyCount: input.enemyIds.filter((id) => actor(before, id)?.alive).length },
+          [`frame:${before.tick}:${input.subjectId}`, `proof:${observation.id}`],
+          { position: observation.coverPosition },
+        ),
+        evidence(
+          'left-post-kill-cover',
+          entry.tick,
+          {
+            movementUnits: distance(observation.coverPosition, observation.entryPosition),
+            enemyCount: observation.enemyIds.length,
+            durationSeconds: (hit.tick - entry.tick) / input.tickrate,
+            hitTick: hit.tick,
+            damage: hit.amount,
+          },
+          [`frame:${entry.tick}:${input.subjectId}`, `event:${hit.id}`, `proof:${observation.id}`],
+          { endTick: hit.tick, targetId: hit.actorId, position: observation.entryPosition },
+        ),
+      ],
+      'left-verified-post-kill-cover',
+      undefined,
+      'hold-post-kill-cover',
+    );
+  }
+
+  // The separate return-route branch still requires actual traversability and timing proof.
   const kills = events.filter(
     (event) => event.kind === 'kill' && event.actorId === input.subjectId && enemies.has(event.targetId),
   );
@@ -837,6 +948,12 @@ export function buildDeathRiskReport(input: DeathRiskInput): DeathRiskReport {
     kills.length > 0,
     'escape-route-unverified',
   );
+  const postKillEvaluation = report.evaluations.find((value) => value.ruleId === 'r8')!;
+  if (postKillEvaluation.status === 'unavailable' && input.postKillCoverDepartures?.reasons.length) {
+    postKillEvaluation.reasons = [
+      ...new Set([...input.postKillCoverDepartures.reasons, ...postKillEvaluation.reasons]),
+    ];
+  }
 
   // R14: previously shared gunline -> own entry -> no actual teammate gunline in this fight.
   // No assumption is made about all possible routes or hypothetical arrival times.

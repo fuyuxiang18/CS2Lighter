@@ -3,6 +3,7 @@ import type { DeathMechanicsMeasurement, DeathMechanicsReason } from 'csdm/commo
 import type { EvidenceEnd, EvidenceFrame, EvidenceHeader, EvidencePlayer, EvidenceShot } from './evidence-protocol';
 import { evidenceNumber } from './evidence-protocol';
 import { getEvidenceWeaponName } from './evidence-weapon-name';
+import { resolveShotAccuracyComponents, type EvidenceBulletDamage } from './evidence-ballistics';
 import {
   getWeaponAccuracyProfile,
   shotServerInterval,
@@ -142,9 +143,10 @@ function profileAgrees(profile: WeaponAccuracyProfile, raw: EvidenceShot): boole
 
 /**
  * Uses measured shot inaccuracy and the weapon's observed accuracy-penalty trajectory.
- * Never replays an assumed deceleration/recovery formula. Attribution requires a
- * clean measured baseline and a complete, unchanged state interval. Ambiguous
- * airborne/stance/scope/reload/multiple-shot intervals remain unavailable.
+ * Never replays an assumed deceleration/recovery formula. Direct transmitted
+ * components take precedence; residual attribution requires a clean measured
+ * baseline and a complete, unchanged state interval. Ambiguous intervals remain
+ * unavailable.
  */
 export function buildRiskMechanicsEvidence(input: {
   header: EvidenceHeader;
@@ -153,6 +155,7 @@ export function buildRiskMechanicsEvidence(input: {
   end: EvidenceEnd;
   subjectId: string;
   contacts?: readonly RiskMechanicsContact[];
+  bulletDamages?: readonly EvidenceBulletDamage[];
   aimProofs?: readonly RiskMechanicsAimProof[];
 }): RiskMechanicsResult {
   const result: RiskMechanicsResult = {
@@ -168,6 +171,9 @@ export function buildRiskMechanicsEvidence(input: {
     input.end.missingTicks.length === 0 &&
     input.end.emittedTicks === input.frames.length &&
     input.end.shots === input.shots.length &&
+    (input.end.bulletDamages === undefined
+      ? (input.bulletDamages?.length ?? 0) === 0
+      : input.end.bulletDamages === (input.bulletDamages?.length ?? 0)) &&
     input.frames.length === input.header.requestedTicks;
   const byServerTick = new Map<number, EvidenceFrame>();
   const duplicateServerTicks = new Set<number>();
@@ -204,6 +210,16 @@ export function buildRiskMechanicsEvidence(input: {
       reasons: [],
     };
     result.measurements.push(m);
+    const enabled = (name: string) => ['1', 'true'].includes(raw.conVars?.[name]?.trim().toLowerCase() ?? '');
+    const forced = raw.conVars?.weapon_accuracy_forcespread;
+    if (
+      enabled('weapon_accuracy_nospread') ||
+      enabled('weapon_debug_max_inaccuracy') ||
+      (forced !== undefined && Number.isFinite(Number(forced)) && Number(forced) > 0)
+    ) {
+      m.reasons.push('accuracy-component-unverified');
+      continue;
+    }
     const interval: State[] = [];
     if (clock)
       for (let t = clock.first; t <= clock.last; t++) {
@@ -212,6 +228,76 @@ export function buildRiskMechanicsEvidence(input: {
         if (!s) break;
         interval.push(s);
       }
+    const contacts = (input.contacts ?? []).filter(
+      (c) => c.shotTick === raw.tick && c.source && c.targetId && Number.isFinite(c.distance) && c.distance > 0,
+    );
+    const exact = resolveShotAccuracyComponents({
+      shot: raw,
+      shots: raws,
+      targetIds: contacts.map((contact) => contact.targetId),
+      bulletDamages: input.bulletDamages ?? [],
+    });
+    if (exact) {
+      m.measurementSource = exact.source;
+      m.movementInaccuracy = exact.movement;
+      m.airborneInaccuracy = exact.airborne;
+    }
+    const weaponHandle = finite(raw.raw.weapon_id);
+    // The server can send a shot-time component directly. It does not depend on
+    // reconstructing a frame-end velocity, a missing turning property or a clean
+    // snapshot anchor. This branch still requires a unique real damage exchange.
+    if (
+      complete &&
+      clock &&
+      profile &&
+      profileAgrees(profile, raw) &&
+      inaccuracy !== null &&
+      spread !== null &&
+      raw.playerEntityId &&
+      recoil === 0 &&
+      weaponHandle !== null &&
+      Number.isSafeInteger(weaponHandle) &&
+      weaponHandle >= 0 &&
+      weaponHandle <= 0xffffffff &&
+      raws.filter((s) => s.tick === raw.tick).length === 1 &&
+      exact &&
+      !exact.inAir &&
+      exact.airborne === 0 &&
+      exact.movement > tolerance &&
+      contacts.length === 1
+    ) {
+      const contact = contacts[0];
+      m.component = 'movement';
+      m.speed =
+        interval.length === clock.last - clock.first + 1 && stableStates(interval)
+          ? Math.max(...interval.map((s) => s.speed))
+          : null;
+      result.shots.push({
+        id,
+        tick: raw.tick,
+        actorId: input.subjectId,
+        weaponEntityId: `${weaponHandle & 0x3fff}:${Math.floor(weaponHandle / 16384)}`,
+        weaponName: m.weaponName,
+      });
+      result.precision.push({
+        shotId: id,
+        kind: 'movement',
+        profileSource: `${profile.source};${exact.source};${contact.source}`,
+        profileVerified: true,
+        componentVerified: true,
+        measurementResolutionDegrees: spreadHalfAngleDegrees(tolerance, 0),
+        segmentFirstShot: true,
+        baselineHalfAngleDegrees: spreadHalfAngleDegrees(inaccuracy - exact.movement, spread),
+        actualHalfAngleDegrees: spreadHalfAngleDegrees(inaccuracy, spread),
+        targetHalfAngleDegrees: null,
+        targetId: contact.targetId,
+        targetGeometryVerified: false,
+        targetAssociationVerified: true,
+        distance: contact.distance,
+        stableAfterTick: null,
+      });
+      continue;
+    }
     if (
       !complete ||
       !clock ||
@@ -223,6 +309,13 @@ export function buildRiskMechanicsEvidence(input: {
       continue;
     }
     const current = interval.at(-1)!;
+    if (
+      (typeof raw.raw.player_inair === 'boolean' && raw.raw.player_inair === current.ground) ||
+      (typeof raw.raw.player_scoped === 'boolean' && raw.raw.player_scoped !== current.scoped)
+    ) {
+      m.reasons.push('shot-state-incomplete');
+      continue;
+    }
     result.shots.push({
       id,
       tick: raw.tick,
@@ -267,19 +360,24 @@ export function buildRiskMechanicsEvidence(input: {
     const direct = record(raw.raw.extra),
       directMove = finite(direct?.inaccuracy_move),
       directAir = finite(direct?.inaccuracy_air);
-    const noTurning = sinceAnchor.every((s) => s.turningInaccuracy === 0);
+    if (
+      !exact &&
+      (input.bulletDamages ?? []).some(
+        (event) =>
+          event.tick === raw.tick &&
+          event.attackerEntityId === raw.playerEntityId &&
+          event.attackerSteamId === raw.steamId,
+      )
+    ) {
+      m.reasons.push('accuracy-component-unverified');
+      continue;
+    }
+    const turningSetting = raw.conVars?.sv_turning_inaccuracy_enabled?.trim().toLowerCase();
+    const noTurning =
+      ((turningSetting === '0' || turningSetting === 'false') &&
+        sinceAnchor.every((s) => s.turningInaccuracy === null || s.turningInaccuracy === 0)) ||
+      sinceAnchor.every((s) => s.turningInaccuracy === 0);
     if (cleanAnchor && interval.every((s) => s.ground) && inaccuracy > baseline + tolerance) {
-      if (
-        recoil === 0 &&
-        priorShots.length === 0 &&
-        directMove !== null &&
-        directMove > tolerance &&
-        directMove <= inaccuracy &&
-        directAir === 0
-      ) {
-        kind = 'movement';
-        conservativeBaseline = inaccuracy - directMove;
-      }
       // For a fresh shot, even the post-shot penalty is used as the upper bound
       // of non-moving inaccuracy. This deliberately misses marginal movement.
       const penaltyUpper = Math.max(...interval.map((s) => s.penalty));
@@ -292,7 +390,7 @@ export function buildRiskMechanicsEvidence(input: {
         interval.every((s) => s.speed > 0) &&
         inaccuracy > penaltyUpper + tolerance
       ) {
-        if (directMove === null || (directMove > tolerance && directAir === 0)) {
+        if (directMove === null && directAir === null) {
           kind = 'movement';
           conservativeBaseline = penaltyUpper;
         }
@@ -340,9 +438,6 @@ export function buildRiskMechanicsEvidence(input: {
       );
       continue;
     }
-    const contacts = (input.contacts ?? []).filter(
-      (c) => c.shotTick === raw.tick && c.source && c.targetId && Number.isFinite(c.distance) && c.distance > 0,
-    );
     if (contacts.length !== 1) {
       m.reasons.push('target-exchange-unverified');
       continue;

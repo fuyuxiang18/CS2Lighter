@@ -1,6 +1,6 @@
 import type { DeathRiskAdvice, DeathRiskRuleId } from 'csdm/common/types/death-risk';
 
-export const DEATH_RISK_REVISION = '2026-10-12.1';
+export const DEATH_RISK_REVISION = '2026-10-22.1';
 
 export const DEATH_RISK_RULES: { id: DeathRiskRuleId; priority: number; advice: DeathRiskAdvice['code'] }[] = [
   { id: 'r1', priority: 85, advice: 'wait-for-movement-recovery' },

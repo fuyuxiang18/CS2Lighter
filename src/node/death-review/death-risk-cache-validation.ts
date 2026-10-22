@@ -2,7 +2,7 @@ import type { DeathRiskInput, DeathRiskReport } from 'csdm/common/types/death-ri
 import { DEATH_RISK_RULES } from 'csdm/common/death-review/death-risk-rules';
 
 const ruleIds = new Set<string>(DEATH_RISK_RULES.map((rule) => rule.id));
-const adviceCodes = new Set<string>(DEATH_RISK_RULES.map((rule) => rule.advice));
+const adviceCodes = new Set<string>([...DEATH_RISK_RULES.map((rule) => rule.advice), 'hold-post-kill-cover']);
 function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
@@ -399,6 +399,48 @@ export function isDeathRiskInput(value: unknown): value is DeathRiskInput {
         !vector(item.previousSupport.subjectPosition) ||
         !uniqueStrings(item.previousSupport.teammateIds, 4) ||
         item.previousSupport.teammateIds.length === 0
+      )
+        return false;
+      ids.add(item.id);
+    }
+  }
+  if (value.postKillCoverDepartures !== undefined) {
+    const departures = value.postKillCoverDepartures;
+    if (!object(departures) || !array(departures.observations, 32) || !uniqueStrings(departures.reasons)) return false;
+    const ids = new Set<string>();
+    const eventIds = new Set(value.events.map((event) => (event as Record<string, unknown>).id));
+    for (const item of departures.observations) {
+      if (
+        !object(item) ||
+        !text(item.id) ||
+        ids.has(item.id) ||
+        item.actorId !== value.subjectId ||
+        !text(item.killEventId) ||
+        !eventIds.has(item.killEventId) ||
+        !text(item.killedEnemyId) ||
+        !value.enemyIds.includes(item.killedEnemyId) ||
+        !text(item.hitEventId) ||
+        !eventIds.has(item.hitEventId) ||
+        !text(item.attackerId) ||
+        !value.enemyIds.includes(item.attackerId) ||
+        !tick(item.killTick) ||
+        item.killTick < startTick ||
+        !tick(item.coverTick) ||
+        item.coverTick <= item.killTick ||
+        !tick(item.entryTick) ||
+        item.entryTick !== item.coverTick + 1 ||
+        !tick(item.endTick) ||
+        item.endTick <= item.entryTick ||
+        item.endTick > deathTick ||
+        !vector(item.coverPosition) ||
+        !vector(item.coverEye) ||
+        !vector(item.entryPosition) ||
+        !uniqueStrings(item.enemyIds, 5) ||
+        item.enemyIds.length === 0 ||
+        !item.enemyIds.includes(item.attackerId) ||
+        !item.enemyIds.every((id) => (value.enemyIds as string[]).includes(id)) ||
+        !uniqueStrings(item.sources, 32768) ||
+        item.sources.length === 0
       )
         return false;
       ids.add(item.id);

@@ -2804,6 +2804,62 @@ msgstr "已保存的点评"
 msgid "Newly generated · Saved locally"
 msgstr "刚刚生成 · 已保存到本机"
 
+#: src/ui/habits/death-animation-details.tsx
+msgid "This window contains no usable character animation instructions."
+msgstr "此片段没有可用的角色动作指令。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The animation resource table is missing or does not match this frame."
+msgstr "动画资源表缺失，或与当前帧不匹配。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The animation resource table could not be decoded completely."
+msgstr "动画资源表未能完整解码。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Some animation instructions are incomplete."
+msgstr "部分动作指令不完整。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "This animation instruction format has not been verified."
+msgstr "此版本的动作指令格式尚未验证。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Final character bone poses have not been reconstructed."
+msgstr "尚未还原角色骨骼的最终姿态。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Character poses still need alignment with the shot and target rewind time."
+msgstr "还需将人体姿态与射击时刻、目标回溯时刻对齐。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "The character entity could not be matched uniquely."
+msgstr "无法唯一匹配角色实体。"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Aim pose"
+msgstr "瞄准姿态"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Weapon alignment"
+msgstr "持枪对齐"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Character animation evidence"
+msgstr "角色动作证据"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Animation recorded in {framesWithRecipe} frames · instruction chains decoded in {decodedTopologyFrames} frames"
+msgstr "{framesWithRecipe} 帧记录了动作指令 · {decodedTopologyFrames} 帧已解出指令链"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Largest resource definitions: {graphResourceCount} animation references · {boneCount} bones · {maskCount} bone masks"
+msgstr "资源定义中的最大条目数：{graphResourceCount} 个动画引用 · {boneCount} 根骨骼 · {maskCount} 组骨骼遮罩"
+
+#: src/ui/habits/death-animation-details.tsx
+msgid "Pose tasks awaiting reconstruction:"
+msgstr "待还原的姿态任务："
+
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "回看 {offset} 秒"
@@ -3094,6 +3150,10 @@ msgid "Needs evidence"
 msgstr "待补证据"
 
 #: src/ui/habits/death-evidence-panel.tsx
+msgid "Loaded saved review evidence"
+msgstr "已加载保存的复盘证据"
+
+#: src/ui/habits/death-evidence-panel.tsx
 msgid "Firing lines and shot traces"
 msgstr "枪线与逐发轨迹"
 
@@ -3277,6 +3337,26 @@ msgstr "站定基线半径"
 #: src/ui/habits/death-mechanics-table.tsx
 msgid "Server tick interval"
 msgstr "服务器 tick 区间"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Recorded movement component"
+msgstr "实录移动精度损失"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Recorded airborne component"
+msgstr "实录空中精度损失"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Component source"
+msgstr "分量来源"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Firing event"
+msgstr "射击事件"
+
+#: src/ui/habits/death-mechanics-table.tsx
+msgid "Bullet damage event"
+msgstr "弹道伤害事件"
 
 #: src/ui/habits/death-review-detail.tsx
 msgid "You"
@@ -6227,6 +6307,10 @@ msgid "After the kill, return along the marked route to cover before taking the 
 msgstr "击杀后沿标出的路线退回掩体，再处理下一名对手。把击杀与立即回撤作为一个完整动作练习。"
 
 #: src/ui/habits/use-death-risk-copy.ts
+msgid "After this kill, the earlier position still separated you from the remaining enemy firing lines. Hold that cover while checking the next angle, then coordinate the next peek."
+msgstr "这次击杀后，原位置仍能挡住剩余敌人的枪线。先利用这处掩体确认下一个角度，再配合队友接下一次交火。"
+
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Complete the weapon switch before entering the marked firing line. Rehearse this route with your gun ready at the corner."
 msgstr "出掩体前先完成切枪。练习这条路线时，把枪械就绪的位置提前到拐角内侧。"
 
@@ -6307,6 +6391,14 @@ msgid "Verified cover reachable before the next hit"
 msgstr "下次受击前可到达的掩体"
 
 #: src/ui/habits/use-death-risk-copy.ts
+msgid "Covered position after the kill"
+msgstr "击杀后的掩体位置"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Left cover and took the next hit"
+msgstr "离开掩体后受击"
+
+#: src/ui/habits/use-death-risk-copy.ts
 msgid "Contact without an available support line"
 msgstr "接敌时没有可用支援枪线"
 
@@ -6327,8 +6419,8 @@ msgid "Fight distance"
 msgstr "交战距离"
 
 #: src/ui/habits/use-death-risk-copy.ts
-msgid "Recovered accuracy half-angle"
-msgstr "恢复后的精度半角"
+msgid "Reference accuracy half-angle"
+msgstr "对照精度半角"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Shot accuracy half-angle"
@@ -6339,8 +6431,8 @@ msgid "Target half-angle"
 msgstr "目标半角"
 
 #: src/ui/habits/use-death-risk-copy.ts
-msgid "Recovered spread radius at this distance"
-msgstr "此距离下稳定散布半径"
+msgid "Reference spread radius at this distance"
+msgstr "此距离的对照散布半径"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "Shot spread radius at this distance"
@@ -6483,6 +6575,34 @@ msgstr "重复露身、对手就绪状态或期间支援记录不完整。"
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "A usable retreat route has not been verified."
 msgstr "尚未核实可用的回撤路线。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The post-kill evidence window is invalid."
+msgstr "击杀后的证据时间范围无效。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The post-kill evidence contains conflicting records."
+msgstr "击杀后的证据记录互相冲突。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Post-kill damage events are incomplete."
+msgstr "击杀后的伤害事件不完整。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Post-kill positions or matching map geometry are incomplete."
+msgstr "击杀后的位置记录或对应版本的地图几何不完整。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Some post-kill enemy firing lines could not be checked."
+msgstr "未能检查击杀后部分敌人的枪线。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "Grounded movement at the cover exit could not be confirmed."
+msgstr "无法确认离开掩体时是在同一高度的地面移动。"
+
+#: src/ui/habits/use-death-risk-copy.ts
+msgid "The earlier position could not be checked against the later enemy positions."
+msgstr "无法确认敌人移动后，原位置是否仍有掩体遮挡。"
 
 #: src/ui/habits/use-death-risk-copy.ts
 msgid "The earliest possible teammate support has not been verified."

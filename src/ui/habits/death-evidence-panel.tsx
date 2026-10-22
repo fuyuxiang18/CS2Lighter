@@ -10,6 +10,7 @@ import { buildMatch2dViewerRoundPath } from 'csdm/ui/routes-paths';
 import { ReviewButton } from './review-button';
 import { DeathRiskPanel, DeathRiskCoverage } from './death-risk-panel';
 import { DeathMechanicsTable } from './death-mechanics-table';
+import { DeathAnimationDetails } from './death-animation-details';
 
 function replayPath(record: DeathReviewRecord, tick: number) {
   return `${buildMatch2dViewerRoundPath(record.checksum, record.roundNumber)}?${new URLSearchParams({ player: record.steamId, tick: String(tick) })}`;
@@ -247,8 +248,14 @@ function EvidenceResults({ report, record }: { report: DeathEvidenceReport; reco
   }
   return (
     <div className="flex min-w-0 flex-col gap-16">
+      {report.loadedFromSavedEvidence && (
+        <p className="text-body text-gray-700">
+          <Trans>Loaded saved review evidence</Trans>
+        </p>
+      )}
       <DeathRiskPanel report={report.risk} record={record} />
       {report.mechanics && <DeathMechanicsTable evidence={report.mechanics} record={record} />}
+      {report.animation && <DeathAnimationDetails evidence={report.animation} />}
       <details className="rounded-8 border border-gray-300">
         <summary className="cursor-pointer p-12 text-body-strong">
           <Trans>Firing lines and shot traces</Trans>

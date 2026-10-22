@@ -16,6 +16,7 @@ import (
 	"time"
 
 	dem "github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs"
+	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/constants"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/msgs2"
@@ -50,6 +51,23 @@ var weaponGeometryFields = []string{
 	"CBodyComponent.m_skeletonInstance.m_modelState.m_hModel", "CBodyComponent.m_skeletonInstance.m_angRotation", "CBodyComponent.m_skeletonInstance.m_flScale", "CBodyComponent.m_skeletonInstance.m_hParent",
 	"m_Collision.m_vecMins", "m_Collision.m_vecMaxs", "m_Collision.m_nSolidType", "m_Collision.m_usSolidFlags",
 	"m_hOwnerEntity", "m_hEffectEntity", "m_fEffects", "m_nRenderMode", "m_clrRender", "m_bDisabled",
+}
+
+// These are recorded values only. In particular, a missing replicated cvar
+// does not establish that the server used the installed game's default.
+func mechanicsConVars(values map[string]string) map[string]string {
+	result := map[string]string{}
+	for _, name := range []string{
+		"weapon_accuracy_nospread", "weapon_accuracy_forcespread", "weapon_air_spread_scale", "weapon_recoil_scale", "sv_maxunlag",
+		"sv_turning_inaccuracy_enabled", "sv_turning_inaccuracy_angle_min", "sv_turning_inaccuracy_decay",
+		"sv_strafing_inaccuracy_enabled", "sv_strafing_inaccuracy_scale", "sv_strafing_inaccuracy_bias",
+		"weapon_debug_max_inaccuracy", "weapon_debug_inaccuracy_only_up", "weapon_accuracy_reset_on_deploy",
+	} {
+		if value, found := values[name]; found && len(value) <= 64 {
+			result[name] = value
+		}
+	}
+	return result
 }
 
 type tracked struct {
@@ -93,9 +111,11 @@ type extractor struct {
 	unsupportedClasses map[string]int
 	frames             int
 	shots              int
+	bulletDamages      int
 	duplicateTicks     int
 	lastProgress       time.Time
 	mechanicsTypes     map[string]string
+	animation          animationState
 }
 
 func kind(class string) string {
@@ -180,7 +200,7 @@ func (x *extractor) send(v any) {
 func (x *extractor) attach(tr *tracked, duringCreation bool) {
 	var names []string
 	if tr.category == "player" {
-		names = playerFields
+		names = animationFields()
 	} else if tr.category == "weapon" {
 		names = append(append([]string{}, weaponFields...), weaponGeometryFields...)
 		for _, node := range []string{"m_skeletonInstance", "m_sceneNode"} {
@@ -344,23 +364,38 @@ func components(e st.Entity, prefix string) *vector {
 	return &vector{*a, *b, *c}
 }
 func (x *extractor) playerSteamID(e st.Entity) *string {
-	for _, player := range x.p.GameState().Participants().All() {
-		if player.Entity == nil {
+	player := uniquePawnController(e, x.p.GameState().Participants().All())
+	if player == nil {
+		return nil
+	}
+	pawn := player.PlayerPawnEntity()
+	if pawn != nil && entityID(pawn) == entityID(e) && player.SteamID64 > 0 {
+		id := strconv.FormatUint(player.SteamID64, 10)
+		if len(id) == 17 {
+			return &id
+		}
+	}
+	return nil
+}
+
+func uniquePawnController(e st.Entity, participants []*common.Player) *common.Player {
+	var found *common.Player
+	for _, player := range participants {
+		if player == nil || player.Entity == nil {
 			continue
 		}
 		handle, ok := raw(player.Entity, "m_hPlayerPawn").(uint64)
 		if !ok || !matchesHandle(e, handle) {
 			continue
 		}
-		pawn := player.PlayerPawnEntity()
-		if pawn != nil && entityID(pawn) == entityID(e) && player.SteamID64 > 0 {
-			id := strconv.FormatUint(player.SteamID64, 10)
-			if len(id) == 17 {
-				return &id
-			}
+		// Resolve uniqueness before checking SteamID or the controller's other
+		// fields: a broken second controller still makes ownership ambiguous.
+		if found != nil {
+			return nil
 		}
+		found = player
 	}
-	return nil
+	return found
 }
 func (x *extractor) player(tr *tracked) playerRecord {
 	e := tr.entity
@@ -376,7 +411,7 @@ func (x *extractor) player(tr *tracked) playerRecord {
 		yaw = &angle[1]
 		pitch = &angle[0]
 	}
-	fields := x.fields(tr, playerFields)
+	fields := x.fields(tr, animationFields())
 	// Tick base is owned by the controller in Source 2. Keep it separate from
 	// the server clock: it is not necessarily the packet's server tick.
 	fields["controller.m_nTickBase"] = field{Present: false, Value: nil}
@@ -391,7 +426,7 @@ func (x *extractor) player(tr *tracked) playerRecord {
 			break
 		}
 	}
-	return playerRecord{ID: entityID(e), SteamID: x.playerSteamID(e), Origin: pos, Eyes: eyes, Yaw: yaw, Pitch: pitch, Velocity: components(e, "m_vecVelocity"), Team: number(raw(e, "m_iTeamNum")), Health: number(raw(e, "m_iHealth")), LifeState: number(raw(e, "m_lifeState")), Hull: hull{Mins: vec(raw(e, "m_Collision.m_vecMins")), Maxs: vec(raw(e, "m_Collision.m_vecMaxs"))}, FieldsComplete: true, Fields: fields, ActiveWeapon: x.activeWeapon(e)}
+	return playerRecord{ID: entityID(e), SteamID: x.playerSteamID(e), Origin: pos, Eyes: eyes, Yaw: yaw, Pitch: pitch, Velocity: components(e, "m_vecVelocity"), Team: number(raw(e, "m_iTeamNum")), Health: number(raw(e, "m_iHealth")), LifeState: number(raw(e, "m_lifeState")), Hull: hull{Mins: vec(raw(e, "m_Collision.m_vecMins")), Maxs: vec(raw(e, "m_Collision.m_vecMaxs"))}, FieldsComplete: true, Fields: fields, ActiveWeapon: x.activeWeapon(e), Animation: x.animationRecipe(e)}
 }
 
 func (x *extractor) activeWeapon(pawn st.Entity) *weaponRecord {
@@ -539,6 +574,7 @@ func (x *extractor) frame() {
 	if !x.wanted[clock.Tick] {
 		return
 	}
+	x.emitAnimationContext(clock)
 	players := []playerRecord{}
 	world := []dynamicRecord{}
 	smokes := []smokeRecord{}
@@ -617,6 +653,7 @@ func (x *extractor) shot(message *msgs2.CMsgTEFireBullets) {
 	if !x.headerSent {
 		return
 	}
+	x.emitAnimationContext(clock)
 	var steamID *string
 	var playerEntityID *string
 	var slot *int
@@ -653,12 +690,7 @@ func (x *extractor) shot(message *msgs2.CMsgTEFireBullets) {
 	}
 	x.emitHeader()
 	x.shots++
-	conVars := map[string]string{}
-	for _, name := range []string{"weapon_accuracy_nospread", "weapon_accuracy_forcespread", "weapon_air_spread_scale", "weapon_recoil_scale", "sv_maxunlag"} {
-		if value, found := x.p.GameState().Rules().ConVars()[name]; found && len(value) <= 64 {
-			conVars[name] = value
-		}
-	}
+	conVars := mechanicsConVars(x.p.GameState().Rules().ConVars())
 	x.send(map[string]any{"type": "shot", "frame": clock.Frame, "tick": clock.Tick, "serverTick": clock.ServerTick, "playerHandle": message.Player, "playerEntityId": playerEntityID, "playerSlot": slot, "steamId": steamID, "raw": json.RawMessage(raw), "conVars": conVars})
 }
 func run(req request, writer io.Writer) (result error) {
@@ -709,7 +741,7 @@ func run(req request, writer io.Writer) (result error) {
 			text := result.Error()
 			errorText = &text
 		}
-		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": []string{"bounded-player-fields", "dynamic-entity-state", "environment-model-candidates", "raw-smoke-frame", "raw-fire-bullets"}, "error": errorText}
+		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "bulletDamages": x.bulletDamages, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": []string{"bounded-player-fields", "dynamic-entity-state", "environment-model-candidates", "raw-smoke-frame", "raw-fire-bullets", "raw-bullet-damage", "ag2-animation-context", "ag2-active-pose-recipe"}, "error": errorText}
 		end["mechanicsFieldTypes"] = x.mechanicsTypes
 		if err := x.output.send(end); result == nil && err != nil {
 			result = err
@@ -717,6 +749,9 @@ func run(req request, writer io.Writer) (result error) {
 	}()
 	p.RegisterNetMessageHandler(func(header *msgs2.CDemoFileHeader) { x.header = header })
 	p.RegisterNetMessageHandler(x.mechanicsSchema)
+	p.RegisterNetMessageHandler(x.animationCreate)
+	p.RegisterNetMessageHandler(x.animationUpdate)
+	p.RegisterNetMessageHandler(x.animationClear)
 	p.RegisterNetMessageHandler(func(tick *msgs2.CNETMsg_Tick) {
 		if tick.Tick != nil {
 			n := int(*tick.Tick)
@@ -749,6 +784,7 @@ func run(req request, writer io.Writer) (result error) {
 		}
 	})
 	p.RegisterEventHandler(func(events.FrameDone) { x.frame() })
+	p.RegisterEventHandler(x.bulletDamage)
 	lastTick := req.Windows[len(req.Windows)-1].EndTick
 	for {
 		more, err := p.ParseNextFrame()
