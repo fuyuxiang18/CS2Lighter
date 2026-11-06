@@ -134,6 +134,12 @@ function parseMessage(value: unknown): EvidenceMessage | EvidenceFrameChunk {
     if (!integer(message.requestedTicks) || !integer(message.emittedTicks))
       throw new Error('Invalid death evidence progress');
   } else if (message.type === 'end') {
+    const classCounts = (value: unknown) =>
+      value !== null &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      Object.entries(value).length <= 4096 &&
+      Object.entries(value).every(([name, count]) => boundedText(name, 256) && integer(count));
     if (
       !['ok', 'error'].includes(message.status ?? '') ||
       !integer(message.emittedTicks) ||
@@ -142,6 +148,22 @@ function parseMessage(value: unknown): EvidenceMessage | EvidenceFrameChunk {
       (message.bulletDamages !== undefined && !integer(message.bulletDamages))
     )
       throw new Error('Invalid death evidence result');
+    if (
+      message.windowClasses !== undefined &&
+      (!Array.isArray(message.windowClasses) ||
+        message.windowClasses.length > 128 ||
+        message.windowClasses.some(
+          (entry) =>
+            !entry ||
+            !integer(entry.startTick) ||
+            !integer(entry.endTick) ||
+            entry.endTick < entry.startTick ||
+            !integer(entry.duplicateTicks) ||
+            !classCounts(entry.supportedClasses) ||
+            !classCounts(entry.unsupportedClasses),
+        ))
+    )
+      throw new Error('Invalid death evidence window coverage');
   } else throw new Error('Unknown death evidence message');
   return message as EvidenceMessage | EvidenceFrameChunk;
 }
@@ -153,6 +175,7 @@ export async function runDeathEvidenceProcess({
   request,
   signal,
   onMessage,
+  frameFields = 'expanded',
   timeoutMs = 180_000,
 }: {
   executable: string;
@@ -160,6 +183,8 @@ export async function runDeathEvidenceProcess({
   request: EvidenceRequest;
   signal: AbortSignal;
   onMessage: (message: EvidenceMessage) => void | Promise<void>;
+  /** Delta delivery retains the same baseline/lifecycle validation before invoking the consumer. */
+  frameFields?: 'expanded' | 'delta';
   timeoutMs?: number;
 }): Promise<EvidenceEnd> {
   const wanted = validateEvidenceRequest(request);
@@ -268,13 +293,18 @@ export async function runDeathEvidenceProcess({
             throw new Error('Invalid death evidence animation recipe');
           if (!player.fieldsComplete && !playerFields.has(player.id))
             throw new Error('Death evidence player delta has no baseline');
-          const expanded = {
-            ...(player.fieldsComplete ? {} : playerFields.get(player.id)),
-            ...player.fields,
-          };
+          const expanded =
+            frameFields === 'delta'
+              ? player.fields
+              : {
+                  ...(player.fieldsComplete ? {} : playerFields.get(player.id)),
+                  ...player.fields,
+                };
           playerFields.set(player.id, expanded);
-          player.fields = expanded;
-          player.fieldsComplete = true;
+          if (frameFields === 'expanded') {
+            player.fields = expanded;
+            player.fieldsComplete = true;
+          }
           const weapon = player.activeWeapon;
           if (weapon === null || weapon === undefined) {
             weaponFields.delete(player.id);
@@ -292,13 +322,18 @@ export async function runDeathEvidenceProcess({
             const previousWeapon = weaponFields.get(player.id);
             if (!weapon.fieldsComplete && previousWeapon?.id !== weapon.id)
               throw new Error('Death evidence weapon delta has no baseline');
-            const expandedWeapon = {
-              ...(weapon.fieldsComplete ? {} : previousWeapon?.fields),
-              ...weapon.fields,
-            };
+            const expandedWeapon =
+              frameFields === 'delta'
+                ? weapon.fields
+                : {
+                    ...(weapon.fieldsComplete ? {} : previousWeapon?.fields),
+                    ...weapon.fields,
+                  };
             weaponFields.set(player.id, { id: weapon.id, fields: expandedWeapon });
-            weapon.fields = expandedWeapon;
-            weapon.fieldsComplete = true;
+            if (frameFields === 'expanded') {
+              weapon.fields = expandedWeapon;
+              weapon.fieldsComplete = true;
+            }
           }
         }
         for (const id of playerFields.keys()) {
@@ -341,6 +376,16 @@ export async function runDeathEvidenceProcess({
     if (code !== 0 || end?.status !== 'ok')
       throw new Error(end?.error || stderr.trim() || 'Death evidence extraction did not finish');
     const missing = new Set(end.missingTicks);
+    if (end.windowClasses !== undefined) {
+      const requested = new Set(request.windows.map((window) => `${window.startTick}:${window.endTick}`));
+      const received = new Set(end.windowClasses.map((window) => `${window.startTick}:${window.endTick}`));
+      if (
+        received.size !== end.windowClasses.length ||
+        received.size !== requested.size ||
+        [...requested].some((key) => !received.has(key))
+      )
+        throw new Error('Death evidence window coverage does not match its request');
+    }
     if (
       end.emittedTicks !== frames.size ||
       missing.size !== end.missingTicks.length ||

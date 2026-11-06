@@ -250,11 +250,11 @@ export class ReviewBatchService {
           },
           async ({ item }, groupFolder, encodingSignal) => {
             if (signal.aborted || encodingSignal.aborted) throw new ReviewClipError('interrupted');
-            // Commit each event before permitting the game to advance. A later failure cannot lose ready media.
+            // Encoding commits independently from capture; already ready events survive later failures.
             if (item.status === 'failed') {
               batch.items[item.index - 1] = { ...item };
             } else {
-              batch.status = 'encoding';
+              if (batch.status !== 'recording') batch.status = 'encoding';
               this.publish(batch);
               try {
                 const output = path.join(folder, `event-${item.index}.mp4`);

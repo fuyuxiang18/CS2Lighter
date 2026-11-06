@@ -1,3 +1,6 @@
+vi.mock('csdm/node/database/player-position/insert-position-blocks', () => ({
+  insertPositionBlocks: (csvFilePath: string) => mocks.copy({ tableName: 'player_position_blocks', csvFilePath }),
+}));
 import { EventEmitter } from 'node:events';
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test';
 
@@ -63,7 +66,7 @@ describe('complete match publication', () => {
   it('keeps a durable barrier until every COPY finishes, then invalidates early caches before releasing the match', async () => {
     let finish: () => void = () => {};
     mocks.copy.mockImplementation(({ tableName }: { tableName: string }) =>
-      tableName === 'player_positions'
+      tableName === 'player_position_blocks'
         ? new Promise<void>((resolve) => {
             finish = resolve;
           })
@@ -71,7 +74,7 @@ describe('complete match publication', () => {
     );
     const run = insertMatch({ checksum: 'aa', demoPath: '/qa/fixture.dem', outputFolderPath: '/qa/export' });
     await vi.waitFor(() =>
-      expect(mocks.copy).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'player_positions' })),
+      expect(mocks.copy).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'player_position_blocks' })),
     );
     expect(mocks.begin).toHaveBeenCalledBefore(mocks.remove);
     expect(mocks.complete).not.toHaveBeenCalled();
@@ -86,7 +89,7 @@ describe('complete match publication', () => {
   it('does not roll back or remove CSVs while another COPY is still writing after a sibling fails', async () => {
     let finish: () => void = () => {};
     mocks.copy.mockImplementation(({ tableName }: { tableName: string }) =>
-      tableName === 'player_positions'
+      tableName === 'player_position_blocks'
         ? new Promise<void>((resolve) => {
             finish = resolve;
           })
@@ -97,7 +100,7 @@ describe('complete match publication', () => {
     const run = insertMatch({ checksum: 'aa', demoPath: '/qa/fixture.dem', outputFolderPath: '/qa/export' });
     const rejected = expect(run).rejects.toThrow('fixture failed COPY');
     await vi.waitFor(() =>
-      expect(mocks.copy).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'player_positions' })),
+      expect(mocks.copy).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'player_position_blocks' })),
     );
     expect(mocks.remove).toHaveBeenCalledTimes(1);
     expect(mocks.cleanup).not.toHaveBeenCalled();

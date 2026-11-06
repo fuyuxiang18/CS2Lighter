@@ -8,6 +8,14 @@ import { validateDeathEvidenceKey } from './death-evidence-cache';
 
 type Progress = Pick<DeathEvidenceState, 'phase' | 'completedTicks' | 'totalTicks'>;
 type Context = { revision: string };
+export type DeathEvidenceBatchItem<T> = {
+  key: DeathEvidenceKey;
+  context: T;
+  signal: AbortSignal;
+  progress: (progress: Progress) => void;
+  complete: (report: DeathEvidenceReport) => Promise<void>;
+  fail: (error: unknown) => void;
+};
 type Dependencies<T extends Context> = {
   prepare: (key: DeathEvidenceKey) => Promise<T>;
   read: (key: DeathEvidenceKey, context: T) => Promise<DeathEvidenceReport | undefined>;
@@ -17,6 +25,7 @@ type Dependencies<T extends Context> = {
     signal: AbortSignal,
     progress: (progress: Progress) => void,
   ) => Promise<DeathEvidenceReport>;
+  buildBatch?: (items: DeathEvidenceBatchItem<T>[], signal: AbortSignal) => Promise<void>;
   current: (key: DeathEvidenceKey, context: T) => Promise<boolean>;
   write: (context: T, report: DeathEvidenceReport, signal: AbortSignal) => Promise<void>;
   canStart: () => boolean;
@@ -46,6 +55,7 @@ export class DeathEvidenceService<T extends Context> {
   private jobs = new Map<string, Job<T>>();
   private queue: Job<T>[] = [];
   private draining = false;
+  private scheduled: ReturnType<typeof setTimeout> | undefined;
 
   constructor(private dependencies: Dependencies<T>) {}
 
@@ -112,8 +122,107 @@ export class DeathEvidenceService<T extends Context> {
     this.jobs.set(key, job);
     this.queue.push(job);
     this.emit(job);
-    void this.drain();
+    if (this.dependencies.buildBatch) {
+      // Let concurrent cache/metadata reads join one scan. Reads alone never schedule work.
+      if (!this.draining && !this.scheduled)
+        this.scheduled = setTimeout(() => {
+          this.scheduled = undefined;
+          void this.drain();
+        }, 50);
+    } else void this.drain();
     return structuredClone(job.state);
+  }
+
+  private async save(job: Job<T>, report: DeathEvidenceReport) {
+    const signal = job.controller.signal;
+    signal.throwIfAborted();
+    if (id(report) !== id(job.state)) throw new Error('Death evidence result belongs to a different death');
+    if (!(await this.dependencies.current(job.state, job.context)))
+      throw new Error('Demo or map changed during evidence analysis; retry this death');
+    signal.throwIfAborted();
+    await this.dependencies.write(job.context, report, signal);
+    signal.throwIfAborted();
+    job.state.status = 'completed';
+    job.state.phase = 'evaluate';
+    job.state.completedTicks = report.coverage.decodedTicks;
+    job.state.totalTicks = report.coverage.requestedTicks;
+    job.state.report = { ...report };
+    delete job.state.report.riskFacts;
+    this.emit(job);
+  }
+
+  private progress(job: Job<T>, progress: Progress) {
+    if (job.controller.signal.aborted) return;
+    job.state.phase = progress.phase;
+    job.state.totalTicks = Math.max(0, progress.totalTicks);
+    job.state.completedTicks = Math.max(0, Math.min(progress.completedTicks, progress.totalTicks));
+    this.emit(job);
+  }
+
+  private fail(job: Job<T>, error: unknown) {
+    job.state.status = job.controller.signal.aborted ? 'canceled' : 'error';
+    job.state.error = job.controller.signal.aborted
+      ? null
+      : (error instanceof Error ? error.message : String(error)).slice(0, 500);
+    this.emit(job);
+  }
+
+  private async runBatch(first: Job<T>) {
+    const jobs = [first];
+    for (let index = 0; index < this.queue.length && jobs.length < 32;) {
+      const candidate = this.queue[index];
+      if (
+        !candidate.controller.signal.aborted &&
+        candidate.state.checksum === first.state.checksum &&
+        candidate.context.revision === first.context.revision
+      ) {
+        jobs.push(candidate);
+        this.queue.splice(index, 1);
+      } else index++;
+    }
+    const controller = new AbortController();
+    const canceled = () => {
+      if (
+        jobs.every((job) => job.controller.signal.aborted || !['queued', 'running'].includes(job.state.status)) &&
+        jobs.some((job) => job.controller.signal.aborted || job.state.status === 'error')
+      )
+        controller.abort();
+    };
+    for (const job of jobs) {
+      job.controller.signal.addEventListener('abort', canceled);
+      job.state.status = 'running';
+      this.emit(job);
+    }
+    try {
+      await this.dependencies.buildBatch!(
+        jobs.map((job) => ({
+          key: job.state,
+          context: job.context,
+          signal: job.controller.signal,
+          progress: (progress) => this.progress(job, progress),
+          complete: async (report) => {
+            if (job.controller.signal.aborted) return;
+            try {
+              await this.save(job, report);
+            } catch (error) {
+              this.fail(job, error);
+            }
+            canceled();
+          },
+          fail: (error) => {
+            this.fail(job, error);
+            canceled();
+          },
+        })),
+        controller.signal,
+      );
+      for (const job of jobs)
+        if (job.state.status === 'running') this.fail(job, new Error('Death evidence batch omitted a result'));
+    } catch (error) {
+      for (const job of jobs) if (job.state.status === 'running') this.fail(job, error);
+    } finally {
+      for (const job of jobs) job.controller.signal.removeEventListener('abort', canceled);
+    }
   }
 
   private async drain() {
@@ -122,7 +231,6 @@ export class DeathEvidenceService<T extends Context> {
     try {
       let job: Job<T> | undefined;
       while ((job = this.queue.shift())) {
-        const currentJob = job;
         const signal = job.controller.signal;
         if (signal.aborted) continue;
         if (!this.dependencies.canStart()) {
@@ -131,33 +239,19 @@ export class DeathEvidenceService<T extends Context> {
           this.emit(job);
           continue;
         }
+        if (this.dependencies.buildBatch) {
+          await this.runBatch(job);
+          continue;
+        }
         job.state.status = 'running';
         this.emit(job);
         try {
           const report = await this.dependencies.build(job.state, job.context, signal, (progress) => {
-            if (signal.aborted) return;
-            currentJob.state.phase = progress.phase;
-            currentJob.state.totalTicks = Math.max(0, progress.totalTicks);
-            currentJob.state.completedTicks = Math.max(0, Math.min(progress.completedTicks, progress.totalTicks));
-            this.emit(currentJob);
+            this.progress(job!, progress);
           });
-          signal.throwIfAborted();
-          if (!(await this.dependencies.current(job.state, job.context)))
-            throw new Error('Demo or map changed during evidence analysis; retry this death');
-          signal.throwIfAborted();
-          await this.dependencies.write(job.context, report, signal);
-          signal.throwIfAborted();
-          job.state.status = 'completed';
-          job.state.phase = 'evaluate';
-          job.state.completedTicks = report.coverage.decodedTicks;
-          job.state.totalTicks = report.coverage.requestedTicks;
-          job.state.report = { ...report };
-          delete job.state.report.riskFacts;
+          await this.save(job, report);
         } catch (error) {
-          job.state.status = signal.aborted ? 'canceled' : 'error';
-          job.state.error = signal.aborted
-            ? null
-            : (error instanceof Error ? error.message : String(error)).slice(0, 500);
+          this.fail(job, error);
         }
         this.emit(job);
       }

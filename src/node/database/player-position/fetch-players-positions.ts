@@ -1,57 +1,34 @@
 import { db } from 'csdm/node/database/database';
-import type { PlayerPosition } from '../../../common/types/player-position';
+import type { PlayerPosition } from 'csdm/common/types/player-position';
 import { playerPositionRowToPlayerPosition } from './player-position-row-to-player-position';
 import { fillMissingTicks } from 'csdm/common/array/fill-missing-ticks';
+import { readPositionRows } from './read-position-rows';
 
-export async function fetchPlayersPositions(checksum: string, roundNumber: number) {
-  const rows = await db
-    .selectFrom('player_positions as p')
-    .leftJoin('steam_account_overrides', 'steam_account_overrides.steam_id', 'p.player_steam_id')
-    .distinctOn(['p.tick', 'p.player_steam_id'])
-    .select([
-      (eb) => {
-        return eb.fn.coalesce('steam_account_overrides.name', 'p.player_name').as('player_name');
-      },
-      'p.active_weapon_name',
-      'p.armor',
-      'p.equipments',
-      'p.flash_duration_remaining',
-      'p.frame',
-      'p.grenades',
-      'p.has_bomb',
-      'p.has_defuse_kit',
-      'p.has_helmet',
-      'p.health',
-      'p.heavy',
-      'p.id',
-      'p.is_airborne',
-      'p.is_alive',
-      'p.is_defusing',
-      'p.is_ducking',
-      'p.is_grabbing_hostage',
-      'p.is_planting',
-      'p.is_scoping',
-      'p.match_checksum',
-      'p.money',
-      'p.pistols',
-      'p.player_steam_id',
-      'p.rifles',
-      'p.round_number',
-      'p.side',
-      'p.smgs',
-      'p.tick',
-      'p.x',
-      'p.y',
-      'p.yaw',
-      'p.z',
-    ])
-    .where('match_checksum', '=', checksum)
-    .where('round_number', '=', roundNumber)
-    .orderBy('p.tick')
-    .orderBy('p.player_steam_id')
-    .execute();
-
-  const playerPositions: PlayerPosition[] = fillMissingTicks(rows.map(playerPositionRowToPlayerPosition));
-
+export async function fetchPlayersPositions(
+  checksum: string,
+  roundNumber: number,
+  window?: { startTick: number; endTick: number },
+) {
+  const rows = await readPositionRows({ checksum, roundNumber, windows: window === undefined ? undefined : [window] });
+  const ids = [...new Set(rows.map((row) => row.player_steam_id))];
+  const overrides =
+    ids.length === 0
+      ? []
+      : await db
+          .selectFrom('steam_account_overrides')
+          .select(['steam_id', 'name'])
+          .where('steam_id', 'in', ids)
+          .execute();
+  const names = new Map(overrides.map((row) => [row.steam_id, row.name]));
+  const seen = new Set<string>();
+  const unique = rows.filter((row) => {
+    const key = `${row.tick}:${row.player_steam_id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    row.player_name = names.get(row.player_steam_id) ?? row.player_name;
+    return true;
+  });
+  const observed = unique.map(playerPositionRowToPlayerPosition);
+  const playerPositions: PlayerPosition[] = window === undefined ? fillMissingTicks(observed) : observed;
   return playerPositions;
 }

@@ -7,6 +7,7 @@ export const RendererClientMessageName = {
   AddToRecordingQueue: 'add-to-recording-queue',
   ControlRecordingQueue: 'control-recording-queue',
   FetchReviewDuels: 'fetch-review-duels',
+  FetchReviewPreview: 'fetch-review-preview',
   GetReviewClip: 'get-review-clip',
   GenerateReviewBatch: 'generate-review-batch',
   GetReviewBatch: 'get-review-batch',

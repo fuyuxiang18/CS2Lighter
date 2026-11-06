@@ -7,6 +7,7 @@ import { buildDemoHabits } from './build-demo-habits';
 import { getDemoCacheGeneration } from './invalidate-demo-cache';
 import { demoCacheProgress } from './demo-cache-progress';
 import { MatchImportIncompleteError, isMatchImportActive } from 'csdm/node/database/matches/match-import-state';
+import { CACHE_CALCULATIONS, isDemoCacheCurrent, planCacheCalculations } from './cache-calculations';
 
 const inFlight = new Map<string, { generation: number; promise: Promise<DemoDataCache> }>();
 const failures = new Map<string, { checksum: string; message: string }>();
@@ -56,7 +57,7 @@ async function readOrBuild(checksum: string, demoPath?: string): Promise<DemoDat
     const saved = await readCacheFile(directory.path, checksum);
     if (readGeneration !== getDemoCacheGeneration(checksum))
       throw new Error('Match data changed while reading its cache.');
-    if (saved?.revision === descriptor.revision) {
+    if (saved && isDemoCacheCurrent(saved, descriptor.revision)) {
       failures.delete(filePath);
       return saved;
     }
@@ -71,9 +72,13 @@ async function readOrBuild(checksum: string, demoPath?: string): Promise<DemoDat
         controller.signal.throwIfAborted();
         const generation = getDemoCacheGeneration(checksum);
         const current = await getDemoCacheDescriptor(checksum);
-        const habitsBySteamId = await buildDemoHabits(current.match, controller.signal);
+        const reusable = readGeneration === generation ? saved : undefined;
+        const plan = planCacheCalculations(reusable, current.revision);
+        const habitsBySteamId = plan.habits
+          ? await buildDemoHabits(current.match, controller.signal)
+          : reusable!.habitsBySteamId;
         controller.signal.throwIfAborted();
-        const metrics = await computePersonalMatchStats(checksum);
+        const metrics = plan.metrics ? await computePersonalMatchStats(checksum) : reusable!.metrics;
         controller.signal.throwIfAborted();
         const fresh = await getDemoCacheDescriptor(checksum);
         if (generation !== getDemoCacheGeneration(checksum) || current.revision !== fresh.revision) {
@@ -85,6 +90,7 @@ async function readOrBuild(checksum: string, demoPath?: string): Promise<DemoDat
           checksum,
           revision: current.revision,
           generatedAt: new Date().toISOString(),
+          calculations: { ...CACHE_CALCULATIONS },
           match: current.match,
           habitsBySteamId,
           metrics,
@@ -134,8 +140,15 @@ export async function loadDemoCaches(
   }
   try {
     const directory = await getDemoCacheDirectory();
-    const discovered = await Promise.allSettled(unique.map(getDemoCacheDescriptor));
-    const descriptors: Awaited<ReturnType<typeof getDemoCacheDescriptor>>[] = [];
+    const discovered = await Promise.allSettled(
+      unique.map(async (checksum) => {
+        // A different descriptor can keep discovery pending after this match was read.
+        // Keep its generation from before that read, rather than accepting a later invalidation.
+        const generation = getDemoCacheGeneration(checksum);
+        return { ...(await getDemoCacheDescriptor(checksum)), generation };
+      }),
+    );
+    const descriptors: (Awaited<ReturnType<typeof getDemoCacheDescriptor>> & { generation: number })[] = [];
     for (const result of discovered) {
       if (result.status === 'fulfilled') descriptors.push(result.value);
       else {
@@ -150,11 +163,12 @@ export async function loadDemoCaches(
       [];
     // Validate files before deciding whether this is an import. Keep file reads sequential, rather than
     // opening every file in a large library at once. No position queries run on this path.
-    for (const { match, revision } of descriptors) {
-      const generation = getDemoCacheGeneration(match.checksum);
+    for (const { match, revision, generation } of descriptors) {
       const saved = await readCacheFile(directory.path, match.checksum).catch(() => undefined);
       const cache =
-        saved?.revision === revision && generation === getDemoCacheGeneration(match.checksum) ? saved : undefined;
+        isDemoCacheCurrent(saved, revision) && generation === getDemoCacheGeneration(match.checksum)
+          ? saved
+          : undefined;
       entries.push({ match, cache, generation, tracked: cache === undefined });
     }
     for (const entry of entries)

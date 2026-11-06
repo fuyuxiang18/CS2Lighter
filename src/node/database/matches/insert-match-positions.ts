@@ -1,4 +1,4 @@
-import type { PlayerPositionTable } from '../player-position/player-position-table';
+import { insertPositionBlocks } from 'csdm/node/database/player-position/insert-position-blocks';
 import type { GrenadePositionTable } from '../grenade-position/grenade-position-table';
 import type { InfernoPositionTable } from '../inferno-position/inferno-position-table';
 import type { HostagePositionTable } from '../hostage-position/hostage-position-table';
@@ -8,44 +8,7 @@ import { copyCsvIntoTable } from 'csdm/node/database/copy-csv-into-table';
 async function insertPlayersPositions({ outputFolderPath, demoName }: InsertOptions) {
   const csvFilePath = getCsvFilePath(outputFolderPath, demoName, '_positions.csv');
 
-  await copyCsvIntoTable<PlayerPositionTable>({
-    csvFilePath,
-    tableName: 'player_positions',
-    columns: [
-      'frame',
-      'tick',
-      'is_alive',
-      'x',
-      'y',
-      'z',
-      'yaw',
-      'flash_duration_remaining',
-      'side',
-      'money',
-      'health',
-      'armor',
-      'has_helmet',
-      'has_bomb',
-      'has_defuse_kit',
-      'is_ducking',
-      'is_airborne',
-      'is_scoping',
-      'is_defusing',
-      'is_planting',
-      'is_grabbing_hostage',
-      'active_weapon_name',
-      'equipments',
-      'grenades',
-      'pistols',
-      'smgs',
-      'rifles',
-      'heavy',
-      'player_steam_id',
-      'player_name',
-      'round_number',
-      'match_checksum',
-    ],
-  });
+  await insertPositionBlocks(csvFilePath);
 }
 
 async function insertGrenadePositions({ outputFolderPath, demoName }: InsertOptions) {

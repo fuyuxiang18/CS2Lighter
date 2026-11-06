@@ -4,6 +4,7 @@ import type { DemoCacheMatch, CachedPlayerHabits } from 'csdm/common/types/demo-
 import { createHabitsAccumulator } from 'csdm/node/database/habits/aggregate-habits';
 import { fetchKills } from 'csdm/node/database/kills/fetch-kills';
 import { sql } from 'kysely';
+import { hasPackedPositions, readPositionRows } from 'csdm/node/database/player-position/read-position-rows';
 
 export async function buildDemoHabits(
   match: DemoCacheMatch,
@@ -55,6 +56,38 @@ export async function buildDemoHabits(
     ct.addMatch(input);
     result[steamId] = { all: all.summary, t: t.summary, ct: ct.summary };
     remaining.delete(steamId);
+  }
+  if (await hasPackedPositions(match.checksum)) {
+    // Read one player's round at a time; packed storage never expands an entire match in memory.
+    for (const steamId of remaining) {
+      signal?.throwIfAborted();
+      const positions: Position[] = [];
+      const roundNumbers = [
+        ...new Set(allRounds.filter((round) => round.playerSteamId === steamId).map((round) => round.number)),
+      ].sort((a, b) => a - b);
+      for (const roundNumber of roundNumbers) {
+        const rows = await readPositionRows({ checksum: match.checksum, roundNumber, steamId, signal });
+        const seen = new Set<number>();
+        // Original CSV order is the tie-break for duplicate snapshots, matching legacy cursor id ordering.
+        rows.sort((a, b) => a.tick - b.tick || (BigInt(a.id) < BigInt(b.id) ? -1 : 1));
+        for (const row of rows) {
+          if (seen.has(row.tick)) continue;
+          seen.add(row.tick);
+          positions.push({
+            playerSteamId: steamId,
+            roundNumber,
+            tick: row.tick,
+            side: row.side,
+            isAlive: row.is_alive,
+            x: row.x,
+            y: row.y,
+            z: row.z,
+          });
+        }
+      }
+      addPlayer(steamId, positions);
+    }
+    return result;
   }
   // One position scan and one sort for the match, instead of a complete scan for every player.
   // A PostgreSQL cursor keeps JS memory bounded to one player's observations plus one fetch block.

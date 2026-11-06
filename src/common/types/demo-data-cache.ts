@@ -32,6 +32,8 @@ export type DemoDataCache = {
   revision: string;
   generatedAt: string;
   contentHash?: string;
+  /** Absent in schema-3 files created before 0.8.0: both calculations used revision 1. */
+  calculations?: { habits: number; metrics: number };
   match: DemoCacheMatch;
   habitsBySteamId: Record<string, CachedPlayerHabits>;
   // Per-match facts are added by the personal-statistics module, never raw position samples.

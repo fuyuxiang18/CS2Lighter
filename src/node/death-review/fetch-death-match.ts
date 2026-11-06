@@ -5,6 +5,7 @@ import { assertMatchImportComplete } from 'csdm/node/database/matches/match-impo
 import { getDemoCacheGeneration } from 'csdm/node/demo-cache/invalidate-demo-cache';
 import type { KillRow } from 'csdm/node/database/kills/kill-table';
 import type { PlayerPositionRow } from 'csdm/node/database/player-position/player-position-table';
+import { readPositionRows } from 'csdm/node/database/player-position/read-position-rows';
 import type { PlayerEconomyRow } from 'csdm/node/database/player-economies/player-economy-table';
 import { buildDeathReviews, type DeathMatchInput } from './build-death-review';
 import { deathMatchRevision, type DeathMatchDescriptor } from './death-review-cache';
@@ -155,19 +156,13 @@ export async function buildDeathMatchFromDatabase(match: DeathMatchDescriptor, s
   const maximumPositionRows = 100_000;
   for (const [roundNumber, windows] of windowsByRound) {
     signal.throwIfAborted();
-    const rows = await db
-      .selectFrom('player_positions')
-      .selectAll()
-      .where('match_checksum', '=', checksum)
-      .where('round_number', '=', roundNumber)
-      .where((eb) =>
-        eb.or(windows.map((window) => eb.and([eb('tick', '>=', window.startTick), eb('tick', '<=', window.endTick)]))),
-      )
-      .orderBy('tick')
-      .orderBy('frame')
-      .orderBy('player_steam_id')
-      .limit(maximumPositionRows - positions.length + 1)
-      .execute();
+    const rows = await readPositionRows({
+      checksum,
+      roundNumber,
+      windows,
+      limit: maximumPositionRows - positions.length + 1,
+      signal,
+    });
     positions.push(...rows);
     if (positions.length > maximumPositionRows)
       throw new Error('Death position windows exceed the supported per-match size');

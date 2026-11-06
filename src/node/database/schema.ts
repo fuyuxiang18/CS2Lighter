@@ -39,6 +39,7 @@ import type { PlayerBlindTable } from './player-blinds/player-blind-table';
 import type { PlayerBuyTable } from './player-buy/player-buy-table';
 import type { PlayerEconomyTable } from './player-economies/player-economy-table';
 import type { PlayerPositionTable } from './player-position/player-position-table';
+import type { PositionBlockTable } from './player-position/position-block-table';
 import type { RoundTable } from './rounds/round-table';
 import type { ShotTable } from './shots/shot-table';
 import type { SmokeStartTable } from './smoke-started/smoke-start-table';
@@ -101,6 +102,7 @@ export type Database = {
   player_buys: PlayerBuyTable;
   player_economies: PlayerEconomyTable;
   player_positions: PlayerPositionTable;
+  player_position_blocks: PositionBlockTable;
   players: MatchPlayerTable;
   renown_accounts: RenownAccountTable;
   round_tags: RoundTagTable;

@@ -57,6 +57,33 @@ function run(source: string, signal = new AbortController().signal, timeoutMs = 
 }
 
 describe('bounded death evidence subprocess', () => {
+  it('can deliver validated deltas for bounded disk spooling without expanding repeated fields', async () => {
+    const value = { present: true, value: 100, lastUpdate: null };
+    const first = { ...frame, players: [{ id: '8:1', fieldsComplete: true, fields: { health: value } }] };
+    const second = { ...frame, tick: 11, players: [{ id: '8:1', fieldsComplete: false, fields: {} }] };
+    const messages: EvidenceMessage[] = [];
+    await runDeathEvidenceProcess({
+      executable: process.execPath,
+      args: ['-e', script([header, first, second, { ...end, emittedTicks: 2, frames: 2, missingTicks: [] }])],
+      request,
+      signal: new AbortController().signal,
+      frameFields: 'delta',
+      onMessage: (message) => {
+        messages.push(message);
+      },
+    });
+    expect(messages[2]).toMatchObject({ players: [{ fieldsComplete: false, fields: {} }] });
+  });
+  it('rejects malformed or wrong-window class coverage', async () => {
+    const valid = { startTick: 10, endTick: 11, supportedClasses: {}, unsupportedClasses: {}, duplicateTicks: 0 };
+    await expect(
+      run(script([header, frame, { ...end, windowClasses: [{ ...valid, startTick: 9 }] }])).result,
+    ).rejects.toThrow('does not match');
+    await expect(
+      run(script([header, frame, { ...end, windowClasses: [{ ...valid, unsupportedClasses: { Unknown: -1 } }] }]))
+        .result,
+    ).rejects.toThrow('Invalid death evidence window coverage');
+  });
   function chunkScript(mode: 'complete' | 'missing' | 'replay' | 'interrupted') {
     return `process.stdin.resume(); process.stdin.on('end', () => {
       const emit = value => process.stdout.write(JSON.stringify(value) + '\\n');

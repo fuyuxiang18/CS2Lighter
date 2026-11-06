@@ -17,10 +17,8 @@ import { isUpdateMaintenance } from 'csdm/server/update-maintenance';
 import { deathMatchRevision, readDeathReviewCache } from './death-review-cache';
 import { listDeathMatches, isDeathMatchCurrent } from './fetch-death-match';
 import { readDeathEvidenceCache, writeDeathEvidenceCache } from './death-evidence-cache';
-import { DeathEvidenceService } from './death-evidence-service';
-import { runDeathEvidenceProcess } from './death-evidence-process';
-import type { EvidenceHeader, EvidenceFrame, EvidenceShot } from './evidence-protocol';
-import type { EvidenceBulletDamage } from './evidence-ballistics';
+import { DeathEvidenceService, type DeathEvidenceBatchItem } from './death-evidence-service';
+import { extractEvidenceWindows, planEvidenceScans, type ExtractedEvidenceWindow } from './evidence-window-batch';
 import { readVisibilityMapRevision, resolveVisibilityMap } from './visibility-map-provider';
 import { buildSprayProviderEvidence } from './spray-provider';
 import { describeSprayMotion } from './spray-motion';
@@ -91,18 +89,7 @@ async function current(key: DeathEvidenceKey, context: Context) {
   );
 }
 
-async function build(
-  key: DeathEvidenceKey,
-  context: Context,
-  signal: AbortSignal,
-  progress: (value: Progress) => void,
-): Promise<DeathEvidenceReport> {
-  signal.throwIfAborted();
-  if (context.sourceStamp === null)
-    throw new Error('The original demo file is missing. Restore it before extracting new evidence.');
-  if ((await getDemoChecksumFromDemoPath(context.demoPath)) !== key.checksum)
-    throw new Error('The original demo has changed');
-  const checksum = key.checksum;
+async function loadMatchEvents(checksum: string) {
   const [rounds, shots, damages, kills, blinds] = await Promise.all([
     db.selectFrom('rounds').selectAll().where('match_checksum', '=', checksum).execute(),
     db.selectFrom('shots').selectAll().where('match_checksum', '=', checksum).execute(),
@@ -110,31 +97,143 @@ async function build(
     db.selectFrom('kills').selectAll().where('match_checksum', '=', checksum).execute(),
     db.selectFrom('player_blinds').selectAll().where('match_checksum', '=', checksum).execute(),
   ]);
+  return { rounds, shots, damages, kills, blinds };
+}
+type MatchEvents = Awaited<ReturnType<typeof loadMatchEvents>>;
+
+async function buildBatch(items: DeathEvidenceBatchItem<Context>[], signal: AbortSignal) {
   signal.throwIfAborted();
-  const { record } = context;
-  const round = rounds.find((round) => round.number === record.roundNumber);
-  if (!round) throw new Error('The selected round is no longer available');
-  const startTick = Math.max(round.start_tick, record.eventTick - Math.ceil(record.tickrate * 7), 0);
-  const endTick = record.eventTick;
-  const totalTicks = endTick - startTick + 1;
-  let header: EvidenceHeader | undefined;
-  const frames: EvidenceFrame[] = [];
-  const rawShots: EvidenceShot[] = [];
-  const bulletDamages: EvidenceBulletDamage[] = [];
-  progress({ phase: 'decode', completedTicks: 0, totalTicks });
-  const end = await runDeathEvidenceProcess({
-    executable: path.join(getStaticFolderPath(), 'death-evidence', 'death-evidence.exe'),
-    request: { version: 1, demoPath: context.demoPath, windows: [{ startTick, endTick }] },
+  const first = items.find((item) => !item.signal.aborted);
+  if (!first) return;
+  if (first.context.sourceStamp === null)
+    throw new Error('The original demo file is missing. Restore it before extracting new evidence.');
+  if (
+    items.some(
+      (item) => item.context.demoPath !== first.context.demoPath || item.context.revision !== first.context.revision,
+    )
+  )
+    throw new Error('Death evidence batch contains different demo revisions');
+  if ((await getDemoChecksumFromDemoPath(first.context.demoPath)) !== first.key.checksum)
+    throw new Error('The original demo has changed');
+  const events = await loadMatchEvents(first.key.checksum);
+  signal.throwIfAborted();
+  const windows = items
+    .filter((item) => !item.signal.aborted)
+    .flatMap((item) => {
+      const { record } = item.context;
+      const round = events.rounds.find((round) => round.number === record.roundNumber);
+      if (!round) {
+        item.fail(new Error('The selected round is no longer available'));
+        return [];
+      }
+      return [
+        {
+          item,
+          window: {
+            startTick: Math.max(round.start_tick, record.eventTick - Math.ceil(record.tickrate * 7), 0),
+            endTick: record.eventTick,
+          },
+        },
+      ];
+    });
+  const sameWindow = (a: { startTick: number; endTick: number }, b: { startTick: number; endTick: number }) =>
+    a.startTick === b.startTick && a.endTick === b.endTick;
+  const distinct = windows
+    .map((entry) => entry.window)
+    .filter((window, index, all) => all.findIndex((other) => sameWindow(window, other)) === index);
+  for (const group of planEvidenceScans(distinct)) {
+    signal.throwIfAborted();
+    const active = group.filter((window) =>
+      windows.some((entry) => sameWindow(entry.window, window) && !entry.item.signal.aborted),
+    );
+    if (!active.length) continue;
+    for (const entry of windows)
+      if (active.some((window) => sameWindow(window, entry.window)))
+        entry.item.progress({
+          phase: 'decode',
+          completedTicks: 0,
+          totalTicks: entry.window.endTick - entry.window.startTick + 1,
+        });
+    await extractEvidenceWindows({
+      executable: path.join(getStaticFolderPath(), 'death-evidence', 'death-evidence.exe'),
+      demoPath: first.context.demoPath,
+      windows: active,
+      directory: path.join(first.context.directory, 'death-evidence'),
+      signal,
+      onProgress: (window, completedTicks) => {
+        for (const entry of windows)
+          if (sameWindow(window, entry.window)) {
+            const totalTicks = entry.window.endTick - entry.window.startTick + 1;
+            entry.item.progress({ phase: 'decode', completedTicks, totalTicks });
+          }
+      },
+      consume: async (extracted) => {
+        for (const { item } of windows.filter((entry) => sameWindow(entry.window, extracted.window))) {
+          if (item.signal.aborted) continue;
+          try {
+            const report = await evaluate(
+              item.key,
+              item.context,
+              AbortSignal.any([signal, item.signal]),
+              item.progress,
+              events,
+              extracted,
+            );
+            await item.complete(report);
+          } catch (error) {
+            item.fail(error);
+          }
+        }
+      },
+    });
+  }
+}
+
+async function build(
+  key: DeathEvidenceKey,
+  context: Context,
+  signal: AbortSignal,
+  progress: (value: Progress) => void,
+): Promise<DeathEvidenceReport> {
+  let result: DeathEvidenceReport | undefined;
+  let failure: unknown;
+  await buildBatch(
+    [
+      {
+        key,
+        context,
+        signal,
+        progress,
+        complete: (report) => {
+          result = report;
+          return Promise.resolve();
+        },
+        fail: (error) => {
+          failure = error;
+        },
+      },
+    ],
     signal,
-    onMessage: (message) => {
-      if (message.type === 'header') header = message;
-      else if (message.type === 'frame') frames.push(message);
-      else if (message.type === 'shot') rawShots.push(message);
-      else if (message.type === 'bullet-damage') bulletDamages.push(message);
-      else if (message.type === 'progress')
-        progress({ phase: 'decode', completedTicks: message.emittedTicks, totalTicks });
-    },
-  });
+  );
+  if (failure) throw failure;
+  if (!result) throw new Error('Death evidence batch omitted a result');
+  return result;
+}
+
+async function evaluate(
+  key: DeathEvidenceKey,
+  context: Context,
+  signal: AbortSignal,
+  progress: (value: Progress) => void,
+  events: MatchEvents,
+  extracted: ExtractedEvidenceWindow,
+): Promise<DeathEvidenceReport> {
+  const { rounds, shots, damages, kills, blinds } = events;
+  const { header, frames, rawShots, bulletDamages, end } = extracted;
+  const { startTick, endTick } = extracted.window;
+  const totalTicks = endTick - startTick + 1;
+  const checksum = key.checksum;
+  const { record } = context;
   if (!header || header.mapName !== record.mapName || Math.abs(header.tickRate - record.tickrate) > 0.001)
     throw new Error('Demo evidence does not match the selected map and tick rate');
   signal.throwIfAborted();
@@ -384,6 +483,7 @@ export const deathEvidence = new DeathEvidenceService({
       deathMatchRevision(context.match),
     ),
   build,
+  buildBatch,
   current,
   write: (context, report, signal) =>
     writeDeathEvidenceCache(

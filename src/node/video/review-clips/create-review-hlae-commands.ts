@@ -3,11 +3,11 @@ import fs from 'node:fs/promises';
 type Action = { tick: number; cmd: string };
 
 /** HLAE owns the tick scheduler, avoiding version-sensitive CSDM server interfaces. */
-export function buildReviewHlaeCommands(actions: Action[]): string {
+export function buildReviewHlaeCommands(actions: Action[], bootstrapTick = 1): string {
   const escape = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   const commands = [
-    { tick: 1, cmd: 'demo_ui_mode 0' },
-    { tick: 1, cmd: 'mirv_script_load "mirv_script_spec_lock.js"' },
+    { tick: bootstrapTick, cmd: 'demo_ui_mode 0' },
+    { tick: bootstrapTick, cmd: 'mirv_script_load "mirv_script_spec_lock.js"' },
     ...actions.flatMap((action) =>
       /^spec_player \d+$/.test(action.cmd)
         ? [action, { ...action, cmd: action.cmd.replace('spec_player ', 'mirv_script_spec_lock ') }]

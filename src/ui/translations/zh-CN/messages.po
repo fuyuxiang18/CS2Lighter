@@ -2191,7 +2191,7 @@ msgstr "穿墙"
 #: src/ui/components/table/cells/kill-attributes-cell.tsx
 msgctxt "Tooltip kill"
 msgid "Blinded"
-msgstr "致盲"
+msgstr "受到致盲"
 
 #: src/ui/components/table/cells/kill-attributes-cell.tsx
 msgctxt "Tooltip kill"
@@ -2804,6 +2804,42 @@ msgstr "已保存的点评"
 msgid "Newly generated · Saved locally"
 msgstr "刚刚生成 · 已保存到本机"
 
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Batch operation review"
+msgstr "批量操作分析"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{selected} selected · saved evidence is reused"
+msgstr "已选 {selected} 次死亡 · 自动复用已保存的证据"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Pause this batch"
+msgstr "暂停本批分析"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Resume previous batch"
+msgstr "继续上次分析"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Analyze selected deaths"
+msgstr "分析选中的死亡"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{settled} / {total} deaths processed"
+msgstr "已处理 {settled} / {total} 次死亡"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{completed} saved · {failed} failed · {canceled} paused"
+msgstr "{completed} 次已保存 · {failed} 次失败 · {canceled} 次暂停"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Batch evidence progress"
+msgstr "批量取证进度"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Some requests failed. Retry the batch to reuse completed results."
+msgstr "部分请求失败，可重试本批分析，已完成的结果会自动复用。"
+
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "回看 {offset} 秒"
@@ -3237,6 +3273,7 @@ msgid "Accuracy shot by shot"
 msgstr "逐发精度"
 
 #: src/ui/habits/death-mechanics-table.tsx
+#: src/ui/habits/death-review-preview.tsx
 msgid "Shot"
 msgstr "射击"
 
@@ -3303,6 +3340,7 @@ msgid "Bullet damage event"
 msgstr "弹道伤害事件"
 
 #: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/death-review-preview.tsx
 msgid "You"
 msgstr "你"
 
@@ -3369,6 +3407,119 @@ msgstr "展开更多事件"
 #: src/ui/habits/death-review-detail.tsx
 msgid "No timeline events are available for this death."
 msgstr "此次死亡没有可用的时间线事件。"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Instant 2D replay"
+msgstr "即时 2D 复盘"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Open full round"
+msgstr "查看完整回合"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Could not load saved positions."
+msgstr "无法加载已保存的位置数据。"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-dashboard.tsx
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Retry"
+msgstr "重试"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Loading saved positions…"
+msgstr "正在加载已保存的位置数据…"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "No saved positions in this clip."
+msgstr "这个片段没有已保存的位置数据。"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Recorded player positions and facing directions"
+msgstr "已记录的玩家位置与朝向"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Map radar is unavailable."
+msgstr "暂无这张地图的雷达图。"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Review clip time"
+msgstr "复盘片段时间"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Pause"
+msgstr "暂停"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Play"
+msgstr "播放"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Loop clip"
+msgstr "循环播放"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Follow your floor"
+msgstr "跟随所在楼层"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-map.tsx
+msgid "Upper floor"
+msgstr "上层"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-map.tsx
+msgid "Lower floor"
+msgstr "下层"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Jump to death"
+msgstr "跳到死亡时刻"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Death"
+msgstr "死亡"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Kill"
+msgstr "击杀"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Damage taken"
+msgstr "受到伤害"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Damage dealt"
+msgstr "造成伤害"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Blinded"
+msgstr "受到致盲"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Plant"
+msgstr "下包"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Defuse"
+msgstr "拆包"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Grenade"
+msgstr "道具"
 
 #: src/ui/habits/death-risk-panel.tsx
 msgid "Locate {offset} s"
@@ -3534,12 +3685,6 @@ msgid "Your demo files are unchanged. Retry loading the saved data."
 msgstr "demo 文件未受影响，请重试读取已保存的数据。"
 
 #: src/ui/habits/habits-dashboard.tsx
-#: src/ui/habits/review-deaths.tsx
-#: src/ui/habits/review-duels.tsx
-msgid "Retry"
-msgstr "重试"
-
-#: src/ui/habits/habits-dashboard.tsx
 msgid "No matches in this selection"
 msgstr "当前筛选没有匹配的比赛"
 
@@ -3554,20 +3699,6 @@ msgstr "位置"
 #: src/ui/habits/habits-evidence.tsx
 msgid "Opening position"
 msgstr "开局位置"
-
-#: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/recording-queue-page.tsx
-#: src/ui/habits/review-duels.tsx
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Kill"
-msgstr "击杀"
-
-#: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/recording-queue-page.tsx
-#: src/ui/habits/review-duels.tsx
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Death"
-msgstr "死亡"
 
 #: src/ui/habits/habits-evidence.tsx
 msgid "No matching evidence yet."
@@ -3694,14 +3825,6 @@ msgstr "存活时间"
 #: src/ui/habits/habits-map.tsx
 msgid "First {openingWindowSeconds} seconds"
 msgstr "开局 {openingWindowSeconds} 秒"
-
-#: src/ui/habits/habits-map.tsx
-msgid "Upper floor"
-msgstr "上层"
-
-#: src/ui/habits/habits-map.tsx
-msgid "Lower floor"
-msgstr "下层"
 
 #: src/ui/habits/habits-map.tsx
 msgid "Unknown floor"
@@ -4474,10 +4597,6 @@ msgid "Thrown"
 msgstr "投掷次数"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Grenade"
-msgstr "道具"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Per round"
 msgstr "每回合"
 
@@ -4974,6 +5093,10 @@ msgid "Deaths with operation risks"
 msgstr "存在操作风险的死亡"
 
 #: src/ui/habits/review-deaths.tsx
+msgid "Select this page for analysis"
+msgstr "选中本页死亡进行分析"
+
+#: src/ui/habits/review-deaths.tsx
 msgid "Analysis status"
 msgstr "分析状态"
 
@@ -5008,6 +5131,10 @@ msgstr "{totalDeaths} 次死亡 · 第 {pageNumber} / {pages} 页"
 #: src/ui/habits/review-deaths.tsx
 msgid "Loading deaths…"
 msgstr "正在读取死亡记录…"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Analyze"
+msgstr "分析"
 
 #: src/ui/habits/review-deaths.tsx
 msgid "Outside a numbered round"
@@ -6083,15 +6210,6 @@ msgstr "环境伤害"
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Unknown cause"
 msgstr "死因未知"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Damage taken"
-msgstr "受到伤害"
-
-#: src/ui/habits/use-death-review-copy.ts
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Damage dealt"
-msgstr "造成伤害"
 
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Shot fired"

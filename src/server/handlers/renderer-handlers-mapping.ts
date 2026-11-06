@@ -1,4 +1,6 @@
 import type { Download } from 'csdm/common/download/download-types';
+import type { ReviewPreview, ReviewPreviewRequest } from 'csdm/common/types/review-preview';
+import { fetchReviewPreviewHandler } from './renderer-process/habits/fetch-review-preview-handler';
 import type { DeathEvidenceState, InspectDeathEvidence } from 'csdm/common/types/death-evidence';
 import { inspectDeathEvidenceHandler } from './renderer-process/habits/death-evidence-handler';
 import type {
@@ -276,6 +278,7 @@ export interface RendererMessageHandlers {
   [RendererClientMessageName.FetchDeathReviewPage]: Handler<FetchDeathReviewPage, DeathReviewPage>;
   [RendererClientMessageName.ControlDeathReview]: Handler<ControlDeathReview, DeathReviewProgress>;
   [RendererClientMessageName.InspectDeathEvidence]: Handler<InspectDeathEvidence, DeathEvidenceState>;
+  [RendererClientMessageName.FetchReviewPreview]: Handler<ReviewPreviewRequest, ReviewPreview>;
   [RendererClientMessageName.FetchReviewDuels]: Handler<ReviewDuelsPayload, ReviewDuelsPage>;
   [RendererClientMessageName.GetReviewClip]: Handler<ReviewClipRequest, ReviewClipInspection>;
   [RendererClientMessageName.GenerateReviewBatch]: Handler<ReviewBatchRequest, ReviewBatchInspection>;
@@ -425,6 +428,7 @@ export const rendererHandlers: RendererMessageHandlers = {
   [RendererClientMessageName.FetchDeathReviewPage]: fetchDeathReviewPageHandler,
   [RendererClientMessageName.ControlDeathReview]: controlDeathReviewHandler,
   [RendererClientMessageName.InspectDeathEvidence]: inspectDeathEvidenceHandler,
+  [RendererClientMessageName.FetchReviewPreview]: fetchReviewPreviewHandler,
   [RendererClientMessageName.FetchReviewDuels]: fetchReviewDuelsHandler,
   [RendererClientMessageName.GetReviewClip]: getReviewClipHandler,
   [RendererClientMessageName.GenerateReviewBatch]: generateReviewBatchHandler,

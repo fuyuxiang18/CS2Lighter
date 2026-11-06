@@ -8,6 +8,8 @@ import { useDeathReviewCopy } from './use-death-review-copy';
 import { ReviewButton } from './review-button';
 import { DeathEvidencePanel } from './death-evidence-panel';
 import { DEATH_BACKGROUND_CODES } from './death-review-presentation';
+import { DeathReviewPreview } from './death-review-preview';
+import { ReviewClipButton } from './review-clip-viewer';
 
 export function canReplayDeath(record: DeathReviewRecord) {
   return (
@@ -62,7 +64,9 @@ export function DeathReviewDetail({ record }: { record: DeathReviewRecord }) {
   ];
   return (
     <div className="flex min-w-0 flex-col gap-16 border-t border-gray-300 p-16">
+      {canReplay && <DeathReviewPreview record={record} />}
       <DeathEvidencePanel record={record} />
+      {canReplay && record.recordingRequest && <ReviewClipButton request={record.recordingRequest} />}
       {canReplay && (
         <div className="flex flex-wrap items-start gap-12">
           <Link

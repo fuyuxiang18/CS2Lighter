@@ -11,7 +11,8 @@ export async function getDatabaseStorage(): Promise<DatabaseStorage> {
   const settings = await getSettings();
   const { rows } = await sql<{ total: number; players: number; utility: number; chickens: number }>`
     SELECT pg_database_size(current_database()) AS total,
-      COALESCE(pg_total_relation_size(to_regclass('public.player_positions')), 0) AS players,
+      COALESCE(pg_total_relation_size(to_regclass('public.player_positions')), 0)
+        + COALESCE(pg_total_relation_size(to_regclass('public.player_position_blocks')), 0) AS players,
       COALESCE(pg_total_relation_size(to_regclass('public.grenade_positions')), 0)
         + COALESCE(pg_total_relation_size(to_regclass('public.inferno_positions')), 0)
         + COALESCE(pg_total_relation_size(to_regclass('public.hostage_positions')), 0) AS utility,

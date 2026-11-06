@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vite-plus/test';
 import type { DeathEvidenceKey, DeathEvidenceReport, DeathEvidenceState } from 'csdm/common/types/death-evidence';
-import { DeathEvidenceService } from './death-evidence-service';
+import { DeathEvidenceService, type DeathEvidenceBatchItem } from './death-evidence-service';
 
 const key: DeathEvidenceKey = { checksum: 'abc', steamId: '76561198000000001', deathId: 'first' };
 function report(selected = key): DeathEvidenceReport {
@@ -22,8 +22,12 @@ function report(selected = key): DeathEvidenceReport {
 function setup() {
   const states: DeathEvidenceState[] = [];
   const dependencies = {
-    prepare: vi.fn(() => Promise.resolve({ revision: 'one' })),
-    read: vi.fn((): Promise<DeathEvidenceReport | undefined> => Promise.resolve(undefined)),
+    prepare: vi.fn<(selected: DeathEvidenceKey) => Promise<{ revision: string }>>(() =>
+      Promise.resolve({ revision: 'one' }),
+    ),
+    read: vi.fn<(selected: DeathEvidenceKey) => Promise<DeathEvidenceReport | undefined>>(() =>
+      Promise.resolve(undefined),
+    ),
     build: vi.fn<
       (selected: DeathEvidenceKey, context: { revision: string }, signal: AbortSignal) => Promise<DeathEvidenceReport>
     >((selected) => Promise.resolve(report(selected))),
@@ -176,5 +180,129 @@ describe('death evidence queue', () => {
     dependencies.canStart.mockReturnValue(false);
     await expect(service.inspect({ ...key, action: 'analyze' })).rejects.toThrow('update');
     expect(dependencies.build).not.toHaveBeenCalled();
+  });
+});
+
+describe('same-demo evidence batches', () => {
+  function batchSetup() {
+    const { dependencies, states } = setup();
+    const buildBatch = vi.fn<
+      (items: DeathEvidenceBatchItem<{ revision: string }>[], signal: AbortSignal) => Promise<void>
+    >(async (items) => {
+      for (const item of items) await item.complete(report(item.key));
+    });
+    return { dependencies, states, buildBatch, service: new DeathEvidenceService({ ...dependencies, buildBatch }) };
+  }
+
+  it('coalesces concurrent deaths, skips cache hits and writes each result independently', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    dependencies.read.mockImplementation((selected: DeathEvidenceKey) =>
+      Promise.resolve(selected.deathId === 'cached' ? report(selected) : undefined),
+    );
+    await Promise.all(
+      ['first', 'second', 'cached'].map((deathId) => service.inspect({ ...key, deathId, action: 'analyze' })),
+    );
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(buildBatch).toHaveBeenCalledTimes(1);
+    expect(buildBatch.mock.calls[0][0].map((item) => item.key.deathId)).toEqual(['first', 'second']);
+    expect(dependencies.build).not.toHaveBeenCalled();
+    expect(dependencies.write).toHaveBeenCalledTimes(2);
+  });
+
+  it('never groups different demo revisions or checksums', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    dependencies.prepare.mockImplementation((selected: DeathEvidenceKey) =>
+      Promise.resolve({ revision: selected.deathId === 'changed' ? 'two' : 'one' }),
+    );
+    await Promise.all([
+      service.inspect({ ...key, action: 'analyze' }),
+      service.inspect({ ...key, deathId: 'changed', action: 'analyze' }),
+      service.inspect({ ...key, checksum: 'def', action: 'analyze' }),
+    ]);
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(buildBatch).toHaveBeenCalledTimes(3);
+    expect(buildBatch.mock.calls.every(([items]) => items.length === 1)).toBe(true);
+  });
+
+  it('canceling one member keeps its peers running and never overwrites the canceled result', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    let finish: (() => void) | undefined;
+    let shared: AbortSignal | undefined;
+    buildBatch.mockImplementation(async (items, signal) => {
+      shared = signal;
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+      for (const item of items) await item.complete(report(item.key));
+    });
+    await Promise.all(['first', 'second'].map((deathId) => service.inspect({ ...key, deathId, action: 'analyze' })));
+    await vi.waitFor(() => expect(finish).toBeDefined());
+    await service.inspect({ ...key, action: 'cancel' });
+    expect(shared!.aborted).toBe(false);
+    finish!();
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(dependencies.write).toHaveBeenCalledTimes(1);
+    expect(dependencies.write.mock.calls[0][1].deathId).toBe('second');
+    expect((await service.inspect({ ...key, action: 'read' })).status).toBe('canceled');
+  });
+
+  it('canceling every member interrupts the shared parser', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    let shared: AbortSignal | undefined;
+    buildBatch.mockImplementation((_items, signal) => {
+      shared = signal;
+      return new Promise((_resolve, reject) =>
+        signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }),
+      );
+    });
+    await Promise.all(['first', 'second'].map((deathId) => service.inspect({ ...key, deathId, action: 'analyze' })));
+    await vi.waitFor(() => expect(shared).toBeDefined());
+    await service.inspect({ ...key, action: 'cancel' });
+    await service.inspect({ ...key, deathId: 'second', action: 'cancel' });
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(shared!.aborted).toBe(true);
+    expect(dependencies.write).not.toHaveBeenCalled();
+  });
+
+  it('preserves a completed member if a later extraction or evaluation fails', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    buildBatch.mockImplementation(async (items) => {
+      await items[0].complete(report(items[0].key));
+      throw new Error('later window failed');
+    });
+    await Promise.all(['first', 'second'].map((deathId) => service.inspect({ ...key, deathId, action: 'analyze' })));
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(dependencies.write).toHaveBeenCalledTimes(1);
+    expect((await service.inspect({ ...key, action: 'read' })).status).toBe('completed');
+    expect((await service.inspect({ ...key, deathId: 'second', action: 'read' })).status).toBe('error');
+  });
+
+  it('a failed member does not prevent cancellation of all remaining work', async () => {
+    const { service, buildBatch } = batchSetup();
+    let shared: AbortSignal | undefined;
+    buildBatch.mockImplementation((items, signal) => {
+      shared = signal;
+      items[0].fail(new Error('selected round disappeared'));
+      return new Promise((_resolve, reject) =>
+        signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }),
+      );
+    });
+    await Promise.all(['first', 'second'].map((deathId) => service.inspect({ ...key, deathId, action: 'analyze' })));
+    await vi.waitFor(() => expect(shared).toBeDefined());
+    await service.inspect({ ...key, deathId: 'second', action: 'cancel' });
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(shared!.aborted).toBe(true);
+    expect((await service.inspect({ ...key, action: 'read' })).status).toBe('error');
+  });
+
+  it('rejects a mismatched per-death result before any cache write', async () => {
+    const { service, dependencies, buildBatch } = batchSetup();
+    buildBatch.mockImplementation(async (items) => {
+      await items[0].complete(report({ ...key, deathId: 'wrong' }));
+    });
+    await service.inspect({ ...key, action: 'analyze' });
+    await vi.waitFor(() => expect(service.isBusy()).toBe(false));
+    expect(dependencies.write).not.toHaveBeenCalled();
+    expect((await service.inspect({ ...key, action: 'read' })).error).toContain('different death');
   });
 });

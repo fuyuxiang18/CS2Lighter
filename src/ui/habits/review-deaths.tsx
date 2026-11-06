@@ -25,6 +25,7 @@ import { ReviewButton } from './review-button';
 import { useDeathReviewCopy } from './use-death-review-copy';
 import { useDeathRiskCopy } from './use-death-risk-copy';
 import { DEATH_BACKGROUND_CODES, deathRiskPresentation } from './death-review-presentation';
+import { DeathEvidenceBatch } from './death-evidence-batch';
 
 export function ReviewDeaths({ scope }: { scope: DeathReviewScope }) {
   return <DeathList key={JSON.stringify(scope)} scope={scope} />;
@@ -47,6 +48,7 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
   const [failed, setFailed] = useState(false);
   const [controlling, setControlling] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [evidenceSelection, setEvidenceSelection] = useState<Set<string>>(new Set());
   const [queue, setQueue] = useState<RecordingQueue | null>(null);
   const [queueBusy, setQueueBusy] = useState(false);
   const [queueFailed, setQueueFailed] = useState(false);
@@ -364,7 +366,20 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
               </div>
             ))}
           </div>
+          <DeathEvidenceBatch records={data.items.filter((record) => evidenceSelection.has(record.id))} />
           <div className="flex flex-wrap items-end gap-12">
+            <Checkbox
+              label={t`Select this page for analysis`}
+              isChecked={data.items.length > 0 && data.items.every((record) => evidenceSelection.has(record.id))}
+              isDisabled={loading || data.items.length === 0}
+              onChange={() =>
+                setEvidenceSelection(
+                  data.items.every((record) => evidenceSelection.has(record.id))
+                    ? new Set()
+                    : new Set(data.items.map((record) => record.id)),
+                )
+              }
+            />
             <Select
               label={t`Analysis status`}
               value={filter}
@@ -438,6 +453,18 @@ function DeathList({ scope }: { scope: DeathReviewScope }) {
                       className={`min-w-0 overflow-hidden rounded-12 border bg-gray-100 ${selected ? 'border-accent-muted' : 'border-gray-300'}`}
                     >
                       <div className="flex flex-wrap items-center gap-12 p-16">
+                        <Checkbox
+                          label={t`Analyze`}
+                          isChecked={evidenceSelection.has(record.id)}
+                          onChange={() =>
+                            setEvidenceSelection((previous) => {
+                              const next = new Set(previous);
+                              if (next.has(record.id)) next.delete(record.id);
+                              else next.add(record.id);
+                              return next;
+                            })
+                          }
+                        />
                         <button
                           type="button"
                           aria-expanded={selected}

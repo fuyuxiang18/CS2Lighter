@@ -49,6 +49,15 @@ vi.mock('./death-evidence-cache', async (importOriginal) => ({
   readDeathEvidenceCache: mocks.read,
 }));
 vi.mock('./death-evidence-process', () => ({ runDeathEvidenceProcess: mocks.process }));
+// These tests exercise saved-evidence access and source validation only. Keep
+// unrelated spatial/weapon providers out of their cold dynamic-import path.
+vi.mock('./spray-provider', () => ({ buildSprayProviderEvidence: vi.fn() }));
+vi.mock('./gunline-evidence', () => ({ buildGunlineEvidence: vi.fn(), resolveGunlineEntityBounds: vi.fn() }));
+vi.mock('./source2-model-resources', () => ({ createSource2ModelResourceResolver: vi.fn() }));
+vi.mock('./risk-tactical-provider', () => ({ buildRiskTacticalEvidence: vi.fn() }));
+vi.mock('./risk-mechanics-provider', () => ({ buildRiskMechanicsEvidence: vi.fn() }));
+vi.mock('./risk-spatial-provider', () => ({ collectSupportTransitions: vi.fn() }));
+vi.mock('./cover-proof-provider', () => ({ collectPostKillCoverDepartures: vi.fn() }));
 vi.mock('./visibility-map-provider', () => ({
   readVisibilityMapRevision: mocks.mapRevision,
   resolveVisibilityMap: vi.fn(),

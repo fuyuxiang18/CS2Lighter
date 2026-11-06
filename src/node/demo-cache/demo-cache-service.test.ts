@@ -58,6 +58,37 @@ beforeEach(async () => {
 });
 
 describe('durable per-demo cache service', () => {
+  it('recomputes only changed metrics and preserves saved spatial habits', async () => {
+    const habitsBySteamId = { preserved: true };
+    mocks.read.mockResolvedValue({
+      revision: 'revision-1',
+      checksum: 'aa',
+      habitsBySteamId,
+      metrics: [],
+      calculations: { habits: 1, metrics: 0 },
+    });
+    const result = await service.ensureDemoCache('aa');
+    expect(mocks.habits).not.toHaveBeenCalled();
+    expect(mocks.metrics).toHaveBeenCalledTimes(1);
+    expect(result.habitsBySteamId).toBe(habitsBySteamId);
+    expect(result.calculations).toEqual({ habits: 1, metrics: 1 });
+  });
+
+  it('recomputes only changed habits and preserves saved combat statistics', async () => {
+    const metrics = [{ preserved: true }];
+    mocks.read.mockResolvedValue({
+      revision: 'revision-1',
+      checksum: 'aa',
+      habitsBySteamId: {},
+      metrics,
+      calculations: { habits: 0, metrics: 1 },
+    });
+    const result = await service.loadDemoCaches(['aa']);
+    expect(mocks.metrics).not.toHaveBeenCalled();
+    expect(mocks.habits).toHaveBeenCalledTimes(1);
+    expect(result[0].metrics).toBe(metrics);
+  });
+
   it('keeps ready matches readable while a different match header is committed but its COPY is incomplete', async () => {
     const { MatchImportIncompleteError } = await import('csdm/node/database/matches/match-import-state');
     mocks.importActive = true;
@@ -104,6 +135,37 @@ describe('durable per-demo cache service', () => {
     expect(mocks.metrics).not.toHaveBeenCalled();
     expect(mocks.write).not.toHaveBeenCalled();
     expect(progress.snapshot()).toMatchObject({ phase: 'idle', total: 0, isBlocking: false });
+  });
+
+  it('does not accept old metadata invalidated while another descriptor is still pending', async () => {
+    let finishDiscovery: () => void = () => {};
+    mocks.descriptor.mockImplementation((checksum: string) =>
+      Promise.resolve({ match: { checksum, demoPath: `/${checksum}.dem` }, revision: 'revision-2' }),
+    );
+    mocks.descriptor.mockResolvedValueOnce({
+      match: { checksum: 'aa', demoPath: '/aa.dem' },
+      revision: 'revision-1',
+    });
+    mocks.descriptor.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishDiscovery = () => resolve({ match: { checksum: 'bb', demoPath: '/bb.dem' }, revision: 'revision-2' });
+        }),
+    );
+    mocks.read.mockImplementation((_directory: string, checksum: string) =>
+      Promise.resolve({ checksum, revision: checksum === 'aa' ? 'revision-1' : 'revision-2' }),
+    );
+    const run = service.loadDemoCaches(['aa', 'bb']);
+    await vi.waitFor(() => expect(mocks.descriptor).toHaveBeenCalledTimes(2));
+    mocks.generation++;
+    finishDiscovery();
+    const results = await run;
+    expect(results.map((cache) => [cache.checksum, cache.revision])).toEqual([
+      ['aa', 'revision-2'],
+      ['bb', 'revision-2'],
+    ]);
+    expect(mocks.habits).toHaveBeenCalledTimes(1);
+    expect(mocks.metrics).toHaveBeenCalledTimes(1);
   });
 
   it('deduplicates concurrent consumers and rebuilds a stale revision', async () => {

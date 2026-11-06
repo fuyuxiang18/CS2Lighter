@@ -1,3 +1,6 @@
+vi.mock('csdm/node/database/player-position/insert-position-blocks', () => ({
+  insertPositionBlocks: (csvFilePath: string) => copy({ tableName: 'player_position_blocks', csvFilePath }),
+}));
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test';
 const copy = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 vi.mock('csdm/node/database/copy-csv-into-table', () => ({ copyCsvIntoTable: copy }));
@@ -11,7 +14,7 @@ describe('personal review position imports', () => {
   it('waits for other COPY streams to settle before reporting one failed stream', async () => {
     let release: () => void = () => {};
     copy.mockImplementation(({ tableName }: { tableName: string }) =>
-      tableName === 'player_positions'
+      tableName === 'player_position_blocks'
         ? new Promise<void>((resolve) => {
             release = resolve;
           })
@@ -32,6 +35,6 @@ describe('personal review position imports', () => {
     await insertMatchPositions({ demoName: 'fixture', outputFolderPath: '/qa/export' });
     expect(
       copy.mock.calls.map(([options]) => options.tableName).sort((a: string, b: string) => a.localeCompare(b)),
-    ).toEqual(['grenade_positions', 'hostage_positions', 'inferno_positions', 'player_positions']);
+    ).toEqual(['grenade_positions', 'hostage_positions', 'inferno_positions', 'player_position_blocks']);
   });
 });

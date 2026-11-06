@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"os"
 	"reflect"
 	"sort"
@@ -89,33 +90,81 @@ type frameSnapshot struct {
 	smokes  []smokeRecord
 }
 type extractor struct {
-	p                  dem.Parser
-	output             emitter
-	request            request
-	wanted             map[int]bool
-	selected           map[string]bool
-	active             map[string]*tracked
-	serverTick         *int
-	header             *msgs2.CDemoFileHeader
-	headerSent         bool
-	sourceBytes        int64
-	visited            map[int]bool
-	worldPrevious      map[string]string
-	smokePrevious      map[string]string
-	playerPrevious     map[string]map[string]string
-	weaponPrevious     map[string]map[string]string
-	playerWeapon       map[string]string
-	lastFrameTick      *int
-	pendingFrame       *frameSnapshot
-	supportedClasses   map[string]int
-	unsupportedClasses map[string]int
-	frames             int
-	shots              int
-	bulletDamages      int
-	duplicateTicks     int
-	lastProgress       time.Time
-	mechanicsTypes     map[string]string
-	animation          animationState
+	p                    dem.Parser
+	output               emitter
+	request              request
+	wanted               map[int]bool
+	selected             map[string]bool
+	active               map[string]*tracked
+	serverTick           *int
+	header               *msgs2.CDemoFileHeader
+	headerSent           bool
+	sourceBytes          int64
+	visited              map[int]bool
+	worldPrevious        map[string]string
+	smokePrevious        map[string]string
+	playerPrevious       map[string]map[string]string
+	weaponPrevious       map[string]map[string]string
+	playerWeapon         map[string]string
+	lastFrameTick        *int
+	pendingFrame         *frameSnapshot
+	supportedClasses     map[string]int
+	unsupportedClasses   map[string]int
+	frames               int
+	shots                int
+	bulletDamages        int
+	duplicateTicks       int
+	duplicateTicksByTick map[int]int
+	lastProgress         time.Time
+	mechanicsTypes       map[string]string
+	animation            animationState
+	windowClasses        []windowClassCoverage
+	requestedWindows     []window
+	classStops           []window
+	nextClassStop        int
+}
+
+type windowClassCoverage struct {
+	StartTick          int            `json:"startTick"`
+	EndTick            int            `json:"endTick"`
+	SupportedClasses   map[string]int `json:"supportedClasses"`
+	UnsupportedClasses map[string]int `json:"unsupportedClasses"`
+	DuplicateTicks     int            `json:"duplicateTicks"`
+}
+
+// Separate scans stop after the first frame beyond their end tick. Capture the
+// same prefix coverage here; later unknown classes must not contaminate an earlier window.
+func (x *extractor) captureWindowClasses(tick int, finished bool) {
+	if x.classStops == nil {
+		windows := x.requestedWindows
+		if windows == nil {
+			windows = x.request.Windows
+		}
+		x.classStops = append([]window{}, windows...)
+		sort.Slice(x.classStops, func(i, j int) bool {
+			if x.classStops[i].EndTick == x.classStops[j].EndTick {
+				return x.classStops[i].StartTick < x.classStops[j].StartTick
+			}
+			return x.classStops[i].EndTick < x.classStops[j].EndTick
+		})
+	}
+	for x.nextClassStop < len(x.classStops) {
+		w := x.classStops[x.nextClassStop]
+		if !finished && tick <= w.EndTick {
+			return
+		}
+		x.nextClassStop++
+		if x.nextClassStop > 1 && x.classStops[x.nextClassStop-2] == w {
+			continue
+		}
+		duplicates := 0
+		for tick, count := range x.duplicateTicksByTick {
+			if tick >= w.StartTick && tick <= w.EndTick {
+				duplicates += count
+			}
+		}
+		x.windowClasses = append(x.windowClasses, windowClassCoverage{w.StartTick, w.EndTick, maps.Clone(x.supportedClasses), maps.Clone(x.unsupportedClasses), duplicates})
+	}
 }
 
 func kind(class string) string {
@@ -197,6 +246,18 @@ func (x *extractor) send(v any) {
 		panic(err)
 	}
 }
+
+func setDynamicNames(tr *tracked, names []string) {
+	propertySet := strings.Join(names, "\x00")
+	if propertySet != tr.propertySet {
+		tr.dirty = true
+		tr.propertySet = propertySet
+	}
+	// Vector/array properties can disappear. Subscription history is not the
+	// current schema; retaining old paths makes later windows depend on earlier ones.
+	tr.dynamicNames = names
+}
+
 func (x *extractor) attach(tr *tracked, duringCreation bool) {
 	var names []string
 	if tr.category == "player" {
@@ -228,16 +289,7 @@ func (x *extractor) attach(tr *tracked, duringCreation bool) {
 				}
 			}
 		}
-		propertySet := strings.Join(currentNames, "\x00")
-		if propertySet != tr.propertySet {
-			tr.dirty = true
-			tr.propertySet = propertySet
-		}
-		for _, name := range currentNames {
-			if !tr.attached[name] {
-				tr.dynamicNames = append(tr.dynamicNames, name)
-			}
-		}
+		setDynamicNames(tr, currentNames)
 	}
 	for _, name := range names {
 		if tr.attached[name] {
@@ -615,6 +667,10 @@ func (x *extractor) queueSnapshot(snapshot *frameSnapshot) {
 	}
 	if x.pendingFrame != nil {
 		x.duplicateTicks++
+		if x.duplicateTicksByTick == nil {
+			x.duplicateTicksByTick = map[int]int{}
+		}
+		x.duplicateTicksByTick[snapshot.clock.Tick]++
 	}
 	x.pendingFrame = snapshot
 }
@@ -700,6 +756,7 @@ func run(req request, writer io.Writer) (result error) {
 			writeRequestError(writer, result)
 		}
 	}()
+	requestedWindows := append([]window(nil), req.Windows...)
 	wanted, err := validateRequest(&req)
 	if err != nil {
 		return err
@@ -719,6 +776,7 @@ func run(req request, writer io.Writer) (result error) {
 	p := dem.NewParser(file)
 	defer p.Close()
 	x := extractor{p: p, output: emitter{out: writer}, request: req, wanted: wanted, selected: map[string]bool{}, active: map[string]*tracked{}, sourceBytes: stat.Size(), visited: map[int]bool{}, worldPrevious: map[string]string{}, smokePrevious: map[string]string{}, playerPrevious: map[string]map[string]string{}, weaponPrevious: map[string]map[string]string{}, playerWeapon: map[string]string{}, supportedClasses: map[string]int{}, unsupportedClasses: map[string]int{}}
+	x.requestedWindows = requestedWindows
 	started = true
 	for _, id := range req.Players {
 		x.selected[id] = true
@@ -747,6 +805,7 @@ func run(req request, writer io.Writer) (result error) {
 		}
 		end := map[string]any{"type": "end", "status": status, "emittedTicks": len(x.visited), "missingTicks": missing, "duplicateTicks": x.duplicateTicks, "frames": x.frames, "shots": x.shots, "bulletDamages": x.bulletDamages, "supportedClasses": x.supportedClasses, "unsupportedClasses": x.unsupportedClasses, "outputBytes": x.output.bytes, "capabilities": capabilities, "error": errorText}
 		end["mechanicsFieldTypes"] = x.mechanicsTypes
+		end["windowClasses"] = x.windowClasses
 		if err := x.output.send(end); result == nil && err != nil {
 			result = err
 		}
@@ -797,6 +856,7 @@ func run(req request, writer io.Writer) (result error) {
 		if err != nil {
 			return err
 		}
+		x.captureWindowClasses(p.GameState().IngameTick(), !more)
 		if !more || p.GameState().IngameTick() > lastTick {
 			break
 		}

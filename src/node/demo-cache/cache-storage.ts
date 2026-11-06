@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile, rename, rm, stat } from 'node:fs/promises';
 import type { DemoDataCache } from 'csdm/common/types/demo-data-cache';
 import { getDemoCacheGeneration, writeWithDemoCacheGeneration } from './cache-generation';
 
-// Bump when persisted fields, habits binning or personal-statistics formulas change.
+// Envelope compatibility only. Calculation changes have independent revisions in cache-calculations.ts.
 export const DEMO_CACHE_SCHEMA_VERSION = 3;
 const memory = new Map<string, { stamp: string; bytes: number; cache: DemoDataCache }>();
 const reads = new Map<string, Promise<DemoDataCache | undefined>>();

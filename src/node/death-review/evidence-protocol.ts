@@ -2,7 +2,7 @@ import type { EvidenceBulletDamage } from './evidence-ballistics';
 import type { EvidenceAnimationContext } from './animation-evidence';
 
 export type EvidenceVector = [number, number, number];
-type EvidenceWindow = { startTick: number; endTick: number };
+export type EvidenceWindow = { startTick: number; endTick: number };
 export type EvidenceRequest = {
   version: 1;
   demoPath: string;
@@ -117,6 +117,14 @@ export type EvidenceEnd = {
   capabilities?: string[];
   supportedClasses?: Record<string, number>;
   unsupportedClasses?: Record<string, number>;
+  /** Cumulative class coverage at each window's stop, matching a separate prefix scan. */
+  windowClasses?: {
+    startTick: number;
+    endTick: number;
+    supportedClasses: Record<string, number>;
+    unsupportedClasses: Record<string, number>;
+    duplicateTicks: number;
+  }[];
   error?: string;
 };
 export type EvidenceMessage =

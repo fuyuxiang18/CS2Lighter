@@ -2810,6 +2810,42 @@ msgstr "Saved report"
 msgid "Newly generated · Saved locally"
 msgstr "Newly generated · Saved locally"
 
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Batch operation review"
+msgstr "Batch operation review"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{selected} selected · saved evidence is reused"
+msgstr "{selected} selected · saved evidence is reused"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Pause this batch"
+msgstr "Pause this batch"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Resume previous batch"
+msgstr "Resume previous batch"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Analyze selected deaths"
+msgstr "Analyze selected deaths"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{settled} / {total} deaths processed"
+msgstr "{settled} / {total} deaths processed"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "{completed} saved · {failed} failed · {canceled} paused"
+msgstr "{completed} saved · {failed} failed · {canceled} paused"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Batch evidence progress"
+msgstr "Batch evidence progress"
+
+#: src/ui/habits/death-evidence-batch.tsx
+msgid "Some requests failed. Retry the batch to reuse completed results."
+msgstr "Some requests failed. Retry the batch to reuse completed results."
+
 #: src/ui/habits/death-evidence-panel.tsx
 msgid "Replay {offset} s"
 msgstr "Replay {offset} s"
@@ -3243,6 +3279,7 @@ msgid "Accuracy shot by shot"
 msgstr "Accuracy shot by shot"
 
 #: src/ui/habits/death-mechanics-table.tsx
+#: src/ui/habits/death-review-preview.tsx
 msgid "Shot"
 msgstr "Shot"
 
@@ -3309,6 +3346,7 @@ msgid "Bullet damage event"
 msgstr "Bullet damage event"
 
 #: src/ui/habits/death-review-detail.tsx
+#: src/ui/habits/death-review-preview.tsx
 msgid "You"
 msgstr "You"
 
@@ -3375,6 +3413,119 @@ msgstr "Show more events"
 #: src/ui/habits/death-review-detail.tsx
 msgid "No timeline events are available for this death."
 msgstr "No timeline events are available for this death."
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Instant 2D replay"
+msgstr "Instant 2D replay"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Open full round"
+msgstr "Open full round"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Could not load saved positions."
+msgstr "Could not load saved positions."
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-dashboard.tsx
+#: src/ui/habits/review-deaths.tsx
+#: src/ui/habits/review-duels.tsx
+msgid "Retry"
+msgstr "Retry"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Loading saved positions…"
+msgstr "Loading saved positions…"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "No saved positions in this clip."
+msgstr "No saved positions in this clip."
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Recorded player positions and facing directions"
+msgstr "Recorded player positions and facing directions"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Map radar is unavailable."
+msgstr "Map radar is unavailable."
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Review clip time"
+msgstr "Review clip time"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Pause"
+msgstr "Pause"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Play"
+msgstr "Play"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Loop clip"
+msgstr "Loop clip"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Follow your floor"
+msgstr "Follow your floor"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-map.tsx
+msgid "Upper floor"
+msgstr "Upper floor"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-map.tsx
+msgid "Lower floor"
+msgstr "Lower floor"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Jump to death"
+msgstr "Jump to death"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Death"
+msgstr "Death"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/habits-evidence.tsx
+#: src/ui/habits/recording-queue-page.tsx
+#: src/ui/habits/review-duels.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Kill"
+msgstr "Kill"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/use-death-review-copy.ts
+msgid "Damage taken"
+msgstr "Damage taken"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/use-death-review-copy.ts
+#: src/ui/match/rounds/round/players-information.tsx
+msgid "Damage dealt"
+msgstr "Damage dealt"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Blinded"
+msgstr "Blinded"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Plant"
+msgstr "Plant"
+
+#: src/ui/habits/death-review-preview.tsx
+msgid "Defuse"
+msgstr "Defuse"
+
+#: src/ui/habits/death-review-preview.tsx
+#: src/ui/habits/personal-stats-panels.tsx
+msgid "Grenade"
+msgstr "Grenade"
 
 #: src/ui/habits/death-risk-panel.tsx
 msgid "Locate {offset} s"
@@ -3540,12 +3691,6 @@ msgid "Your demo files are unchanged. Retry loading the saved data."
 msgstr "Your demo files are unchanged. Retry loading the saved data."
 
 #: src/ui/habits/habits-dashboard.tsx
-#: src/ui/habits/review-deaths.tsx
-#: src/ui/habits/review-duels.tsx
-msgid "Retry"
-msgstr "Retry"
-
-#: src/ui/habits/habits-dashboard.tsx
 msgid "No matches in this selection"
 msgstr "No matches in this selection"
 
@@ -3560,20 +3705,6 @@ msgstr "Position"
 #: src/ui/habits/habits-evidence.tsx
 msgid "Opening position"
 msgstr "Opening position"
-
-#: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/recording-queue-page.tsx
-#: src/ui/habits/review-duels.tsx
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Kill"
-msgstr "Kill"
-
-#: src/ui/habits/habits-evidence.tsx
-#: src/ui/habits/recording-queue-page.tsx
-#: src/ui/habits/review-duels.tsx
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Death"
-msgstr "Death"
 
 #: src/ui/habits/habits-evidence.tsx
 msgid "No matching evidence yet."
@@ -3700,14 +3831,6 @@ msgstr "Alive time"
 #: src/ui/habits/habits-map.tsx
 msgid "First {openingWindowSeconds} seconds"
 msgstr "First {openingWindowSeconds} seconds"
-
-#: src/ui/habits/habits-map.tsx
-msgid "Upper floor"
-msgstr "Upper floor"
-
-#: src/ui/habits/habits-map.tsx
-msgid "Lower floor"
-msgstr "Lower floor"
 
 #: src/ui/habits/habits-map.tsx
 msgid "Unknown floor"
@@ -4480,10 +4603,6 @@ msgid "Thrown"
 msgstr "Thrown"
 
 #: src/ui/habits/personal-stats-panels.tsx
-msgid "Grenade"
-msgstr "Grenade"
-
-#: src/ui/habits/personal-stats-panels.tsx
 msgid "Per round"
 msgstr "Per round"
 
@@ -4980,6 +5099,10 @@ msgid "Deaths with operation risks"
 msgstr "Deaths with operation risks"
 
 #: src/ui/habits/review-deaths.tsx
+msgid "Select this page for analysis"
+msgstr "Select this page for analysis"
+
+#: src/ui/habits/review-deaths.tsx
 msgid "Analysis status"
 msgstr "Analysis status"
 
@@ -5014,6 +5137,10 @@ msgstr "{totalDeaths} deaths · page {pageNumber} of {pages}"
 #: src/ui/habits/review-deaths.tsx
 msgid "Loading deaths…"
 msgstr "Loading deaths…"
+
+#: src/ui/habits/review-deaths.tsx
+msgid "Analyze"
+msgstr "Analyze"
 
 #: src/ui/habits/review-deaths.tsx
 msgid "Outside a numbered round"
@@ -6089,15 +6216,6 @@ msgstr "World damage"
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Unknown cause"
 msgstr "Unknown cause"
-
-#: src/ui/habits/use-death-review-copy.ts
-msgid "Damage taken"
-msgstr "Damage taken"
-
-#: src/ui/habits/use-death-review-copy.ts
-#: src/ui/match/rounds/round/players-information.tsx
-msgid "Damage dealt"
-msgstr "Damage dealt"
 
 #: src/ui/habits/use-death-review-copy.ts
 msgid "Shot fired"
